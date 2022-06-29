@@ -11,8 +11,9 @@ import 'package:http/http.dart';
 import '../../../../../widgets/show_toast.dart';
 
 class PhoneVerify extends StatefulWidget {
-  const PhoneVerify({Key key}) : super(key: key);
-
+  final dynamic email;
+  PhoneVerify(
+      {@required this.email});
   @override
   _PhoneVerifyPageState createState() => _PhoneVerifyPageState();
 }
@@ -20,24 +21,26 @@ class PhoneVerify extends StatefulWidget {
 class _PhoneVerifyPageState extends State<PhoneVerify> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController phoneEditingController = TextEditingController();
-  void email(String phone) async {
+  void phone(String phone,email) async {
     try {
       Response response = await post(
-          Uri.parse(NetworkConstants.BASE_URL + 'registration'),
+          Uri.parse(NetworkConstants.BASE_URL + 'phone-number-verify'),
           body: {
             'phone': phone,
+            'email': email,
+
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
+        print(phoneEditingController.text.toString()+"  "+widget.email.toString());
         print(data);
-        // print('created');
         setState(() {
           isApiCallProcess = false;
         });
         showToast(context, data['message']);
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => OtpVolunteer()),
+          MaterialPageRoute(builder: (context) => PhoneOtp(email: widget.email.toString(),phone: phoneEditingController.text.toString(),)),
         );
       } else {
         var data = jsonDecode(response.body.toString());
@@ -146,13 +149,13 @@ class _PhoneVerifyPageState extends State<PhoneVerify> {
                                 controller: phoneEditingController,
                                 decoration: ThemeHelper().textInputDecoration(
                                     "Phone Number", "Enter your phone number"),
-                                validator: (val) {
-                                  if (val.isEmpty) {
-                                    return "Email can't be empty";
-                                  } else if (!RegExp(
-                                      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
-                                      .hasMatch(val)) {
-                                    return "Enter a valid email address";
+                                validator: (value) {
+                                  if (value == null ||
+                                      value.isEmpty) {
+                                    return 'Please enter your phone';
+                                  }
+                                  if (value.length < 11) {
+                                    return 'Phone number has to be 11 character';
                                   }
                                   return null;
                                 },
@@ -179,19 +182,15 @@ class _PhoneVerifyPageState extends State<PhoneVerify> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>PhoneOtp()),
-                                  );
-                                  // if (_formKey.currentState.validate()) {
-                                  //   setState(() {
-                                  //     isApiCallProcess = true;
-                                  //   });
-                                  //   email(
-                                  //     phoneEditingController.text.toString(),
-                                  //   );
-                                  // }
+                                  if (_formKey.currentState.validate()) {
+                                    setState(() {
+                                      isApiCallProcess = true;
+                                    });
+                                    phone(
+                                      phoneEditingController.text.toString(),
+                                      widget.email.toString(),
+                                    );
+                                  }
                                 },
                               ),
                             ),

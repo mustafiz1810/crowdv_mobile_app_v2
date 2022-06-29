@@ -12,7 +12,10 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../../../../widgets/show_toast.dart';
 
 class PhoneOtp extends StatefulWidget {
-  const PhoneOtp({Key key}) : super(key: key);
+  final dynamic email,phone;
+  PhoneOtp(
+      {@required this.email,this.phone});
+
 
   @override
   _PhoneOtpPageState createState() => _PhoneOtpPageState();
@@ -31,19 +34,18 @@ class _PhoneOtpPageState extends State<PhoneOtp> {
   void otp(String otp) async {
     try {
       Response response =
-      await post(Uri.parse(NetworkConstants.BASE_URL + 'otp/check'), body: {
+      await post(Uri.parse(NetworkConstants.BASE_URL + 'phone-number-otp/check'), body: {
         'otp': otp,
       });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        // print('created');
         setState(() {
           isApiCallProcess = false;
         });
         showToast(context, data['message']);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-                builder: (context) => VolunteerSignUp(
+                builder: (context) => VolunteerSignUp(email: widget.email.toString(),phone: widget.phone.toString(),
                 )),
                 (Route<dynamic> route) => false);
       } else {
@@ -113,7 +115,7 @@ class _PhoneOtpPageState extends State<PhoneOtp> {
                               height: 10,
                             ),
                             Text(
-                              'Enter the verification code we just sent you on your email address.',
+                              'Enter the verification code we just sent you on your phone number.',
                               style: TextStyle(
                                 // fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -220,21 +222,15 @@ class _PhoneOtpPageState extends State<PhoneOtp> {
                               ),
                             ),
                           ),
-                          onPressed: (){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>VolunteerSignUp()),
-                            );
+                          onPressed:
+                          _pinSuccess == true
+                              ? () {
+                            setState(() {
+                              isApiCallProcess = true;
+                            });
+                            otp(otpController.text.toString());
                           }
-                          // _pinSuccess == true
-                          //     ? () {
-                          //   setState(() {
-                          //     isApiCallProcess = true;
-                          //   });
-                          //   otp(otpController.text.toString());
-                          // }
-                          //     : null,
+                              : null,
                         ),
                       ),
                     ],

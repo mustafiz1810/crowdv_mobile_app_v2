@@ -88,7 +88,7 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                       children: [
                         Container(
                           height: 120,
-                          child: HeaderWidget(120),
+                          child: HeaderWidget(),
                         ),
                         Positioned(
                           top: 25,
@@ -233,15 +233,13 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                                   leading: Icon(Icons.phone),
                                                   title: Text("Phone:"),
                                                   subtitle:
-                                                      Text("99--99876-56"),
+                                                      Text(snapshot.data.data[0].phone),
                                                 ),
                                                 ListTile(
                                                   leading: Icon(Icons.person),
                                                   title: Text("Date of Birth:"),
                                                   subtitle: Text(
-                                                      DateFormat.yMMMd().format(
-                                                          snapshot.data.data[0]
-                                                              .dob)),
+                                                     'dwfw'),
                                                 ),
                                               ],
                                             ),
@@ -269,10 +267,16 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                   child: Center(
                                     child: DropdownButton<String>(
                                         hint: Center(
-                                          child: Text(
+                                          child: snapshot.data.data[0].profession!=null?Text(
                                             "Profession:  " +
                                                 snapshot.data.data[0].profession
                                                     .toString(),
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ):Text(
+                                            "Profession: ",
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 color: Colors.white,
@@ -343,9 +347,10 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                         value: _dropdown,
                                         hint: Center(
                                           child: Text(
-                                            "Gender:    " +
-                                                snapshot.data.data[0].gender
-                                                    .toUpperCase(),
+                                            "Gender:    " ,
+                                                // +
+                                                // snapshot.data.data[0].gender
+                                                //     .toUpperCase(),
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 color: Colors.white,
@@ -449,9 +454,15 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                     child: DropdownButton<String>(
                                         value: _stateValue,
                                         hint: Center(
-                                          child: Text(
+                                          child: snapshot.data.data[0].state!=null?Text(
                                             "State:  " +
                                                 snapshot.data.data[0].state,
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ):Text(
+                                            "State:  ",
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 color: Colors.white,
@@ -580,10 +591,16 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                     child: DropdownButton<String>(
                                         value: _cityvalue,
                                         hint: Center(
-                                          child: Text(
+                                          child: snapshot.data.data[0].city!=null?Text(
                                             "City:  " +
                                                 snapshot.data.data[0].city
                                                     .toString(),
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ):Text(
+                                            "City:  ",
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 color: Colors.white,
@@ -649,39 +666,18 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                   ),
                                 ),
                                 SizedBox(height: 10),
-                                Container(
-                                  child: TextFormField(
-                                    decoration: ThemeHelper()
-                                        .textInputDecoration(
-                                            snapshot.data.data[0].zipCode,
-                                            'Enter your zip code'),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    child: TextFormField(
+                                      decoration: ThemeHelper()
+                                          .textInputDecoration(
+                                              snapshot.data.data[0].zipCode!=null?snapshot.data.data[0].zipCode:"Zip Code",
+                                              'Enter your zip code'),
+                                    ),
+                                    decoration:
+                                        ThemeHelper().inputBoxDecorationShaddow(),
                                   ),
-                                  decoration:
-                                      ThemeHelper().inputBoxDecorationShaddow(),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Container(
-                                  child: TextFormField(
-                                    decoration: ThemeHelper()
-                                        .textInputDecoration(
-                                            snapshot.data.data[0].streetAddress,
-                                            'Street address or P.O box'),
-                                  ),
-                                  decoration:
-                                      ThemeHelper().inputBoxDecorationShaddow(),
-                                ),
-                                SizedBox(height: 5.0),
-                                Container(
-                                  child: TextFormField(
-                                    decoration: ThemeHelper()
-                                        .textInputDecoration(
-                                            snapshot.data.data[0].building,
-                                            "Apt,Suite,Unit,Building,Floor,etc"),
-                                  ),
-                                  decoration:
-                                      ThemeHelper().inputBoxDecorationShaddow(),
                                 ),
                                 SizedBox(height: 20.0),
                                 Row(

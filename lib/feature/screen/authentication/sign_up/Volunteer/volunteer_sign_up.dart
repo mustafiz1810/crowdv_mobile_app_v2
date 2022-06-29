@@ -1,13 +1,20 @@
+import 'dart:convert';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
-import 'package:crowdv_mobile_app/feature/screen/authentication/sign_up/Volunteer/sign_up_details.dart';
+import 'package:crowdv_mobile_app/feature/screen/authentication/sign_in/sign_in.dart';
+import 'package:crowdv_mobile_app/feature/screen/authentication/sign_up/Volunteer/role_check.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
+import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/widgets/header_widget.dart';
+import 'package:crowdv_mobile_app/widgets/progres_hud.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/route_manager.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../../widgets/show_toast.dart';
 
 class VolunteerSignUp extends StatefulWidget {
+  final dynamic email,phone;
+  VolunteerSignUp(
+      {@required this.email,this.phone});
   @override
   State<StatefulWidget> createState() {
     return _VolunteerSignUpState();
@@ -22,9 +29,70 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
   TextEditingController passwordController = TextEditingController();
   bool checkedValue = false;
   bool checkboxValue = false;
-
+  void signup(String fname, lname, email, phone, password, check) async {
+    try {
+      Response response =
+      await post(Uri.parse(NetworkConstants.BASE_URL + 'registration'), body: {
+        'first_name': fname,
+        'last_name': lname,
+        'email': email,
+        'phone': phone,
+        'password': password,
+        'terms_and_conditions': check,
+      });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        setState(() {
+          isApiCallProcess = false;
+        });
+        showToast(context, data['message']);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+          RoleCheck(id: data['data'][0]['id'],)),
+        );
+      } else {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
+        setState(() {
+          isApiCallProcess = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isApiCallProcess = false;
+      });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Exception:"),
+              content: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+  bool isApiCallProcess = false;
   @override
   Widget build(BuildContext context) {
+    return ProgressHUD(
+      child: _signup(context),
+      inAsyncCall: isApiCallProcess,
+      opacity: 0.3,
+    );
+  }
+
+
+  Widget _signup(BuildContext context) {
     double _headerHeight = 300;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -89,6 +157,12 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                             controller: fnameController,
                             decoration: ThemeHelper().textInputDecoration(
                                 'First Name', 'Enter your first name'),
+                            validator: (val) {
+                              if (val.isEmpty) {
+                                return "Please enter your first name";
+                              }
+                              return null;
+                            },
                           ),
                           decoration: ThemeHelper().inputBoxDecorationShaddow(),
                         ),
@@ -100,6 +174,12 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                             controller: lnameController,
                             decoration: ThemeHelper().textInputDecoration(
                                 'Last Name', 'Enter your last name'),
+                            validator: (val) {
+                              if (val.isEmpty) {
+                                return "Please enter your last name";
+                              }
+                              return null;
+                            },
                           ),
                           decoration: ThemeHelper().inputBoxDecorationShaddow(),
                         ),
@@ -161,7 +241,7 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                             controller: passwordController,
                             obscureText: true,
                             decoration: ThemeHelper().textInputDecoration(
-                                "Password*", "Enter your password"),
+                                "Password", "Enter your password"),
                             validator: (val) {
                               if (val.isEmpty) {
                                 return "Please enter your password";
@@ -225,7 +305,7 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                               padding:
                                   const EdgeInsets.fromLTRB(40, 10, 40, 10),
                               child: Text(
-                                "Next Page".toUpperCase(),
+                                "submit".toUpperCase(),
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -234,14 +314,24 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                               ),
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>HomeScreen()),
-                              );
-                              // if (_formKey.currentState.validate()) {
-                              //
-                              // }
+                              if (_formKey.currentState.validate()) {
+                                setState(() {
+                                  isApiCallProcess = true;
+                                  // print(fnameController.text.toString() +" "+
+                                  //     lnameController.text.toString() +" "+
+                                  //     widget.email.toString() +" "+
+                                  //     widget.phone.toString() +" "+
+                                  //     passwordController.text.toString() +" "+
+                                  //     checkboxValue.toString());
+                                });
+                                signup(
+                                    fnameController.text.toString(),
+                                    lnameController.text.toString(),
+                                    widget.email.toString(),
+                                    widget.phone.toString(),
+                                    passwordController.text.toString(),
+                                    checkboxValue.toString(),);
+                              }
                             },
                           ),
                         ),

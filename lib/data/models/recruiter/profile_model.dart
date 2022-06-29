@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-RecruiterProfileModel recruiterProfileModelFromJson(String str) => RecruiterProfileModel.fromJson(json.decode(str));
+RecruiterProfileModel recruiterProfileModelFromJson(String str) =>
+    RecruiterProfileModel.fromJson(json.decode(str));
 
-String recruiterProfileModelToJson(RecruiterProfileModel data) => json.encode(data.toJson());
+String recruiterProfileModelToJson(RecruiterProfileModel data) =>
+    json.encode(data.toJson());
 
 class RecruiterProfileModel {
   RecruiterProfileModel({
@@ -19,17 +21,18 @@ class RecruiterProfileModel {
   String message;
   List<Datum> data;
 
-  factory RecruiterProfileModel.fromJson(Map<String, dynamic> json) => RecruiterProfileModel(
-    success: json["success"],
-    message: json["message"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-  );
+  factory RecruiterProfileModel.fromJson(Map<String, dynamic> json) =>
+      RecruiterProfileModel(
+        success: json["success"],
+        message: json["message"],
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "success": success,
-    "message": message,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
+        "success": success,
+        "message": message,
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
 }
 
 class Datum {
@@ -43,14 +46,14 @@ class Datum {
     this.gender,
     this.image,
     this.dob,
-    this.roleId,
+    this.role,
     this.membershipId,
     this.emailVerifiedAt,
     this.verified,
+    this.isPhoneVerified,
     this.typeOfDisability,
     this.profession,
-    this.type,
-    this.institutionName,
+    this.organizationId,
     this.otp,
     this.otpExpireAt,
     this.isAvailable,
@@ -60,7 +63,9 @@ class Datum {
     this.membershipAutoRenewal,
     this.stripeCustomerId,
     this.isComplete,
-    this.termsConditions,
+    this.isVolunteerProfileComplete,
+    this.isRecruiterProfileComplete,
+    this.termsAndConditions,
     this.state,
     this.city,
     this.building,
@@ -79,20 +84,20 @@ class Datum {
   int id;
   String firstName;
   String lastName;
-  String surName;
+  dynamic surName;
   String email;
   String phone;
-  String gender;
+  dynamic gender;
   String image;
-  DateTime dob;
-  int roleId;
+  dynamic dob;
+  String role;
   int membershipId;
   DateTime emailVerifiedAt;
   int verified;
-  String typeOfDisability;
-  String profession;
-  String type;
-  dynamic institutionName;
+  int isPhoneVerified;
+  dynamic typeOfDisability;
+  dynamic profession;
+  dynamic organizationId;
   dynamic otp;
   dynamic otpExpireAt;
   int isAvailable;
@@ -102,12 +107,14 @@ class Datum {
   int membershipAutoRenewal;
   dynamic stripeCustomerId;
   int isComplete;
-  int termsConditions;
-  String state;
-  String city;
-  String building;
-  String streetAddress;
-  String zipCode;
+  int isVolunteerProfileComplete;
+  int isRecruiterProfileComplete;
+  bool termsAndConditions;
+  dynamic state;
+  dynamic city;
+  dynamic building;
+  dynamic streetAddress;
+  dynamic zipCode;
   dynamic serviceState;
   dynamic serviceCity;
   dynamic serviceBuilding;
@@ -118,88 +125,92 @@ class Datum {
   DateTime updatedAt;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    firstName: json["first_name"],
-    lastName: json["last_name"],
-    surName: json["sur_name"],
-    email: json["email"],
-    phone: json["phone"],
-    gender: json["gender"],
-    image: json["image"],
-    dob: DateTime.parse(json["dob"]),
-    roleId: json["role_id"],
-    membershipId: json["membership_id"],
-    emailVerifiedAt: DateTime.parse(json["email_verified_at"]),
-    verified: json["verified"],
-    typeOfDisability: json["type_of_disability"],
-    profession: json["profession"],
-    type: json["type"],
-    institutionName: json["institution_name"],
-    otp: json["otp"],
-    otpExpireAt: json["otp_expire_at"],
-    isAvailable: json["is_available"],
-    status: json["status"],
-    isReferral: json["is_referral"],
-    membershipExpireAt: json["membership_expire_at"],
-    membershipAutoRenewal: json["membership_auto_renewal"],
-    stripeCustomerId: json["stripe_customer_id"],
-    isComplete: json["is_complete"],
-    termsConditions: json["terms_&_conditions"],
-    state: json["state"],
-    city: json["city"],
-    building: json["building"],
-    streetAddress: json["street_address"],
-    zipCode: json["zip_code"],
-    serviceState: json["service_state"],
-    serviceCity: json["service_city"],
-    serviceBuilding: json["service_building"],
-    serviceStreetAddress: json["service_street_address"],
-    serviceZipCode: json["service_zip_code"],
-    deletedAt: json["deleted_at"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
-  );
+        id: json["id"],
+        firstName: json["first_name"],
+        lastName: json["last_name"],
+        surName: json["sur_name"],
+        email: json["email"],
+        phone: json["phone"],
+        gender: json["gender"],
+        image: json["image"],
+        dob: json["dob"],
+        role: json["role"],
+        membershipId: json["membership_id"],
+        emailVerifiedAt: DateTime.parse(json["email_verified_at"]),
+        verified: json["verified"],
+        isPhoneVerified: json["is_phone_verified"],
+        typeOfDisability: json["type_of_disability"],
+        profession: json["profession"],
+        organizationId: json["organization_id"],
+        otp: json["otp"],
+        otpExpireAt: json["otp_expire_at"],
+        isAvailable: json["is_available"],
+        status: json["status"],
+        isReferral: json["is_referral"],
+        membershipExpireAt: json["membership_expire_at"],
+        membershipAutoRenewal: json["membership_auto_renewal"],
+        stripeCustomerId: json["stripe_customer_id"],
+        isComplete: json["is_complete"],
+        isVolunteerProfileComplete: json["is_volunteer_profile_complete"],
+        isRecruiterProfileComplete: json["is_recruiter_profile_complete"],
+        termsAndConditions: json["terms_and_conditions"],
+        state: json["state"],
+        city: json["city"],
+        building: json["building"],
+        streetAddress: json["street_address"],
+        zipCode: json["zip_code"],
+        serviceState: json["service_state"],
+        serviceCity: json["service_city"],
+        serviceBuilding: json["service_building"],
+        serviceStreetAddress: json["service_street_address"],
+        serviceZipCode: json["service_zip_code"],
+        deletedAt: json["deleted_at"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "first_name": firstName,
-    "last_name": lastName,
-    "sur_name": surName,
-    "email": email,
-    "phone": phone,
-    "gender": gender,
-    "image": image,
-    "dob": dob.toIso8601String(),
-    "role_id": roleId,
-    "membership_id": membershipId,
-    "email_verified_at": emailVerifiedAt.toIso8601String(),
-    "verified": verified,
-    "type_of_disability": typeOfDisability,
-    "profession": profession,
-    "type": type,
-    "institution_name": institutionName,
-    "otp": otp,
-    "otp_expire_at": otpExpireAt,
-    "is_available": isAvailable,
-    "status": status,
-    "is_referral": isReferral,
-    "membership_expire_at": membershipExpireAt,
-    "membership_auto_renewal": membershipAutoRenewal,
-    "stripe_customer_id": stripeCustomerId,
-    "is_complete": isComplete,
-    "terms_&_conditions": termsConditions,
-    "state": state,
-    "city": city,
-    "building": building,
-    "street_address": streetAddress,
-    "zip_code": zipCode,
-    "service_state": serviceState,
-    "service_city": serviceCity,
-    "service_building": serviceBuilding,
-    "service_street_address": serviceStreetAddress,
-    "service_zip_code": serviceZipCode,
-    "deleted_at": deletedAt,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
-  };
+        "id": id,
+        "first_name": firstName,
+        "last_name": lastName,
+        "sur_name": surName,
+        "email": email,
+        "phone": phone,
+        "gender": gender,
+        "image": image,
+        "dob": dob,
+        "role": role,
+        "membership_id": membershipId,
+        "email_verified_at": emailVerifiedAt.toIso8601String(),
+        "verified": verified,
+        "is_phone_verified": isPhoneVerified,
+        "type_of_disability": typeOfDisability,
+        "profession": profession,
+        "organization_id": organizationId,
+        "otp": otp,
+        "otp_expire_at": otpExpireAt,
+        "is_available": isAvailable,
+        "status": status,
+        "is_referral": isReferral,
+        "membership_expire_at": membershipExpireAt,
+        "membership_auto_renewal": membershipAutoRenewal,
+        "stripe_customer_id": stripeCustomerId,
+        "is_complete": isComplete,
+        "is_volunteer_profile_complete": isVolunteerProfileComplete,
+        "is_recruiter_profile_complete": isRecruiterProfileComplete,
+        "terms_and_conditions": termsAndConditions,
+        "state": state,
+        "city": city,
+        "building": building,
+        "street_address": streetAddress,
+        "zip_code": zipCode,
+        "service_state": serviceState,
+        "service_city": serviceCity,
+        "service_building": serviceBuilding,
+        "service_street_address": serviceStreetAddress,
+        "service_zip_code": serviceZipCode,
+        "deleted_at": deletedAt,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+      };
 }

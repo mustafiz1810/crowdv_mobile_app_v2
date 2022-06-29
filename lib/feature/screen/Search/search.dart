@@ -155,7 +155,12 @@ class _SearchPageState extends State<SearchPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Container(
-                                width: 350,
+                                width: 360,
+                                padding:
+                                EdgeInsets.symmetric(vertical: 1, horizontal: 15),
+                                decoration: BoxDecoration(
+                                    color: primaryColor,
+                                    borderRadius: BorderRadius.circular(30)),
                                 child: Center(
                                   child: DropdownButton<String>(
                                     hint: Center(
@@ -196,22 +201,21 @@ class _SearchPageState extends State<SearchPage> {
                                         provinces = AlaskaProvince;
                                       } else if (country == 'California') {
                                         provinces = CaliforniaProvince;
-                                      }else if (country == 'Connecticut') {
+                                      } else if (country == 'Connecticut') {
                                         provinces = ConnecticutProvince;
-                                      }else if (country == 'Delaware') {
+                                      } else if (country == 'Delaware') {
                                         provinces = DelawareProvince;
-                                      }else if (country == 'Florida') {
+                                      } else if (country == 'Florida') {
                                         provinces = FloridaProvince;
-                                      }else if (country == 'Illinois') {
+                                      } else if (country == 'Illinois') {
                                         provinces = IllinoisProvince;
-                                      }else if (country == 'Kansas') {
+                                      } else if (country == 'Kansas') {
                                         provinces = KansasProvince;
-                                      }else if (country == 'Kentucky') {
+                                      } else if (country == 'Kentucky') {
                                         provinces = KentuckyProvince;
-                                      }else if (country == 'Louisiana') {
+                                      } else if (country == 'Louisiana') {
                                         provinces = LouisianaProvince;
-                                      }
-                                      else {
+                                      } else {
                                         provinces = [];
                                       }
                                       setState(() {
@@ -222,24 +226,19 @@ class _SearchPageState extends State<SearchPage> {
                                     },
                                   ),
                                 ),
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.black26,
-                                        offset: Offset(0, 2),
-                                        blurRadius: 2.0)
-                                  ],
-                                  color: primaryColor,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
                               ),
                               SizedBox(
                                 height: 5,
                               ),
                               Container(
                                 width: 360,
+                                padding:
+                                EdgeInsets.symmetric(vertical: 1, horizontal: 15),
+                                decoration: BoxDecoration(
+                                    color: secondaryColor,
+                                    borderRadius: BorderRadius.circular(30)),
                                 child: Center(
-                                  child:DropdownButton<String>(
+                                  child: DropdownButton<String>(
                                     hint: Center(
                                       child: Text(
                                         'Select City',
@@ -250,6 +249,8 @@ class _SearchPageState extends State<SearchPage> {
                                       ),
                                     ),
                                     underline: SizedBox(),
+                                    iconEnabledColor: Colors.white,
+                                    iconDisabledColor: secondaryColor,
                                     value: selectedProvince,
                                     isExpanded: true,
                                     items: provinces.map((String value) {
@@ -277,16 +278,6 @@ class _SearchPageState extends State<SearchPage> {
                                       });
                                     },
                                   ),
-                                ),
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.black26,
-                                        offset: Offset(0, 2),
-                                        blurRadius: 2.0)
-                                  ],
-                                  color: secondaryColor,
-                                  borderRadius: BorderRadius.circular(30),
                                 ),
                               ),
                               SizedBox(height: 10),

@@ -13,6 +13,7 @@ import 'package:crowdv_mobile_app/widgets/header_without_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'home_contents/recruiter/my_opportunities.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -28,9 +29,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   bool navbarScrolled = false;
   // // AnimationController _controller_body;
   var user;
-  // double width, height = 55.0;
-  // double customFontSize = 13;
-  // String defaultFontFamily = 'Roboto-Light.ttf';
+  bool volunteer = true;
+  bool recruiter = false;
 
   @override
   void initState() {
@@ -114,23 +114,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       // extendBody: true,
       body: Stack(
         children: [
-          // Container(
-          //   // Here the height of the container is 45% of our total height
-          //   height: size.height * .45,
-          //   decoration: BoxDecoration(
-          //     color: primaryColor,
-          //     image: DecorationImage(
-          //       // fit: BoxFit.cover,
-          //       alignment: Alignment.centerLeft,
-          //       image: AssetImage("assets/undraw_pilates_gpdb.png"),
-          //     ),
-          //   ),
-          // ),
-          // Image.asset(
-          //     "assets/—Pngtree—world aids day volunteers hold_4839309.png"),
           Container(
             height: 200,
-            child: HeaderWidget(200),
+            child: HeaderWidget(),
           ),
           SafeArea(
             child: Padding(
@@ -138,15 +124,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  // Align(
-                  //   alignment: Alignment.topCenter,
-                  //   child: Container(
-                  //       height: 120,
-                  //       width: 300,
-                  //       child: Image.asset("assets/273.png")),
-                  // ),
                   Expanded(
-                    child: widget.role == 'Volunteer'
+                    child: widget.role == 'volunteer'
                         ? GridView.count(
                             // scrollDirection: Axis.horizontal,
                             crossAxisCount: 2,
@@ -154,6 +133,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             crossAxisSpacing: 5,
                             mainAxisSpacing: 5,
                             children: <Widget>[
+                              SizedBox(
+                                child: Row(children: [
+                                  const Text(
+                                    "Crowd",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 40,
+                                        color: Colors.white),
+                                  ),
+                                  Center(
+                                    child: Image.asset('assets/crowdv_png.png',
+                                        width: 40, height: 50),
+                                  ),
+                                ]),
+                              ),
+                              SizedBox(),
                               CategoryCard(
                                 title: "Upcoming Opportunity",
                                 svgSrc: "assets/86.svg",
@@ -199,19 +194,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             crossAxisSpacing: 5,
                             mainAxisSpacing: 5,
                             children: <Widget>[
-                              SizedBox(
-                                child: SvgPicture.asset('assets/undraw_web_browsing_p-77-h.svg',),
-                              ),
-                              SizedBox(
-                               child: Row(children:[const Text(
-                                 "Crowd",
-                                 style: TextStyle(fontWeight: FontWeight.bold,fontSize: 40,color: Colors.white),
-                               ),
-                                 Center(
-                                   child:
-                                   Image.asset('assets/crowdv_png.png', width: 40, height: 50),
-                                 ),]),
-                              ),
+
                               CategoryCard(
                                 title: "Create Opportunity",
                                 svgSrc: "assets/471.svg",
@@ -233,6 +216,43 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ),
           ),
+          widget.role == 'volunteer'
+              ? Positioned(
+                  top: 10,
+                  left: 250,
+                  child: LiteRollingSwitch(
+                    value: volunteer,
+                    iconOn: Icons.accessibility,
+                    iconOff: Icons.accessible,
+                    colorOff: Colors.blue,
+                    colorOn: secondaryColor,
+                    onChanged: (val) {
+                      volunteer = val;
+                      print(volunteer);
+                    },
+                    animationDuration: Duration(milliseconds: 1600),
+                    textOn: "Volunteer",
+                    textOff: "Recruiter",
+                  ),
+                )
+              : Positioned(
+                  top: 10,
+                  left: 250,
+                  child: LiteRollingSwitch(
+                    value: recruiter,
+                    iconOn: Icons.accessibility,
+                    iconOff: Icons.accessible,
+                    colorOff: Colors.blue,
+                    colorOn: secondaryColor,
+                    onChanged: (val) {
+                      recruiter = val;
+                      print(recruiter);
+                    },
+                    animationDuration: Duration(milliseconds: 1600),
+                    textOn: "Volunteer",
+                    textOff: "Recruiter",
+                  ),
+                ),
         ],
       ),
     );

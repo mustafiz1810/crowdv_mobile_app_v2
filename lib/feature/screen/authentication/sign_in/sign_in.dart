@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
       });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        pageRoute(data['result']['token']);
+        pageRoute(data['result']['token'].toString());
         // print('created');
         setState(() {
           isApiCallProcess = false;
@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
           MaterialPageRoute(
               builder: (context) => HomeScreen(
                   id: data['result']['data']['id'],
-                  role: data['result']['data']['role']['name'])),
+                  role: data['result']['data']['role'])),
         );
       } else {
         setState(() {
@@ -193,7 +193,6 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    //After successful login we will redirect to profile page. Let's create profile page now
                                     if (_formKey.currentState.validate()) {
                                       setState(() {
                                         isApiCallProcess = true;

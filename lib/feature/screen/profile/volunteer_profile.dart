@@ -88,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         Container(
                           height: 120,
-                          child: HeaderWidget(120),
+                          child: HeaderWidget(),
                         ),
                         Positioned(
                           top: 25,

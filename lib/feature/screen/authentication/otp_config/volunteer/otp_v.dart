@@ -32,19 +32,19 @@ class _OtpVolunteerPageState extends State<OtpVolunteer> {
   void otp(String otp) async {
     try {
       Response response =
-          await post(Uri.parse(NetworkConstants.BASE_URL + 'otp/check'), body: {
+          await post(Uri.parse(NetworkConstants.BASE_URL + 'email-otp/check'), body: {
         'otp': otp,
       });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        // print('created');
+        print(data['data'][0]['email'].toString());
         setState(() {
           isApiCallProcess = false;
         });
         showToast(context, data['message']);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-                builder: (context) => VolunteerSignUp(
+                builder: (context) => PhoneVerify(email: data['data'][0]['email'],
                     )),
             (Route<dynamic> route) => false);
       } else {
@@ -221,19 +221,15 @@ class _OtpVolunteerPageState extends State<OtpVolunteer> {
                               ),
                             ),
                           ),
-                          onPressed: (){ Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>PhoneVerify()),
-                          );}
-                          // _pinSuccess == true
-                          //     ? () {
-                          //         setState(() {
-                          //           isApiCallProcess = true;
-                          //         });
-                          //         otp(otpController.text.toString());
-                          //       }
-                          //     : null,
+                          onPressed:
+                          _pinSuccess == true
+                              ? () {
+                                  setState(() {
+                                    isApiCallProcess = true;
+                                  });
+                                  otp(otpController.text.toString());
+                                }
+                              : null,
                         ),
                       ),
                     ],

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
 import 'package:crowdv_mobile_app/feature/screen/password/change_pass.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/recruiter_profile.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/volunteer_profile.dart';
@@ -11,6 +12,7 @@ import 'package:crowdv_mobile_app/feature/screen/authentication/sign_in/sign_in.
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../utils/view_utils/common_util.dart';
@@ -24,7 +26,7 @@ class NavDrawer extends StatefulWidget {
 
 class _NavDrawerState extends State<NavDrawer> {
   String token = "";
-
+  String role;
   @override
   void initState() {
     super.initState();
@@ -37,6 +39,7 @@ class _NavDrawerState extends State<NavDrawer> {
       token = pref.getString("user");
     });
   }
+
   // Future<ProfileModel> getProfileApi() async {
   //   final response = await http.get(
   //       Uri.parse(NetworkConstants.BASE_URL + 'user/${widget.id}'),
@@ -48,7 +51,6 @@ class _NavDrawerState extends State<NavDrawer> {
   //     return ProfileModel.fromJson(data);
   //   }
   // }
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -59,10 +61,15 @@ class _NavDrawerState extends State<NavDrawer> {
           ),
           Stack(children: [
             Container(
-              height: 200,
-              child: HeaderWidget(200),
+              height: 210,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20)),
+                color: primaryColor,
+              ),
             ),
-            new UserAccountsDrawerHeader(
+            UserAccountsDrawerHeader(
               accountName: new Text("Mustafizur Rahman"),
               accountEmail: new Text("munna.kodeeo@gmail.com"),
               decoration: new BoxDecoration(
@@ -73,6 +80,7 @@ class _NavDrawerState extends State<NavDrawer> {
                 backgroundColor: Colors.transparent,
               ),
             ),
+
           ]),
           token != null
               ? Container()
@@ -83,7 +91,7 @@ class _NavDrawerState extends State<NavDrawer> {
                     // Navigator.pushNamed(context, '/categories');
                     Get.to(const LoginPage());
                   }),
-          widget.role == 'Volunteer'
+          widget.role == 'volunteer'
               ? ListTile(
                   leading: Icon(Icons.person),
                   title: Text("Profile"),

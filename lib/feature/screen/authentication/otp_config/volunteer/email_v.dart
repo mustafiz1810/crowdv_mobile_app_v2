@@ -6,7 +6,6 @@ import 'package:crowdv_mobile_app/widgets/header_widget.dart';
 import 'package:crowdv_mobile_app/widgets/progres_hud.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-
 import '../../../../../widgets/show_toast.dart';
 
 class EmailVolunteer extends StatefulWidget {
@@ -22,7 +21,7 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
   void email(String email) async {
     try {
       Response response = await post(
-          Uri.parse(NetworkConstants.BASE_URL + 'registration'),
+          Uri.parse(NetworkConstants.BASE_URL + 'email-send'),
           body: {
             'email': email,
           });
@@ -178,19 +177,14 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>OtpVolunteer()),
-                                  );
-                                  // if (_formKey.currentState.validate()) {
-                                  //   setState(() {
-                                  //     isApiCallProcess = true;
-                                  //   });
-                                  //   email(
-                                  //     emailEditingController.text.toString(),
-                                  //   );
-                                  // }
+                                  if (_formKey.currentState.validate()) {
+                                    setState(() {
+                                      isApiCallProcess = true;
+                                    });
+                                    email(
+                                      emailEditingController.text.toString(),
+                                    );
+                                  }
                                 },
                               ),
                             ),
