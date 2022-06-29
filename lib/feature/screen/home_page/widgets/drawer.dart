@@ -1,20 +1,13 @@
-import 'dart:async';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
 import 'package:crowdv_mobile_app/feature/screen/password/change_pass.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/recruiter_profile.dart';
-import 'package:crowdv_mobile_app/feature/screen/profile/volunteer_profile.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/get_prefs.dart';
-import 'package:crowdv_mobile_app/widgets/header_without_logo.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:flutter/material.dart';
 import 'package:crowdv_mobile_app/feature/screen/authentication/sign_in/sign_in.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../utils/view_utils/common_util.dart';
 
 class NavDrawer extends StatefulWidget {
@@ -91,14 +84,7 @@ class _NavDrawerState extends State<NavDrawer> {
                     // Navigator.pushNamed(context, '/categories');
                     Get.to(const LoginPage());
                   }),
-          widget.role == 'volunteer'
-              ? ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text("Profile"),
-                  onTap: () {
-                    Get.to(() => ProfilePage());
-                  })
-              : ListTile(
+           ListTile(
                   leading: Icon(Icons.person),
                   title: Text("Profile"),
                   onTap: () {

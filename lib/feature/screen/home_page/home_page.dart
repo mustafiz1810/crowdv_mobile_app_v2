@@ -1,19 +1,23 @@
+import 'dart:convert';
 import 'package:crowdv_mobile_app/feature/screen/Search/search.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruiter/Create%20Opportunity/create_op.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruiter/Create_Opportunity/create_op.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/service_location.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/set_category.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/upcoming.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/notification.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/drawer.dart';
+import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
 import 'package:crowdv_mobile_app/widgets/category_grid.dart';
 import 'package:crowdv_mobile_app/widgets/get_prefs.dart';
 import 'package:crowdv_mobile_app/widgets/header_without_logo.dart';
+import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
+import 'package:get/route_manager.dart';
+import 'package:http/http.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'home_contents/recruiter/my_opportunities.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,12 +29,92 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  // HomeController _controller = HomeController(repository: Get.find());
   bool navbarScrolled = false;
-  // // AnimationController _controller_body;
   var user;
   bool volunteer = true;
   bool recruiter = false;
+  void rec() async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'role/${widget.id}/volunteer'));
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+        prefs.clear();
+        pageRoute(data['data'][0]['token']);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) =>
+                    HomeScreen(id: widget.id, role: data['data'][0]['role'])),
+            (Route<dynamic> route) => false);
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Exception:"),
+              content: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+
+  void vol() async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'role/${widget.id}/recruiter'));
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+        prefs.clear();
+        pageRoute(data['data'][0]['token']);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) =>
+                    HomeScreen(id: widget.id, role: data['data'][0]['role'])),
+            (Route<dynamic> route) => false);
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Exception:"),
+              content: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+
+  void pageRoute(String token) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString("user", token);
+  }
 
   @override
   void initState() {
@@ -194,7 +278,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             crossAxisSpacing: 5,
                             mainAxisSpacing: 5,
                             children: <Widget>[
-
+                              SizedBox(
+                                child: Row(children: [
+                                  const Text(
+                                    "Crowd",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 40,
+                                        color: Colors.white),
+                                  ),
+                                  Center(
+                                    child: Image.asset('assets/crowdv_png.png',
+                                        width: 40, height: 50),
+                                  ),
+                                ]),
+                              ),
+                              SizedBox(),
                               CategoryCard(
                                 title: "Create Opportunity",
                                 svgSrc: "assets/471.svg",
@@ -230,6 +329,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       volunteer = val;
                       print(volunteer);
                     },
+                    onTap: () {
+                      vol();
+                    },
                     animationDuration: Duration(milliseconds: 1600),
                     textOn: "Volunteer",
                     textOff: "Recruiter",
@@ -246,7 +348,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     colorOn: secondaryColor,
                     onChanged: (val) {
                       recruiter = val;
-                      print(recruiter);
+                      print("recruiter");
+                    },
+                    onTap: () {
+                      rec();
                     },
                     animationDuration: Duration(milliseconds: 1600),
                     textOn: "Volunteer",

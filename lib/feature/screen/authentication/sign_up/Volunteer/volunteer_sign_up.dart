@@ -1,14 +1,11 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
-import 'package:crowdv_mobile_app/feature/screen/authentication/sign_in/sign_in.dart';
 import 'package:crowdv_mobile_app/feature/screen/authentication/sign_up/Volunteer/role_check.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/widgets/header_widget.dart';
 import 'package:crowdv_mobile_app/widgets/progres_hud.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../widgets/show_toast.dart';
 
 class VolunteerSignUp extends StatefulWidget {
@@ -20,7 +17,6 @@ class VolunteerSignUp extends StatefulWidget {
     return _VolunteerSignUpState();
   }
 }
-
 class _VolunteerSignUpState extends State<VolunteerSignUp> {
 
   final _formKey = GlobalKey<FormState>();
