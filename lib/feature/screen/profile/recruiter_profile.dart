@@ -47,7 +47,7 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
 
   Future<RecruiterProfileModel> getProfileApi() async {
     final response = await http.get(
-        Uri.parse(NetworkConstants.BASE_URL + 'recruiter/profile'),
+        Uri.parse(NetworkConstants.BASE_URL + 'profile'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
     if (response.statusCode == 200) {
@@ -116,15 +116,15 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                     ],
                                   ),
                                   child: Image.network(
-                                      snapshot.data.data[0].image),
+                                      snapshot.data.data.image),
                                 ),
                                 SizedBox(
                                   height: 5,
                                 ),
                                 Text(
-                                  snapshot.data.data[0].firstName +
+                                  snapshot.data.data.firstName +
                                       " " +
-                                      snapshot.data.data[0].lastName,
+                                      snapshot.data.data.lastName,
                                   style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold),
@@ -133,7 +133,7 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                   height: 5,
                                 ),
                                 Text(
-                                  snapshot.data.data[0].email,
+                                  snapshot.data.data.email,
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
@@ -216,10 +216,10 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                                   leading: Icon(Icons.person),
                                                   title: Text("Name:"),
                                                   subtitle: Text(
-                                                    snapshot.data.data[0]
+                                                    snapshot.data.data
                                                             .firstName +
                                                         " " +
-                                                        snapshot.data.data[0]
+                                                        snapshot.data.data
                                                             .lastName,
                                                   ),
                                                 ),
@@ -227,13 +227,13 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                                   leading: Icon(Icons.email),
                                                   title: Text("Email:"),
                                                   subtitle: Text(snapshot
-                                                      .data.data[0].email),
+                                                      .data.data.email),
                                                 ),
                                                 ListTile(
                                                   leading: Icon(Icons.phone),
                                                   title: Text("Phone:"),
                                                   subtitle:
-                                                      Text(snapshot.data.data[0].phone),
+                                                      Text(snapshot.data.data.phone),
                                                 ),
                                                 ListTile(
                                                   leading: Icon(Icons.person),
@@ -267,9 +267,9 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                   child: Center(
                                     child: DropdownButton<String>(
                                         hint: Center(
-                                          child: snapshot.data.data[0].profession!=null?Text(
+                                          child: snapshot.data.data.profession!=null?Text(
                                             "Profession:  " +
-                                                snapshot.data.data[0].profession
+                                                snapshot.data.data.profession
                                                     .toString(),
                                             style: TextStyle(
                                                 fontSize: 18,
@@ -454,9 +454,9 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                     child: DropdownButton<String>(
                                         value: _stateValue,
                                         hint: Center(
-                                          child: snapshot.data.data[0].state!=null?Text(
+                                          child: snapshot.data.data.state!=null?Text(
                                             "State:  " +
-                                                snapshot.data.data[0].state,
+                                                snapshot.data.data.state,
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 color: Colors.white,
@@ -591,9 +591,9 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                     child: DropdownButton<String>(
                                         value: _cityvalue,
                                         hint: Center(
-                                          child: snapshot.data.data[0].city!=null?Text(
+                                          child: snapshot.data.data.city!=null?Text(
                                             "City:  " +
-                                                snapshot.data.data[0].city
+                                                snapshot.data.data.city
                                                     .toString(),
                                             style: TextStyle(
                                                 fontSize: 18,
@@ -672,7 +672,7 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                     child: TextFormField(
                                       decoration: ThemeHelper()
                                           .textInputDecoration(
-                                              snapshot.data.data[0].zipCode!=null?snapshot.data.data[0].zipCode:"Zip Code",
+                                              snapshot.data.data.zipCode!=null?snapshot.data.data.zipCode:"Zip Code",
                                               'Enter your zip code'),
                                     ),
                                     decoration:

@@ -5,15 +5,14 @@ import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:inkwell_splash/inkwell_splash.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
 import '../../../../../widgets/show_toast.dart';
 
 class MyOpportunity extends StatefulWidget {
+  final dynamic role;
+  MyOpportunity({this.role});
   @override
   State<MyOpportunity> createState() => _MyOpportunityState();
 }
@@ -141,7 +140,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                               margin:
                                                   EdgeInsets.fromLTRB(0, 0, 0, 5),
                                               decoration: BoxDecoration(
-                                                color: secondaryColor,
+                                                color: Colors.white,
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(20)),
                                               ),
@@ -151,9 +150,9 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                           .status,
                                                       style: TextStyle(
                                                           fontWeight:
-                                                              FontWeight.bold,
+                                                          FontWeight.bold,
                                                           fontSize: 14,
-                                                          color: Colors.white))),
+                                                          color: Colors.deepOrange)),),
                                             ),
                                           ],
                                         ),
@@ -207,7 +206,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                           FontWeight.bold,
                                                       fontSize: 18),
                                                 ),
-                                                Text(snapshot.data.data[index].locationFrom,
+                                                Text(snapshot.data.data[index].city,
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -233,35 +232,29 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.end,
+                                                  MainAxisAlignment.spaceBetween,
                                               children: [
-                                                InkWell(
-                                                  onTap: () {
-                                                    Get.to(() =>
-                                                        OpportunityDetails());
-                                                  },
-                                                  child: Container(
-                                                    // width: 80,
-                                                    // height: 30,
-                                                    // margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                                    // decoration: BoxDecoration(
-                                                    //   color: primaryColor,
-                                                    //   borderRadius: BorderRadius.all(Radius.circular(20)),
-                                                    // ),
-                                                    child: Center(
-                                                        child: Text(
-                                                            'Details...',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 16,
-                                                                color:
-                                                                    primaryColor))),
-                                                  ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      'Category: ',
+                                                      style: TextStyle(
+                                                          color: primaryColor,
+                                                          fontWeight:
+                                                          FontWeight.bold,
+                                                          fontSize: 18),
+                                                    ),
+                                                    Text(snapshot.data.data[index].category.name,
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                            FontWeight.bold,
+                                                            fontSize: 14))
+                                                  ],
                                                 ),
+
                                               ],
                                             ),
+
                                           ],
                                         )),
                                   ],
@@ -287,33 +280,22 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                             ),
                                           ],
                                         ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                'Category: ',
-                                                style: TextStyle(
-                                                    color: primaryColor,
-                                                    fontWeight:
-                                                    FontWeight.bold,
-                                                    fontSize: 18),
-                                              ),
-                                              Text(snapshot.data.data[index].category.name,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                      FontWeight.bold,
-                                                      fontSize: 14))
-                                            ],
-                                          ),
-                                        ),
                                       ),
                                     )),
                                 Positioned(
-                                    right: 20,
+                                    left: 20,
                                     top: 195,
                                     child: Row(
                                       children: [
+                                        IconBox(
+                                          child: Icon(
+                                            Icons.edit,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                          bgColor: Colors.blueAccent,
+                                        ),
+                                        SizedBox(width: 10,),
                                         IconBox(
                                           child: Icon(
                                             Icons.delete,
@@ -322,6 +304,83 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                           ),
                                           bgColor: Colors.red,
                                         ),
+                                        SizedBox(width: 10,),
+                                        IconBox(
+                                          child: Icon(
+                                            Icons.person_pin,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                          bgColor: primaryColor,
+                                        ),
+                                      ],
+                                    )),
+                                Positioned(
+                                  top: 195,
+                                  left: 125,
+                                  child: Container(
+                                    padding: EdgeInsets.all(1),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    constraints: BoxConstraints(
+                                      minWidth: 12,
+                                      minHeight: 12,
+                                    ),
+                                    child: Text(
+                                      '1',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 8,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                    right: 20,
+                                    top: 193,
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 80,
+                                          height: 35,
+                                          margin:
+                                          EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                          decoration: BoxDecoration(
+                                            color: primaryColor,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                          ),
+                                          child: Center(
+                                            child:  InkWell(
+                                              onTap: () {
+                                                Get.to(() =>
+                                                    OpportunityDetails(role: widget.role,id:snapshot.data.data[index].id,token:token));
+                                              },
+                                              child: Container(
+                                                // width: 80,
+                                                // height: 30,
+                                                // margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                                // decoration: BoxDecoration(
+                                                //   color: primaryColor,
+                                                //   borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                // ),
+                                                child: Center(
+                                                    child: Text(
+                                                        'Details',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                            FontWeight
+                                                                .bold,
+                                                            fontSize: 16,
+                                                            color:
+                                                            Colors.white))),
+                                              ),
+                                            ),),
+                                        ),
+
                                       ],
                                     )),
                               ],

@@ -29,7 +29,7 @@ Future getRequest(path, qparam, headers) async {
 }
 
 Future getRequestWithoutParam(path, headers) async {
-  final response = await http.get(Uri.http('b00d-182-48-84-100.ngrok.io', path),
+  final response = await http.get(Uri.http('192.168.68.169:8000', path),
       headers: headers);
 
   // debugPrint(response.body);

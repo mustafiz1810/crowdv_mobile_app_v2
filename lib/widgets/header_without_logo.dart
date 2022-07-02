@@ -28,7 +28,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         children: [
           ClipPath(
             child: Container(
-              height: 210,
+              height: 100,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20)),
                   color: primaryColor,
@@ -41,60 +41,23 @@ class _HeaderWidgetState extends State<HeaderWidget> {
             //   // Offset(width, _height - 20)
             // ]),
           ),
-          // Positioned(
-          //     top: 150,
-          //     right: 152,
-          //     child: Container(
-          //         height: 100,
-          //         width: 100,
-          //         padding: EdgeInsets.all(10),
-          //         decoration: BoxDecoration(
-          //           borderRadius: BorderRadius.circular(100),
-          //           border: Border.all(
-          //               width: 5, color: Colors.white),
-          //           color: Colors.white,
-          //           boxShadow: [
-          //             BoxShadow(
-          //               color: Colors.black12,
-          //               blurRadius: 20,
-          //               offset: const Offset(5, 5),
-          //             ),
-          //           ],
-          //         ),
-          //         child:Image.asset('assets/crowdv_jpg.jpg')
-          //     ))
-          // Visibility(
-          //   visible: _showIcon,
-          //   child: Container(
-          //     height: _height - 40,
-          //     child: Center(
-          //       child: Container(
-          //         margin: EdgeInsets.all(20),
-          //         padding: EdgeInsets.only(
-          //           left: 5.0,
-          //           top: 20.0,
-          //           right: 5.0,
-          //           bottom: 20.0,
-          //         ),
-          //         decoration: BoxDecoration(
-          //           // borderRadius: BorderRadius.circular(20),
-          //           borderRadius: BorderRadius.only(
-          //             topLeft: Radius.circular(100),
-          //             topRight: Radius.circular(100),
-          //             bottomLeft: Radius.circular(60),
-          //             bottomRight: Radius.circular(60),
-          //           ),
-          //           border: Border.all(width: 5, color: Colors.white),
-          //         ),
-          //         child: Icon(
-          //           _icon,
-          //           color: Colors.white,
-          //           size: 40.0,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
+          Positioned(
+              top: 30,
+              right: 220,
+              child: Row(children: [
+                const Text(
+                  "Crowd",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 40,
+                      color: Colors.white),
+                ),
+                Center(
+                  child: Image.asset('assets/crowdv_png.png',
+                      width: 40, height: 50),
+                ),
+              ]))
+
         ],
       ),
     );

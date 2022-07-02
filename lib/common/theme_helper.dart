@@ -9,6 +9,7 @@ class ThemeHelper{
       labelText: lableText,
       hintText: hintText,
       fillColor: Colors.white,
+      labelStyle: TextStyle(fontWeight: FontWeight.bold),
       filled: true,
       contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
       focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100.0), borderSide: BorderSide(color: Colors.grey)),

@@ -196,169 +196,143 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       // extendBody: true,
-      body: Stack(
-        children: [
-          Container(
-            height: 200,
-            child: HeaderWidget(),
-          ),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Expanded(
-                    child: widget.role == 'volunteer'
-                        ? GridView.count(
-                            // scrollDirection: Axis.horizontal,
-                            crossAxisCount: 2,
-                            childAspectRatio: .90,
-                            crossAxisSpacing: 5,
-                            mainAxisSpacing: 5,
-                            children: <Widget>[
-                              SizedBox(
-                                child: Row(children: [
-                                  const Text(
-                                    "Crowd",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 40,
-                                        color: Colors.white),
-                                  ),
-                                  Center(
-                                    child: Image.asset('assets/crowdv_png.png',
-                                        width: 40, height: 50),
-                                  ),
-                                ]),
-                              ),
-                              SizedBox(),
-                              CategoryCard(
-                                title: "Upcoming Opportunity",
-                                svgSrc: "assets/86.svg",
-                                press: () {
-                                  Get.to(() => UpcomingOpportunity());
-                                },
-                              ),
-                              CategoryCard(
-                                title: "Set category",
-                                svgSrc: "assets/162.svg",
-                                press: () {
-                                  Get.to(() => SetCategory());
-                                },
-                              ),
-                              CategoryCard(
-                                title: "Service Location",
-                                svgSrc: "assets/214.svg",
-                                press: () {
-                                  Get.to(() => ServiceLocation());
-                                },
-                              ),
-                              CategoryCard(
-                                title: "Training",
-                                svgSrc: "assets/179.svg",
-                                press: () {},
-                              ),
-                              CategoryCard(
-                                title: "Membership",
-                                svgSrc: "assets/93.svg",
-                                press: () {},
-                              ),
-                              CategoryCard(
-                                title: "Certificate",
-                                svgSrc: "assets/185.svg",
-                                press: () {},
-                              ),
-                            ],
-                          )
-                        : GridView.count(
-                            // scrollDirection: Axis.horizontal,
-                            crossAxisCount: 2,
-                            childAspectRatio: .90,
-                            crossAxisSpacing: 5,
-                            mainAxisSpacing: 5,
-                            children: <Widget>[
-                              SizedBox(
-                                child: Row(children: [
-                                  const Text(
-                                    "Crowd",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 40,
-                                        color: Colors.white),
-                                  ),
-                                  Center(
-                                    child: Image.asset('assets/crowdv_png.png',
-                                        width: 40, height: 50),
-                                  ),
-                                ]),
-                              ),
-                              SizedBox(),
-                              CategoryCard(
-                                title: "Create Opportunity",
-                                svgSrc: "assets/471.svg",
-                                press: () {
-                                  Get.to(CreateOpportunity());
-                                },
-                              ),
-                              CategoryCard(
-                                title: "My Opportunity",
-                                svgSrc: "assets/457.svg",
-                                press: () {
-                                  Get.to(MyOpportunity());
-                                },
-                              ),
-                            ],
+      body: Container(
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                Container(
+                  height: 100,
+                  child: HeaderWidget(),
+                ),
+                widget.role == 'volunteer'
+                    ? Positioned(
+                        top: 30,
+                        left: 250,
+                        child: LiteRollingSwitch(
+                          value: volunteer,
+                          iconOn: Icons.accessibility,
+                          iconOff: Icons.accessible,
+                          colorOff: Colors.blue,
+                          colorOn: secondaryColor,
+                          onChanged: (val) {
+                            volunteer = val;
+                            print(volunteer);
+                          },
+                          onTap: () {
+                            vol();
+                          },
+                          animationDuration: Duration(milliseconds: 1600),
+                          textOn: "Volunteer",
+                          textOff: "Recruiter",
+                        ),
+                      )
+                    : Positioned(
+                        top: 30,
+                        left: 250,
+                        child: LiteRollingSwitch(
+                          value: recruiter,
+                          iconOn: Icons.accessibility,
+                          iconOff: Icons.accessible,
+                          colorOff: Colors.blue,
+                          colorOn: secondaryColor,
+                          onChanged: (val) {
+                            recruiter = val;
+                            print("recruiter");
+                          },
+                          onTap: () {
+                            rec();
+                          },
+                          animationDuration: Duration(milliseconds: 1600),
+                          textOn: "Volunteer",
+                          textOff: "Recruiter",
+                        ),
+                      ),
+              ],
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: widget.role == 'volunteer'
+                          ? GridView.count(
+                        // scrollDirection: Axis.horizontal,
+                        crossAxisCount: 2,
+                        childAspectRatio: .90,
+                        crossAxisSpacing: 5,
+                        mainAxisSpacing: 5,
+                        children: <Widget>[
+                          CategoryCard(
+                            title: "Upcoming Opportunity",
+                            svgSrc: "assets/86.svg",
+                            press: () {
+                              Get.to(() => UpcomingOpportunity(role: widget.role,));
+                            },
                           ),
-                  ),
-                ],
+                          CategoryCard(
+                            title: "Set category",
+                            svgSrc: "assets/162.svg",
+                            press: () {
+                              Get.to(() => SetCategory());
+                            },
+                          ),
+                          CategoryCard(
+                            title: "Service Location",
+                            svgSrc: "assets/214.svg",
+                            press: () {
+                              Get.to(() => ServiceLocation());
+                            },
+                          ),
+                          CategoryCard(
+                            title: "Training",
+                            svgSrc: "assets/179.svg",
+                            press: () {},
+                          ),
+                          CategoryCard(
+                            title: "Membership",
+                            svgSrc: "assets/93.svg",
+                            press: () {},
+                          ),
+                          CategoryCard(
+                            title: "Certificate",
+                            svgSrc: "assets/185.svg",
+                            press: () {},
+                          ),
+                        ],
+                      )
+                          : GridView.count(
+                        // scrollDirection: Axis.horizontal,
+                        crossAxisCount: 2,
+                        childAspectRatio: .90,
+                        crossAxisSpacing: 5,
+                        mainAxisSpacing: 5,
+                        children: <Widget>[
+                          CategoryCard(
+                            title: "Create Opportunity",
+                            svgSrc: "assets/471.svg",
+                            press: () {
+                              Get.to(CreateOpportunity());
+                            },
+                          ),
+                          CategoryCard(
+                            title: "My Opportunity",
+                            svgSrc: "assets/457.svg",
+                            press: () {
+                              Get.to(MyOpportunity(role: widget.role,));
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          widget.role == 'volunteer'
-              ? Positioned(
-                  top: 10,
-                  left: 250,
-                  child: LiteRollingSwitch(
-                    value: volunteer,
-                    iconOn: Icons.accessibility,
-                    iconOff: Icons.accessible,
-                    colorOff: Colors.blue,
-                    colorOn: secondaryColor,
-                    onChanged: (val) {
-                      volunteer = val;
-                      print(volunteer);
-                    },
-                    onTap: () {
-                      vol();
-                    },
-                    animationDuration: Duration(milliseconds: 1600),
-                    textOn: "Volunteer",
-                    textOff: "Recruiter",
-                  ),
-                )
-              : Positioned(
-                  top: 10,
-                  left: 250,
-                  child: LiteRollingSwitch(
-                    value: recruiter,
-                    iconOn: Icons.accessibility,
-                    iconOff: Icons.accessible,
-                    colorOff: Colors.blue,
-                    colorOn: secondaryColor,
-                    onChanged: (val) {
-                      recruiter = val;
-                      print("recruiter");
-                    },
-                    onTap: () {
-                      rec();
-                    },
-                    animationDuration: Duration(milliseconds: 1600),
-                    textOn: "Volunteer",
-                    textOff: "Recruiter",
-                  ),
-                ),
-        ],
+          ],
+        ),
       ),
     );
   }
