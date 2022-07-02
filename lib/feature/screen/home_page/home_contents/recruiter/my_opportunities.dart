@@ -287,7 +287,18 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                 Positioned(
                                     left: 20,
                                     top: 195,
-                                    child: Row(
+                                    child:snapshot.data.data[index].status=='Hired'?Row(
+                                      children: [
+                                        IconBox(
+                                          child: Icon(
+                                            Icons.message,
+                                            color: Colors.white,
+                                            size: 18,
+                                          ),
+                                          bgColor: primaryColor,
+                                        )
+                                      ],
+                                    ): Row(
                                       children: [
                                         IconBox(
                                           child: Icon(
@@ -307,14 +318,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                           bgColor: Colors.red,
                                         ),
                                         SizedBox(width: 10,),
-                                       snapshot.data.data[index].status=='Hired'?IconBox(
-                                         child: Icon(
-                                           Icons.message,
-                                           color: Colors.white,
-                                           size: 18,
-                                         ),
-                                         bgColor: primaryColor,
-                                       ):IconBox(
+                                       IconBox(
                                          onTap: (){Get.to(()=>AppliedVolunteer(token:token,id:snapshot.data.data[index].id,));},
                                          child: Icon(
                                            Icons.person_pin,
@@ -326,7 +330,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                       ],
                                     )),
                                 // -----------------------------------Notification
-                                Positioned(
+                                snapshot.data.data[index].status=='Hired'?SizedBox():Positioned(
                                   top: 195,
                                   left: 125,
                                   child: Container(

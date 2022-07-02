@@ -22,6 +22,7 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
         Uri.parse(NetworkConstants.BASE_URL + 'apply-volunteer-list/${widget.id}'),
         headers: {"Authorization": "Bearer ${widget.token}"});
     var data = jsonDecode(response.body.toString());
+
     showToast(context, data['message']);
     if (response.statusCode == 200) {
       return ApplyVolunteer.fromJson(data);
@@ -291,7 +292,7 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
                                                 child:  InkWell(
                                                   onTap: () {
                                                     getRequestWithoutParam(
-                                                        '/api/v1/opportunity/hired/${snapshot.data.data.applyVolunteer[index].volunteers.id}',
+                                                        '/api/v1/opportunity/hired/${snapshot.data.data.applyVolunteer[index].id}',
                                                         {
                                                           'Content-Type':
                                                           "application/json",

@@ -58,16 +58,20 @@ class Data {
 
 class ApplyVolunteerElement {
   ApplyVolunteerElement({
+    this.id,
     this.volunteers,
   });
 
+  int id;
   Volunteers volunteers;
 
   factory ApplyVolunteerElement.fromJson(Map<String, dynamic> json) => ApplyVolunteerElement(
+    id: json["id"],
     volunteers: Volunteers.fromJson(json["volunteers"]),
   );
 
   Map<String, dynamic> toJson() => {
+    "id": id,
     "volunteers": volunteers.toJson(),
   };
 }
