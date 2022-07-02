@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/data/models/recruiter/my_opportunity.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/applied_volunteer.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
@@ -282,6 +283,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                         ),
                                       ),
                                     )),
+                                // ---------------------------------------Icons
                                 Positioned(
                                     left: 20,
                                     top: 195,
@@ -305,16 +307,25 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                           bgColor: Colors.red,
                                         ),
                                         SizedBox(width: 10,),
-                                        IconBox(
-                                          child: Icon(
-                                            Icons.person_pin,
-                                            color: Colors.white,
-                                            size: 20,
-                                          ),
-                                          bgColor: primaryColor,
-                                        ),
+                                       snapshot.data.data[index].status=='Hired'?IconBox(
+                                         child: Icon(
+                                           Icons.message,
+                                           color: Colors.white,
+                                           size: 18,
+                                         ),
+                                         bgColor: primaryColor,
+                                       ):IconBox(
+                                         onTap: (){Get.to(()=>AppliedVolunteer(token:token,id:snapshot.data.data[index].id,));},
+                                         child: Icon(
+                                           Icons.person_pin,
+                                           color: Colors.white,
+                                           size: 20,
+                                         ),
+                                         bgColor: primaryColor,
+                                       ),
                                       ],
                                     )),
+                                // -----------------------------------Notification
                                 Positioned(
                                   top: 195,
                                   left: 125,
@@ -338,6 +349,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                     ),
                                   ),
                                 ),
+                                // -----------------------------Detail
                                 Positioned(
                                     right: 20,
                                     top: 193,

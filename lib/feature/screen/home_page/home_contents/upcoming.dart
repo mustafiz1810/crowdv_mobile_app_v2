@@ -34,7 +34,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
     });
   }
 
-  Future<VolunteerOpportunity> getOpportunityApi() async {
+  Future<VolunteerOpportunity> getVOpportunityApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL + 'volunteer/tasks/list'),
         headers: {"Authorization": "Bearer ${token}"});
@@ -70,7 +70,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
             children: [
               Expanded(
                   child: FutureBuilder<VolunteerOpportunity>(
-                future: getOpportunityApi(),
+                future: getVOpportunityApi(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
@@ -296,8 +296,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                         ),
                                       ),
                                     )),
-                                widget.role == 'volunteer'
-                                    ? Positioned(
+                                Positioned(
                                         left: 20,
                                         top: 202,
                                         child: Row(
@@ -309,67 +308,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                                 snapshot.data.data[index]
                                                     .recruiter.lastName,style: TextStyle(fontWeight: FontWeight.bold),)
                                           ],
-                                        ))
-                                    : Positioned(
-                                        left: 20,
-                                        top: 195,
-                                        child: Row(
-                                          children: [
-                                            IconBox(
-                                              child: Icon(
-                                                Icons.edit,
-                                                color: Colors.white,
-                                                size: 20,
-                                              ),
-                                              bgColor: Colors.blueAccent,
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            IconBox(
-                                              child: Icon(
-                                                Icons.delete,
-                                                color: Colors.white,
-                                                size: 20,
-                                              ),
-                                              bgColor: Colors.red,
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            IconBox(
-                                              child: Icon(
-                                                Icons.person_pin,
-                                                color: Colors.white,
-                                                size: 20,
-                                              ),
-                                              bgColor: primaryColor,
-                                            ),
-                                          ],
                                         )),
-                                widget.role == 'volunteer'?SizedBox():Positioned(
-                                  top: 195,
-                                  left: 125,
-                                  child: Container(
-                                    padding: EdgeInsets.all(1),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    constraints: BoxConstraints(
-                                      minWidth: 12,
-                                      minHeight: 12,
-                                    ),
-                                    child: Text(
-                                      '1',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 8,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),
                                 Positioned(
                                     right: 20,
                                     top: 193,
