@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:sweetalert/sweetalert.dart';
 import '../../../../../widgets/show_toast.dart';
 
 class MyOpportunity extends StatefulWidget {
@@ -359,6 +360,46 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                     top: 193,
                                     child: Row(
                                       children: [
+                                        snapshot.data.data[index].status=='Hired'?Container(
+                                          width: 90,
+                                          height: 35,
+                                          margin:
+                                          EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                          decoration: BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                          ),
+                                          child: Center(
+                                            child:  InkWell(
+                                              onTap: () {
+                                                SweetAlert.show(context,
+                                                    title: "Opportunity completed",
+                                                    subtitle: "Sweet alert is pretty",
+                                                    style: SweetAlertStyle.success);
+                                              },
+                                              child: Container(
+                                                // width: 80,
+                                                // height: 30,
+                                                // margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                                // decoration: BoxDecoration(
+                                                //   color: primaryColor,
+                                                //   borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                // ),
+                                                child: Center(
+                                                    child: Text(
+                                                        'Complete',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                            FontWeight
+                                                                .bold,
+                                                            fontSize: 16,
+                                                            color:
+                                                            Colors.white))),
+                                              ),
+                                            ),),
+                                        ):Container(),
+                                        SizedBox(width: 5,),
                                         Container(
                                           width: 80,
                                           height: 35,
@@ -396,6 +437,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                               ),
                                             ),),
                                         ),
+
 
                                       ],
                                     )),

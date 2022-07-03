@@ -24,7 +24,6 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
   void initState() {
     super.initState();
     getCred();
-    print(widget.role.toString());
   }
 
   void getCred() async {
@@ -331,7 +330,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                                     role: widget.role,
                                                     id: snapshot
                                                         .data.data[index].id,
-                                                    token: token,name:snapshot.data.data[index].recruiter.firstName));
+                                                    token: token));
                                               },
                                               child: Container(
                                                 // width: 80,

@@ -72,6 +72,7 @@ dependencies:
   pin_code_fields: ^7.4.0
   lite_rolling_switch: ^0.1.1
   fancy_radio_button: ^0.0.1
+  sweetalert: ^0.0.1
 
 dev_dependencies:
   flutter_test:
