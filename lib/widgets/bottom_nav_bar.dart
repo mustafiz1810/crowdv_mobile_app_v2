@@ -1,4 +1,5 @@
 import 'package:crowdv_mobile_app/feature/screen/History/history.dart';
+import 'package:crowdv_mobile_app/feature/screen/History/recruiter_history.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -6,10 +7,8 @@ import 'package:get/get.dart';
 
 
 class CustomBottomNavigation extends StatefulWidget {
-  const CustomBottomNavigation({
-    Key key,
-  }) : super(key: key);
-
+  final dynamic role;
+  CustomBottomNavigation({this.role});
   @override
   State<CustomBottomNavigation> createState() => _CustomBottomNavigationState();
 }
@@ -42,7 +41,8 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
           case 0:
             return Get.to(HomeScreen());
           case 1:
-            return Get.to(History());
+            widget.role=='volunteer'?
+             Get.to(VolunteerHistory()):Get.to(RecruiterHistory());
           // case 1:
           //   if (user == null)
           //     Get.to(SignIn());

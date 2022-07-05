@@ -4,6 +4,7 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
+import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,8 +25,8 @@ class _MyOpportunityState extends State<MyOpportunity> {
 
   @override
   void initState() {
-    super.initState();
     getCred();
+    super.initState();
   }
 
   void getCred() async {
@@ -111,11 +112,12 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                       width: 370,
                                       decoration: BoxDecoration(
                                         color: primaryColor,
-                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight:Radius.circular(20)),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(20),
+                                            topRight: Radius.circular(20)),
                                         boxShadow: [
                                           BoxShadow(
-                                            color:
-                                            shadowColor.withOpacity(0.2),
+                                            color: shadowColor.withOpacity(0.2),
                                             spreadRadius: .1,
                                             blurRadius: 3,
                                             // offset: Offset(0, 1), // changes position of shadow
@@ -132,29 +134,31 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                             Text(
                                               snapshot.data.data[index].title,
                                               style: TextStyle(
-                                                color: Colors.white,
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 18),
                                             ),
                                             Container(
                                               width: 80,
                                               height: 35,
-                                              margin:
-                                                  EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                              margin: EdgeInsets.fromLTRB(
+                                                  0, 0, 0, 5),
                                               decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(20)),
                                               ),
                                               child: Center(
-                                                  child: Text(
-                                                      snapshot.data.data[index]
-                                                          .status,
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                          FontWeight.bold,
-                                                          fontSize: 14,
-                                                          color: Colors.deepOrange)),),
+                                                child: Text(
+                                                    snapshot.data.data[index]
+                                                        .status,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14,
+                                                        color:
+                                                            Colors.deepOrange)),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -179,16 +183,16 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                     style: TextStyle(
                                                         color: primaryColor,
                                                         fontWeight:
-                                                        FontWeight.bold,
+                                                            FontWeight.bold,
                                                         fontSize: 18),
                                                   ),
                                                 ),
                                                 SizedBox(
-                                                  width:250,
+                                                  width: 250,
                                                   height: 40,
                                                   child: Text(
-                                                    snapshot
-                                                        .data.data[index].details,
+                                                    snapshot.data.data[index]
+                                                        .details,
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -197,7 +201,9 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(height: 10,),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
                                             Row(
                                               children: [
                                                 Text(
@@ -208,7 +214,9 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                           FontWeight.bold,
                                                       fontSize: 18),
                                                 ),
-                                                Text(snapshot.data.data[index].city,
+                                                Text(
+                                                    snapshot
+                                                        .data.data[index].city,
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -225,7 +233,9 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                           FontWeight.bold,
                                                       fontSize: 18),
                                                 ),
-                                                Text(snapshot.data.data[index].taskType,
+                                                Text(
+                                                    snapshot.data.data[index]
+                                                        .taskType,
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -234,7 +244,8 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Row(
                                                   children: [
@@ -243,20 +254,23 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                       style: TextStyle(
                                                           color: primaryColor,
                                                           fontWeight:
-                                                          FontWeight.bold,
+                                                              FontWeight.bold,
                                                           fontSize: 18),
                                                     ),
-                                                    Text(snapshot.data.data[index].category.name,
+                                                    Text(
+                                                        snapshot
+                                                            .data
+                                                            .data[index]
+                                                            .category
+                                                            .name,
                                                         style: TextStyle(
                                                             fontWeight:
-                                                            FontWeight.bold,
+                                                                FontWeight.bold,
                                                             fontSize: 14))
                                                   ],
                                                 ),
-
                                               ],
                                             ),
-
                                           ],
                                         )),
                                   ],
@@ -288,133 +302,155 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                 Positioned(
                                     left: 20,
                                     top: 195,
-                                    child:snapshot.data.data[index].status=='Hired'?Row(
-                                      children: [
-                                        IconBox(
-                                          child: Icon(
-                                            Icons.message,
-                                            color: Colors.white,
-                                            size: 18,
-                                          ),
-                                          bgColor: primaryColor,
-                                        )
-                                      ],
-                                    ): Row(
-                                      children: [
-                                        IconBox(
-                                          child: Icon(
-                                            Icons.edit,
-                                            color: Colors.white,
-                                            size: 20,
-                                          ),
-                                          bgColor: Colors.blueAccent,
-                                        ),
-                                        SizedBox(width: 10,),
-                                        IconBox(
-                                          child: Icon(
-                                            Icons.delete,
-                                            color: Colors.white,
-                                            size: 20,
-                                          ),
-                                          bgColor: Colors.red,
-                                        ),
-                                        SizedBox(width: 10,),
-                                       IconBox(
-                                         onTap: (){Get.to(()=>AppliedVolunteer(token:token,id:snapshot.data.data[index].id,));},
-                                         child: Icon(
-                                           Icons.person_pin,
-                                           color: Colors.white,
-                                           size: 20,
-                                         ),
-                                         bgColor: primaryColor,
-                                       ),
-                                      ],
-                                    )),
+                                    child: snapshot.data.data[index].status ==
+                                            'Hired'
+                                        ? Row(
+                                            children: [
+                                              IconBox(
+                                                child: Icon(
+                                                  Icons.message,
+                                                  color: Colors.white,
+                                                  size: 18,
+                                                ),
+                                                bgColor: primaryColor,
+                                              )
+                                            ],
+                                          )
+                                        : Row(
+                                            children: [
+                                              IconBox(
+                                                onTap: () {
+                                                  Get.to(() => AppliedVolunteer(
+                                                        token: token,
+                                                        id: snapshot.data
+                                                            .data[index].id,
+                                                      ));
+                                                },
+                                                child: Icon(
+                                                  Icons.person_pin,
+                                                  color: Colors.white,
+                                                  size: 20,
+                                                ),
+                                                bgColor: primaryColor,
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              IconBox(
+                                                onTap: () {
+                                                  SweetAlert.show(context,
+                                                      subtitle:
+                                                          "Do you want to delete this opportunity?",
+                                                      style: SweetAlertStyle
+                                                          .confirm,
+                                                      showCancelButton: true,
+                                                      onPress:
+                                                          (bool isConfirm) {
+                                                    if (isConfirm) {
+                                                      //Return false to keep dialog
+                                                      if (isConfirm) {
+                                                        SweetAlert.show(context,
+                                                            subtitle:
+                                                                "Deleting...",
+                                                            style:
+                                                                SweetAlertStyle
+                                                                    .loading);
+                                                        new Future.delayed(
+                                                            new Duration(
+                                                                seconds: 2),
+                                                            () {
+                                                          getRequestWithoutParam(
+                                                              '/api/v1/opportunity/delete/${snapshot.data.data[index].id}',
+                                                              {
+                                                                'Content-Type':
+                                                                    "application/json",
+                                                                "Authorization":
+                                                                    "Bearer ${token}"
+                                                              }).then(
+                                                              (value) async {
+                                                            SweetAlert.show(
+                                                                context,
+                                                                subtitle:
+                                                                    "Success!",
+                                                                style:
+                                                                    SweetAlertStyle
+                                                                        .success);
+                                                          });
+                                                        });
+                                                      } else {
+                                                        SweetAlert.show(context,
+                                                            subtitle:
+                                                                "Canceled!",
+                                                            style:
+                                                                SweetAlertStyle
+                                                                    .error);
+                                                      }
+                                                      return false;
+                                                    }
+                                                    return null;
+                                                  });
+
+                                                },
+                                                child: Icon(
+                                                  Icons.delete,
+                                                  color: Colors.white,
+                                                  size: 20,
+                                                ),
+                                                bgColor: Colors.red,
+                                              ),
+                                            ],
+                                          )),
                                 // -----------------------------------Notification
-                                snapshot.data.data[index].status=='Hired'?SizedBox():Positioned(
-                                  top: 195,
-                                  left: 125,
-                                  child: Container(
-                                    padding: EdgeInsets.all(1),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    constraints: BoxConstraints(
-                                      minWidth: 12,
-                                      minHeight: 12,
-                                    ),
-                                    child: Text(
-                                      '1',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 8,
+                                snapshot.data.data[index].status == 'Hired'
+                                    ? SizedBox()
+                                    : Positioned(
+                                        top: 195,
+                                        left: 40,
+                                        child: Container(
+                                          padding: EdgeInsets.all(1),
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                          ),
+                                          constraints: BoxConstraints(
+                                            minWidth: 12,
+                                            minHeight: 12,
+                                          ),
+                                          child: Text(
+                                            '1',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 8,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
                                       ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),
                                 // -----------------------------Detail
                                 Positioned(
                                     right: 20,
                                     top: 193,
                                     child: Row(
                                       children: [
-                                        snapshot.data.data[index].status=='Hired'?Container(
-                                          width: 90,
-                                          height: 35,
-                                          margin:
-                                          EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                          decoration: BoxDecoration(
-                                            color: Colors.green,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)),
-                                          ),
-                                          child: Center(
-                                            child:  InkWell(
-                                              onTap: () {
-                                                SweetAlert.show(context,
-                                                    title: "Opportunity completed",
-                                                    subtitle: "Sweet alert is pretty",
-                                                    style: SweetAlertStyle.success);
-                                              },
-                                              child: Container(
-                                                // width: 80,
-                                                // height: 30,
-                                                // margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                                // decoration: BoxDecoration(
-                                                //   color: primaryColor,
-                                                //   borderRadius: BorderRadius.all(Radius.circular(20)),
-                                                // ),
-                                                child: Center(
-                                                    child: Text(
-                                                        'Complete',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .bold,
-                                                            fontSize: 16,
-                                                            color:
-                                                            Colors.white))),
-                                              ),
-                                            ),),
-                                        ):Container(),
-                                        SizedBox(width: 5,),
                                         Container(
                                           width: 80,
                                           height: 35,
                                           margin:
-                                          EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                              EdgeInsets.fromLTRB(0, 0, 0, 5),
                                           decoration: BoxDecoration(
                                             color: primaryColor,
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)),
                                           ),
                                           child: Center(
-                                            child:  InkWell(
+                                            child: InkWell(
                                               onTap: () {
-                                                Get.to(() =>
-                                                    OpportunityDetails(role: widget.role,id:snapshot.data.data[index].id,token:token));
+                                                Get.to(() => OpportunityDetails(
+                                                    role: widget.role,
+                                                    id: snapshot
+                                                        .data.data[index].id,
+                                                    token: token));
                                               },
                                               child: Container(
                                                 // width: 80,
@@ -425,20 +461,17 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                 //   borderRadius: BorderRadius.all(Radius.circular(20)),
                                                 // ),
                                                 child: Center(
-                                                    child: Text(
-                                                        'Details',
+                                                    child: Text('Details',
                                                         style: TextStyle(
                                                             fontWeight:
-                                                            FontWeight
-                                                                .bold,
+                                                                FontWeight.bold,
                                                             fontSize: 16,
                                                             color:
-                                                            Colors.white))),
+                                                                Colors.white))),
                                               ),
-                                            ),),
+                                            ),
+                                          ),
                                         ),
-
-
                                       ],
                                     )),
                               ],

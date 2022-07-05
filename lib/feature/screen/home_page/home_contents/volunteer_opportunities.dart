@@ -1,30 +1,30 @@
 import 'dart:convert';
-import 'package:crowdv_mobile_app/data/models/volunteer/upcoming_opportunity.dart';
+import 'package:crowdv_mobile_app/data/models/volunteer/volunteer_opportunity_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
-import 'package:crowdv_mobile_app/widgets/icon_box.dart';
+import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:sweetalert/sweetalert.dart';
 import '../../../../../widgets/show_toast.dart';
 
-class UpcomingOpportunity extends StatefulWidget {
+class VolunteerMyOpportunity extends StatefulWidget {
   final dynamic role;
-  UpcomingOpportunity({this.role});
+  VolunteerMyOpportunity({this.role});
   @override
-  State<UpcomingOpportunity> createState() => _UpcomingOpportunityState();
+  State<VolunteerMyOpportunity> createState() => _VolunteerMyOpportunityState();
 }
 
-class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
+class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
   String token = "";
 
   @override
   void initState() {
-    super.initState();
-    getUOpportunityApi();
     getCred();
+    super.initState();
   }
 
   void getCred() async {
@@ -34,16 +34,16 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
     });
   }
 
-  Future<VolunteerOpportunity> getUOpportunityApi() async {
+  Future<VolunteerOpportunityModel> getVOpportunityApi() async {
     final response = await http.get(
-        Uri.parse(NetworkConstants.BASE_URL + 'volunteer/tasks/list'),
+        Uri.parse(NetworkConstants.BASE_URL + 'volunteer/own/tasks'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
     showToast(context, data['message']);
     if (response.statusCode == 200) {
-      return VolunteerOpportunity.fromJson(data);
+      return VolunteerOpportunityModel.fromJson(data);
     } else {
-      return VolunteerOpportunity.fromJson(data);
+      return VolunteerOpportunityModel.fromJson(data);
     }
   }
 
@@ -54,7 +54,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
           iconTheme: IconThemeData(color: Colors.white),
           // collapsedHeight: 150,
           title: const Text(
-            'Upcoming Opportunity',
+            'My Opportunity',
             style: TextStyle(color: Colors.white),
           ),
           // ),
@@ -69,8 +69,8 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
           child: Column(
             children: [
               Expanded(
-                  child: FutureBuilder<VolunteerOpportunity>(
-                future: getUOpportunityApi(),
+                  child: FutureBuilder<VolunteerOpportunityModel>(
+                future: getVOpportunityApi(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
@@ -296,28 +296,87 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                         ),
                                       ),
                                     )),
-                                Positioned(
-                                    left: 20,
-                                    top: 202,
-                                    child: Row(
-                                      children: [
-                                        Text("Recruiter Name: "),
-                                        Text(
-                                          snapshot.data.data[index].recruiter
-                                                  .firstName +
-                                              " " +
-                                              snapshot.data.data[index]
-                                                  .recruiter.lastName,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        )
-                                      ],
-                                    )),
+                                // -----------------------------Detail
                                 Positioned(
                                     right: 20,
                                     top: 193,
                                     child: Row(
                                       children: [
+                                        Container(
+                                          width: 90,
+                                          height: 35,
+                                          margin: EdgeInsets.fromLTRB(
+                                              0, 0, 0, 5),
+                                          decoration: BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius:
+                                            BorderRadius.all(
+                                                Radius.circular(20)),
+                                          ),
+                                          child: Center(
+                                            child: InkWell(
+                                              onTap: () {
+                                                getRequestWithoutParam(
+                                                    '/api/v1/volunteer-request-for-task-complete/${snapshot.data.data[index].id}',
+                                                    {
+                                                      'Content-Type':
+                                                      "application/json",
+                                                      "Authorization":
+                                                      "Bearer ${token}"
+                                                    }).then(
+                                                        (value) async {
+                                                      SweetAlert.show(context,
+                                                          title:
+                                                          "Your Task is completed",
+                                                          style:
+                                                          SweetAlertStyle
+                                                              .success,
+                                                          onPress: (bool
+                                                          isConfirm) {
+                                                            if (isConfirm) {
+                                                              getVOpportunityApi();
+                                                              // return false to keep dialog
+                                                            }
+                                                            return null;
+                                                          });
+                                                    });
+                                                // SweetAlert.show(context,
+                                                //     title: "Just show a message",
+                                                //     subtitle: "Sweet alert is pretty",
+                                                //     style: SweetAlertStyle.success,
+                                                //     onPress: (bool isConfirm) {
+                                                //       if (isConfirm) {
+                                                //         getOpportunityApi();
+                                                //         // return false to keep dialog
+                                                //       }
+                                                //       return null;
+                                                //     });
+                                              },
+                                              child: Container(
+                                                // width: 80,
+                                                // height: 30,
+                                                // margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                                // decoration: BoxDecoration(
+                                                //   color: primaryColor,
+                                                //   borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                // ),
+                                                child: Center(
+                                                    child: Text(
+                                                        'Complete',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                            FontWeight
+                                                                .bold,
+                                                            fontSize: 16,
+                                                            color: Colors
+                                                                .white))),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
                                         Container(
                                           width: 80,
                                           height: 35,

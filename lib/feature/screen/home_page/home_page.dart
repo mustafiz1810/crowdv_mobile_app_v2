@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:crowdv_mobile_app/data/models/volunteer/upcoming_opportunity.dart';
 import 'package:crowdv_mobile_app/feature/screen/Search/search.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruiter/Create_Opportunity/create_op.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/service_location.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/set_category.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/upcoming.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/volunteer_opportunities.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/notification.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/drawer.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
@@ -185,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           )
         ],
       ),
-      bottomNavigationBar: CustomBottomNavigation(),
+      bottomNavigationBar: CustomBottomNavigation(role: widget.role,),
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
@@ -270,6 +272,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             svgSrc: "assets/86.svg",
                             press: () {
                               Get.to(() => UpcomingOpportunity(role: widget.role,));
+                            },
+                          ),
+                          CategoryCard(
+                            title: "My Opportunity",
+                            svgSrc: "assets/457.svg",
+                            press: () {
+                              Get.to(VolunteerMyOpportunity(role: widget.role,));
                             },
                           ),
                           CategoryCard(

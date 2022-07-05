@@ -8,45 +8,45 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class OpLocation extends StatefulWidget {
-  final dynamic title,
+class LocationUpdate extends StatefulWidget {
+  final dynamic token,id,title,
       category,
       type,
       description,
       date,
       time,
       etime,
-      eligibility;
-  OpLocation(
-      {@required this.title,
+      eligibility,
+      city,
+      state,
+  zip;
+  LocationUpdate(
+      {@required this.token,
+        this.id,
+      this.title,
       this.category,
       this.type,
       this.description,
       this.date,
       this.time,
       this.etime,
-      this.eligibility});
+      this.eligibility,
+      this.city,
+      this.state,
+      this.zip});
 
   @override
-  _OpLocationState createState() => _OpLocationState();
+  _LocationUpdateState createState() => _LocationUpdateState();
 }
 
-class _OpLocationState extends State<OpLocation> {
-  String token = "";
-
+class _LocationUpdateState extends State<LocationUpdate> {
   @override
   void initState() {
     super.initState();
-    getCred();
+    selectedCountry=widget.state;
+    selectedProvince=widget.city;
+    zipController.text=widget.zip.toString();
   }
-
-  void getCred() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    setState(() {
-      token = pref.getString("user");
-    });
-  }
-
   List<String> countries = [
     'Alabama',
     'Alaska',
@@ -76,13 +76,13 @@ class _OpLocationState extends State<OpLocation> {
   String selectedCountry;
   String selectedProvince;
   TextEditingController zipController = TextEditingController();
-  void create(String title, category_id, date, start_time, end_time, state,
+  void update(String title, category_id, date, start_time, end_time, state,
       city, eligibility, details, task_type, zip_code) async {
     try {
       Response response = await post(
-          Uri.parse(NetworkConstants.BASE_URL + 'opportunity/store'),
+          Uri.parse(NetworkConstants.BASE_URL + 'opportunity/update/${widget.id}'),
           headers: {
-            "Authorization": "Bearer $token"
+            "Authorization": "Bearer ${widget.token}"
           },
           body: {
             'title': title,
@@ -242,7 +242,7 @@ class _OpLocationState extends State<OpLocation> {
                 child: DropdownButton<String>(
                   hint: Center(
                     child: Text(
-                      'Select City',
+                      widget.city.toString(),
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.white,
@@ -303,7 +303,7 @@ class _OpLocationState extends State<OpLocation> {
                       splashColor: secondaryColor, // splash color
                       onTap: () {
                         setState(() {
-                          print(widget.title +
+                          print(widget.id.toString() +
                               "  " +
                               widget.category +
                               "  " +
@@ -325,7 +325,7 @@ class _OpLocationState extends State<OpLocation> {
                               "  " +
                               zipController.text.toString());
                         });
-                        create(
+                        update(
                             widget.title,
                             widget.category,
                             widget.date,
@@ -349,7 +349,7 @@ class _OpLocationState extends State<OpLocation> {
                             width: 5,
                           ), // icon
                           Text(
-                            "Create Opportunity",
+                            "Update Opportunity",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,

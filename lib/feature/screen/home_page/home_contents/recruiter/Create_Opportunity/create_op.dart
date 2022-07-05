@@ -20,17 +20,11 @@ class CreateOpportunity extends StatefulWidget {
 }
 
 class _CreateOpportunityState extends State<CreateOpportunity> {
-  DateTime dateTime = DateTime(2022, 6, 20, 5, 30);
+  DateTime dateTime = DateTime.now();
   TimeOfDay time = TimeOfDay(hour: 12, minute: 50);
   TimeOfDay _time = TimeOfDay(hour: 12, minute: 50);
-  String _stateValue = "Alabama";
   String _typevalue;
-  List<String> _state = [
-    "Alabama",
-    "Alaska",
-    "California",
-  ];
-  List<String> _type = ["online", "offline", "both"];
+  List<String> _type = ["Online", "Offline", "Both"];
   String token = "";
   Future<CategoryModel> getAllCategory() async {
     final response = await http.get(

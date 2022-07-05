@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final myOpportunityModel = myOpportunityModelFromJson(jsonString);
+//     final volunteerOpportunityModel = volunteerOpportunityModelFromJson(jsonString);
 
 import 'dart:convert';
 
-MyOpportunityModel myOpportunityModelFromJson(String str) => MyOpportunityModel.fromJson(json.decode(str));
+VolunteerOpportunityModel volunteerOpportunityModelFromJson(String str) => VolunteerOpportunityModel.fromJson(json.decode(str));
 
-String myOpportunityModelToJson(MyOpportunityModel data) => json.encode(data.toJson());
+String volunteerOpportunityModelToJson(VolunteerOpportunityModel data) => json.encode(data.toJson());
 
-class MyOpportunityModel {
-  MyOpportunityModel({
+class VolunteerOpportunityModel {
+  VolunteerOpportunityModel({
     this.success,
     this.message,
     this.data,
@@ -19,7 +19,7 @@ class MyOpportunityModel {
   String message;
   List<Datum> data;
 
-  factory MyOpportunityModel.fromJson(Map<String, dynamic> json) => MyOpportunityModel(
+  factory VolunteerOpportunityModel.fromJson(Map<String, dynamic> json) => VolunteerOpportunityModel(
     success: json["success"],
     message: json["message"],
     data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
@@ -66,8 +66,8 @@ class Datum {
   Recruiter volunteer;
   Recruiter recruiter;
   DateTime date;
-  String startTime;
-  String endTime;
+  DateTime startTime;
+  DateTime endTime;
   int workingHours;
   dynamic benefits;
   String status;
@@ -86,8 +86,8 @@ class Datum {
     volunteer: Recruiter.fromJson(json["volunteer"]),
     recruiter: Recruiter.fromJson(json["recruiter"]),
     date: DateTime.parse(json["date"]),
-    startTime: json["start_time"],
-    endTime: json["end_time"],
+    startTime: DateTime.parse(json["start_time"]),
+    endTime: DateTime.parse(json["end_time"]),
     workingHours: json["working_hours"],
     benefits: json["benefits"],
     status: json["status"],
@@ -107,8 +107,8 @@ class Datum {
     "volunteer": volunteer.toJson(),
     "recruiter": recruiter.toJson(),
     "date": "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
-    "start_time": startTime,
-    "end_time": endTime,
+    "start_time": startTime.toIso8601String(),
+    "end_time": endTime.toIso8601String(),
     "working_hours": workingHours,
     "benefits": benefits,
     "status": status,
@@ -186,21 +186,21 @@ class Eligibility {
 
 class Pivot {
   Pivot({
-    this.eligibilityId,
     this.opportunityId,
+    this.eligibilityId,
   });
 
-  int eligibilityId;
   int opportunityId;
+  int eligibilityId;
 
   factory Pivot.fromJson(Map<String, dynamic> json) => Pivot(
-    eligibilityId: json["eligibility_id"],
     opportunityId: json["opportunity_id"],
+    eligibilityId: json["eligibility_id"],
   );
 
   Map<String, dynamic> toJson() => {
-    "eligibility_id": eligibilityId,
     "opportunity_id": opportunityId,
+    "eligibility_id": eligibilityId,
   };
 }
 
@@ -218,6 +218,7 @@ class Recruiter {
     this.state,
     this.city,
     this.zipCode,
+    this.role,
     this.profession,
   });
 
@@ -233,37 +234,40 @@ class Recruiter {
   String state;
   String city;
   String zipCode;
+  String role;
   dynamic profession;
 
   factory Recruiter.fromJson(Map<String, dynamic> json) => Recruiter(
-    id: json["id"] == null ? null : json["id"],
-    firstName: json["first_name"] == null ? null : json["first_name"],
-    lastName: json["last_name"] == null ? null : json["last_name"],
+    id: json["id"],
+    firstName: json["first_name"],
+    lastName: json["last_name"],
     surName: json["sur_name"],
-    image: json["image"] == null ? null : json["image"],
-    phone: json["phone"] == null ? null : json["phone"],
-    email: json["email"] == null ? null : json["email"],
-    gender: json["gender"] == null ? null : json["gender"],
+    image: json["image"],
+    phone: json["phone"],
+    email: json["email"],
+    gender: json["gender"],
     typeOfDisability: json["type_of_disability"],
-    state: json["state"] == null ? null : json["state"],
-    city: json["city"] == null ? null : json["city"],
-    zipCode: json["zip_code"] == null ? null : json["zip_code"],
+    state: json["state"],
+    city: json["city"],
+    zipCode: json["zip_code"],
+    role: json["role"],
     profession: json["profession"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "first_name": firstName == null ? null : firstName,
-    "last_name": lastName == null ? null : lastName,
+    "id": id,
+    "first_name": firstName,
+    "last_name": lastName,
     "sur_name": surName,
-    "image": image == null ? null : image,
-    "phone": phone == null ? null : phone,
-    "email": email == null ? null : email,
-    "gender": gender == null ? null : gender,
+    "image": image,
+    "phone": phone,
+    "email": email,
+    "gender": gender,
     "type_of_disability": typeOfDisability,
-    "state": state == null ? null : state,
-    "city": city == null ? null : city,
-    "zip_code": zipCode == null ? null : zipCode,
+    "state": state,
+    "city": city,
+    "zip_code": zipCode,
+    "role": role,
     "profession": profession,
   };
 }
