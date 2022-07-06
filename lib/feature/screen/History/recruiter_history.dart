@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/data/models/recruiter/recruiter_history_model.dart';
-import 'package:crowdv_mobile_app/data/models/volunteer/history_model.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
-import 'package:crowdv_mobile_app/widgets/sample_card.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/route_manager.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,6 +18,7 @@ class RecruiterHistory extends StatefulWidget {
 }
 
 class _RecruiterHistoryState extends State<RecruiterHistory> {
+  TextEditingController reviewController = TextEditingController();
   String token = "";
 
   @override
@@ -30,6 +32,81 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
     setState(() {
       token = pref.getString("user");
     });
+  }
+
+  void review(String review, int id) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'recruiter/review/$id'),
+          headers: {
+            "Authorization": "Bearer ${token}"
+          },
+          body: {
+            'remark': review,
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        // print(data);
+        Navigator.of(context).pop();
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+
+  void rate(String rating, int id) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'recruiter/rating/$id'),
+          headers: {
+            "Authorization": "Bearer ${token}"
+          },
+          body: {
+            'rating': rating,
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
   }
 
   Future<RecruiterHistoryModel> getRHistoryApi() async {
@@ -92,6 +169,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                             ),
                             child: Stack(
                               children: [
+                                // --------------------------------------------Body
                                 Column(
                                   children: [
                                     Padding(
@@ -102,28 +180,42 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            'Heading',
+                                            snapshot.data.data[index].title,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 18),
                                           ),
-                                          Container(
-                                            width: 80,
-                                            height: 35,
-                                            margin:
-                                                EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                            decoration: BoxDecoration(
-                                              color: primaryColor,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20)),
+                                          InkWell(
+                                            onTap: () {
+                                              Get.to(() => OpportunityDetails(
+                                                  role: snapshot
+                                                      .data
+                                                      .data[index]
+                                                      .volunteer
+                                                      .role,
+                                                  id: snapshot
+                                                      .data.data[index].id,
+                                                  token: token));
+                                            },
+                                            child: Container(
+                                              width: 80,
+                                              height: 35,
+                                              margin: EdgeInsets.fromLTRB(
+                                                  0, 0, 0, 5),
+                                              decoration: BoxDecoration(
+                                                color: primaryColor,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
+                                              ),
+                                              child: Center(
+                                                  child: Text('Details',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 14,
+                                                          color:
+                                                              Colors.white))),
                                             ),
-                                            child: Center(
-                                                child: Text('Details',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 14,
-                                                        color: Colors.white))),
                                           )
                                         ],
                                       ),
@@ -140,12 +232,28 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                           children: [
                                             Row(
                                               children: [
-                                                Text(
-                                                  'Opportunity details..',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16),
+                                                SizedBox(
+                                                  height: 40,
+                                                  child: Text(
+                                                    'Details:  ',
+                                                    style: TextStyle(
+                                                        color: primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 220,
+                                                  height: 40,
+                                                  child: Text(
+                                                    snapshot.data.data[index]
+                                                        .details,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16),
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -158,7 +266,12 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                           FontWeight.bold,
                                                       fontSize: 18),
                                                 ),
-                                                Text('Los Angeles',
+                                                Text(
+                                                    snapshot.data.data[index]
+                                                            .city +
+                                                        ", " +
+                                                        snapshot.data
+                                                            .data[index].state,
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -174,7 +287,9 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                           FontWeight.bold,
                                                       fontSize: 18),
                                                 ),
-                                                Text('Offline',
+                                                Text(
+                                                    snapshot.data.data[index]
+                                                        .taskType,
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -185,6 +300,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                         )),
                                   ],
                                 ),
+                                // -------------------------------------------------Card
                                 Positioned(
                                     top: 150,
                                     child: Padding(
@@ -208,32 +324,121 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                         ),
                                       ),
                                     )),
+                                // ----------------------------------------------------review
                                 Positioned(
-                                    right: 10,
-                                    top: 195,
+                                    right: 20,
+                                    top: 180,
                                     child: Row(
                                       children: [
                                         IconBox(
                                           child: Icon(
-                                            Icons.message_rounded,
+                                            Icons.rate_review_rounded,
                                             color: Colors.white,
-                                            size: 20,
+                                            size: 24,
                                           ),
-                                          bgColor: primaryColor,
+                                          bgColor: Colors.teal,
+                                          onTap: () {
+                                            return showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: Row(
+                                                      children: [
+                                                        Text(
+                                                            'Give a review to the user'),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Icon(Icons.create),
+                                                      ],
+                                                    ),
+                                                    content: TextFormField(
+                                                      textInputAction:
+                                                          TextInputAction.done,
+                                                      controller:
+                                                          reviewController,
+                                                      maxLines: 4,
+                                                      maxLength: 100,
+                                                      decoration:
+                                                          InputDecoration(
+                                                              focusedBorder:
+                                                                  OutlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                    color: Colors
+                                                                        .white),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10.0),
+                                                              ),
+                                                              enabledBorder:
+                                                                  UnderlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                    color: Colors
+                                                                        .white),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10.0),
+                                                              ),
+                                                              filled: true,
+                                                              hintStyle: TextStyle(
+                                                                  color: Colors.black,
+                                                                  fontSize: 16,),
+                                                              hintText: snapshot
+                                                                  .data
+                                                                  .data[index]
+                                                                  .volunteer
+                                                                  .review,
+                                                              fillColor: Colors
+                                                                  .grey
+                                                                  .shade200),
+                                                    ),
+                                                    actions: <Widget>[
+                                                      FlatButton(
+                                                        child:
+                                                            new Text('Cancel'),
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                      ),
+                                                      FlatButton(
+                                                        child:
+                                                            new Text('Submit'),
+                                                        onPressed: () {
+                                                          review(
+                                                              reviewController
+                                                                  .text
+                                                                  .toString(),
+                                                              snapshot
+                                                                  .data
+                                                                  .data[index]
+                                                                  .id);
+                                                        },
+                                                      )
+                                                    ],
+                                                  );
+                                                });
+                                          },
                                         ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        IconBox(
-                                          child: Icon(
-                                            Icons.report,
-                                            color: Colors.white,
-                                            size: 20,
-                                          ),
-                                          bgColor: Colors.redAccent,
-                                        ),
+                                        // SizedBox(
+                                        //   width: 5,
+                                        // ),
+                                        // IconBox(
+                                        //   child: Icon(
+                                        //     Icons.report,
+                                        //     color: Colors.white,
+                                        //     size: 20,
+                                        //   ),
+                                        //   onTap: (){
+                                        //     displayDialog(context);
+                                        //   },
+                                        //   bgColor: Colors.redAccent,
+                                        // ),
                                       ],
                                     )),
+                                // ---------------------------------------------------Rating
                                 Positioned(
                                     left: 10,
                                     top: 170,
@@ -242,9 +447,10 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                         Column(
                                           children: [
                                             CircleAvatar(
-                                              backgroundImage: AssetImage(
-                                                  'assets/crowdv_jpg.jpg'),
-                                              radius: 30,
+                                              backgroundImage: NetworkImage(
+                                                  snapshot.data.data[index]
+                                                      .volunteer.image),
+                                              radius: 25,
                                             ),
                                           ],
                                         ),
@@ -256,7 +462,11 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "Mustafizur Rahman",
+                                              snapshot.data.data[index]
+                                                      .volunteer.firstName +
+                                                  " " +
+                                                  snapshot.data.data[index]
+                                                      .volunteer.lastName,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
@@ -270,10 +480,21 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                               children: [
                                                 RatingBar.builder(
                                                   itemSize: 20,
-                                                  initialRating: 3,
+                                                  initialRating: snapshot
+                                                              .data
+                                                              .data[index]
+                                                              .volunteer
+                                                              .rating ==
+                                                          null
+                                                      ? 0
+                                                      : snapshot
+                                                          .data
+                                                          .data[index]
+                                                          .volunteer
+                                                          .rating
+                                                          .toDouble(),
                                                   minRating: 1,
                                                   direction: Axis.horizontal,
-                                                  allowHalfRating: true,
                                                   itemCount: 5,
                                                   itemPadding:
                                                       EdgeInsets.symmetric(
@@ -284,7 +505,10 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                     color: Colors.amber,
                                                   ),
                                                   onRatingUpdate: (rating) {
-                                                    print(rating);
+                                                    rate(
+                                                        rating.toString(),
+                                                        snapshot.data
+                                                            .data[index].id);
                                                   },
                                                 ),
                                               ],

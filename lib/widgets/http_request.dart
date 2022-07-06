@@ -50,9 +50,9 @@ Future getRequestWithoutParam(path, headers) async {
   }
 }
 
-Future postRequest(path, headers, qparam, body) async {
+Future postRequest(path, headers, body) async {
   final response = await http.post(
-      Uri.https('b00d-182-48-84-100.ngrok.io', path, qparam),
+      Uri.http('192.168.68.169:8000', path),
       headers: headers,
       body: body);
 
@@ -66,9 +66,6 @@ Future postRequest(path, headers, qparam, body) async {
     );
     print(
       headers,
-    );
-    print(
-      qparam,
     );
     print(body);
     print(HtmlParser.parseHTML(response.body).body.innerHtml);

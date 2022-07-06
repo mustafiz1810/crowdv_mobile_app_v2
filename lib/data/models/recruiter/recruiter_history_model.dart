@@ -220,6 +220,8 @@ class Recruiter {
     this.zipCode,
     this.role,
     this.profession,
+    this.rating,
+    this.review,
   });
 
   int id;
@@ -236,6 +238,8 @@ class Recruiter {
   String zipCode;
   String role;
   dynamic profession;
+  int rating;
+  dynamic review;
 
   factory Recruiter.fromJson(Map<String, dynamic> json) => Recruiter(
     id: json["id"],
@@ -252,6 +256,8 @@ class Recruiter {
     zipCode: json["zip_code"],
     role: json["role"],
     profession: json["profession"],
+    rating: json["rating"] == null ? null : json["rating"],
+    review: json["review"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -269,5 +275,7 @@ class Recruiter {
     "zip_code": zipCode,
     "role": role,
     "profession": profession,
+    "rating": rating == null ? null : rating,
+    "review": review,
   };
 }
