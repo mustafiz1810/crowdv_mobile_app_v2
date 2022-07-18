@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/data/models/volunteer/history_model.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
-import 'package:crowdv_mobile_app/widgets/sample_card.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/route_manager.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,20 +18,96 @@ class VolunteerHistory extends StatefulWidget {
 }
 
 class _VolunteerHistoryState extends State<VolunteerHistory> {
+  TextEditingController reviewController = TextEditingController();
   String token = "";
 
-@override
-void initState() {
-  super.initState();
-  getCred();
-}
+  @override
+  void initState() {
+    super.initState();
+    getCred();
+  }
 
-void getCred() async {
-  SharedPreferences pref = await SharedPreferences.getInstance();
-  setState(() {
-    token = pref.getString("user");
-  });
-}
+  void getCred() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      token = pref.getString("user");
+    });
+  }
+
+  void review(String review, int id) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'volunteer/review/$id'),
+          headers: {
+            "Authorization": "Bearer ${token}"
+          },
+          body: {
+            'remark': review,
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        // print(data);
+        Navigator.of(context).pop();
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+
+  void rate(String rating, int id) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'volunteer/rating/$id'),
+          headers: {
+            "Authorization": "Bearer ${token}"
+          },
+          body: {
+            'rating': rating,
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
 
   Future<VolunteerHistoryModel> getVHistoryApi() async {
     final response = await http.get(
@@ -43,6 +121,7 @@ void getCred() async {
       return VolunteerHistoryModel.fromJson(data);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +144,8 @@ void getCred() async {
                           itemCount: snapshot.data.data.length,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: const EdgeInsets.only(left: 10, top: 10,right: 10),
+                              padding: const EdgeInsets.only(
+                                  left: 10, top: 10, right: 10),
                               child: Container(
                                 width: 350,
                                 height: 240,
@@ -76,7 +156,8 @@ void getCred() async {
                                   //   image: AssetImage("assets/undraw_pilates_gpdb.png"),
                                   // ),
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
                                   boxShadow: [
                                     BoxShadow(
                                       color: shadowColor.withOpacity(0.4),
@@ -88,55 +169,138 @@ void getCred() async {
                                 ),
                                 child: Stack(
                                   children: [
+                                    // --------------------------------------------Body
                                     Column(
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.only(left: 20,right: 20,top: 10),
+                                          padding: const EdgeInsets.only(
+                                              left: 20, right: 20, top: 10),
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text('Heading',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                                              Container(
-                                                width: 80,
-                                                height: 35,
-                                                margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                                decoration: BoxDecoration(
-                                                  color: primaryColor,
-                                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                              Text(
+                                                snapshot.data.data[index].title,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18),
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  Get.to(() => OpportunityDetails(
+                                                      role: snapshot
+                                                          .data
+                                                          .data[index]
+                                                          .recruiter
+                                                          .role,
+                                                      id: snapshot
+                                                          .data.data[index].id,
+                                                      token: token));
+                                                },
+                                                child: Container(
+                                                  width: 80,
+                                                  height: 35,
+                                                  margin: EdgeInsets.fromLTRB(
+                                                      0, 0, 0, 5),
+                                                  decoration: BoxDecoration(
+                                                    color: primaryColor,
+                                                    borderRadius: BorderRadius.all(
+                                                        Radius.circular(20)),
+                                                  ),
+                                                  child: Center(
+                                                      child: Text('Details',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                              FontWeight.bold,
+                                                              fontSize: 14,
+                                                              color:
+                                                              Colors.white))),
                                                 ),
-                                                child: Center(child: Text('Details',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14,color: Colors.white))),
                                               )
                                             ],
                                           ),
                                         ),
-                                        Divider(thickness: 1,height: 10,color: primaryColor,),
+                                        Divider(
+                                          thickness: 1,
+                                          height: 10,
+                                          color: primaryColor,
+                                        ),
                                         Padding(
-                                            padding: const EdgeInsets.only(left: 20,right: 20,top: 10),
+                                            padding: const EdgeInsets.only(
+                                                left: 20, right: 20, top: 10),
                                             child: Column(
                                               children: [
                                                 Row(
                                                   children: [
-                                                    Text('Opportunity details..',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                                                    SizedBox(
+                                                      height: 40,
+                                                      child: Text(
+                                                        'Details:  ',
+                                                        style: TextStyle(
+                                                            color: primaryColor,
+                                                            fontWeight:
+                                                            FontWeight.bold,
+                                                            fontSize: 18),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 220,
+                                                      height: 40,
+                                                      child: Text(
+                                                        snapshot.data.data[index]
+                                                            .details,
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                            FontWeight.bold,
+                                                            fontSize: 16),
+                                                      ),
+                                                    ),
                                                   ],
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Text('Location : ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                                                    Text('Los Angeles',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14)                )
+                                                    Text(
+                                                      'Location : ',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                          FontWeight.bold,
+                                                          fontSize: 18),
+                                                    ),
+                                                    Text(
+                                                        snapshot.data.data[index]
+                                                            .city +
+                                                            ", " +
+                                                            snapshot.data
+                                                                .data[index].state,
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                            FontWeight.bold,
+                                                            fontSize: 14))
                                                   ],
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Text('Job Type: ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                                                    Text('Offline',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14)                )
+                                                    Text(
+                                                      'Job Type: ',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                          FontWeight.bold,
+                                                          fontSize: 18),
+                                                    ),
+                                                    Text(
+                                                        snapshot.data.data[index]
+                                                            .taskType,
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                            FontWeight.bold,
+                                                            fontSize: 14))
                                                   ],
                                                 ),
                                               ],
-                                            )
-
-                                        ),
+                                            )),
                                       ],
                                     ),
+                                    // -------------------------------------------------Card
                                     Positioned(
                                         top: 150,
                                         child: Padding(
@@ -146,10 +310,12 @@ void getCred() async {
                                             width: 342,
                                             decoration: BoxDecoration(
                                               color: Colors.white,
-                                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)),
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: shadowColor.withOpacity(0.2),
+                                                  color:
+                                                  shadowColor.withOpacity(0.2),
                                                   spreadRadius: .1,
                                                   blurRadius: 3,
                                                   // offset: Offset(0, 1), // changes position of shadow
@@ -158,32 +324,121 @@ void getCred() async {
                                             ),
                                           ),
                                         )),
+                                    // ----------------------------------------------------review
                                     Positioned(
-                                        right: 10,
-                                        top: 195,
+                                        right: 20,
+                                        top: 180,
                                         child: Row(
                                           children: [
                                             IconBox(
                                               child: Icon(
-                                                Icons.message_rounded,
+                                                Icons.rate_review_rounded,
                                                 color: Colors.white,
-                                                size: 20,
+                                                size: 24,
                                               ),
-                                              bgColor: primaryColor,
+                                              bgColor: Colors.teal,
+                                              onTap: () {
+                                                return showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return AlertDialog(
+                                                        title: Row(
+                                                          children: [
+                                                            Text(
+                                                                'Give a review to the user'),
+                                                            SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            Icon(Icons.create),
+                                                          ],
+                                                        ),
+                                                        content: TextFormField(
+                                                          textInputAction:
+                                                          TextInputAction.done,
+                                                          controller:
+                                                          reviewController,
+                                                          maxLines: 4,
+                                                          maxLength: 100,
+                                                          decoration:
+                                                          InputDecoration(
+                                                              focusedBorder:
+                                                              OutlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                    color: Colors
+                                                                        .white),
+                                                                borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                    10.0),
+                                                              ),
+                                                              enabledBorder:
+                                                              UnderlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                    color: Colors
+                                                                        .white),
+                                                                borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                    10.0),
+                                                              ),
+                                                              filled: true,
+                                                              hintStyle: TextStyle(
+                                                                color: Colors.black,
+                                                                fontSize: 16,),
+                                                              hintText: snapshot
+                                                                  .data
+                                                                  .data[index]
+                                                                  .recruiter
+                                                                  .review,
+                                                              fillColor: Colors
+                                                                  .grey
+                                                                  .shade200),
+                                                        ),
+                                                        actions: <Widget>[
+                                                          FlatButton(
+                                                            child:
+                                                            new Text('Cancel'),
+                                                            onPressed: () {
+                                                              Navigator.of(context)
+                                                                  .pop();
+                                                            },
+                                                          ),
+                                                          FlatButton(
+                                                            child:
+                                                            new Text('Submit'),
+                                                            onPressed: () {
+                                                              review(
+                                                                  reviewController
+                                                                      .text
+                                                                      .toString(),
+                                                                  snapshot
+                                                                      .data
+                                                                      .data[index]
+                                                                      .id);
+                                                            },
+                                                          )
+                                                        ],
+                                                      );
+                                                    });
+                                              },
                                             ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            IconBox(
-                                              child: Icon(
-                                                Icons.report,
-                                                color: Colors.white,
-                                                size: 20,
-                                              ),
-                                              bgColor: Colors.redAccent,
-                                            ),
+                                            // SizedBox(
+                                            //   width: 5,
+                                            // ),
+                                            // IconBox(
+                                            //   child: Icon(
+                                            //     Icons.report,
+                                            //     color: Colors.white,
+                                            //     size: 20,
+                                            //   ),
+                                            //   onTap: (){
+                                            //     displayDialog(context);
+                                            //   },
+                                            //   bgColor: Colors.redAccent,
+                                            // ),
                                           ],
                                         )),
+                                    // ---------------------------------------------------Rating
                                     Positioned(
                                         left: 10,
                                         top: 170,
@@ -192,8 +447,10 @@ void getCred() async {
                                             Column(
                                               children: [
                                                 CircleAvatar(
-                                                  backgroundImage: AssetImage('assets/crowdv_jpg.jpg'),
-                                                  radius: 30,
+                                                  backgroundImage: NetworkImage(
+                                                      snapshot.data.data[index]
+                                                          .recruiter.image),
+                                                  radius: 25,
                                                 ),
                                               ],
                                             ),
@@ -201,14 +458,20 @@ void getCred() async {
                                               width: 5,
                                             ),
                                             Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  "Mustafizur Rahman",
+                                                  snapshot.data.data[index]
+                                                      .recruiter.firstName +
+                                                      " " +
+                                                      snapshot.data.data[index]
+                                                          .recruiter.lastName,
                                                   maxLines: 1,
                                                   overflow: TextOverflow.ellipsis,
                                                   style: TextStyle(
-                                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600),
                                                 ),
                                                 SizedBox(
                                                   height: 5,
@@ -217,19 +480,35 @@ void getCred() async {
                                                   children: [
                                                     RatingBar.builder(
                                                       itemSize: 20,
-                                                      initialRating: 3,
+                                                      initialRating: snapshot
+                                                          .data
+                                                          .data[index]
+                                                          .recruiter
+                                                          .rating ==
+                                                          null
+                                                          ? 0
+                                                          : snapshot
+                                                          .data
+                                                          .data[index]
+                                                          .recruiter
+                                                          .rating
+                                                          .toDouble(),
                                                       minRating: 1,
                                                       direction: Axis.horizontal,
-                                                      allowHalfRating: true,
                                                       itemCount: 5,
                                                       itemPadding:
-                                                      EdgeInsets.symmetric(horizontal: 4.0),
-                                                      itemBuilder: (context, _) => Icon(
-                                                        Icons.star,
-                                                        color: Colors.amber,
-                                                      ),
+                                                      EdgeInsets.symmetric(
+                                                          horizontal: 4.0),
+                                                      itemBuilder: (context, _) =>
+                                                          Icon(
+                                                            Icons.star,
+                                                            color: Colors.amber,
+                                                          ),
                                                       onRatingUpdate: (rating) {
-                                                        print(rating);
+                                                        rate(
+                                                            rating.toString(),
+                                                            snapshot.data
+                                                                .data[index].id);
                                                       },
                                                     ),
                                                   ],
@@ -254,7 +533,6 @@ void getCred() async {
                   )),
             ],
           ),
-        )
-    );
+        ));
   }
 }

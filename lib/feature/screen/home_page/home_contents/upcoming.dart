@@ -4,6 +4,7 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
+import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,7 +40,6 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
         Uri.parse(NetworkConstants.BASE_URL + 'volunteer/tasks/list'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
-    showToast(context, data['message']);
     if (response.statusCode == 200) {
       return VolunteerOpportunity.fromJson(data);
     } else {
@@ -331,11 +331,15 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                           child: Center(
                                             child: InkWell(
                                               onTap: () {
-                                                Get.to(() => OpportunityDetails(
-                                                    role: widget.role,
-                                                    id: snapshot
-                                                        .data.data[index].id,
-                                                    token: token));
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) => OpportunityDetails(
+                                                          role: widget.role,
+                                                          id: snapshot
+                                                              .data.data[index].id,
+                                                          token: token)),
+                                                ).then((value) => setState(() {}));
                                               },
                                               child: Container(
                                                 // width: 80,
@@ -366,7 +370,24 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                       },
                     );
                   } else {
-                    return Center(child: CircularProgressIndicator());
+                    return Container(
+                      alignment: Alignment.center,
+                      child: EmptyWidget(
+                        image: null,
+                        packageImage: PackageImage.Image_3,
+                        title: 'No Opportunity',
+                        subTitle: 'No  Opportunity available',
+                        titleTextStyle: TextStyle(
+                          fontSize: 22,
+                          color: Color(0xff9da9c7),
+                          fontWeight: FontWeight.w500,
+                        ),
+                        subtitleTextStyle: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xffabb8d6),
+                        ),
+                      ),
+                    );
                   }
                 },
               )),

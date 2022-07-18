@@ -60,7 +60,6 @@ class _OpportunityDetailsState extends State<OpportunityDetails>
         Uri.parse(NetworkConstants.BASE_URL + 'opportunity/view/${widget.id}'),
         headers: {"Authorization": "Bearer ${widget.token}"});
     var data = jsonDecode(response.body.toString());
-    showToast(context, data['message']);
     if (response.statusCode == 200) {
       return OpportunityDetail.fromJson(data);
     } else {
@@ -288,7 +287,8 @@ class _OpportunityDetailsState extends State<OpportunityDetails>
                                 SizedBox(
                                   height: 20,
                                 ),
-                                snapshot.data.data.status == 'Hired'
+                                snapshot.data.data.status == 'Hired' ||
+                                        snapshot.data.data.status == 'Completed'
                                     ? Container(
                                         height: 150,
                                         width: 390,
@@ -514,7 +514,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails>
                   ],
                 ),
                 Positioned(
-                  top: (MediaQuery.of(context).size.width / 1.2) - 145.0,
+                  top: MediaQuery.of(context).size.width / 2.1,
                   bottom: 0,
                   left: 0,
                   right: 0,
@@ -905,65 +905,61 @@ class _OpportunityDetailsState extends State<OpportunityDetails>
                               SizedBox(
                                 height: 20,
                               ),
-                              widget.role == "recruiter" || snapshot.data.data.status == "Hired"
-                                  ? Container()
-                                  : AnimatedOpacity(
-                                      duration:
-                                          const Duration(milliseconds: 500),
-                                      opacity: opacity3,
-                                      child: InkWell(
-                                        onTap: () {
-                                          getRequestWithoutParam(
-                                              '/api/v1/volunteer/apply-task/${widget.id}',
-                                              {
-                                                'Content-Type':
-                                                    "application/json",
-                                                "Authorization":
-                                                    "Bearer ${widget.token}"
-                                              }).then((value) async {
-                                            Navigator.pop(context);
-                                            showToast(
-                                                context, 'Opportunity Applied');
-                                          });
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 16, left: 16, right: 16),
-                                          child: Container(
-                                            height: 48,
-                                            decoration: BoxDecoration(
-                                              color: primaryColor,
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                Radius.circular(16.0),
-                                              ),
-                                              boxShadow: <BoxShadow>[
-                                                BoxShadow(
-                                                    color: DesignCourseAppTheme
-                                                        .nearlyBlue
-                                                        .withOpacity(0.5),
-                                                    offset:
-                                                        const Offset(1.1, 1.1),
-                                                    blurRadius: 10.0),
-                                              ],
+                              widget.role == "volunteer" &&
+                                      snapshot.data.data.status == "Pending"|| snapshot.data.data.status == "Applied"
+                                  ? InkWell(
+                                      onTap: () {
+                                        getRequestWithoutParam(
+                                            '/api/v1/volunteer/apply-task/${widget.id}',
+                                            {
+                                              'Content-Type':
+                                                  "application/json",
+                                              "Authorization":
+                                                  "Bearer ${widget.token}"
+                                            }).then((value) async {
+                                          Navigator.pop(context);
+                                          showToast(
+                                              context, 'Opportunity Applied');
+                                        });
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 16, left: 16, right: 16),
+                                        child: Container(
+                                          height: 48,
+                                          decoration: BoxDecoration(
+                                            color: primaryColor,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(16.0),
                                             ),
-                                            child: Center(
-                                              child: Text(
-                                                'Apply Now',
-                                                textAlign: TextAlign.left,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 18,
-                                                  letterSpacing: 0.0,
+                                            boxShadow: <BoxShadow>[
+                                              BoxShadow(
                                                   color: DesignCourseAppTheme
-                                                      .nearlyWhite,
-                                                ),
+                                                      .nearlyBlue
+                                                      .withOpacity(0.5),
+                                                  offset:
+                                                      const Offset(1.1, 1.1),
+                                                  blurRadius: 10.0),
+                                            ],
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              'Apply Now',
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 18,
+                                                letterSpacing: 0.0,
+                                                color: DesignCourseAppTheme
+                                                    .nearlyWhite,
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
+                                    )
+                                  : Container(),
                               SizedBox(
                                 height: 10,
                               )
@@ -974,35 +970,49 @@ class _OpportunityDetailsState extends State<OpportunityDetails>
                     ),
                   ),
                 ),
-                Positioned(
-                  top: (MediaQuery.of(context).size.width / 1.2) - 100.0 - 220,
-                  right: 5,
-                  child: ScaleTransition(
-                    alignment: Alignment.center,
-                    scale: CurvedAnimation(
-                        parent: animationController,
-                        curve: Curves.fastOutSlowIn),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 80,
-                          height: 40,
-                          margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                          decoration: BoxDecoration(
-                            color: secondaryColor,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                widget.role == 'recruiter' &&
+                        snapshot.data.data.status == "Pending"
+                    ? Positioned(
+                        top: MediaQuery.of(context).size.width / 2.3,
+                        right: MediaQuery.of(context).size.width / 30,
+                        child: IconBox(
+                          child: Icon(
+                            Icons.create,
+                            color: Colors.white,
                           ),
-                          child: Center(
-                              child: Text(snapshot.data.data.status,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.white))),
+                          bgColor: Colors.lightBlue,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OpportunityUpdate(
+                                        token: widget.token,
+                                        id: snapshot.data.data.id,
+                                        title: snapshot.data.data.title,
+                                        category:
+                                            snapshot.data.data.category.id,
+                                        type: snapshot.data.data.taskType,
+                                        description: snapshot.data.data.details,
+                                        date: snapshot.data.data.date,
+                                        timeh:
+                                            snapshot.data.data.startTime.hour,
+                                        timem:
+                                            snapshot.data.data.startTime.minute,
+                                        etimeh: snapshot.data.data.endTime.hour,
+                                        etimem:
+                                            snapshot.data.data.endTime.minute,
+                                        slug: snapshot.data.data.category.slug,
+                                        eligibility: snapshot
+                                            .data.data.eligibility[0].id,
+                                        city: snapshot.data.data.city,
+                                        state: snapshot.data.data.state,
+                                        zip: snapshot.data.data.zipCode,
+                                      )),
+                            ).then((value) => setState(() {}));
+                          },
                         ),
-                      ],
-                    ),
-                  ),
-                )
+                      )
+                    : Container()
               ],
             );
           } else {

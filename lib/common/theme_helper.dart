@@ -19,6 +19,21 @@ class ThemeHelper{
     );
   }
 
+  InputDecoration IconInputDecoration([String lableText="", String hintText = "",Icon icon]){
+    return InputDecoration(
+      icon: icon,
+      labelText: lableText,
+      hintText: hintText,
+      fillColor: Colors.white,
+      labelStyle: TextStyle(fontWeight: FontWeight.bold),
+      filled: true,
+      contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100.0), borderSide: BorderSide(color: Colors.grey)),
+      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100.0), borderSide: BorderSide(color: Colors.grey.shade400)),
+      errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100.0), borderSide: BorderSide(color: Colors.red, width: 2.0)),
+      focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100.0), borderSide: BorderSide(color: Colors.red, width: 2.0)),
+    );
+  }
   BoxDecoration inputBoxDecorationShaddow() {
     return BoxDecoration(boxShadow: [
       BoxShadow(

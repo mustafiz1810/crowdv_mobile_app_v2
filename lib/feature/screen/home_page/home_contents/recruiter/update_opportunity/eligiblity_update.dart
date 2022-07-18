@@ -72,7 +72,6 @@ class _EligibilityUpdateState extends State<EligibilityUpdate> {
             'category-wise-eligibility/${widget.slug}'),
         headers: {"Authorization": "Bearer ${widget.token}"});
     var data = jsonDecode(response.body.toString());
-    showToast(context, data['message']);
     if (response.statusCode == 200) {
       return EligibilityModel.fromJson(data);
     } else {
@@ -131,7 +130,7 @@ class _EligibilityUpdateState extends State<EligibilityUpdate> {
               ),
               child: Center(
                 child: Text(
-                  'Next Page',
+                  'Next',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,

@@ -1,6 +1,5 @@
-import 'dart:convert';
-import 'package:crowdv_mobile_app/data/models/volunteer/upcoming_opportunity.dart';
 import 'package:crowdv_mobile_app/feature/screen/Search/search.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/organization/create_opportunity.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruiter/Create_Opportunity/create_op.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/service_location.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/set_category.dart';
@@ -8,18 +7,12 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/upcomin
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/volunteer_opportunities.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/notification.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/drawer.dart';
-import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
 import 'package:crowdv_mobile_app/widgets/category_grid.dart';
-import 'package:crowdv_mobile_app/widgets/get_prefs.dart';
 import 'package:crowdv_mobile_app/widgets/header_without_logo.dart';
-import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
-import 'package:http/http.dart';
-import 'package:lite_rolling_switch/lite_rolling_switch.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'home_contents/recruiter/my_opportunities.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,108 +22,11 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => new _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool navbarScrolled = false;
-  var user;
-  bool volunteer = true;
-  bool recruiter = false;
-  void rec() async {
-    try {
-      Response response = await post(
-          Uri.parse(NetworkConstants.BASE_URL + 'role/${widget.id}/volunteer'));
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
-        print(data);
-        prefs.clear();
-        pageRoute(data['data'][0]['token']);
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (context) =>
-                    HomeScreen(id: widget.id, role: data['data'][0]['role'])),
-            (Route<dynamic> route) => false);
-        showToast(context, data['message']);
-      } else {
-        var data = jsonDecode(response.body.toString());
-        showToast(context, data['message']);
-      }
-    } catch (e) {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Exception:"),
-              content: Text(e.toString()),
-              actions: [
-                FlatButton(
-                  child: Text("Try Again"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            );
-          });
-    }
-  }
-
-  void vol() async {
-    try {
-      Response response = await post(
-          Uri.parse(NetworkConstants.BASE_URL + 'role/${widget.id}/recruiter'));
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
-        print(data);
-        prefs.clear();
-        pageRoute(data['data'][0]['token']);
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (context) =>
-                    HomeScreen(id: widget.id, role: data['data'][0]['role'])),
-            (Route<dynamic> route) => false);
-        showToast(context, data['message']);
-      } else {
-        var data = jsonDecode(response.body.toString());
-        showToast(context, data['message']);
-      }
-    } catch (e) {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Exception:"),
-              content: Text(e.toString()),
-              actions: [
-                FlatButton(
-                  child: Text("Try Again"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            );
-          });
-    }
-  }
-
-  void pageRoute(String token) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    await pref.setString("user", token);
-  }
-
-  @override
-  void initState() {
-    getUser().then((value) {
-      setState(() {
-        user = value;
-      });
-    });
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
       drawer: NavDrawer(id: widget.id, role: widget.role),
@@ -201,56 +97,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       body: Container(
         child: Column(
           children: [
-            Stack(
-              children: [
-                Container(
-                  height: 100,
-                  child: HeaderWidget(),
-                ),
-                widget.role == 'volunteer'
-                    ? Positioned(
-                        top: 30,
-                        left: 250,
-                        child: LiteRollingSwitch(
-                          value: volunteer,
-                          iconOn: Icons.accessibility,
-                          iconOff: Icons.accessible,
-                          colorOff: Colors.blue,
-                          colorOn: secondaryColor,
-                          onChanged: (val) {
-                            volunteer = val;
-                            print(volunteer);
-                          },
-                          onTap: () {
-                            vol();
-                          },
-                          animationDuration: Duration(milliseconds: 1600),
-                          textOn: "Volunteer",
-                          textOff: "Recruiter",
-                        ),
-                      )
-                    : Positioned(
-                        top: 30,
-                        left: 250,
-                        child: LiteRollingSwitch(
-                          value: recruiter,
-                          iconOn: Icons.accessibility,
-                          iconOff: Icons.accessible,
-                          colorOff: Colors.blue,
-                          colorOn: secondaryColor,
-                          onChanged: (val) {
-                            recruiter = val;
-                            print("recruiter");
-                          },
-                          onTap: () {
-                            rec();
-                          },
-                          animationDuration: Duration(milliseconds: 1600),
-                          textOn: "Volunteer",
-                          textOff: "Recruiter",
-                        ),
-                      ),
-              ],
+            Container(
+              height: 100,
+              child: HeaderWidget(role: widget.role,id:widget.id),
             ),
             Expanded(
               child: Padding(
@@ -258,6 +107,31 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    widget.role=='organization'?Expanded(
+                      child: GridView.count(
+                        // scrollDirection: Axis.horizontal,
+                        crossAxisCount: 2,
+                        childAspectRatio: .90,
+                        crossAxisSpacing: 5,
+                        mainAxisSpacing: 5,
+                        children: <Widget>[
+                          CategoryCard(
+                            title: "Create Opportunity",
+                            svgSrc: "assets/471.svg",
+                            press: () {
+                              Get.to(OrgOpportunity());
+                            },
+                          ),
+                          CategoryCard(
+                            title: "My Opportunity",
+                            svgSrc: "assets/457.svg",
+                            press: () {
+                              Get.to(MyOpportunity(role: widget.role,));
+                            },
+                          ),
+                        ],
+                      ),
+                    ):
                     Expanded(
                       child: widget.role == 'volunteer'
                           ? GridView.count(

@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 
 class OpportunityUpdate extends StatefulWidget {
   final dynamic token,
-  id,
+      id,
       title,
       category,
       type,
@@ -52,10 +52,11 @@ class OpportunityUpdate extends StatefulWidget {
 
 class _OpportunityUpdateState extends State<OpportunityUpdate> {
   DateTime dateTime = DateTime.now();
-  TimeOfDay time = TimeOfDay(hour: 12, minute: 50);
-  TimeOfDay _time = TimeOfDay(hour: 12, minute: 50);
+  TimeOfDay time = TimeOfDay.now();
+  TimeOfDay _time = TimeOfDay.now();
   String _typevalue;
   List<String> _type = ["Online", "Offline", "Both"];
+
   Future<CategoryModel> getAllCategory() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL + 'categories'),
@@ -505,24 +506,6 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
               SizedBox(height: 10.0),
               InkWellSplash(
                 onTap: () {
-                  // setState(() {
-                  //   print(titleController.text +
-                  //       " " +
-                  //       _selectedIndex.toString() +
-                  //       " " +
-                  //       _typevalue.toString() +
-                  //       " " +
-                  //       descriptionController.text +
-                  //       " " +
-                  //       dateTime.toString() +
-                  //       " " +
-                  //       time.toString() +
-                  //       " " +
-                  //       _time.toString() +
-                  //       "  " +
-                  //       sslug.toString() +
-                  //       widget.eligibility.toString());
-                  // });
                   Get.to(() => EligibilityUpdate(
                     slug: sslug.toString(),
                     title: titleController.text,
@@ -559,7 +542,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                   ),
                   child: Center(
                     child: Text(
-                      'Next Page',
+                      'Next',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -620,7 +603,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
   Future<DateTime> pickDate() => showDatePicker(
         context: context,
         initialDate: dateTime,
-        firstDate: DateTime(2000),
+        firstDate: DateTime.now(),
         lastDate: DateTime(2100),
       );
 }

@@ -101,22 +101,16 @@ class _OpLocationState extends State<OpLocation> {
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data);
-        setState(() {
-          isApiCallProcess = false;
-        });
+        // print(data);
         showToast(context, data['message']);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => HomeScreen()),
             (Route<dynamic> route) => false);
       } else {
         var data = jsonDecode(response.body.toString());
-        showToast(context, data['message'].toString());
+        showToast(context, data['errors'].toString());
       }
     } catch (e) {
-      setState(() {
-        isApiCallProcess = false;
-      });
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -124,7 +118,7 @@ class _OpLocationState extends State<OpLocation> {
               title: Text("Exception:"),
               content: Text(e.toString()),
               actions: [
-                FlatButton(
+                TextButton(
                   child: Text("Try Again"),
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -135,8 +129,6 @@ class _OpLocationState extends State<OpLocation> {
           });
     }
   }
-
-  bool isApiCallProcess = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -302,29 +294,29 @@ class _OpLocationState extends State<OpLocation> {
                     child: InkWell(
                       splashColor: secondaryColor, // splash color
                       onTap: () {
-                        setState(() {
-                          print(widget.title +
-                              "  " +
-                              widget.category +
-                              "  " +
-                              widget.date +
-                              "  " +
-                              widget.time +
-                              "  " +
-                              widget.etime +
-                              "  " +
-                              selectedCountry.toString() +
-                              "  " +
-                              selectedProvince.toString() +
-                              "  " +
-                              widget.eligibility +
-                              "  " +
-                              widget.description +
-                              "  " +
-                              widget.type +
-                              "  " +
-                              zipController.text.toString());
-                        });
+                        // setState(() {
+                        //   print(widget.title +
+                        //       "  " +
+                        //       widget.category +
+                        //       "  " +
+                        //       widget.date +
+                        //       "  " +
+                        //       widget.time +
+                        //       "  " +
+                        //       widget.etime +
+                        //       "  " +
+                        //       selectedCountry.toString() +
+                        //       "  " +
+                        //       selectedProvince.toString() +
+                        //       "  " +
+                        //       widget.eligibility +
+                        //       "  " +
+                        //       widget.description +
+                        //       "  " +
+                        //       widget.type +
+                        //       "  " +
+                        //       zipController.text.toString());
+                        // });
                         create(
                             widget.title,
                             widget.category,

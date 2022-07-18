@@ -76,7 +76,6 @@ class _CheckBoxState extends State<CheckBox> {
             'category-wise-eligibility/${widget.slug}'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
-    showToast(context, data['message']);
     if (response.statusCode == 200) {
       return EligibilityModel.fromJson(data);
     } else {
@@ -130,7 +129,7 @@ class _CheckBoxState extends State<CheckBox> {
               ),
               child: Center(
                 child: Text(
-                  'Create',
+                  'Next',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,

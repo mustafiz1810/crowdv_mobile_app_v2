@@ -4,6 +4,7 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
+import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,7 +40,6 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
         Uri.parse(NetworkConstants.BASE_URL + 'volunteer/own/tasks'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
-    showToast(context, data['message']);
     if (response.statusCode == 200) {
       return VolunteerOpportunityModel.fromJson(data);
     } else {
@@ -91,7 +91,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                               // ),
                               color: Colors.white,
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
+                              BorderRadius.all(Radius.circular(20)),
                               boxShadow: [
                                 BoxShadow(
                                   color: shadowColor.withOpacity(0.4),
@@ -127,7 +127,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                             left: 20, right: 20, top: 10),
                                         child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               snapshot.data.data[index].title,
@@ -152,10 +152,10 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                         .status,
                                                     style: TextStyle(
                                                         fontWeight:
-                                                            FontWeight.bold,
+                                                        FontWeight.bold,
                                                         fontSize: 14,
                                                         color:
-                                                            Colors.deepOrange)),
+                                                        Colors.deepOrange)),
                                               ),
                                             ),
                                           ],
@@ -181,7 +181,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                     style: TextStyle(
                                                         color: primaryColor,
                                                         fontWeight:
-                                                            FontWeight.bold,
+                                                        FontWeight.bold,
                                                         fontSize: 18),
                                                   ),
                                                 ),
@@ -193,7 +193,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                         .details,
                                                     style: TextStyle(
                                                         fontWeight:
-                                                            FontWeight.bold,
+                                                        FontWeight.bold,
                                                         fontSize: 16),
                                                   ),
                                                 ),
@@ -209,7 +209,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                   style: TextStyle(
                                                       color: primaryColor,
                                                       fontWeight:
-                                                          FontWeight.bold,
+                                                      FontWeight.bold,
                                                       fontSize: 18),
                                                 ),
                                                 Text(
@@ -217,7 +217,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                         .data.data[index].city,
                                                     style: TextStyle(
                                                         fontWeight:
-                                                            FontWeight.bold,
+                                                        FontWeight.bold,
                                                         fontSize: 14))
                                               ],
                                             ),
@@ -228,7 +228,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                   style: TextStyle(
                                                       color: primaryColor,
                                                       fontWeight:
-                                                          FontWeight.bold,
+                                                      FontWeight.bold,
                                                       fontSize: 18),
                                                 ),
                                                 Text(
@@ -236,14 +236,14 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                         .taskType,
                                                     style: TextStyle(
                                                         fontWeight:
-                                                            FontWeight.bold,
+                                                        FontWeight.bold,
                                                         fontSize: 14))
                                               ],
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              MainAxisAlignment
+                                                  .spaceBetween,
                                               children: [
                                                 Row(
                                                   children: [
@@ -252,7 +252,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                       style: TextStyle(
                                                           color: primaryColor,
                                                           fontWeight:
-                                                              FontWeight.bold,
+                                                          FontWeight.bold,
                                                           fontSize: 18),
                                                     ),
                                                     Text(
@@ -263,7 +263,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                             .name,
                                                         style: TextStyle(
                                                             fontWeight:
-                                                                FontWeight.bold,
+                                                            FontWeight.bold,
                                                             fontSize: 14))
                                                   ],
                                                 ),
@@ -287,7 +287,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                           boxShadow: [
                                             BoxShadow(
                                               color:
-                                                  shadowColor.withOpacity(0.2),
+                                              shadowColor.withOpacity(0.2),
                                               spreadRadius: .1,
                                               blurRadius: 3,
                                               // offset: Offset(0, 1), // changes position of shadow
@@ -305,12 +305,11 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                         Container(
                                           width: 90,
                                           height: 35,
-                                          margin: EdgeInsets.fromLTRB(
-                                              0, 0, 0, 5),
+                                          margin:
+                                          EdgeInsets.fromLTRB(0, 0, 0, 5),
                                           decoration: BoxDecoration(
                                             color: Colors.green,
-                                            borderRadius:
-                                            BorderRadius.all(
+                                            borderRadius: BorderRadius.all(
                                                 Radius.circular(20)),
                                           ),
                                           child: Center(
@@ -323,34 +322,22 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                       "application/json",
                                                       "Authorization":
                                                       "Bearer ${token}"
-                                                    }).then(
-                                                        (value) async {
-                                                      SweetAlert.show(context,
-                                                          title:
-                                                          "Your Task is completed",
-                                                          style:
-                                                          SweetAlertStyle
-                                                              .success,
-                                                          onPress: (bool
-                                                          isConfirm) {
-                                                            if (isConfirm) {
-                                                              getVOpportunityApi();
-                                                              // return false to keep dialog
-                                                            }
-                                                            return null;
-                                                          });
-                                                    });
-                                                // SweetAlert.show(context,
-                                                //     title: "Just show a message",
-                                                //     subtitle: "Sweet alert is pretty",
-                                                //     style: SweetAlertStyle.success,
-                                                //     onPress: (bool isConfirm) {
-                                                //       if (isConfirm) {
-                                                //         getOpportunityApi();
-                                                //         // return false to keep dialog
-                                                //       }
-                                                //       return null;
-                                                //     });
+                                                    }).then((value) async {
+                                                  SweetAlert.show(context,
+                                                      title:
+                                                      "Your Task is completed",
+                                                      subtitle:"Please go to History ",
+                                                      style: SweetAlertStyle
+                                                          .success,
+                                                      onPress:
+                                                          (bool isConfirm) {
+                                                        if (isConfirm) {
+                                                          // return false to keep dialog
+                                                        }
+                                                        return null;
+                                                      });
+                                                  setState(() {});
+                                                });
                                               },
                                               child: Container(
                                                 // width: 80,
@@ -361,15 +348,13 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                 //   borderRadius: BorderRadius.all(Radius.circular(20)),
                                                 // ),
                                                 child: Center(
-                                                    child: Text(
-                                                        'Complete',
+                                                    child: Text('Complete',
                                                         style: TextStyle(
                                                             fontWeight:
-                                                            FontWeight
-                                                                .bold,
+                                                            FontWeight.bold,
                                                             fontSize: 16,
-                                                            color: Colors
-                                                                .white))),
+                                                            color:
+                                                            Colors.white))),
                                               ),
                                             ),
                                           ),
@@ -381,7 +366,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                           width: 80,
                                           height: 35,
                                           margin:
-                                              EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                          EdgeInsets.fromLTRB(0, 0, 0, 5),
                                           decoration: BoxDecoration(
                                             color: primaryColor,
                                             borderRadius: BorderRadius.all(
@@ -390,11 +375,15 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                           child: Center(
                                             child: InkWell(
                                               onTap: () {
-                                                Get.to(() => OpportunityDetails(
-                                                    role: widget.role,
-                                                    id: snapshot
-                                                        .data.data[index].id,
-                                                    token: token));
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) => OpportunityDetails(
+                                                          role: widget.role,
+                                                          id: snapshot
+                                                              .data.data[index].id,
+                                                          token: token)),
+                                                ).then((value) => setState(() {}));
                                               },
                                               child: Container(
                                                 // width: 80,
@@ -408,10 +397,10 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                     child: Text('Details',
                                                         style: TextStyle(
                                                             fontWeight:
-                                                                FontWeight.bold,
+                                                            FontWeight.bold,
                                                             fontSize: 16,
                                                             color:
-                                                                Colors.white))),
+                                                            Colors.white))),
                                               ),
                                             ),
                                           ),

@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 class LocationUpdate extends StatefulWidget {
   final dynamic token,id,title,
       category,
@@ -102,21 +100,14 @@ class _LocationUpdateState extends State<LocationUpdate> {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         print(data);
-        setState(() {
-          isApiCallProcess = false;
-        });
         showToast(context, data['message']);
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-            (Route<dynamic> route) => false);
+        int count = 0;
+        Navigator.popUntil(context, (route) => count++ == 3);
       } else {
         var data = jsonDecode(response.body.toString());
         showToast(context, data['message'].toString());
       }
     } catch (e) {
-      setState(() {
-        isApiCallProcess = false;
-      });
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -135,8 +126,6 @@ class _LocationUpdateState extends State<LocationUpdate> {
           });
     }
   }
-
-  bool isApiCallProcess = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

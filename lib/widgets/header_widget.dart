@@ -39,8 +39,8 @@ class _HeaderLogoState extends State<HeaderLogo> {
             // ]),
           ),
           Positioned(
-            top: 150,
-              right: 152,
+            top: MediaQuery.of(context).size.height / 5.1,
+              right: MediaQuery.of(context).size.width / 2.8,
               child: Container(
                 height: 100,
                 width: 100,

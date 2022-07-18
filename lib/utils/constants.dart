@@ -7,7 +7,7 @@ class AssetConstants {
 }
 
 class NetworkConstants {
-  static const BASE_URL = "http://192.168.68.169:8000/api/v1/";
+  static const BASE_URL = "http://192.168.68.169:8001/api/v1/";
   // static const BASE_URL_IMAGE = "";
 
   //header parameters

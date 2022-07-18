@@ -1,67 +1,193 @@
-// This widget will draw header section of all page. Wich you will get with the project source code.
-
+import 'dart:convert';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
+import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
+import 'package:crowdv_mobile_app/widgets/get_prefs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:lite_rolling_switch/lite_rolling_switch.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'show_toast.dart';
 
 class HeaderWidget extends StatefulWidget {
-  // final  color;
-  // const HeaderWidget(this.color);
-
+  final dynamic id, role;
+  HeaderWidget({this.id, this.role});
   @override
-  _HeaderWidgetState createState() =>
-      _HeaderWidgetState();
+  _HeaderWidgetState createState() => _HeaderWidgetState();
 }
 
-class _HeaderWidgetState extends State<HeaderWidget> {
-  // final color;
-  //
-  //
-  // _HeaderWidgetState(this.color);
+class _HeaderWidgetState extends State<HeaderWidget>
+    with TickerProviderStateMixin {
+  var user;
+  bool volunteer = true;
+  bool recruiter = false;
+  void rec() async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'role/${widget.id}/volunteer'));
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+        prefs.clear();
+        pageRoute(data['data'][0]['token']);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) =>
+                    HomeScreen(id: widget.id, role: data['data'][0]['role'])),
+            (Route<dynamic> route) => false);
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Exception:"),
+              content: Text(e.toString()),
+              actions: [
+                TextButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+
+  void vol() async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'role/${widget.id}/recruiter'));
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+        prefs.clear();
+        pageRoute(data['data'][0]['token']);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) =>
+                    HomeScreen(id: widget.id, role: data['data'][0]['role'])),
+            (Route<dynamic> route) => false);
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Exception:"),
+              content: Text(e.toString()),
+              actions: [
+                TextButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+
+  void pageRoute(String token) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString("user", token);
+  }
+
+  @override
+  void initState() {
+    getUser().then((value) {
+      setState(() {
+        user = value;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-
     return Container(
-      child: Stack(
-        children: [
-          ClipPath(
-            child: Container(
-              height: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20)),
-                  color: primaryColor,
-              ),
+      height: 100,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20)),
+        color: primaryColor,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Row(
+          children: [
+            Column(
+              children: [
+                widget.role == 'volunteer'
+                    ? LiteRollingSwitch(
+                  value: volunteer,
+                  iconOn: Icons.accessibility,
+                  iconOff: Icons.accessible,
+                  colorOff: Colors.blue,
+                  colorOn: secondaryColor,
+                  onChanged: (val) {
+                    volunteer = val;
+                    print(volunteer);
+                  },
+                  onTap: () {
+                    vol();
+                  },
+                  animationDuration: Duration(seconds: 2),
+                  textOn: "Volunteer",
+                  textOff: "Recruiter",
+                )
+                    : LiteRollingSwitch(
+                  value: recruiter,
+                  iconOn: Icons.accessibility,
+                  iconOff: Icons.accessible,
+                  colorOff: Colors.blue,
+                  colorOn: secondaryColor,
+                  onChanged: (val) {
+                    recruiter = val;
+                    print("recruiter");
+                  },
+                  onTap: () {
+                    rec();
+                  },
+                  animationDuration: Duration(milliseconds: 1600),
+                  textOn: "Volunteer",
+                  textOff: "Recruiter",
+                ),
+              ],
             ),
-            // clipper: ShapeClipper([
-            //   // Offset(width / 5, _height),
-            //   // Offset(width / 2, _height - 40),
-            //   // Offset(width / 5 * 4, _height - 80),
-            //   // Offset(width, _height - 20)
-            // ]),
-          ),
-          Positioned(
-              top: 30,
-              right: 220,
-              child: Row(children: [
-                const Text(
-                  "Crowd",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 40,
-                      color: Colors.white),
-                ),
-                Center(
-                  child: Image.asset('assets/crowdv_png.png',
+            SizedBox(width: 60,),
+            Column(
+              children: [
+                Row(children: [
+                  const Text(
+                    "Crowd",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 40,
+                        color: Colors.white),
+                  ),
+                  Image.asset('assets/crowdv_png.png',
                       width: 40, height: 50),
-                ),
-              ]))
-
-        ],
+                ]),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-
-

@@ -4,7 +4,7 @@ import 'package:flutter_html/html_parser.dart';
 import 'package:http/http.dart' as http;
 
 Future getRequest(path, qparam, headers) async {
-  final response = await http.get(Uri.http('192.168.68.169:8000', path, qparam),
+  final response = await http.get(Uri.http('192.168.68.169:8001', path, qparam),
       headers: headers);
 
   // debugPrint(response.body);

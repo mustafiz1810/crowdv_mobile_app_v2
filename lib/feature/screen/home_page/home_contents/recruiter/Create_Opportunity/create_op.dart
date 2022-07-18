@@ -21,11 +21,12 @@ class CreateOpportunity extends StatefulWidget {
 
 class _CreateOpportunityState extends State<CreateOpportunity> {
   DateTime dateTime = DateTime.now();
-  TimeOfDay time = TimeOfDay(hour: 12, minute: 50);
-  TimeOfDay _time = TimeOfDay(hour: 12, minute: 50);
+  TimeOfDay time = TimeOfDay.now();
+  TimeOfDay _time = TimeOfDay.now();
   String _typevalue;
   List<String> _type = ["Online", "Offline", "Both"];
   String token = "";
+
   Future<CategoryModel> getAllCategory() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL + 'categories'),
@@ -425,7 +426,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                         ),
                       ),
                       SizedBox(
-                        width: 9,
+                        width: 2,
                       ),
                       InkWell(
                           onTap: () async {
@@ -440,7 +441,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                                   '${time.hour}:${time.minute.toString().padLeft(2, '0')}');
                             });
                           },
-                          child: getTimeBoxUI('$hours:$minutes', 100)),
+                          child: getTimeBoxUI('$hours:$minutes', 80)),
                       SizedBox(
                         width: 5,
                       ),
@@ -463,7 +464,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                               print(_time.toString());
                             });
                           },
-                          child: getTimeBoxUI('$_hours:$_minutes', 100)),
+                          child: getTimeBoxUI('$_hours:$_minutes', 80)),
                     ],
                   ),
                   SizedBox(
@@ -474,21 +475,21 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
               SizedBox(height: 10.0),
               InkWellSplash(
                 onTap: () {
-                  setState(() {
-                    print(titleController.text +
-                        " " +
-                        _selectedIndex.toString() +
-                        " " +
-                        _typevalue.toString() +
-                        " " +
-                        descriptionController.text +
-                        " " +
-                        dateTime.toString() +
-                        " " +
-                        '${time.hour}:${time.minute.toString().padLeft(2, '0')}' +
-                        " " +
-                        '${_time.hour}:${_time.minute.toString().padLeft(2, '0') + "  " + slug.toString()}');
-                  });
+                  // setState(() {
+                  //   print(titleController.text +
+                  //       " " +
+                  //       _selectedIndex.toString() +
+                  //       " " +
+                  //       _typevalue.toString() +
+                  //       " " +
+                  //       descriptionController.text +
+                  //       " " +
+                  //       dateTime.toString() +
+                  //       " " +
+                  //       '${time.hour}:${time.minute.toString().padLeft(2, '0')}' +
+                  //       " " +
+                  //       '${_time.hour}:${_time.minute.toString().padLeft(2, '0') + "  " + slug.toString()}');
+                  // });
                   Get.to(() => CheckBox(
                         slug: slug.toString(),
                         title: titleController.text,
@@ -519,7 +520,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                   ),
                   child: Center(
                     child: Text(
-                      'Next Page',
+                      'Next',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -580,7 +581,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
   Future<DateTime> pickDate() => showDatePicker(
         context: context,
         initialDate: dateTime,
-        firstDate: DateTime(2000),
+        firstDate: DateTime.now(),
         lastDate: DateTime(2100),
       );
 }

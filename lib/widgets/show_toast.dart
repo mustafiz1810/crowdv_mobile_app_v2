@@ -5,7 +5,8 @@ void showToast(BuildContext context, msg) {
   Fluttertoast.showToast(
     msg: msg,
     toastLength: Toast.LENGTH_SHORT,
-    gravity: ToastGravity.BOTTOM,
+    gravity: ToastGravity.CENTER,
+    timeInSecForIosWeb: 20,
     // timeInSecForIos: 1
   );
 }

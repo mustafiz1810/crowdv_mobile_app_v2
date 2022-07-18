@@ -1,5 +1,5 @@
 import 'package:crowdv_mobile_app/feature/screen/password/change_pass.dart';
-import 'package:crowdv_mobile_app/feature/screen/profile/recruiter_profile.dart';
+import 'package:crowdv_mobile_app/feature/screen/profile/profile.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/get_prefs.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
@@ -52,29 +52,17 @@ class _NavDrawerState extends State<NavDrawer> {
           const SizedBox(
             height: 10,
           ),
-          Stack(children: [
-            Container(
-              height: 210,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20)),
-                color: primaryColor,
-              ),
+          UserAccountsDrawerHeader(
+            accountName: new Text("Mustafizur Rahman"),
+            accountEmail: new Text("munna.kodeeo@gmail.com"),
+            decoration: new BoxDecoration(
+              color: primaryColor,
             ),
-            UserAccountsDrawerHeader(
-              accountName: new Text("Mustafizur Rahman"),
-              accountEmail: new Text("munna.kodeeo@gmail.com"),
-              decoration: new BoxDecoration(
-                color: Colors.transparent,
-              ),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('assets/avater.png'),
-                backgroundColor: Colors.transparent,
-              ),
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: AssetImage('assets/avater.png'),
+              backgroundColor: Colors.transparent,
             ),
-
-          ]),
+          ),
           token != null
               ? Container()
               : ListTile(
@@ -84,12 +72,13 @@ class _NavDrawerState extends State<NavDrawer> {
                     // Navigator.pushNamed(context, '/categories');
                     Get.to(const LoginPage());
                   }),
-           ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text("Profile"),
-                  onTap: () {
-                    Get.to(() => RecruiterProfile());
-                  }),
+          ListTile(
+              leading: Icon(Icons.person),
+              title: Text("Profile"),
+              onTap: () {
+                Get.to(() => ProfilePage());
+              }),
+
           ListTile(
               leading: Icon(Icons.password_rounded),
               title: Text("Change Password"),
@@ -127,9 +116,6 @@ class _NavDrawerState extends State<NavDrawer> {
                   leading: Icon(Icons.power_settings_new),
                   title: new Text("Logout"),
                   onTap: () async {
-                    // print(user['token']);
-                    // await prefs.clear();
-                    // Navigator.pop(context);
                     getRequest('/api/v1/logout', null, {
                       'Content-Type': "application/json",
                       "Authorization": "Bearer ${token}"
