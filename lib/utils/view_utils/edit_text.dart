@@ -1,5 +1,4 @@
 import 'package:crowdv_mobile_app/utils/view_utils/dimens.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

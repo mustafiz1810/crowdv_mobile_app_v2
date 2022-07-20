@@ -1,8 +1,10 @@
 import 'package:crowdv_mobile_app/feature/screen/Search/search.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/organization/create_opportunity.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/organization/op_list.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruiter/Create_Opportunity/create_op.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/service_location.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/set_category.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/training.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/upcoming.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/volunteer_opportunities.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/notification.dart';
@@ -83,7 +85,9 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      bottomNavigationBar: CustomBottomNavigation(role: widget.role,),
+      bottomNavigationBar: CustomBottomNavigation(
+        role: widget.role,
+      ),
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
@@ -99,117 +103,127 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Container(
               height: 100,
-              child: HeaderWidget(role: widget.role,id:widget.id),
+              child: HeaderWidget(role: widget.role, id: widget.id),
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    widget.role=='organization'?Expanded(
-                      child: GridView.count(
-                        // scrollDirection: Axis.horizontal,
-                        crossAxisCount: 2,
-                        childAspectRatio: .90,
-                        crossAxisSpacing: 5,
-                        mainAxisSpacing: 5,
-                        children: <Widget>[
-                          CategoryCard(
-                            title: "Create Opportunity",
-                            svgSrc: "assets/471.svg",
-                            press: () {
-                              Get.to(OrgOpportunity());
-                            },
+                    widget.role == 'organization'
+                        ? Expanded(
+                            child: GridView.count(
+                              // scrollDirection: Axis.horizontal,
+                              crossAxisCount: 2,
+                              childAspectRatio: .90,
+                              crossAxisSpacing: 5,
+                              mainAxisSpacing: 5,
+                              children: <Widget>[
+                                CategoryCard(
+                                  title: "Create Opportunity",
+                                  svgSrc: "assets/471.svg",
+                                  press: () {
+                                    Get.to(OrgOpportunity());
+                                  },
+                                ),
+                                CategoryCard(
+                                  title: "My Opportunity",
+                                  svgSrc: "assets/457.svg",
+                                  press: () {
+                                    Get.to(OrgOpportunityList());
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
+                        : Expanded(
+                            child: widget.role == 'volunteer'
+                                ? GridView.count(
+                                    // scrollDirection: Axis.horizontal,
+                                    crossAxisCount: 2,
+                                    childAspectRatio: .90,
+                                    crossAxisSpacing: 5,
+                                    mainAxisSpacing: 5,
+                                    children: <Widget>[
+                                      CategoryCard(
+                                        title: "Upcoming Opportunity",
+                                        svgSrc: "assets/86.svg",
+                                        press: () {
+                                          Get.to(() => UpcomingOpportunity(
+                                                role: widget.role,
+                                              ));
+                                        },
+                                      ),
+                                      CategoryCard(
+                                        title: "My Opportunity",
+                                        svgSrc: "assets/457.svg",
+                                        press: () {
+                                          Get.to(VolunteerMyOpportunity(
+                                            role: widget.role,
+                                          ));
+                                        },
+                                      ),
+                                      CategoryCard(
+                                        title: "Set category",
+                                        svgSrc: "assets/162.svg",
+                                        press: () {
+                                          Get.to(() => SetCategory());
+                                        },
+                                      ),
+                                      CategoryCard(
+                                        title: "Service Location",
+                                        svgSrc: "assets/214.svg",
+                                        press: () {
+                                          Get.to(() => ServiceLocation());
+                                        },
+                                      ),
+                                      CategoryCard(
+                                        title: "Training",
+                                        svgSrc: "assets/179.svg",
+                                        press: () {
+                                          Get.to(() => Training());
+                                        },
+                                      ),
+                                      CategoryCard(
+                                        title: "Membership",
+                                        svgSrc: "assets/93.svg",
+                                        press: () {},
+                                      ),
+                                      CategoryCard(
+                                        title: "Certificate",
+                                        svgSrc: "assets/185.svg",
+                                        press: () {},
+                                      ),
+                                    ],
+                                  )
+                                : GridView.count(
+                                    // scrollDirection: Axis.horizontal,
+                                    crossAxisCount: 2,
+                                    childAspectRatio: .90,
+                                    crossAxisSpacing: 5,
+                                    mainAxisSpacing: 5,
+                                    children: <Widget>[
+                                      CategoryCard(
+                                        title: "Create Opportunity",
+                                        svgSrc: "assets/471.svg",
+                                        press: () {
+                                          Get.to(CreateOpportunity());
+                                        },
+                                      ),
+                                      CategoryCard(
+                                        title: "My Opportunity",
+                                        svgSrc: "assets/457.svg",
+                                        press: () {
+                                          Get.to(MyOpportunity(
+                                            role: widget.role,
+                                          ));
+                                        },
+                                      ),
+                                    ],
+                                  ),
                           ),
-                          CategoryCard(
-                            title: "My Opportunity",
-                            svgSrc: "assets/457.svg",
-                            press: () {
-                              Get.to(MyOpportunity(role: widget.role,));
-                            },
-                          ),
-                        ],
-                      ),
-                    ):
-                    Expanded(
-                      child: widget.role == 'volunteer'
-                          ? GridView.count(
-                        // scrollDirection: Axis.horizontal,
-                        crossAxisCount: 2,
-                        childAspectRatio: .90,
-                        crossAxisSpacing: 5,
-                        mainAxisSpacing: 5,
-                        children: <Widget>[
-                          CategoryCard(
-                            title: "Upcoming Opportunity",
-                            svgSrc: "assets/86.svg",
-                            press: () {
-                              Get.to(() => UpcomingOpportunity(role: widget.role,));
-                            },
-                          ),
-                          CategoryCard(
-                            title: "My Opportunity",
-                            svgSrc: "assets/457.svg",
-                            press: () {
-                              Get.to(VolunteerMyOpportunity(role: widget.role,));
-                            },
-                          ),
-                          CategoryCard(
-                            title: "Set category",
-                            svgSrc: "assets/162.svg",
-                            press: () {
-                              Get.to(() => SetCategory());
-                            },
-                          ),
-                          CategoryCard(
-                            title: "Service Location",
-                            svgSrc: "assets/214.svg",
-                            press: () {
-                              Get.to(() => ServiceLocation());
-                            },
-                          ),
-                          CategoryCard(
-                            title: "Training",
-                            svgSrc: "assets/179.svg",
-                            press: () {},
-                          ),
-                          CategoryCard(
-                            title: "Membership",
-                            svgSrc: "assets/93.svg",
-                            press: () {},
-                          ),
-                          CategoryCard(
-                            title: "Certificate",
-                            svgSrc: "assets/185.svg",
-                            press: () {},
-                          ),
-                        ],
-                      )
-                          : GridView.count(
-                        // scrollDirection: Axis.horizontal,
-                        crossAxisCount: 2,
-                        childAspectRatio: .90,
-                        crossAxisSpacing: 5,
-                        mainAxisSpacing: 5,
-                        children: <Widget>[
-                          CategoryCard(
-                            title: "Create Opportunity",
-                            svgSrc: "assets/471.svg",
-                            press: () {
-                              Get.to(CreateOpportunity());
-                            },
-                          ),
-                          CategoryCard(
-                            title: "My Opportunity",
-                            svgSrc: "assets/457.svg",
-                            press: () {
-                              Get.to(MyOpportunity(role: widget.role,));
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ),

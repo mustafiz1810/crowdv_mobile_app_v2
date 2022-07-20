@@ -58,6 +58,8 @@ dependencies:
   sweetalert: ^0.0.1
   empty_widget: ^0.0.5
   dependency_validator: ^3.2.0
+  better_player: any
+  url_launcher: ^6.1.5
 
 dev_dependencies:
   flutter_test:

@@ -19,8 +19,6 @@ class _HeaderLogoState extends State<HeaderLogo> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-
     return Container(
       child: Stack(
         children: [

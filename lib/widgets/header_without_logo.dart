@@ -3,7 +3,6 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/get_prefs.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
