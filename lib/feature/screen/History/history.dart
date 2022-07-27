@@ -5,6 +5,7 @@ import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
+import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/route_manager.dart';
@@ -527,7 +528,24 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                           },
                         );
                       } else {
-                        return Center(child: CircularProgressIndicator());
+                        return Container(
+                          alignment: Alignment.center,
+                          child: EmptyWidget(
+                            image: null,
+                            packageImage: PackageImage.Image_1,
+                            title: 'Empty',
+                            subTitle: 'No  History available',
+                            titleTextStyle: TextStyle(
+                              fontSize: 22,
+                              color: Color(0xff9da9c7),
+                              fontWeight: FontWeight.w500,
+                            ),
+                            subtitleTextStyle: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xffabb8d6),
+                            ),
+                          ),
+                        );
                       }
                     },
                   )),

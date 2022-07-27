@@ -13,6 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
+  final disability,chosenValue,dropdown,selectedCountry,selectedProvince;
+  ProfilePage({this.disability,this.chosenValue,this.dropdown,this.selectedProvince,this.selectedCountry});
   @override
   State<StatefulWidget> createState() {
     return _ProfilePageState();
@@ -22,8 +24,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   String token = "";
   String disability;
-  String _chosenValue;
-  String _dropdown;
+  String _profession;
+  String _gender;
   String selectedCountry;
   String selectedProvince;
   List<String> countries = [
@@ -52,14 +54,14 @@ class _ProfilePageState extends State<ProfilePage> {
   List<String> KentuckyProvince = ['Anchorage', 'Juneau', 'California'];
   List<String> LouisianaProvince = ['Anchorage', 'Juneau', 'California'];
   List<String> provinces = [];
-  List<String> _disability = ["select","Blind"];
+  List<String> _disability = ["select", "Blind"];
   List<String> _items = ["Business", "Student", "Service", "Self-employer"];
-  List<String> _item = ["Select","Male", "Female"];
+  List<String> _item = ["Select", "Male", "Female"];
   @override
   void initState() {
     super.initState();
     getCred();
-    disability="select";
+    disability = "select";
   }
 
   void getCred() async {
@@ -109,8 +111,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     alignment: Alignment.center,
                     children: [
                       Container(
-                        height: 120,
-                        child: HeaderWidget(),
+                        height: 110,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20)),
+                          color: primaryColor,
+                        ),
                       ),
                       Positioned(
                         top: 25,
@@ -298,7 +305,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                 snapshot
                                                                         .data
                                                                         .data
-                                                                        .firstName.toString() +
+                                                                        .firstName
+                                                                        .toString() +
                                                                     " " +
                                                                     snapshot
                                                                         .data
@@ -450,18 +458,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                               child: Center(
                                                 child: DropdownButton<String>(
                                                     hint: Center(
-                                                        child: Text(
-                                                      "Profession:  " +
-                                                          snapshot.data.data
-                                                              .profession
-                                                              .toString(),
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    )),
-                                                    value: _chosenValue,
+                                                      child: Text(
+                                                        "Select Profession",
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                    value: _profession,
                                                     // elevation: 5,
                                                     style: TextStyle(
                                                         color: Colors.black,
@@ -512,7 +519,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     // isExpanded: true,
                                                     onChanged: (String value) {
                                                       setState(() {
-                                                        _chosenValue = value;
+                                                        _profession = value;
                                                       });
                                                     }),
                                               ),
@@ -531,10 +538,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                                           30)),
                                               child: Center(
                                                 child: DropdownButton<String>(
-                                                    value: _dropdown,
+                                                    value: _gender,
                                                     hint: Center(
                                                       child: Text(
-                                                        "select option",
+                                                        "Select Gender",
                                                         style: TextStyle(
                                                             fontSize: 18,
                                                             color: Colors.white,
@@ -581,7 +588,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     underline: Container(),
                                                     onChanged: (String value) {
                                                       setState(() {
-                                                        _dropdown = value;
+                                                        _gender = value;
                                                       });
                                                     }),
                                               ),

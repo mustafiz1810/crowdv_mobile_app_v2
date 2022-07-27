@@ -59,6 +59,7 @@ dependencies:
   empty_widget: ^0.0.5
   dependency_validator: ^3.2.0
   better_player: any
+  video_thumbnail: ^0.5.2
   url_launcher: ^6.1.5
 
 dev_dependencies:

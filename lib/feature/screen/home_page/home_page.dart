@@ -4,7 +4,7 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/organiz
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruiter/Create_Opportunity/create_op.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/service_location.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/set_category.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/training.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/training_video_list.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/upcoming.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/volunteer_opportunities.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/notification.dart';
@@ -15,6 +15,7 @@ import 'package:crowdv_mobile_app/widgets/category_grid.dart';
 import 'package:crowdv_mobile_app/widgets/header_without_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'home_contents/Training/training_list.dart';
 import 'home_contents/recruiter/my_opportunities.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -183,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         title: "Training",
                                         svgSrc: "assets/179.svg",
                                         press: () {
-                                          Get.to(() => Training());
+                                          Get.to(() => TrainingList());
                                         },
                                       ),
                                       CategoryCard(

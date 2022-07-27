@@ -1,10 +1,18 @@
+import 'dart:convert';
+
 import 'package:better_player/better_player.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/test.dart';
+import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
+import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:http/http.dart';
 
 class VideoScreen extends StatefulWidget {
-  final String name, mediaUrl, details;
-  VideoScreen({this.name, this.mediaUrl, this.details});
+  final String token, name, mediaUrl, details;
+  final int id;
+  VideoScreen({this.id,this.token,this.name, this.mediaUrl, this.details});
 
   @override
   _VideoScreenState createState() => _VideoScreenState();
@@ -13,10 +21,10 @@ class VideoScreen extends StatefulWidget {
 class _VideoScreenState extends State<VideoScreen> {
   BetterPlayerController _betterPlayerController;
   GlobalKey _betterPlayerKey = GlobalKey();
-  bool isDisabled = true;
 
   @override
   void initState() {
+    print(widget.mediaUrl.toString());
     BetterPlayerConfiguration betterPlayerConfiguration =
         BetterPlayerConfiguration(
       aspectRatio: 16 / 9,
@@ -30,16 +38,51 @@ class _VideoScreenState extends State<VideoScreen> {
     _betterPlayerController.setBetterPlayerGlobalKey(_betterPlayerKey);
     super.initState();
   }
-
+  void train( duration, total) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'track-video-info/${widget.id}'),
+          headers: {
+            "Authorization": "Bearer ${widget.token}"
+          },
+          body: {
+            'duration': duration,
+            'total_duration': total,
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print(duration+"   /"+total);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
   void _onPlayerEvent(BetterPlayerEvent event) {
     if (_checkIfCanProcessPlayerEvent(event)) {
       Duration progress = event.parameters['progress'];
       Duration duration = event.parameters['duration'];
-      setState(() {
         if(progress==duration){
-          isDisabled = false;
+          setState(() {
+            train(progress.toString(), duration.toString());
+          });
         }
-      });
     }
   }
 
@@ -53,17 +96,6 @@ class _VideoScreenState extends State<VideoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar:  Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: ElevatedButton(
-          onPressed: isDisabled == true
-              ? null
-              : () {
-            print("Clicked");
-          },
-          child: Text("Take the test"),
-        ),
-      ),
       appBar: AppBar(
         backgroundColor: primaryColor,
         title: Text(widget.name),

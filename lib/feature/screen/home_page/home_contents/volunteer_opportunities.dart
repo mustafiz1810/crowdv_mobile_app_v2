@@ -414,7 +414,24 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                       },
                     );
                   } else {
-                    return Center(child: CircularProgressIndicator());
+                    return Container(
+                      alignment: Alignment.center,
+                      child: EmptyWidget(
+                        image: null,
+                        packageImage: PackageImage.Image_3,
+                        title: 'No Opportunity',
+                        subTitle: 'No  Opportunity available',
+                        titleTextStyle: TextStyle(
+                          fontSize: 22,
+                          color: Color(0xff9da9c7),
+                          fontWeight: FontWeight.w500,
+                        ),
+                        subtitleTextStyle: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xffabb8d6),
+                        ),
+                      ),
+                    );
                   }
                 },
               )),

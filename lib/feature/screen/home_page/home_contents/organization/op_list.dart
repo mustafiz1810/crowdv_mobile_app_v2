@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:sweetalert/sweetalert.dart';
+import 'package:url_launcher/url_launcher.dart';
 class OrgOpportunityList extends StatefulWidget {
   @override
   State<OrgOpportunityList> createState() => _OrgOpportunityListState();
@@ -128,68 +129,68 @@ class _OrgOpportunityListState extends State<OrgOpportunityList> {
                                                       fontWeight: FontWeight.bold,
                                                       fontSize: 18),
                                                 ),
-                                                IconBox(
-                                                  onTap: () {
-                                                    SweetAlert.show(context,
-                                                        subtitle:
-                                                        "Do you want to delete this opportunity?",
-                                                        style: SweetAlertStyle
-                                                            .confirm,
-                                                        showCancelButton: true,
-                                                        onPress:
-                                                            (bool isConfirm) {
-                                                          if (isConfirm) {
-                                                            //Return false to keep dialog
-                                                            if (isConfirm) {
-                                                              SweetAlert.show(context,
-                                                                  subtitle:
-                                                                  "Deleting...",
-                                                                  style:
-                                                                  SweetAlertStyle
-                                                                      .loading);
-                                                              new Future.delayed(
-                                                                  new Duration(
-                                                                      seconds: 1),
-                                                                      () {
-                                                                    getRequestWithoutParam(
-                                                                        '/api/v1/opportunity/delete/${snapshot.data.data[index].id}',
-                                                                        {
-                                                                          'Content-Type':
-                                                                          "application/json",
-                                                                          "Authorization":
-                                                                          "Bearer ${token}"
-                                                                        }).then(
-                                                                            (value) async {
-                                                                          SweetAlert.show(
-                                                                              context,
-                                                                              subtitle:
-                                                                              "Success!",
-                                                                              style:
-                                                                              SweetAlertStyle
-                                                                                  .success);
-                                                                          setState(() {});
-                                                                        });
-                                                                  });
-                                                            } else {
-                                                              SweetAlert.show(context,
-                                                                  subtitle:
-                                                                  "Canceled!",
-                                                                  style:
-                                                                  SweetAlertStyle
-                                                                      .error);
-                                                            }
-                                                            return false;
-                                                          }
-                                                          return null;
-                                                        });
-                                                  },
-                                                  child: Icon(
-                                                    Icons.delete,
-                                                    color: Colors.white,
-                                                    size: 20,
-                                                  ),
-                                                  bgColor: Colors.red,
-                                                ),
+                                                // IconBox(
+                                                //   onTap: () {
+                                                //     SweetAlert.show(context,
+                                                //         subtitle:
+                                                //         "Do you want to delete this opportunity?",
+                                                //         style: SweetAlertStyle
+                                                //             .confirm,
+                                                //         showCancelButton: true,
+                                                //         onPress:
+                                                //             (bool isConfirm) {
+                                                //           if (isConfirm) {
+                                                //             //Return false to keep dialog
+                                                //             if (isConfirm) {
+                                                //               SweetAlert.show(context,
+                                                //                   subtitle:
+                                                //                   "Deleting...",
+                                                //                   style:
+                                                //                   SweetAlertStyle
+                                                //                       .loading);
+                                                //               new Future.delayed(
+                                                //                   new Duration(
+                                                //                       seconds: 1),
+                                                //                       () {
+                                                //                     getRequestWithoutParam(
+                                                //                         '/api/v1/opportunity/delete/${snapshot.data.data[index].id}',
+                                                //                         {
+                                                //                           'Content-Type':
+                                                //                           "application/json",
+                                                //                           "Authorization":
+                                                //                           "Bearer ${token}"
+                                                //                         }).then(
+                                                //                             (value) async {
+                                                //                           SweetAlert.show(
+                                                //                               context,
+                                                //                               subtitle:
+                                                //                               "Success!",
+                                                //                               style:
+                                                //                               SweetAlertStyle
+                                                //                                   .success);
+                                                //                           setState(() {});
+                                                //                         });
+                                                //                   });
+                                                //             } else {
+                                                //               SweetAlert.show(context,
+                                                //                   subtitle:
+                                                //                   "Canceled!",
+                                                //                   style:
+                                                //                   SweetAlertStyle
+                                                //                       .error);
+                                                //             }
+                                                //             return false;
+                                                //           }
+                                                //           return null;
+                                                //         });
+                                                //   },
+                                                //   child: Icon(
+                                                //     Icons.delete,
+                                                //     color: Colors.white,
+                                                //     size: 20,
+                                                //   ),
+                                                //   bgColor: Colors.red,
+                                                // ),
                                               ],
                                             ),
                                           ),
@@ -204,6 +205,17 @@ class _OrgOpportunityListState extends State<OrgOpportunityList> {
                                                 left: 20, right: 20),
                                             child: Column(
                                               children: [
+                                                TextButton(
+                                                  onPressed: () async {
+                                                    const url = 'https://blog.logrocket.com';
+                                                    if(await canLaunch(url)){
+                                                      await launch(url);
+                                                    }else {
+                                                      throw 'Could not launch $url';
+                                                    }
+                                                  },
+                                                  child: Text(snapshot.data.data[index].links)
+                                                ),
                                                 // Row(
                                                 //   children: [
                                                 //     SizedBox(

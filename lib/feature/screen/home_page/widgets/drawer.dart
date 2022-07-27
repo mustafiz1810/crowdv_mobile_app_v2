@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:crowdv_mobile_app/data/models/profile_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/password/change_pass.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/profile.dart';
+import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/get_prefs.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
@@ -9,6 +13,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../utils/view_utils/common_util.dart';
+import 'package:http/http.dart' as http;
 
 class NavDrawer extends StatefulWidget {
   final dynamic id, role;
@@ -33,17 +38,18 @@ class _NavDrawerState extends State<NavDrawer> {
     });
   }
 
-  // Future<ProfileModel> getProfileApi() async {
-  //   final response = await http.get(
-  //       Uri.parse(NetworkConstants.BASE_URL + 'user/${widget.id}'),
-  //       headers: {"Authorization": "Bearer $token"});
-  //   var data = jsonDecode(response.body.toString());
-  //   if (response.statusCode == 200) {
-  //     return ProfileModel.fromJson(data);
-  //   } else {
-  //     return ProfileModel.fromJson(data);
-  //   }
-  // }
+  Future<ProfileModel> getAcApi() async {
+    final response = await http.get(
+        Uri.parse(NetworkConstants.BASE_URL + 'profile'),
+        headers: {"Authorization": "Bearer $token"});
+    var data = jsonDecode(response.body.toString());
+    if (response.statusCode == 200) {
+      return ProfileModel.fromJson(data);
+    } else {
+      return ProfileModel.fromJson(data);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -52,17 +58,49 @@ class _NavDrawerState extends State<NavDrawer> {
           const SizedBox(
             height: 10,
           ),
-          UserAccountsDrawerHeader(
-            accountName: new Text("Mustafizur Rahman"),
-            accountEmail: new Text("munna.kodeeo@gmail.com"),
-            decoration: new BoxDecoration(
-              color: primaryColor,
-            ),
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: AssetImage('assets/avater.png'),
-              backgroundColor: Colors.transparent,
-            ),
-          ),
+          FutureBuilder<ProfileModel>(
+              future: getAcApi(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Column(
+                    children: [
+                      UserAccountsDrawerHeader(
+                        accountName: new Text(snapshot.data.data.firstName +
+                            " " +
+                            snapshot.data.data.lastName),
+                        accountEmail: new Text(snapshot.data.data.email),
+                        decoration: new BoxDecoration(
+                          color: primaryColor,
+                        ),
+                        currentAccountPicture: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(snapshot.data.data.image),
+                          backgroundColor: Colors.transparent,
+                        ),
+                      ),
+                      ListTile(
+                          leading: Icon(Icons.person),
+                          title: Text("Profile"),
+                          onTap: () {
+                            Get.to(() => ProfilePage(
+                                  disability:
+                                      snapshot.data.data.typeOfDisability,
+                                  chosenValue: snapshot.data.data.profession,
+                                  dropdown: snapshot.data.data.gender,
+                                  selectedCountry: snapshot.data.data.state,
+                                  selectedProvince: snapshot.data.data.city,
+                                ));
+                          }),
+                    ],
+                  );
+                } else {
+                  return Container(
+                    color: Colors.white,
+                    height: 100,
+                    width: 100,
+                  );
+                }
+              }),
           token != null
               ? Container()
               : ListTile(
@@ -72,13 +110,6 @@ class _NavDrawerState extends State<NavDrawer> {
                     // Navigator.pushNamed(context, '/categories');
                     Get.to(const LoginPage());
                   }),
-          ListTile(
-              leading: Icon(Icons.person),
-              title: Text("Profile"),
-              onTap: () {
-                Get.to(() => ProfilePage());
-              }),
-
           ListTile(
               leading: Icon(Icons.password_rounded),
               title: Text("Change Password"),
