@@ -207,7 +207,7 @@ class _OrgOpportunityListState extends State<OrgOpportunityList> {
                                               children: [
                                                 TextButton(
                                                   onPressed: () async {
-                                                    const url = 'https://blog.logrocket.com';
+                                                    String url = snapshot.data.data[index].links;
                                                     if(await canLaunch(url)){
                                                       await launch(url);
                                                     }else {

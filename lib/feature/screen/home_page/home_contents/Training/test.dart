@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'package:crowdv_mobile_app/data/models/volunteer/exam_model.dart';
 import 'package:crowdv_mobile_app/data/models/volunteer/test_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/widget/Exam/exam_main.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
+import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,7 @@ class Test extends StatefulWidget {
 
 class _TestState extends State<Test> {
   String token = "";
-
+  int testId;
   @override
   void initState() {
     getCred();
@@ -39,14 +41,12 @@ class _TestState extends State<Test> {
         Uri.parse(NetworkConstants.BASE_URL + 'test/list/${widget.trainingId}'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
-    showToast(context, data['message']);
     if (response.statusCode == 200) {
       return TestModel.fromJson(data);
     } else {
       return TestModel.fromJson(data);
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,6 +68,7 @@ class _TestState extends State<Test> {
                       shrinkWrap: true,
                       itemCount: snapshot.data.data.tests.length,
                       itemBuilder: (context, index) {
+                        testId = snapshot.data.data.tests[index].id;
                         return Padding(
                           padding: const EdgeInsets.all(5),
                           child: Container(
@@ -95,8 +96,7 @@ class _TestState extends State<Test> {
                               children: [
                                 Container(
                                   height: 35,
-                                  width: MediaQuery.of(context).size.width /
-                                      1,
+                                  width: MediaQuery.of(context).size.width / 1,
                                   decoration: BoxDecoration(
                                     color: primaryColor,
                                     borderRadius: BorderRadius.only(
@@ -116,7 +116,7 @@ class _TestState extends State<Test> {
                                         left: 20, right: 20, top: 5),
                                     child: Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           snapshot.data.data.tests[index].title,
@@ -145,16 +145,14 @@ class _TestState extends State<Test> {
                                               'Name:  ',
                                               style: TextStyle(
                                                   color: primaryColor,
-                                                  fontWeight:
-                                                  FontWeight.bold,
+                                                  fontWeight: FontWeight.bold,
                                                   fontSize: 18),
                                             ),
                                             Text(
                                               snapshot
                                                   .data.data.tests[index].title,
                                               style: TextStyle(
-                                                  fontWeight:
-                                                  FontWeight.bold,
+                                                  fontWeight: FontWeight.bold,
                                                   fontSize: 16),
                                             ),
                                           ],
@@ -165,8 +163,7 @@ class _TestState extends State<Test> {
                                               'Total Score : ',
                                               style: TextStyle(
                                                   color: primaryColor,
-                                                  fontWeight:
-                                                  FontWeight.bold,
+                                                  fontWeight: FontWeight.bold,
                                                   fontSize: 18),
                                             ),
                                             Text(
@@ -174,8 +171,7 @@ class _TestState extends State<Test> {
                                                     .totalScore
                                                     .toString(),
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                    FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                     fontSize: 14))
                                           ],
                                         ),
@@ -185,8 +181,7 @@ class _TestState extends State<Test> {
                                               'Passing mark: ',
                                               style: TextStyle(
                                                   color: primaryColor,
-                                                  fontWeight:
-                                                  FontWeight.bold,
+                                                  fontWeight: FontWeight.bold,
                                                   fontSize: 18),
                                             ),
                                             Text(
@@ -194,14 +189,13 @@ class _TestState extends State<Test> {
                                                     .totalScore
                                                     .toString(),
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                    FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                     fontSize: 14))
                                           ],
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.end,
+                                              MainAxisAlignment.end,
                                           children: [
                                             Container(
                                               width: 100,
@@ -210,26 +204,30 @@ class _TestState extends State<Test> {
                                                   0, 0, 0, 5),
                                               decoration: BoxDecoration(
                                                 color: Colors.teal,
-                                                borderRadius:
-                                                BorderRadius.all(
-                                                    Radius.circular(
-                                                        20)),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
                                               ),
                                               child: Center(
                                                 child: InkWell(
-                                                  onTap: () {
-                                                    Get.to(()=>ExamPage(id:snapshot.data.data.tests[index].id));
+                                                  onTap: () async {
+                                                    getRequest('/api/v1/question/list/$testId', null, {
+                                                      'Content-Type': "application/json",
+                                                      "Authorization": "Bearer ${token}"
+                                                    }).then((value) async {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(builder: (context) => ExamPage(data:value["data"]["questions"])),
+                                                      );
+                                                    });
                                                   },
                                                   child: Container(
                                                     child: Center(
-                                                        child: Text(
-                                                            'Take Test',
+                                                        child: Text('Take Test',
                                                             style: TextStyle(
                                                                 fontWeight:
-                                                                FontWeight
-                                                                    .bold,
-                                                                fontSize:
-                                                                16,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 16,
                                                                 color: Colors
                                                                     .white))),
                                                   ),
@@ -237,7 +235,7 @@ class _TestState extends State<Test> {
                                               ),
                                             ),
                                           ],
-                                        )
+                                        ),
                                       ],
                                     )),
                               ],
@@ -253,7 +251,6 @@ class _TestState extends State<Test> {
                         image: null,
                         packageImage: PackageImage.Image_1,
                         title: 'Empty',
-                        subTitle: 'No Test available',
                         titleTextStyle: TextStyle(
                           fontSize: 22,
                           color: Color(0xff9da9c7),

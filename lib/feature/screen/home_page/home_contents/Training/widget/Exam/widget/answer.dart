@@ -1,32 +1,34 @@
+import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:flutter/material.dart';
 
-class Answer extends StatelessWidget {
+class Answer extends StatefulWidget {
+  final Function selectHandler;
   final String answerText;
-  final Color answerColor;
-  final Function answerTap;
 
-  Answer({this.answerText, this.answerColor, this.answerTap});
+  Answer(this.selectHandler, this.answerText);
 
   @override
+  State<Answer> createState() => _AnswerState();
+}
+
+class _AnswerState extends State<Answer> {
+  @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: answerTap,
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
       child: Container(
-        padding: EdgeInsets.all(15.0),
-        margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 30.0),
         width: double.infinity,
-        decoration: BoxDecoration(
-          color: answerColor,
-          border: Border.all(color: Colors.blue),
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        child: Text(
-          answerText,
-          style: TextStyle(
-            fontSize: 15.0,
+        height: 50,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.white,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30)),
           ),
-        ),
+          onPressed: widget.selectHandler,
+          child: Text(widget.answerText,style: TextStyle(color: primaryColor),),
+        ),//RaisedButton
       ),
-    );
+    ); //Container
   }
 }

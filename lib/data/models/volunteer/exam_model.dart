@@ -46,7 +46,7 @@ class Data {
   int testId;
   String testTitle;
   String testDetails;
-  int testPassingMark;
+  dynamic testPassingMark;
   int testTotalScore;
   String testStatus;
   List<Question> questions;
@@ -79,6 +79,7 @@ class Question {
     this.question,
     this.status,
     this.value,
+    this.deletedAt,
     this.createdAt,
     this.updatedAt,
     this.options,
@@ -89,6 +90,7 @@ class Question {
   String question;
   int status;
   dynamic value;
+  dynamic deletedAt;
   DateTime createdAt;
   DateTime updatedAt;
   List<Option> options;
@@ -99,6 +101,7 @@ class Question {
     question: json["question"],
     status: json["status"],
     value: json["value"],
+    deletedAt: json["deleted_at"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
     options: List<Option>.from(json["options"].map((x) => Option.fromJson(x))),
@@ -110,6 +113,7 @@ class Question {
     "question": question,
     "status": status,
     "value": value,
+    "deleted_at": deletedAt,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
     "options": List<dynamic>.from(options.map((x) => x.toJson())),
@@ -122,6 +126,7 @@ class Option {
     this.questionId,
     this.correctAnswer,
     this.optionName,
+    this.deletedAt,
     this.createdAt,
     this.updatedAt,
   });
@@ -130,6 +135,7 @@ class Option {
   int questionId;
   int correctAnswer;
   String optionName;
+  dynamic deletedAt;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -138,6 +144,7 @@ class Option {
     questionId: json["question_id"],
     correctAnswer: json["correct_answer"],
     optionName: json["option_name"],
+    deletedAt: json["deleted_at"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
   );
@@ -147,6 +154,7 @@ class Option {
     "question_id": questionId,
     "correct_answer": correctAnswer,
     "option_name": optionName,
+    "deleted_at": deletedAt,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
   };

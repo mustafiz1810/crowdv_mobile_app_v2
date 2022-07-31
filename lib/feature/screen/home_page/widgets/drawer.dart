@@ -158,7 +158,8 @@ class _NavDrawerState extends State<NavDrawer> {
                       );
                       showToast("Logged Out");
                     });
-                  })
+                  },
+          )
               : Container(
                   height: 0,
                 ),

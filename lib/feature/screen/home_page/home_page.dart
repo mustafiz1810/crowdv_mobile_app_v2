@@ -1,4 +1,5 @@
 import 'package:crowdv_mobile_app/feature/screen/Search/search.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/certificate.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/organization/create_opportunity.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/organization/op_list.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruiter/Create_Opportunity/create_op.dart';
@@ -187,15 +188,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Get.to(() => TrainingList());
                                         },
                                       ),
-                                      CategoryCard(
-                                        title: "Membership",
-                                        svgSrc: "assets/93.svg",
-                                        press: () {},
-                                      ),
+                                      // CategoryCard(
+                                      //   title: "Membership",
+                                      //   svgSrc: "assets/93.svg",
+                                      //   press: () {},
+                                      // ),
                                       CategoryCard(
                                         title: "Certificate",
                                         svgSrc: "assets/185.svg",
-                                        press: () {},
+                                        press: () {
+                                          Get.to(() => Certificate());
+                                        },
                                       ),
                                     ],
                                   )
