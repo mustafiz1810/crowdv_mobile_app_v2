@@ -1,8 +1,8 @@
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:flutter/material.dart';
 
-import './answer.dart';
-import './question.dart';
+import 'answer.dart';
+import 'question.dart';
 
 class Quiz extends StatelessWidget {
   final questions;

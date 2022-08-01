@@ -39,13 +39,12 @@ class _LoginPageState extends State<LoginPage> {
           isApiCallProcess = false;
         });
         showToast(context, data['message']);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => HomeScreen(
-                  id: data['result']['data']['id'],
-                  role: data['result']['data']['role'])),
-        );
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(
+                    id: data['result']['data']['id'],
+                    role: data['result']['data']['role'])),
+            (Route<dynamic> route) => false);
       } else {
         setState(() {
           isApiCallProcess = false;

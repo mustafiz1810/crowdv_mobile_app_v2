@@ -1,5 +1,5 @@
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/widget/Exam/widget/quiz.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/widget/Exam/widget/result.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/Exam/widget/quiz.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/Exam/widget/result.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:flutter/material.dart';
 

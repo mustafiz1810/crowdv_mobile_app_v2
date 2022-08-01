@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/data/models/volunteer/exam_model.dart';
 import 'package:crowdv_mobile_app/data/models/volunteer/test_model.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/widget/Exam/exam_main.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/Exam/exam_main.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
@@ -22,7 +22,6 @@ class Test extends StatefulWidget {
 
 class _TestState extends State<Test> {
   String token = "";
-  int testId;
   @override
   void initState() {
     getCred();
@@ -68,7 +67,6 @@ class _TestState extends State<Test> {
                       shrinkWrap: true,
                       itemCount: snapshot.data.data.tests.length,
                       itemBuilder: (context, index) {
-                        testId = snapshot.data.data.tests[index].id;
                         return Padding(
                           padding: const EdgeInsets.all(5),
                           child: Container(
@@ -210,10 +208,11 @@ class _TestState extends State<Test> {
                                               child: Center(
                                                 child: InkWell(
                                                   onTap: () async {
-                                                    getRequest('/api/v1/question/list/$testId', null, {
+                                                    getRequest('/api/v1/question/list/${snapshot.data.data.tests[index].id}', null, {
                                                       'Content-Type': "application/json",
                                                       "Authorization": "Bearer ${token}"
                                                     }).then((value) async {
+                                                      print(snapshot.data.data.tests[index].id);
                                                       Navigator.push(
                                                         context,
                                                         MaterialPageRoute(builder: (context) => ExamPage(data:value["data"]["questions"])),
