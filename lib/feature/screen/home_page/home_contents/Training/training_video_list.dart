@@ -176,12 +176,16 @@ class _TrainingVideoState extends State<TrainingVideo> {
                                         SizedBox(
                                           height: 10,
                                         ),
-                                        Text(
-                                          "Title: " +
-                                              snapshot.data.data.videos[index]
-                                                  .title,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                        SizedBox(
+                                          width: 150,
+                                          height: 18,
+                                          child: Text(
+                                            "Title: " +
+                                                snapshot.data.data.videos[index]
+                                                    .title,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ),
                                         SizedBox(
                                             height: 50,

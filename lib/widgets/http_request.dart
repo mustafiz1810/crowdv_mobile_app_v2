@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:crowdv_mobile_app/utils/view_utils/common_util.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/html_parser.dart';
 import 'package:http/http.dart' as http;
@@ -36,15 +37,17 @@ Future getRequestWithoutParam(path, headers) async {
 
   if (response.statusCode == 200) {
     var data = json.decode(response.body);
-    // print(data);
-    return data;
+    print(data);
+    // return data;
   } else {
-    print(
-      path,
-    );
-    print(
-      headers,
-    );
+    var data = json.decode(response.body);
+    showToast(data['message']);
+    // print(
+    //   path,
+    // );
+    // print(
+    //   headers,
+    // );
     print(HtmlParser.parseHTML(response.body).body.innerHtml);
     throw Exception('Failed to load data');
   }

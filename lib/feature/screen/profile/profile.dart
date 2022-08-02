@@ -7,14 +7,22 @@ import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/header_without_logo.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
+import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
-  final disability,chosenValue,dropdown,selectedCountry,selectedProvince;
-  ProfilePage({this.disability,this.chosenValue,this.dropdown,this.selectedProvince,this.selectedCountry});
+  final disability, chosenValue, dropdown, selectedCountry, selectedProvince,zip;
+  ProfilePage(
+      {this.disability,
+      this.chosenValue,
+      this.dropdown,
+      this.selectedProvince,
+      this.selectedCountry,
+      this.zip});
   @override
   State<StatefulWidget> createState() {
     return _ProfilePageState();
@@ -54,14 +62,28 @@ class _ProfilePageState extends State<ProfilePage> {
   List<String> KentuckyProvince = ['Anchorage', 'Juneau', 'California'];
   List<String> LouisianaProvince = ['Anchorage', 'Juneau', 'California'];
   List<String> provinces = [];
-  List<String> _disability = ["select", "Blind"];
+  List<String> _disability = ["Blind"];
   List<String> _items = ["Business", "Student", "Service", "Self-employer"];
-  List<String> _item = ["Select", "Male", "Female"];
+  List<String> _item = ["Male", "female"];
   @override
   void initState() {
     super.initState();
     getCred();
-    disability = "select";
+    widget.disability == null
+        ? disability = "Blind"
+        : disability = widget.disability;
+    widget.chosenValue == null
+        ? _profession = "Business"
+        : _profession = widget.chosenValue;
+    widget.dropdown == null ? _gender = "Male" : _gender = widget.dropdown;
+    widget.selectedCountry == "unknown"
+        ? selectedCountry = "Alabama"
+        : selectedCountry = widget.selectedCountry;
+    widget.selectedProvince == "unknown"
+        ? selectedProvince = "Birmingham"
+        : selectedProvince = widget.selectedProvince;
+    widget.zip==null?zipController.text="12345":zipController.text=widget.zip;
+    print(zipController.text);
   }
 
   void getCred() async {
@@ -80,6 +102,86 @@ class _ProfilePageState extends State<ProfilePage> {
       return ProfileModel.fromJson(data);
     } else {
       return ProfileModel.fromJson(data);
+    }
+  }
+
+  void set(String gender, disable, prof) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'profile/update?type=service'),
+          headers: {
+            "Authorization": "Bearer $token"
+          },
+          body: {
+            'gender': gender,
+            'type_of_disability': disable,
+            'profession': prof,
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message'].toString());
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Exception:"),
+              content: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+
+  void location(String state, city, zip_code) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'profile/update?type=contacts'),
+          headers: {
+            "Authorization": "Bearer $token"
+          },
+          body: {
+            'state': state,
+            'city': city,
+            'zip_code': zip_code,
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message'].toString());
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Exception:"),
+              content: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
     }
   }
 
@@ -459,7 +561,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 child: DropdownButton<String>(
                                                     hint: Center(
                                                       child: Text(
-                                                        "Select Profession",
+                                                        _profession,
                                                         style: TextStyle(
                                                             fontSize: 18,
                                                             color: Colors.white,
@@ -541,7 +643,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     value: _gender,
                                                     hint: Center(
                                                       child: Text(
-                                                        "Select Gender",
+                                                        _gender,
                                                         style: TextStyle(
                                                             fontSize: 18,
                                                             color: Colors.white,
@@ -608,8 +710,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       child: InkWell(
                                                         splashColor:
                                                             secondaryColor, // splash color
-                                                        onTap:
-                                                            () {}, // button pressed
+                                                        onTap: () {
+                                                          set(
+                                                              _gender,
+                                                              disability,
+                                                              _profession);
+                                                        }, // button pressed
                                                         child: Column(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
@@ -656,8 +762,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   child: DropdownButton<String>(
                                                     hint: Center(
                                                       child: Text(
-                                                        snapshot.data.data.state
-                                                            .toString(),
+                                                        "selectedCountry",
                                                         style: TextStyle(
                                                             fontSize: 18,
                                                             color: Colors.white,
@@ -768,8 +873,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   child: DropdownButton<String>(
                                                     hint: Center(
                                                       child: Text(
-                                                        snapshot.data.data.city
-                                                            .toString(),
+                                                        'selectedProvince',
                                                         style: TextStyle(
                                                             fontSize: 18,
                                                             color: Colors.white,
@@ -848,8 +952,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         child: InkWell(
                                                           splashColor:
                                                               secondaryColor, // splash color
-                                                          onTap:
-                                                              () {}, // button pressed
+                                                          onTap: () {
+                                                            location(
+                                                                selectedCountry,
+                                                                selectedProvince,
+                                                                zipController
+                                                                    .text
+                                                                    .toString());
+                                                          }, // button pressed
                                                           child: Column(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment

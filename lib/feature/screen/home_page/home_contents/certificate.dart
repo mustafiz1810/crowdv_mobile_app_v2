@@ -1,12 +1,9 @@
 import 'dart:convert';
-
 import 'package:crowdv_mobile_app/data/models/volunteer/certificate_model.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
-import 'package:crowdv_mobile_app/widgets/show_toast.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -91,7 +88,7 @@ class _CertificateState extends State<Certificate> {
                         padding: const EdgeInsets.all(5),
                         child: Container(
                           width: MediaQuery.of(context).size.width / 1.1,
-                          height: MediaQuery.of(context).size.height / 4.7,
+                          height: MediaQuery.of(context).size.height / 4.1,
                           margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                           decoration: BoxDecoration(
                             // image: DecorationImage(
@@ -118,13 +115,16 @@ class _CertificateState extends State<Certificate> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      "Test Name: " +
-                                          snapshot.data.data[index].test.title,
-                                      style: TextStyle(
-                                          color: primaryColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18),
+                                    SizedBox(
+                                      width:320,
+                                      child: Text(
+                                        "Test Name: " +
+                                            snapshot.data.data[index].test.title,
+                                        style: TextStyle(
+                                            color: primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                      ),
                                     ),
                                   ],
                                 ),

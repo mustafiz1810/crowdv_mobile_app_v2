@@ -212,6 +212,7 @@ class _TestState extends State<Test> {
                                                       'Content-Type': "application/json",
                                                       "Authorization": "Bearer ${token}"
                                                     }).then((value) async {
+                                                      showToast(context, value['message']);
                                                       print(snapshot.data.data.tests[index].id);
                                                       Navigator.push(
                                                         context,

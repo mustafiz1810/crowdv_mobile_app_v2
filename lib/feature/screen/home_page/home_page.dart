@@ -5,7 +5,6 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/organiz
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruiter/Create_Opportunity/create_op.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/service_location.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/set_category.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/training_video_list.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/upcoming.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/volunteer_opportunities.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/notification.dart';
@@ -16,6 +15,8 @@ import 'package:crowdv_mobile_app/widgets/category_grid.dart';
 import 'package:crowdv_mobile_app/widgets/header_without_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../widgets/http_request.dart';
 import 'home_contents/Training/training_list.dart';
 import 'home_contents/recruiter/my_opportunities.dart';
 
@@ -29,6 +30,21 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool navbarScrolled = false;
+  String token = "";
+
+  @override
+  void initState() {
+    getCred();
+    super.initState();
+  }
+
+  void getCred() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      token = pref.getString("user");
+    });
+  }
+  final List<String> users=[];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,8 +186,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                       CategoryCard(
                                         title: "Set category",
                                         svgSrc: "assets/162.svg",
-                                        press: () {
-                                          Get.to(() => SetCategory());
+                                        press: () async {
+                                          getRequestWithoutParam(
+                                              '/api/v1/get-category', {
+                                            "Authorization": "Bearer ${token}"
+                                          }).then((value) async {
+                                            //   users.addAll(await value['data']['category'][0]['name']);
+                                            // print(users);
+                                            Get.to(() => SetCategory());
+                                          });
                                         },
                                       ),
                                       CategoryCard(

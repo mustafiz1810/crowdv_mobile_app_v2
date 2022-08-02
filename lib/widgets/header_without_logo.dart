@@ -140,12 +140,12 @@ class _HeaderWidgetState extends State<HeaderWidget>
                   colorOn: secondaryColor,
                   onChanged: (val) {
                     volunteer = val;
-                    print(volunteer);
+                    print("volunteer");
                   },
                   onTap: () {
                     vol();
                   },
-                  animationDuration: Duration(seconds: 2),
+                  animationDuration: Duration(seconds: 1),
                   textOn: "Volunteer",
                   textOff: "Recruiter",
                 )
@@ -162,7 +162,7 @@ class _HeaderWidgetState extends State<HeaderWidget>
                   onTap: () {
                     rec();
                   },
-                  animationDuration: Duration(milliseconds: 1600),
+                  animationDuration: Duration(milliseconds: 1),
                   textOn: "Volunteer",
                   textOff: "Recruiter",
                 ),

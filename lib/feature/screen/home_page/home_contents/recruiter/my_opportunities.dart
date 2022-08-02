@@ -83,8 +83,8 @@ class _MyOpportunityState extends State<MyOpportunity> {
                         return Padding(
                           padding: const EdgeInsets.all(5),
                           child: Container(
-                            width: 350,
-                            height: 240,
+                            width: MediaQuery.of(context).size.width,
+                            height:  MediaQuery.of(context).size.height/3.1,
                             margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                             decoration: BoxDecoration(
                               // image: DecorationImage(
@@ -109,7 +109,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                   children: [
                                     Container(
                                       height: 55,
-                                      width: 370,
+                                      width: MediaQuery.of(context).size.width,
                                       decoration: BoxDecoration(
                                         color: primaryColor,
                                         borderRadius: BorderRadius.only(
@@ -129,7 +129,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                             left: 20, right: 20, top: 10),
                                         child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               snapshot.data.data[index].title,
@@ -154,24 +154,19 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                         .status,
                                                     style: TextStyle(
                                                         fontWeight:
-                                                            FontWeight.bold,
+                                                        FontWeight.bold,
                                                         fontSize: 14,
                                                         color:
-                                                            Colors.deepOrange)),
+                                                        Colors.deepOrange)),
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
                                     ),
-                                    Divider(
-                                      thickness: 4,
-                                      height: 10,
-                                      color: Colors.white,
-                                    ),
                                     Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 20, right: 20),
+                                            top:10,left: 20, right: 20),
                                         child: Column(
                                           children: [
                                             Row(
@@ -273,14 +268,10 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                             ),
                                           ],
                                         )),
-                                  ],
-                                ),
-                                Positioned(
-                                    top: MediaQuery.of(context).size.height /4.2,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
+                                    Padding(
+                                      padding: const EdgeInsets.all(5.0),
                                       child: Container(
-                                        height: 50,
+                                        height: 55,
                                         width: MediaQuery.of(context).size.width/1.1,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
@@ -289,7 +280,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                           boxShadow: [
                                             BoxShadow(
                                               color:
-                                                  shadowColor.withOpacity(0.2),
+                                              shadowColor.withOpacity(0.2),
                                               spreadRadius: .1,
                                               blurRadius: 3,
                                               // offset: Offset(0, 1), // changes position of shadow
@@ -297,8 +288,9 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                           ],
                                         ),
                                       ),
-                                    )),
-                                // ---------------------------------------Icons
+                                    )
+                                  ],
+                                ),
                                 Positioned(
                                     left: 20,
                                     top: 195,
@@ -357,12 +349,12 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                     if (isConfirm) {
                                                       //Return false to keep dialog
                                                       if (isConfirm) {
-                                                        SweetAlert.show(context,
-                                                            subtitle:
-                                                                "Deleting...",
-                                                            style:
-                                                                SweetAlertStyle
-                                                                    .loading);
+                                                        // SweetAlert.show(context,
+                                                        //     subtitle:
+                                                        //         "Deleting...",
+                                                        //     style:
+                                                        //         SweetAlertStyle
+                                                        //             .loading);
                                                         new Future.delayed(
                                                             new Duration(
                                                                 seconds: 1),

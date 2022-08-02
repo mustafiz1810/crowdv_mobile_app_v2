@@ -162,11 +162,6 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                         ),
                                       ),
                                     ),
-                                    Divider(
-                                      thickness: 4,
-                                      height: 10,
-                                      color: Colors.white,
-                                    ),
                                     Padding(
                                         padding: const EdgeInsets.only(
                                             left: 20, right: 20),
@@ -271,15 +266,11 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                             ),
                                           ],
                                         )),
-                                  ],
-                                ),
-                                Positioned(
-                                    top: 180,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
+                                    Padding(
+                                      padding: const EdgeInsets.all(5.0),
                                       child: Container(
-                                        height: 50,
-                                        width: 355,
+                                        height: 55,
+                                        width: MediaQuery.of(context).size.width/1.1,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius: BorderRadius.all(
@@ -295,7 +286,9 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                           ],
                                         ),
                                       ),
-                                    )),
+                                    ),
+                                  ],
+                                ),
                                 // -----------------------------Detail
                                 Positioned(
                                     right: 20,

@@ -96,7 +96,6 @@ class _OpLocationState extends State<OpLocation> {
             'city': city,
             'state': state,
             'zip_code': zip_code,
-            'working_hours': '10',
             'is_public': 'true',
           });
       if (response.statusCode == 200) {
@@ -294,29 +293,29 @@ class _OpLocationState extends State<OpLocation> {
                     child: InkWell(
                       splashColor: secondaryColor, // splash color
                       onTap: () {
-                        // setState(() {
-                        //   print(widget.title +
-                        //       "  " +
-                        //       widget.category +
-                        //       "  " +
-                        //       widget.date +
-                        //       "  " +
-                        //       widget.time +
-                        //       "  " +
-                        //       widget.etime +
-                        //       "  " +
-                        //       selectedCountry.toString() +
-                        //       "  " +
-                        //       selectedProvince.toString() +
-                        //       "  " +
-                        //       widget.eligibility +
-                        //       "  " +
-                        //       widget.description +
-                        //       "  " +
-                        //       widget.type +
-                        //       "  " +
-                        //       zipController.text.toString());
-                        // });
+                        setState(() {
+                          print(widget.title +
+                              "  " +
+                              widget.category +
+                              "  " +
+                              widget.date +
+                              "  " +
+                              widget.time +
+                              "  " +
+                              widget.etime +
+                              "  " +
+                              selectedCountry.toString() +
+                              "  " +
+                              selectedProvince.toString() +
+                              "  " +
+                              widget.eligibility +
+                              "  " +
+                              widget.description +
+                              "  " +
+                              widget.type +
+                              "  " +
+                              zipController.text.toString());
+                        });
                         create(
                             widget.title,
                             widget.category,

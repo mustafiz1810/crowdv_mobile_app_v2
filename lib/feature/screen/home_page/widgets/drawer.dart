@@ -89,6 +89,7 @@ class _NavDrawerState extends State<NavDrawer> {
                                   dropdown: snapshot.data.data.gender,
                                   selectedCountry: snapshot.data.data.state,
                                   selectedProvince: snapshot.data.data.city,
+                              zip: snapshot.data.data.zipCode,
                                 ));
                           }),
                     ],

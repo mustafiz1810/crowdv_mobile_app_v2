@@ -73,7 +73,7 @@ class _TrainingListState extends State<TrainingList> {
                             padding: const EdgeInsets.all(5),
                             child: Container(
                               width: MediaQuery.of(context).size.width / 1.1,
-                              height: MediaQuery.of(context).size.height / 5,
+                              height: MediaQuery.of(context).size.height / 4.8,
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                               decoration: BoxDecoration(
                                 // image: DecorationImage(
@@ -101,12 +101,16 @@ class _TrainingListState extends State<TrainingList> {
                                       mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          snapshot.data.data[index].trainingTitle,
-                                          style: TextStyle(
-                                              color: primaryColor,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
+                                        SizedBox(
+                                          width:250,
+                                          height: 20,
+                                          child: Text(
+                                            snapshot.data.data[index].trainingTitle,
+                                            style: TextStyle(
+                                                color: primaryColor,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -151,12 +155,16 @@ class _TrainingListState extends State<TrainingList> {
                                                     FontWeight.bold,
                                                     fontSize: 18),
                                               ),
-                                              Text(
-                                                  snapshot.data.data[index].trainingDescription,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                      FontWeight.bold,
-                                                      fontSize: 14))
+                                              SizedBox(
+                                                width: 250,
+                                                height: 30,
+                                                child: Text(
+                                                    snapshot.data.data[index].trainingDescription,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                        FontWeight.bold,
+                                                        fontSize: 14)),
+                                              )
                                             ],
                                           ),
                                           SizedBox(height: 15,),
