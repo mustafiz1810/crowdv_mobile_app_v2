@@ -10,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:sweetalert/sweetalert.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../../utils/view_utils/common_util.dart';
 class OrgOpportunityList extends StatefulWidget {
   @override
   State<OrgOpportunityList> createState() => _OrgOpportunityListState();
@@ -207,11 +209,13 @@ class _OrgOpportunityListState extends State<OrgOpportunityList> {
                                               children: [
                                                 TextButton(
                                                   onPressed: () async {
-                                                    String url = snapshot.data.data[index].links;
-                                                    if(await canLaunch(url)){
-                                                      await launch(url);
-                                                    }else {
-                                                      throw 'Could not launch $url';
+                                                    String _url = snapshot.data.data[index].links;
+                                                    print('launching');
+                                                    try {
+                                                      await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+                                                      showToast("Launched");
+                                                    } catch (_, __) {
+                                                      showToast("Failed");
                                                     }
                                                   },
                                                   child: Text(snapshot.data.data[index].links)

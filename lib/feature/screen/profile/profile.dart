@@ -762,7 +762,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   child: DropdownButton<String>(
                                                     hint: Center(
                                                       child: Text(
-                                                        "selectedCountry",
+                                                        "select Country",
                                                         style: TextStyle(
                                                             fontSize: 18,
                                                             color: Colors.white,
@@ -873,7 +873,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   child: DropdownButton<String>(
                                                     hint: Center(
                                                       child: Text(
-                                                        'selectedProvince',
+                                                        'select city',
                                                         style: TextStyle(
                                                             fontSize: 18,
                                                             color: Colors.white,

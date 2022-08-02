@@ -116,12 +116,16 @@ class _TestState extends State<Test> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          snapshot.data.data.tests[index].title,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
+                                        SizedBox(
+                                          width:250,
+                                          height: 20,
+                                          child: Text(
+                                            snapshot.data.data.tests[index].title,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -146,12 +150,16 @@ class _TestState extends State<Test> {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 18),
                                             ),
-                                            Text(
-                                              snapshot
-                                                  .data.data.tests[index].title,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16),
+                                            SizedBox(
+                                              width: 200,
+                                              height: 22,
+                                              child: Text(
+                                                snapshot
+                                                    .data.data.tests[index].title,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16),
+                                              ),
                                             ),
                                           ],
                                         ),

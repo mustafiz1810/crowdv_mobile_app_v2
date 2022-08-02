@@ -12,18 +12,20 @@ Future getRequest(path, qparam, headers) async {
 
   if (response.statusCode == 200) {
     var data = json.decode(response.body);
-    // print(data);
+    print(data["message"]);
     return data;
   } else {
-    print(
-      path,
-    );
-    print(
-      headers,
-    );
-    print(
-      qparam,
-    );
+    var data = json.decode(response.body);
+    showToast(data["message"]);
+    // print(
+    //   path,
+    // );
+    // print(
+    //   headers,
+    // );
+    // print(
+    //   qparam,
+    // );
     print(HtmlParser.parseHTML(response.body).body.innerHtml);
     throw Exception('Failed to load data');
   }

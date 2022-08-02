@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:crowdv_mobile_app/data/models/volunteer/certificate_model.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
+import 'package:crowdv_mobile_app/utils/view_utils/common_util.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:flutter/material.dart';
@@ -251,12 +252,14 @@ class _CertificateState extends State<Certificate> {
                                               }).then((value) async {
                                                 print(
                                                     value['data']['file_path']);
-                                                String url =
+                                                String _url =
                                                     value['data']['file_path'];
-                                                if (await canLaunch(url)) {
-                                                  await launch(url);
-                                                } else {
-                                                  throw 'Could not launch $url';
+                                                print('launching');
+                                                try {
+                                                  await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+                                                  showToast("Launched");
+                                                } catch (_, __) {
+                                                  showToast("Failed");
                                                 }
                                               });
                                             },
