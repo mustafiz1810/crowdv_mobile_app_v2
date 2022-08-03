@@ -32,10 +32,9 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
         setState(() {
           isApiCallProcess = false;
         });
-        showToast(context, data['message']);
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => OtpVolunteer()),
+          MaterialPageRoute(builder: (context) => OtpVolunteer(email: data['data']['email'],)),
         );
       } else {
         var data = jsonDecode(response.body.toString());
@@ -113,7 +112,7 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
                               height: 10,
                             ),
                             Text(
-                              'Enter the email address to register your account.',
+                              'Enter your email address to register account.',
                               style: TextStyle(
                                   // fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -124,7 +123,7 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
                               height: 10,
                             ),
                             Text(
-                              'We will email you a verification code to check your authenticity.',
+                              'A verification code will be send to your email.',
                               style: TextStyle(
                                 color: Colors.black38,
                                 // fontSize: 20,

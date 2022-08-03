@@ -4,6 +4,7 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
+import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -266,7 +267,20 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                   child: Container(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Row(
+                                      child: snapshot.data.data[index].status=="applied"?Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.end,
+                                        children: [IconBox(
+                                          child: Icon(
+                                            Icons.message,
+                                            color: Colors.white,
+                                            size: 18,
+                                          ),
+                                          bgColor: primaryColor,
+                                        ),
+                                          SizedBox(width: 10,),
+                                        ],
+                                      ):Row(
                                         mainAxisAlignment:
                                         MainAxisAlignment.end,
                                         children: [

@@ -13,7 +13,8 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../../../../widgets/show_toast.dart';
 
 class OtpVolunteer extends StatefulWidget {
-  const OtpVolunteer({Key key}) : super(key: key);
+  final email;
+  OtpVolunteer({this.email});
 
   @override
   _OtpVolunteerPageState createState() => _OtpVolunteerPageState();
@@ -31,25 +32,66 @@ class _OtpVolunteerPageState extends State<OtpVolunteer> {
   final _formKey = GlobalKey<FormState>();
   void otp(String otp) async {
     try {
-      Response response =
-          await post(Uri.parse(NetworkConstants.BASE_URL + 'email-otp/check'), body: {
-        'otp': otp,
-      });
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'email-otp/check'),
+          body: {
+            'otp': otp,
+          });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data['data'][0]['email'].toString());
+        print(data['data']['email'].toString());
         setState(() {
           isApiCallProcess = false;
         });
         showToast(context, data['message']);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-                builder: (context) => PhoneVerify(email: data['data'][0]['email'],
+                builder: (context) => PhoneVerify(
+                      email: data['data']['email'],
                     )),
             (Route<dynamic> route) => false);
       } else {
         var data = jsonDecode(response.body.toString());
         showToast(context, data['message']);
+      }
+    } catch (e) {
+      setState(() {
+        isApiCallProcess = false;
+      });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+
+   resend(String email) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'email-otp/resend'),
+          body: {
+            'email': email,
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
+        setState(() {
+          isApiCallProcess = false;
+        });
       }
     } catch (e) {
       setState(() {
@@ -113,13 +155,24 @@ class _OtpVolunteerPageState extends State<OtpVolunteer> {
                             SizedBox(
                               height: 10,
                             ),
-                            Text(
-                              'Enter the verification code we just sent you on your email address.',
-                              style: TextStyle(
-                                  // fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black54),
-                              // textAlign: TextAlign.center,
+                            RichText(
+                              text: new TextSpan(
+                                style: new TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                children: [
+                                  new TextSpan(
+                                      text:
+                                          'Enter the verification code we just sent you on ',
+                                      style:
+                                          new TextStyle(color: Colors.black54)),
+                                  new TextSpan(
+                                      text: widget.email,
+                                      style: new TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.blue)),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -184,6 +237,7 @@ class _OtpVolunteerPageState extends State<OtpVolunteer> {
                               text: 'Resend',
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
+                                    resend(widget.email);
                                   _controller.start();
                                   showDialog(
                                     context: context,
@@ -221,8 +275,7 @@ class _OtpVolunteerPageState extends State<OtpVolunteer> {
                               ),
                             ),
                           ),
-                          onPressed:
-                          _pinSuccess == true
+                          onPressed: _pinSuccess == true
                               ? () {
                                   setState(() {
                                     isApiCallProcess = true;

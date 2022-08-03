@@ -274,7 +274,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                                   .firstName +
                                               " " +
                                               snapshot.data.data[index]
-                                                  .recruiter.lastName+snapshot.data.data[index].id.toString(),
+                                                  .recruiter.lastName,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         )

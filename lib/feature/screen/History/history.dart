@@ -136,256 +136,259 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
             children: [
               Expanded(
                   child: FutureBuilder<VolunteerHistoryModel>(
-                    future: getVHistoryApi(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: snapshot.data.data.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10, top: 10, right: 10),
-                              child: Container(
-                                width: 350,
-                                height: 240,
-                                margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                decoration: BoxDecoration(
-                                  // image: DecorationImage(
-                                  //   fit: BoxFit.cover,
-                                  //   image: AssetImage("assets/undraw_pilates_gpdb.png"),
-                                  // ),
-                                  color: Colors.white,
-                                  borderRadius:
+                future: getVHistoryApi(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.data.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              left: 10, top: 10, right: 10),
+                          child: Container(
+                            width: 350,
+                            height: 240,
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                            decoration: BoxDecoration(
+                              // image: DecorationImage(
+                              //   fit: BoxFit.cover,
+                              //   image: AssetImage("assets/undraw_pilates_gpdb.png"),
+                              // ),
+                              color: Colors.white,
+                              borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: shadowColor.withOpacity(0.4),
-                                      spreadRadius: .1,
-                                      blurRadius: 2,
-                                      // offset: Offset(0, 1), // changes position of shadow
-                                    ),
-                                  ],
+                              boxShadow: [
+                                BoxShadow(
+                                  color: shadowColor.withOpacity(0.4),
+                                  spreadRadius: .1,
+                                  blurRadius: 2,
+                                  // offset: Offset(0, 1), // changes position of shadow
                                 ),
-                                child: Stack(
+                              ],
+                            ),
+                            child: Stack(
+                              children: [
+                                // --------------------------------------------Body
+                                Column(
                                   children: [
-                                    // --------------------------------------------Body
-                                    Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, right: 20, top: 10),
-                                          child: Row(
-                                            mainAxisAlignment:
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20, right: 20, top: 10),
+                                      child: Row(
+                                        mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                snapshot.data.data[index].title,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18),
-                                              ),
-                                              InkWell(
-                                                onTap: () {
-                                                  Get.to(() => OpportunityDetails(
-                                                      role: snapshot
-                                                          .data
-                                                          .data[index]
-                                                          .recruiter
-                                                          .role,
-                                                      id: snapshot
-                                                          .data.data[index].id,
-                                                      token: token));
-                                                },
-                                                child: Container(
-                                                  width: 80,
-                                                  height: 35,
-                                                  margin: EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 5),
-                                                  decoration: BoxDecoration(
-                                                    color: primaryColor,
-                                                    borderRadius: BorderRadius.all(
-                                                        Radius.circular(20)),
-                                                  ),
-                                                  child: Center(
-                                                      child: Text('Details',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                              FontWeight.bold,
-                                                              fontSize: 14,
-                                                              color:
-                                                              Colors.white))),
-                                                ),
-                                              )
-                                            ],
+                                        children: [
+                                          Text(
+                                            snapshot.data.data[index].title,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18),
                                           ),
-                                        ),
-                                        Divider(
-                                          thickness: 1,
-                                          height: 10,
-                                          color: primaryColor,
-                                        ),
-                                        Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 20, right: 20, top: 10),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      height: 40,
-                                                      child: Text(
-                                                        'Details:  ',
-                                                        style: TextStyle(
-                                                            color: primaryColor,
-                                                            fontWeight:
-                                                            FontWeight.bold,
-                                                            fontSize: 18),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 220,
-                                                      height: 40,
-                                                      child: Text(
-                                                        snapshot.data.data[index]
-                                                            .details,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                            FontWeight.bold,
-                                                            fontSize: 16),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      'Location : ',
+                                          InkWell(
+                                            onTap: () {
+                                              Get.to(() => OpportunityDetails(
+                                                  role: snapshot
+                                                      .data
+                                                      .data[index]
+                                                      .recruiter
+                                                      .role,
+                                                  id: snapshot
+                                                      .data.data[index].id,
+                                                  token: token));
+                                            },
+                                            child: Container(
+                                              width: 80,
+                                              height: 35,
+                                              margin: EdgeInsets.fromLTRB(
+                                                  0, 0, 0, 5),
+                                              decoration: BoxDecoration(
+                                                color: primaryColor,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
+                                              ),
+                                              child: Center(
+                                                  child: Text('Details',
                                                       style: TextStyle(
                                                           fontWeight:
-                                                          FontWeight.bold,
-                                                          fontSize: 18),
-                                                    ),
-                                                    Text(
-                                                        snapshot.data.data[index]
-                                                            .city +
-                                                            ", " +
-                                                            snapshot.data
-                                                                .data[index].state,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                            FontWeight.bold,
-                                                            fontSize: 14))
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      'Job Type: ',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                          FontWeight.bold,
-                                                          fontSize: 18),
-                                                    ),
-                                                    Text(
-                                                        snapshot.data.data[index]
-                                                            .taskType,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                            FontWeight.bold,
-                                                            fontSize: 14))
-                                                  ],
-                                                ),
-                                              ],
-                                            )),
-                                      ],
+                                                              FontWeight.bold,
+                                                          fontSize: 14,
+                                                          color:
+                                                              Colors.white))),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                    // -------------------------------------------------Card
-                                    Positioned(
-                                        top: 150,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Container(
-                                            height: 83,
-                                            width: 342,
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20)),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color:
-                                                  shadowColor.withOpacity(0.2),
-                                                  spreadRadius: .1,
-                                                  blurRadius: 3,
-                                                  // offset: Offset(0, 1), // changes position of shadow
+                                    Divider(
+                                      thickness: 1,
+                                      height: 10,
+                                      color: primaryColor,
+                                    ),
+                                    Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20, right: 20, top: 10),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                  height: 40,
+                                                  child: Text(
+                                                    'Details:  ',
+                                                    style: TextStyle(
+                                                        color: primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 220,
+                                                  height: 40,
+                                                  child: Text(
+                                                    snapshot.data.data[index]
+                                                        .details,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16),
+                                                  ),
                                                 ),
                                               ],
                                             ),
-                                          ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'Location : ',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18),
+                                                ),
+                                                Text(
+                                                    snapshot.data.data[index]
+                                                            .city +
+                                                        ", " +
+                                                        snapshot.data
+                                                            .data[index].state,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14))
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'Job Type: ',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18),
+                                                ),
+                                                Text(
+                                                    snapshot.data.data[index]
+                                                        .taskType,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14))
+                                              ],
+                                            ),
+                                          ],
                                         )),
-                                    // ----------------------------------------------------review
-                                    Positioned(
-                                        right: 20,
-                                        top: 180,
-                                        child: Row(
-                                          children: [
-                                            IconBox(
-                                              child: Icon(
-                                                Icons.rate_review_rounded,
-                                                color: Colors.white,
-                                                size: 24,
-                                              ),
-                                              bgColor: Colors.teal,
-                                              onTap: () {
-                                                return showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return AlertDialog(
-                                                        title: Row(
-                                                          children: [
-                                                            Text(
-                                                                'Give a review to the user'),
-                                                            SizedBox(
-                                                              width: 10,
-                                                            ),
-                                                            Icon(Icons.create),
-                                                          ],
+                                  ],
+                                ),
+                                // -------------------------------------------------Card
+                                Positioned(
+                                    top: 150,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Container(
+                                        height: 83,
+                                        width: 342,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  shadowColor.withOpacity(0.2),
+                                              spreadRadius: .1,
+                                              blurRadius: 3,
+                                              // offset: Offset(0, 1), // changes position of shadow
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )),
+                                // ----------------------------------------------------review
+                                Positioned(
+                                    right: 20,
+                                    top: 180,
+                                    child: Row(
+                                      children: [
+                                        IconBox(
+                                          child: Icon(
+                                            Icons.rate_review_rounded,
+                                            color: Colors.white,
+                                            size: 24,
+                                          ),
+                                          bgColor: Colors.teal,
+                                          onTap: () {
+                                            return showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: Row(
+                                                      children: [
+                                                        Text(
+                                                            'Give a review to the user'),
+                                                        SizedBox(
+                                                          width: 10,
                                                         ),
-                                                        content: TextFormField(
-                                                          textInputAction:
+                                                        Icon(Icons.create),
+                                                      ],
+                                                    ),
+                                                    content: TextFormField(
+                                                      textInputAction:
                                                           TextInputAction.done,
-                                                          controller:
+                                                      controller:
                                                           reviewController,
-                                                          maxLines: 4,
-                                                          maxLength: 100,
-                                                          decoration:
+                                                      maxLines: 4,
+                                                      maxLength: 100,
+                                                      decoration:
                                                           InputDecoration(
                                                               focusedBorder:
-                                                              OutlineInputBorder(
+                                                                  OutlineInputBorder(
                                                                 borderSide: BorderSide(
                                                                     color: Colors
                                                                         .white),
                                                                 borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                    10.0),
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10.0),
                                                               ),
                                                               enabledBorder:
-                                                              UnderlineInputBorder(
+                                                                  UnderlineInputBorder(
                                                                 borderSide: BorderSide(
                                                                     color: Colors
                                                                         .white),
                                                                 borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                    10.0),
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10.0),
                                                               ),
                                                               filled: true,
-                                                              hintStyle: TextStyle(
-                                                                color: Colors.black,
-                                                                fontSize: 16,),
+                                                              hintStyle:
+                                                                  TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 16,
+                                                              ),
                                                               hintText: snapshot
                                                                   .data
                                                                   .data[index]
@@ -394,161 +397,161 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                               fillColor: Colors
                                                                   .grey
                                                                   .shade200),
-                                                        ),
-                                                        actions: <Widget>[
-                                                          FlatButton(
-                                                            child:
+                                                    ),
+                                                    actions: <Widget>[
+                                                      FlatButton(
+                                                        child:
                                                             new Text('Cancel'),
-                                                            onPressed: () {
-                                                              Navigator.of(context)
-                                                                  .pop();
-                                                            },
-                                                          ),
-                                                          FlatButton(
-                                                            child:
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                      ),
+                                                      FlatButton(
+                                                        child:
                                                             new Text('Submit'),
-                                                            onPressed: () {
-                                                              review(
-                                                                  reviewController
-                                                                      .text
-                                                                      .toString(),
-                                                                  snapshot
-                                                                      .data
-                                                                      .data[index]
-                                                                      .id);
-                                                            },
-                                                          )
-                                                        ],
-                                                      );
-                                                    });
-                                              },
-                                            ),
-                                            // SizedBox(
-                                            //   width: 5,
-                                            // ),
-                                            // IconBox(
-                                            //   child: Icon(
-                                            //     Icons.report,
-                                            //     color: Colors.white,
-                                            //     size: 20,
-                                            //   ),
-                                            //   onTap: (){
-                                            //     displayDialog(context);
-                                            //   },
-                                            //   bgColor: Colors.redAccent,
-                                            // ),
-                                          ],
-                                        )),
-                                    // ---------------------------------------------------Rating
-                                    Positioned(
-                                        left: 10,
-                                        top: 170,
-                                        child: Row(
+                                                        onPressed: () {
+                                                          review(
+                                                              reviewController
+                                                                  .text
+                                                                  .toString(),
+                                                              snapshot
+                                                                  .data
+                                                                  .data[index]
+                                                                  .id);
+                                                        },
+                                                      )
+                                                    ],
+                                                  );
+                                                });
+                                          },
+                                        ),
+                                        // SizedBox(
+                                        //   width: 5,
+                                        // ),
+                                        // IconBox(
+                                        //   child: Icon(
+                                        //     Icons.report,
+                                        //     color: Colors.white,
+                                        //     size: 20,
+                                        //   ),
+                                        //   onTap: (){
+                                        //     displayDialog(context);
+                                        //   },
+                                        //   bgColor: Colors.redAccent,
+                                        // ),
+                                      ],
+                                    )),
+                                // ---------------------------------------------------Rating
+                                Positioned(
+                                    left: 10,
+                                    top: 170,
+                                    child: Row(
+                                      children: [
+                                        Column(
                                           children: [
-                                            Column(
-                                              children: [
-                                                CircleAvatar(
-                                                  backgroundImage: NetworkImage(
-                                                      snapshot.data.data[index]
-                                                          .recruiter.image),
-                                                  radius: 25,
-                                                ),
-                                              ],
+                                            CircleAvatar(
+                                              backgroundImage: NetworkImage(
+                                                  snapshot.data.data[index]
+                                                      .recruiter.image),
+                                              radius: 25,
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              snapshot.data.data[index]
+                                                      .recruiter.firstName +
+                                                  " " +
+                                                  snapshot.data.data[index]
+                                                      .recruiter.lastName,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600),
                                             ),
                                             SizedBox(
-                                              width: 5,
+                                              height: 5,
                                             ),
-                                            Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                            Row(
                                               children: [
-                                                Text(
-                                                  snapshot.data.data[index]
-                                                      .recruiter.firstName +
-                                                      " " +
-                                                      snapshot.data.data[index]
-                                                          .recruiter.lastName,
-                                                  maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w600),
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    RatingBar.builder(
-                                                      itemSize: 20,
-                                                      initialRating: snapshot
-                                                          .data
-                                                          .data[index]
-                                                          .recruiter
-                                                          .rating ==
+                                                RatingBar.builder(
+                                                  itemSize: 20,
+                                                  initialRating: snapshot
+                                                              .data
+                                                              .data[index]
+                                                              .recruiter
+                                                              .rating ==
                                                           null
-                                                          ? 0
-                                                          : snapshot
+                                                      ? 0
+                                                      : snapshot
                                                           .data
                                                           .data[index]
                                                           .recruiter
                                                           .rating
                                                           .toDouble(),
-                                                      minRating: 1,
-                                                      direction: Axis.horizontal,
-                                                      itemCount: 5,
-                                                      itemPadding:
+                                                  minRating: 1,
+                                                  direction: Axis.horizontal,
+                                                  itemCount: 5,
+                                                  itemPadding:
                                                       EdgeInsets.symmetric(
                                                           horizontal: 4.0),
-                                                      itemBuilder: (context, _) =>
-                                                          Icon(
-                                                            Icons.star,
-                                                            color: Colors.amber,
-                                                          ),
-                                                      onRatingUpdate: (rating) {
-                                                        rate(
-                                                            rating.toString(),
-                                                            snapshot.data
-                                                                .data[index].id);
-                                                      },
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
+                                                  itemBuilder: (context, _) =>
+                                                      Icon(
+                                                    Icons.star,
+                                                    color: Colors.amber,
+                                                  ),
+                                                  onRatingUpdate: (rating) {
+                                                    rate(
+                                                        rating.toString(),
+                                                        snapshot.data
+                                                            .data[index].id);
+                                                  },
                                                 ),
                                               ],
                                             ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
                                           ],
-                                        )),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      } else {
-                        return Container(
-                          alignment: Alignment.center,
-                          child: EmptyWidget(
-                            image: null,
-                            packageImage: PackageImage.Image_1,
-                            title: 'Empty',
-                            subTitle: 'No  History available',
-                            titleTextStyle: TextStyle(
-                              fontSize: 22,
-                              color: Color(0xff9da9c7),
-                              fontWeight: FontWeight.w500,
-                            ),
-                            subtitleTextStyle: TextStyle(
-                              fontSize: 14,
-                              color: Color(0xffabb8d6),
+                                        ),
+                                      ],
+                                    )),
+                              ],
                             ),
                           ),
                         );
-                      }
-                    },
-                  )),
+                      },
+                    );
+                  } else {
+                    return Container(
+                      alignment: Alignment.center,
+                      child: EmptyWidget(
+                        image: null,
+                        packageImage: PackageImage.Image_1,
+                        title: 'Empty',
+                        subTitle: 'No  History available',
+                        titleTextStyle: TextStyle(
+                          fontSize: 22,
+                          color: Color(0xff9da9c7),
+                          fontWeight: FontWeight.w500,
+                        ),
+                        subtitleTextStyle: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xffabb8d6),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              )),
             ],
           ),
         ));
