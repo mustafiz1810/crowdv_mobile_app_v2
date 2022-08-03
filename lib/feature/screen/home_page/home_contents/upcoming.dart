@@ -3,13 +3,10 @@ import 'package:crowdv_mobile_app/data/models/volunteer/upcoming_opportunity.dar
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
-import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import '../../../../../widgets/show_toast.dart';
 
 class UpcomingOpportunity extends StatefulWidget {
   final dynamic role;
@@ -40,6 +37,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
         Uri.parse(NetworkConstants.BASE_URL + 'volunteer/tasks/list'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
+    print(data);
     if (response.statusCode == 200) {
       return VolunteerOpportunity.fromJson(data);
     } else {
@@ -189,8 +187,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                                   width: 250,
                                                   height: 40,
                                                   child: Text(
-                                                    snapshot.data.data[index]
-                                                        .details,
+                                                    snapshot.data.data[index].details,
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -232,41 +229,11 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                                       fontSize: 18),
                                                 ),
                                                 Text(
-                                                    snapshot.data.data[index]
-                                                        .taskType,
+                                                    snapshot.data.data[index].taskType,
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         fontSize: 14))
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      'Category: ',
-                                                      style: TextStyle(
-                                                          color: primaryColor,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18),
-                                                    ),
-                                                    Text(
-                                                        snapshot
-                                                            .data
-                                                            .data[index]
-                                                            .category
-                                                            .name,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 14))
-                                                  ],
-                                                ),
                                               ],
                                             ),
                                           ],
@@ -307,7 +274,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                                   .firstName +
                                               " " +
                                               snapshot.data.data[index]
-                                                  .recruiter.lastName,
+                                                  .recruiter.lastName+snapshot.data.data[index].id.toString(),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         )

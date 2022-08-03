@@ -37,7 +37,7 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
           iconTheme: IconThemeData(color: Colors.white),
           // collapsedHeight: 150,
           title: const Text(
-            'My Opportunity',
+            'Applied Volunteer',
             style: TextStyle(color: Colors.white),
           ),
           // ),
@@ -171,23 +171,23 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
                                                     ),
                                                   ],
                                                 ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      'Email : ',
-                                                      style: TextStyle(
-                                                          color: primaryColor,
-                                                          fontWeight:
-                                                          FontWeight.bold,
-                                                          fontSize: 18),
-                                                    ),
-                                                    Text(snapshot.data.data.applyVolunteer[index].volunteers.email,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                            FontWeight.bold,
-                                                            fontSize: 14))
-                                                  ],
-                                                ),
+                                                // Row(
+                                                //   children: [
+                                                //     Text(
+                                                //       'Email : ',
+                                                //       style: TextStyle(
+                                                //           color: primaryColor,
+                                                //           fontWeight:
+                                                //           FontWeight.bold,
+                                                //           fontSize: 18),
+                                                //     ),
+                                                //     Text(snapshot.data.data.applyVolunteer[index].volunteers.email,
+                                                //         style: TextStyle(
+                                                //             fontWeight:
+                                                //             FontWeight.bold,
+                                                //             fontSize: 14))
+                                                //   ],
+                                                // ),
                                                 Row(
                                                   children: [
                                                     Text(
@@ -205,30 +205,30 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
                                                             fontSize: 14))
                                                   ],
                                                 ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                          'Gender: ',
-                                                          style: TextStyle(
-                                                              color: primaryColor,
-                                                              fontWeight:
-                                                              FontWeight.bold,
-                                                              fontSize: 18),
-                                                        ),
-                                                        Text(snapshot.data.data.applyVolunteer[index].volunteers.gender,
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                FontWeight.bold,
-                                                                fontSize: 14))
-                                                      ],
-                                                    ),
-
-                                                  ],
-                                                ),
+                                                // Row(
+                                                //   mainAxisAlignment:
+                                                //   MainAxisAlignment.spaceBetween,
+                                                //   children: [
+                                                //     Row(
+                                                //       children: [
+                                                //         Text(
+                                                //           'Gender: ',
+                                                //           style: TextStyle(
+                                                //               color: primaryColor,
+                                                //               fontWeight:
+                                                //               FontWeight.bold,
+                                                //               fontSize: 18),
+                                                //         ),
+                                                //         Text(snapshot.data.data.applyVolunteer[index].volunteers.gender,
+                                                //             style: TextStyle(
+                                                //                 fontWeight:
+                                                //                 FontWeight.bold,
+                                                //                 fontSize: 14))
+                                                //       ],
+                                                //     ),
+                                                //
+                                                //   ],
+                                                // ),
 
                                               ],
                                             )),
@@ -283,7 +283,45 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
                                               margin:
                                               EdgeInsets.fromLTRB(0, 0, 0, 5),
                                               decoration: BoxDecoration(
-                                                color: Colors.teal,
+                                                color: Colors.red,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
+                                              ),
+                                              child: Center(
+                                                child:  InkWell(
+                                                  onTap: () {
+                                                    getRequestWithoutParam(
+                                                        '/api/v1/opportunity/reject/${snapshot.data.data.applyVolunteer[index].id}',
+                                                        {
+                                                          'Content-Type':
+                                                          "application/json",
+                                                          "Authorization":
+                                                          "Bearer ${widget.token}"
+                                                        }).then((value) async {
+                                                          setState(() {});
+                                                      showToast(context,
+                                                          'Volunteer Rejected');
+                                                    });
+                                                  },
+                                                  child: Text(
+                                                      'Reject',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                          FontWeight
+                                                              .bold,
+                                                          fontSize: 16,
+                                                          color:
+                                                          Colors.white)),
+                                                ),),
+                                            ),
+                                            SizedBox(width: 5,),
+                                            Container(
+                                              width: 80,
+                                              height: 30,
+                                              margin:
+                                              EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                              decoration: BoxDecoration(
+                                                color: Colors.green,
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(20)),
                                               ),
@@ -303,18 +341,15 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
                                                           'Volunteer Hired');
                                                     });
                                                   },
-                                                  child: Container(
-                                                    child: Center(
-                                                        child: Text(
-                                                            'Hire',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .bold,
-                                                                fontSize: 16,
-                                                                color:
-                                                                Colors.white))),
-                                                  ),
+                                                  child: Text(
+                                                      'Hire',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                          FontWeight
+                                                              .bold,
+                                                          fontSize: 16,
+                                                          color:
+                                                          Colors.white)),
                                                 ),),
                                             ),
                                           ],

@@ -5,6 +5,7 @@ import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:empty_widget/empty_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -85,13 +86,9 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                             height: 240,
                             margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                             decoration: BoxDecoration(
-                              // image: DecorationImage(
-                              //   fit: BoxFit.cover,
-                              //   image: AssetImage("assets/undraw_pilates_gpdb.png"),
-                              // ),
                               color: Colors.white,
                               borderRadius:
-                              BorderRadius.all(Radius.circular(20)),
+                                  BorderRadius.all(Radius.circular(20)),
                               boxShadow: [
                                 BoxShadow(
                                   color: shadowColor.withOpacity(0.4),
@@ -101,305 +98,326 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                 ),
                               ],
                             ),
-                            child: Stack(
+                            child: Column(
                               children: [
-                                Column(
-                                  children: [
-                                    Container(
-                                      height: 55,
-                                      width: 370,
-                                      decoration: BoxDecoration(
-                                        color: primaryColor,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            topRight: Radius.circular(20)),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: shadowColor.withOpacity(0.2),
-                                            spreadRadius: .1,
-                                            blurRadius: 3,
-                                            // offset: Offset(0, 1), // changes position of shadow
-                                          ),
-                                        ],
+                                Container(
+                                  height: 55,
+                                  width: 370,
+                                  decoration: BoxDecoration(
+                                    color: primaryColor,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: shadowColor.withOpacity(0.2),
+                                        spreadRadius: .1,
+                                        blurRadius: 3,
+                                        // offset: Offset(0, 1), // changes position of shadow
                                       ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 20, right: 20, top: 10),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              snapshot.data.data[index].title,
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18),
-                                            ),
-                                            Container(
-                                              width: 80,
-                                              height: 35,
-                                              margin: EdgeInsets.fromLTRB(
-                                                  0, 0, 0, 5),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(20)),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                    snapshot.data.data[index]
-                                                        .status,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontSize: 14,
-                                                        color:
-                                                        Colors.deepOrange)),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 20, right: 20),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                SizedBox(
-                                                  height: 40,
-                                                  child: Text(
-                                                    'Details:  ',
-                                                    style: TextStyle(
-                                                        color: primaryColor,
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontSize: 18),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 250,
-                                                  height: 40,
-                                                  child: Text(
-                                                    snapshot.data.data[index]
-                                                        .details,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontSize: 16),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  'Location : ',
-                                                  style: TextStyle(
-                                                      color: primaryColor,
-                                                      fontWeight:
-                                                      FontWeight.bold,
-                                                      fontSize: 18),
-                                                ),
-                                                Text(
-                                                    snapshot
-                                                        .data.data[index].city,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontSize: 14))
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  'Job Type: ',
-                                                  style: TextStyle(
-                                                      color: primaryColor,
-                                                      fontWeight:
-                                                      FontWeight.bold,
-                                                      fontSize: 18),
-                                                ),
-                                                Text(
-                                                    snapshot.data.data[index]
-                                                        .taskType,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontSize: 14))
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment
-                                                  .spaceBetween,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      'Category: ',
-                                                      style: TextStyle(
-                                                          color: primaryColor,
-                                                          fontWeight:
-                                                          FontWeight.bold,
-                                                          fontSize: 18),
-                                                    ),
-                                                    Text(
-                                                        snapshot
-                                                            .data
-                                                            .data[index]
-                                                            .category
-                                                            .name,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                            FontWeight.bold,
-                                                            fontSize: 14))
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        )),
-                                    Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Container(
-                                        height: 55,
-                                        width: MediaQuery.of(context).size.width/1.1,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                              shadowColor.withOpacity(0.2),
-                                              spreadRadius: .1,
-                                              blurRadius: 3,
-                                              // offset: Offset(0, 1), // changes position of shadow
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                // -----------------------------Detail
-                                Positioned(
-                                    right: 20,
-                                    top: 193,
+                                    ],
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 20, right: 20, top: 10),
                                     child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Container(
-                                          width: 90,
-                                          height: 35,
-                                          margin:
-                                          EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                          decoration: BoxDecoration(
-                                            color: Colors.green,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)),
-                                          ),
-                                          child: Center(
-                                            child: InkWell(
-                                              onTap: () {
-                                                getRequestWithoutParam(
-                                                    '/api/v1/volunteer-request-for-task-complete/${snapshot.data.data[index].id}',
-                                                    {
-                                                      'Content-Type':
-                                                      "application/json",
-                                                      "Authorization":
-                                                      "Bearer ${token}"
-                                                    }).then((value) async {
-                                                  SweetAlert.show(context,
-                                                      title:
-                                                      "Your Task is completed",
-                                                      subtitle:"Please go to History ",
-                                                      style: SweetAlertStyle
-                                                          .success,
-                                                      onPress:
-                                                          (bool isConfirm) {
-                                                        if (isConfirm) {
-                                                          // return false to keep dialog
-                                                        }
-                                                        return null;
-                                                      });
-                                                  setState(() {});
-                                                });
-                                              },
-                                              child: Container(
-                                                // width: 80,
-                                                // height: 30,
-                                                // margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                                // decoration: BoxDecoration(
-                                                //   color: primaryColor,
-                                                //   borderRadius: BorderRadius.all(Radius.circular(20)),
-                                                // ),
-                                                child: Center(
-                                                    child: Text('Complete',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                            FontWeight.bold,
-                                                            fontSize: 16,
-                                                            color:
-                                                            Colors.white))),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 5,
+                                        Text(
+                                          snapshot
+                                              .data.data[index].task.title,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18),
                                         ),
                                         Container(
                                           width: 80,
                                           height: 35,
-                                          margin:
-                                          EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                          margin: EdgeInsets.fromLTRB(
+                                              0, 0, 0, 5),
                                           decoration: BoxDecoration(
-                                            color: primaryColor,
+                                            color: Colors.white,
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)),
                                           ),
                                           child: Center(
-                                            child: InkWell(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => OpportunityDetails(
-                                                          role: widget.role,
-                                                          id: snapshot
-                                                              .data.data[index].id,
-                                                          token: token)),
-                                                ).then((value) => setState(() {}));
-                                              },
-                                              child: Container(
-                                                // width: 80,
-                                                // height: 30,
-                                                // margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                                // decoration: BoxDecoration(
-                                                //   color: primaryColor,
-                                                //   borderRadius: BorderRadius.all(Radius.circular(20)),
-                                                // ),
-                                                child: Center(
-                                                    child: Text('Details',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                            FontWeight.bold,
-                                                            fontSize: 16,
-                                                            color:
-                                                            Colors.white))),
-                                              ),
-                                            ),
+                                            child: Text(
+                                                snapshot.data.data[index]
+                                                    .status,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                    FontWeight.bold,
+                                                    fontSize: 14,
+                                                    color:
+                                                    Colors.deepOrange)),
                                           ),
                                         ),
                                       ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                              height: 40,
+                                              child: Text(
+                                                'Details:  ',
+                                                style: TextStyle(
+                                                    color: primaryColor,
+                                                    fontWeight:
+                                                    FontWeight.bold,
+                                                    fontSize: 18),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 250,
+                                              height: 40,
+                                              child: Text(
+                                                snapshot.data.data[index]
+                                                    .task.details,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                    FontWeight.bold,
+                                                    fontSize: 16),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Location : ',
+                                              style: TextStyle(
+                                                  color: primaryColor,
+                                                  fontWeight:
+                                                  FontWeight.bold,
+                                                  fontSize: 18),
+                                            ),
+                                            Text(
+                                                snapshot.data.data[index]
+                                                    .task.city,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                    FontWeight.bold,
+                                                    fontSize: 14))
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Job Type: ',
+                                              style: TextStyle(
+                                                  color: primaryColor,
+                                                  fontWeight:
+                                                  FontWeight.bold,
+                                                  fontSize: 18),
+                                            ),
+                                            Text(
+                                                snapshot.data.data[index]
+                                                    .task.taskType,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                    FontWeight.bold,
+                                                    fontSize: 14))
+                                          ],
+                                        ),
+                                        // Row(
+                                        //   mainAxisAlignment:
+                                        //   MainAxisAlignment
+                                        //       .spaceBetween,
+                                        //   children: [
+                                        //     Row(
+                                        //       children: [
+                                        //         Text(
+                                        //           'Category: ',
+                                        //           style: TextStyle(
+                                        //               color: primaryColor,
+                                        //               fontWeight:
+                                        //               FontWeight.bold,
+                                        //               fontSize: 18),
+                                        //         ),
+                                        //         Text(
+                                        //             snapshot
+                                        //                 .data
+                                        //                 .data[index]
+                                        //                 .task.category
+                                        //                 .name,
+                                        //             style: TextStyle(
+                                        //                 fontWeight:
+                                        //                 FontWeight.bold,
+                                        //                 fontSize: 14))
+                                        //       ],
+                                        //     ),
+                                        //   ],
+                                        // ),
+                                      ],
                                     )),
+                                Padding(
+                                  padding: const EdgeInsets.all(7.0),
+                                  child: Container(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            width: 90,
+                                            height: 35,
+                                            margin: EdgeInsets.fromLTRB(
+                                                0, 0, 0, 5),
+                                            decoration: BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius:
+                                              BorderRadius.all(
+                                                  Radius.circular(
+                                                      20)),
+                                            ),
+                                            child: Center(
+                                              child: InkWell(
+                                                onTap: () {
+                                                  getRequestWithoutParam(
+                                                      '/api/v1/volunteer-request-for-task-complete/${snapshot.data.data[index].task.id}',
+                                                      {
+                                                        'Content-Type':
+                                                        "application/json",
+                                                        "Authorization":
+                                                        "Bearer ${token}"
+                                                      }).then(
+                                                          (value) async {
+                                                        SweetAlert.show(
+                                                            context,
+                                                            title:
+                                                            "Your Task is completed",
+                                                            subtitle:
+                                                            "Please go to History ",
+                                                            style:
+                                                            SweetAlertStyle
+                                                                .success,
+                                                            onPress: (bool
+                                                            isConfirm) {
+                                                              if (isConfirm) {
+                                                                // return false to keep dialog
+                                                              }
+                                                              return null;
+                                                            });
+                                                        setState(() {});
+                                                      });
+                                                },
+                                                child: Container(
+                                                  // width: 80,
+                                                  // height: 30,
+                                                  // margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                                  // decoration: BoxDecoration(
+                                                  //   color: primaryColor,
+                                                  //   borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                  // ),
+                                                  child: Center(
+                                                      child: Text(
+                                                          'Complete',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .bold,
+                                                              fontSize:
+                                                              16,
+                                                              color: Colors
+                                                                  .white))),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Container(
+                                            width: 80,
+                                            height: 35,
+                                            margin: EdgeInsets.fromLTRB(
+                                                0, 0, 0, 5),
+                                            decoration: BoxDecoration(
+                                              color: primaryColor,
+                                              borderRadius:
+                                              BorderRadius.all(
+                                                  Radius.circular(
+                                                      20)),
+                                            ),
+                                            child: Center(
+                                              child: InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            OpportunityDetails(
+                                                                status:snapshot.data.data[index].status,
+                                                                role: widget
+                                                                    .role,
+                                                                id: snapshot
+                                                                    .data
+                                                                    .data[
+                                                                index].task
+                                                                    .id,
+                                                                token:
+                                                                token)),
+                                                  ).then((value) =>
+                                                      setState(() {}));
+                                                },
+                                                child: Container(
+                                                  // width: 80,
+                                                  // height: 30,
+                                                  // margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                                  // decoration: BoxDecoration(
+                                                  //   color: primaryColor,
+                                                  //   borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                  // ),
+                                                  child: Center(
+                                                      child: Text(
+                                                          'Details',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .bold,
+                                                              fontSize:
+                                                              16,
+                                                              color: Colors
+                                                                  .white))),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    height: 55,
+                                    width:
+                                    MediaQuery.of(context).size.width /
+                                        1.1,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color:
+                                          shadowColor.withOpacity(0.2),
+                                          spreadRadius: .1,
+                                          blurRadius: 3,
+                                          // offset: Offset(0, 1), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),

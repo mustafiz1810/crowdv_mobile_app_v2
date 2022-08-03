@@ -5,6 +5,7 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Trainin
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
+import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
@@ -215,7 +216,24 @@ class _TrainingVideoState extends State<TrainingVideo> {
                     },
                   );
                 } else {
-                  return Center(child: CircularProgressIndicator());
+                 return Container(
+                    alignment: Alignment.center,
+                    child: EmptyWidget(
+                      image: null,
+                      packageImage: PackageImage.Image_3,
+                      title: 'Empty',
+                      subTitle: 'No videos available',
+                      titleTextStyle: TextStyle(
+                        fontSize: 22,
+                        color: Color(0xff9da9c7),
+                        fontWeight: FontWeight.w500,
+                      ),
+                      subtitleTextStyle: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xffabb8d6),
+                      ),
+                    ),
+                  );
                 }
               },
             )),

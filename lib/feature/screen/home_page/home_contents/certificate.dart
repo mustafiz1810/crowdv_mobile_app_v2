@@ -5,6 +5,7 @@ import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/common_util.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
+import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -275,7 +276,24 @@ class _CertificateState extends State<Certificate> {
                     },
                   );
                 } else {
-                  return Center(child: CircularProgressIndicator());
+                  return Container(
+                    alignment: Alignment.center,
+                    child: EmptyWidget(
+                      image: null,
+                      packageImage: PackageImage.Image_3,
+                      title: 'Empty',
+                      subTitle: 'Pass a test to claim',
+                      titleTextStyle: TextStyle(
+                        fontSize: 22,
+                        color: Color(0xff9da9c7),
+                        fontWeight: FontWeight.w500,
+                      ),
+                      subtitleTextStyle: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xffabb8d6),
+                      ),
+                    ),
+                  );
                 }
               },
             )),

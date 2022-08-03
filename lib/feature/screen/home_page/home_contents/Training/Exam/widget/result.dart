@@ -22,6 +22,7 @@ class Result extends StatefulWidget {
 class _ResultState extends State<Result> {
   String token = "";
   bool isVisible = false;
+  bool isShow = true;
   String score = "00";
   String remark = "jsadj";
   String name = "jsadj";
@@ -122,39 +123,39 @@ class _ResultState extends State<Result> {
             //     );
             //   },
             // ),
-            Container(
-              height: 50,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.black12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text("Click to check your result"),
-                  isVisible
-                      ? IconBox(
-                          child: Icon(
-                            Icons.check,
-                            color: Colors.white,
+             Visibility(
+               visible: isShow,
+               child: Container(
+                height: 50,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.black12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text("Click to check your result"),
+                    ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: primaryColor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30)),
+                            ),
+                            onPressed: () {
+                              submit(widget.id, widget.answer);
+                              setState(() {
+                                if (isShow == true) {
+                                  isShow = false;
+                                }
+                              });
+                            },
+                            child: Text("Check"),
                           ),
-                    bgColor: Colors.green,
-                        )
-                      : ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: primaryColor,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                          ),
-                          onPressed: () {
-                            submit(widget.id, widget.answer);
-                          },
-                          child: Text("Check"),
-                        ),
-                ],
-              ),
+                  ],
+                ),
             ),
+             ),
             SizedBox(
-              height: 50,
+              height: 5,
             ),
             Visibility(
               visible: isVisible,

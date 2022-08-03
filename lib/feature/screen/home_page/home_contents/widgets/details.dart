@@ -13,8 +13,8 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class OpportunityDetails extends StatefulWidget {
-  final dynamic role, id, token;
-  OpportunityDetails({this.role, this.id, this.token});
+  final dynamic status, role, id, token;
+  OpportunityDetails({this.status, this.role, this.id, this.token});
   @override
   _OpportunityDetailsState createState() => _OpportunityDetailsState();
 }
@@ -905,9 +905,11 @@ class _OpportunityDetailsState extends State<OpportunityDetails>
                               SizedBox(
                                 height: 20,
                               ),
-                              widget.role == "volunteer" &&
-                                      snapshot.data.data.status == "Pending"|| snapshot.data.data.status == "Applied"
-                                  ? InkWell(
+                              widget.role == "recruiter" ||
+                                      snapshot.data.data.status == "Hired" ||
+                                      widget.status == "applied"
+                                  ? Container()
+                                  : InkWell(
                                       onTap: () {
                                         getRequestWithoutParam(
                                             '/api/v1/volunteer/apply-task/${widget.id}',
@@ -958,8 +960,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails>
                                           ),
                                         ),
                                       ),
-                                    )
-                                  : Container(),
+                                    ),
                               SizedBox(
                                 height: 10,
                               )
