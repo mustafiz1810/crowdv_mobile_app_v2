@@ -71,9 +71,6 @@ class Video {
     this.title,
     this.details,
     this.video,
-    this.status,
-    this.createdAt,
-    this.updatedAt,
   });
 
   int id;
@@ -81,9 +78,6 @@ class Video {
   String title;
   String details;
   String video;
-  int status;
-  DateTime createdAt;
-  DateTime updatedAt;
 
   factory Video.fromJson(Map<String, dynamic> json) => Video(
     id: json["id"],
@@ -91,9 +85,6 @@ class Video {
     title: json["title"],
     details: json["details"],
     video: json["video"],
-    status: json["status"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -102,8 +93,5 @@ class Video {
     "title": title,
     "details": details,
     "video": video,
-    "status": status,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
   };
 }

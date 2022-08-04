@@ -907,7 +907,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails>
                               ),
                               widget.role == "recruiter" ||
                                       snapshot.data.data.status == "Hired" ||
-                                      widget.status == "applied"
+                                      widget.status == "applied"|| snapshot.data.data.status == "Completed"
                                   ? Container()
                                   : InkWell(
                                       onTap: () {

@@ -25,6 +25,7 @@ class HomeScreen extends StatefulWidget {
   HomeScreen({this.id, this.role});
   @override
   _HomeScreenState createState() => new _HomeScreenState();
+
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -44,7 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
       token = pref.getString("user");
     });
   }
-  final List<String> users=[];
+
+  final List users = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -191,8 +193,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                               '/api/v1/get-category', {
                                             "Authorization": "Bearer ${token}"
                                           }).then((value) async {
-                                            //   users.addAll(await value['data']['category'][0]['name']);
-                                            // print(users);
+                                            // List<dynamic> data = [];
+                                            // for (var i = 0; i < value["data"]["category"].length; i++) {
+                                            //   dataObject newObject =
+                                            //   new dataObject(name: listA[i], type: listB[i]);
+                                            //   data.add(newObject);
+                                            // }
+                                            // for (var i = 0; i < data.length; i++) {
+                                            //   print("${data[i].name},${data[i].type}");
+                                            // }
+                                            // var list = new List.from(value["data"]["category"])..addAll(value["data"]["category"][0]["name"]);
+                                            // print(list);
                                             Get.to(() => SetCategory());
                                           });
                                         },
@@ -200,8 +211,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                       CategoryCard(
                                         title: "Service Location",
                                         svgSrc: "assets/214.svg",
-                                        press: () {
-                                          Get.to(() => ServiceLocation());
+                                        press: () async {
+                                          getRequestWithoutParam(
+                                              '/api/v1/get-category', {
+                                            "Authorization": "Bearer ${token}"
+                                          }).then((value) async {
+                                            print(value["data"]['service_state']);
+                                            Get.to(() => ServiceLocation(
+                                                  country: value['data']
+                                                      ['service_state'],
+                                                  city: value['data']
+                                                      ['service_city'],
+                                                  zip: value['data']
+                                                      ['service_zip_code'],
+                                                ));
+                                          });
                                         },
                                       ),
                                       CategoryCard(

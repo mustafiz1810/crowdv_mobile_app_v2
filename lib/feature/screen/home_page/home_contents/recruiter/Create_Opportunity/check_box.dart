@@ -103,15 +103,15 @@ class _CheckBoxState extends State<CheckBox> {
             onTap: () {
               // getItems();
               Get.to(() => OpLocation(
-                eligibility: _selectedIndex.toString(),
-                title: widget.title,
-                category: widget.category,
-                type: widget.type,
-                description: widget.description,
-                date: widget.date,
-                time: widget.time,
-                etime: widget.etime,
-              ));
+                    eligibility: _selectedIndex.toString(),
+                    title: widget.title,
+                    category: widget.category,
+                    type: widget.type,
+                    description: widget.description,
+                    date: widget.date,
+                    time: widget.time,
+                    etime: widget.etime,
+                  ));
             },
             child: Container(
               height: 48,
@@ -156,8 +156,20 @@ class _CheckBoxState extends State<CheckBox> {
                       shrinkWrap: true,
                       itemCount: snapshot.data.data.length,
                       itemBuilder: (context, index) {
-                        final post = snapshot.data.data[index];
                         return Column(children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Please click to select eligibility, ",
+                                  style: TextStyle(
+                                      color: primaryColor,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                          ),
                           Card(
                             child: ListTile(
                               trailing: isSelected
@@ -169,17 +181,26 @@ class _CheckBoxState extends State<CheckBox> {
                                       Icons.check_circle_outline,
                                       color: Colors.grey,
                                     ),
-                              selected:
-                                  snapshot.data.data[index].id == _selectedIndex,
+                              selected: snapshot.data.data[index].id ==
+                                  _selectedIndex,
                               onTap: () {
                                 setState(() {
-                                  isSelected=true;
+                                  isSelected = true;
                                   _selectedIndex = snapshot.data.data[index].id;
                                   print(_selectedIndex.toString());
                                 });
                               },
-                              title: Text("Title:   "+snapshot.data.data[index].title,style: TextStyle(fontWeight: FontWeight.bold),),
-                              subtitle: Text("Details:   "+snapshot.data.data[index].details,style: TextStyle(fontWeight: FontWeight.bold)),
+                              title: Text(
+                                "Title:   " + snapshot.data.data[index].title,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                "Details:   " +
+                                    snapshot.data.data[index].details,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ),
                         ]);

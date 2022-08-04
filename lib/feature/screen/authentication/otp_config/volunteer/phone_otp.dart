@@ -114,13 +114,24 @@ class _PhoneOtpPageState extends State<PhoneOtp> {
                             SizedBox(
                               height: 10,
                             ),
-                            Text(
-                              'Enter the verification code we just sent you on your phone number.',
-                              style: TextStyle(
-                                // fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black54),
-                              // textAlign: TextAlign.center,
+                            RichText(
+                              text: new TextSpan(
+                                style: new TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                children: [
+                                  new TextSpan(
+                                      text:
+                                      'Enter the verification code we just sent you on ',
+                                      style:
+                                      new TextStyle(color: Colors.black54)),
+                                  new TextSpan(
+                                      text: widget.phone.replaceRange(3, 9,"******"),
+                                      style: new TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.blue)),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -172,37 +183,37 @@ class _PhoneOtpPageState extends State<PhoneOtp> {
                                 "${remaining.minutes}:${remaining.seconds}",
                                 style: TextStyle(fontSize: 24.0));
                           }),
-                      Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "If you didn't receive a code! ",
-                              style: TextStyle(
-                                color: Colors.black38,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'Resend',
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  _controller.start();
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return ThemeHelper().alartDialog(
-                                          "Successful",
-                                          "Verification code resend successful.",
-                                          context);
-                                    },
-                                  );
-                                },
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.orange),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Text.rich(
+                      //   TextSpan(
+                      //     children: [
+                      //       TextSpan(
+                      //         text: "If you didn't receive a code! ",
+                      //         style: TextStyle(
+                      //           color: Colors.black38,
+                      //         ),
+                      //       ),
+                      //       TextSpan(
+                      //         text: 'Resend',
+                      //         recognizer: TapGestureRecognizer()
+                      //           ..onTap = () {
+                      //             _controller.start();
+                      //             showDialog(
+                      //               context: context,
+                      //               builder: (BuildContext context) {
+                      //                 return ThemeHelper().alartDialog(
+                      //                     "Successful",
+                      //                     "Verification code resend successful.",
+                      //                     context);
+                      //               },
+                      //             );
+                      //           },
+                      //         style: TextStyle(
+                      //             fontWeight: FontWeight.bold,
+                      //             color: Colors.orange),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       SizedBox(height: 40.0),
                       Container(
                         decoration: _pinSuccess == true

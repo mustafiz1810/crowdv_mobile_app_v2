@@ -115,6 +115,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
         Uri.parse(NetworkConstants.BASE_URL + 'opportunity/history'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
+    print(data.toString());
     showToast(context, data['message']);
     if (response.statusCode == 200) {
       return RecruiterHistoryModel.fromJson(data);
@@ -192,7 +193,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                   role: snapshot
                                                       .data
                                                       .data[index]
-                                                      .volunteer
+                                                      .recruiter
                                                       .role,
                                                   id: snapshot
                                                       .data.data[index].id,
@@ -223,41 +224,14 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                     ),
                                     Divider(
                                       thickness: 1,
-                                      height: 10,
+                                      height: 5,
                                       color: primaryColor,
                                     ),
                                     Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 20, right: 20, top: 10),
+                                            left: 20, right: 20, top: 5),
                                         child: Column(
                                           children: [
-                                            Row(
-                                              children: [
-                                                SizedBox(
-                                                  height: 40,
-                                                  child: Text(
-                                                    'Details:  ',
-                                                    style: TextStyle(
-                                                        color: primaryColor,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 220,
-                                                  height: 40,
-                                                  child: Text(
-                                                    snapshot.data.data[index]
-                                                        .details,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 16),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
                                             Row(
                                               children: [
                                                 Text(
@@ -265,7 +239,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 18),
+                                                      fontSize: 16),
                                                 ),
                                                 Text(
                                                     snapshot.data.data[index]
@@ -286,11 +260,69 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 18),
+                                                      fontSize: 16),
                                                 ),
                                                 Text(
                                                     snapshot.data.data[index]
                                                         .taskType,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14))
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'Your Rating: ',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16),
+                                                ),
+                                                Text(
+                                                    snapshot
+                                                                .data
+                                                                .data[index]
+                                                                .recruiter
+                                                                .rating
+                                                                .toString() !=
+                                                            null
+                                                        ? snapshot
+                                                            .data
+                                                            .data[index]
+                                                            .recruiter
+                                                            .rating
+                                                            .toString()
+                                                        : "",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14))
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'Your Review: ',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16),
+                                                ),
+                                                Text(
+                                                    snapshot
+                                                                .data
+                                                                .data[index]
+                                                                .recruiter
+                                                                .review !=
+                                                            null
+                                                        ? snapshot
+                                                            .data
+                                                            .data[index]
+                                                            .recruiter
+                                                            .review
+                                                        : "",
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -303,11 +335,11 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                 ),
                                 // -------------------------------------------------Card
                                 Positioned(
-                                    top: 150,
+                                    top: 160,
                                     child: Padding(
                                       padding: const EdgeInsets.all(4.0),
                                       child: Container(
-                                        height: 83,
+                                        height: 70,
                                         width: 342,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
@@ -383,9 +415,12 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                                             10.0),
                                                               ),
                                                               filled: true,
-                                                              hintStyle: TextStyle(
-                                                                  color: Colors.black,
-                                                                  fontSize: 16,),
+                                                              hintStyle:
+                                                                  TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 16,
+                                                              ),
                                                               hintText: snapshot
                                                                   .data
                                                                   .data[index]
@@ -445,16 +480,16 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                     top: 170,
                                     child: Row(
                                       children: [
-                                        Column(
-                                          children: [
-                                            CircleAvatar(
-                                              backgroundImage: NetworkImage(
-                                                  snapshot.data.data[index]
-                                                      .volunteer.image),
-                                              radius: 25,
-                                            ),
-                                          ],
-                                        ),
+                                        // Column(
+                                        //   children: [
+                                        //     CircleAvatar(
+                                        //       backgroundImage: NetworkImage(
+                                        //           snapshot.data.data[index]
+                                        //               .volunteer.image),
+                                        //       radius: 25,
+                                        //     ),
+                                        //   ],
+                                        // ),
                                         SizedBox(
                                           width: 5,
                                         ),

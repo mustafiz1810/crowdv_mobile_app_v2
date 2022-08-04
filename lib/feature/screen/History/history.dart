@@ -192,7 +192,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                   role: snapshot
                                                       .data
                                                       .data[index]
-                                                      .recruiter
+                                                      .volunteer
                                                       .role,
                                                   id: snapshot
                                                       .data.data[index].id,
@@ -223,41 +223,14 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                     ),
                                     Divider(
                                       thickness: 1,
-                                      height: 10,
+                                      height: 5,
                                       color: primaryColor,
                                     ),
                                     Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 20, right: 20, top: 10),
+                                            left: 20, right: 20, top: 5),
                                         child: Column(
                                           children: [
-                                            Row(
-                                              children: [
-                                                SizedBox(
-                                                  height: 40,
-                                                  child: Text(
-                                                    'Details:  ',
-                                                    style: TextStyle(
-                                                        color: primaryColor,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 220,
-                                                  height: 40,
-                                                  child: Text(
-                                                    snapshot.data.data[index]
-                                                        .details,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 16),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
                                             Row(
                                               children: [
                                                 Text(
@@ -294,6 +267,64 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
+                                                        fontSize: 14))
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'Your Rating: ',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                      fontSize: 16),
+                                                ),
+                                                Text(
+                                                    snapshot
+                                                        .data
+                                                        .data[index]
+                                                        .volunteer
+                                                        .rating
+                                                        .toString() !=
+                                                        null
+                                                        ? snapshot
+                                                        .data
+                                                        .data[index]
+                                                        .volunteer
+                                                        .rating
+                                                        .toString()
+                                                        : "",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                        FontWeight.bold,
+                                                        fontSize: 14))
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'Your Review: ',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                      fontSize: 16),
+                                                ),
+                                                Text(
+                                                    snapshot
+                                                        .data
+                                                        .data[index]
+                                                        .volunteer
+                                                        .review !=
+                                                        null
+                                                        ? snapshot
+                                                        .data
+                                                        .data[index]
+                                                        .volunteer
+                                                        .review
+                                                        : "",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                        FontWeight.bold,
                                                         fontSize: 14))
                                               ],
                                             ),

@@ -14,7 +14,8 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../../../../widgets/show_toast.dart';
 
 class ForgetPassVerify extends StatefulWidget {
-  const ForgetPassVerify({Key key}) : super(key: key);
+  final email;
+  ForgetPassVerify({this.email});
 
   @override
   _ForgetPassVerifyPageState createState() => _ForgetPassVerifyPageState();
@@ -118,13 +119,28 @@ class _ForgetPassVerifyPageState extends State<ForgetPassVerify> {
                             SizedBox(
                               height: 10,
                             ),
-                            Text(
-                              'Enter the verification code we just sent you on your email address.',
-                              style: TextStyle(
-                                  // fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black54),
-                              // textAlign: TextAlign.center,
+                            RichText(
+                              text: new TextSpan(
+                                style: new TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                children: [
+                                  new TextSpan(
+                                      text:
+                                      'Enter the verification code we just sent you on ',
+                                      style:
+                                      new TextStyle(color: Colors.black54)),
+                                  new TextSpan(
+                                      text: widget.email.replaceRange(
+                                          0,
+                                          widget.email.indexOf("@") -
+                                              2,
+                                          "***"),
+                                      style: new TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.blue)),
+                                ],
+                              ),
                             ),
                           ],
                         ),

@@ -39,8 +39,7 @@ Future getRequestWithoutParam(path, headers) async {
 
   if (response.statusCode == 200) {
     var data = json.decode(response.body);
-    print(data);
-    // return data;
+    return data;
   } else {
     var data = json.decode(response.body);
     showToast(data['message']);

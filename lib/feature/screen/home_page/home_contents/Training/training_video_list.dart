@@ -42,6 +42,7 @@ class _TrainingVideoState extends State<TrainingVideo> {
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
     if (response.statusCode == 200) {
+      print(data);
       return VideoListModel.fromJson(data);
     } else {
       return VideoListModel.fromJson(data);

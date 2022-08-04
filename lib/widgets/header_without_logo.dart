@@ -30,11 +30,11 @@ class _HeaderWidgetState extends State<HeaderWidget>
         var data = jsonDecode(response.body.toString());
         print(data);
         prefs.clear();
-        pageRoute(data['data'][0]['token']);
+        pageRoute(data['data']['token']);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) =>
-                    HomeScreen(id: widget.id, role: data['data'][0]['role'])),
+                    HomeScreen(id: widget.id, role: data['data']['role'])),
             (Route<dynamic> route) => false);
         showToast(context, data['message']);
       } else {
@@ -69,11 +69,11 @@ class _HeaderWidgetState extends State<HeaderWidget>
         var data = jsonDecode(response.body.toString());
         print(data);
         prefs.clear();
-        pageRoute(data['data'][0]['token']);
+        pageRoute(data['data']['token']);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) =>
-                    HomeScreen(id: widget.id, role: data['data'][0]['role'])),
+                    HomeScreen(id: widget.id, role: data['data']['role'])),
             (Route<dynamic> route) => false);
         showToast(context, data['message']);
       } else {

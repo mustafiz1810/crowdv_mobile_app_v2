@@ -43,11 +43,11 @@ class _OtpVolunteerPageState extends State<OtpVolunteer> {
         setState(() {
           isApiCallProcess = false;
         });
-        showToast(context, data['message']);
+        showToast(context, data['message'],);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) => PhoneVerify(
-                      email: data['data']['email'],
+                      email: widget.email,
                     )),
             (Route<dynamic> route) => false);
       } else {
@@ -163,11 +163,14 @@ class _OtpVolunteerPageState extends State<OtpVolunteer> {
                                 children: [
                                   new TextSpan(
                                       text:
-                                          'Enter the verification code we just sent you on ',
+                                      'Enter the verification code we just sent you on ',
                                       style:
-                                          new TextStyle(color: Colors.black54)),
+                                      new TextStyle(color: Colors.black54)),
                                   new TextSpan(
-                                      text: widget.email,
+                                      text: widget.email.replaceRange(
+                                          0,
+                                          widget.email.indexOf("@") - 2,
+                                          "***"),
                                       style: new TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.blue)),

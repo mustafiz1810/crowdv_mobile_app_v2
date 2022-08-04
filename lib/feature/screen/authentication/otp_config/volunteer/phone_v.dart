@@ -129,7 +129,7 @@ class _PhoneVerifyPageState extends State<PhoneVerify> {
                               height: 10,
                             ),
                             Text(
-                              'We will send you a verification code to check your authenticity.',
+                              'A verification code will be send to your phone number.',
                               style: TextStyle(
                                 color: Colors.black38,
                                 // fontSize: 20,

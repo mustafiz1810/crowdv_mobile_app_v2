@@ -12,7 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../Search/search_pages/location.dart';
 
 class ServiceLocation extends StatefulWidget {
-  const ServiceLocation({Key key}) : super(key: key);
+  final country,city,zip;
+  ServiceLocation({this.country,this.city,this.zip});
 
   @override
   _ServiceLocationState createState() => _ServiceLocationState();
@@ -23,6 +24,9 @@ class _ServiceLocationState extends State<ServiceLocation> {
 
   @override
   void initState() {
+    widget.country != null?selectedCountry=widget.country:selectedCountry="Alabama";
+    // widget.city != null ? selectedProvince=widget.city:selectedProvince="Birmingham";
+    widget.zip != null ? zipController.text=widget.zip:zipController.text="your zip here";
     super.initState();
     getCred();
   }
@@ -77,7 +81,6 @@ class _ServiceLocationState extends State<ServiceLocation> {
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data);
         showToast(context, data['message']);
       } else {
         var data = jsonDecode(response.body.toString());
@@ -134,7 +137,7 @@ class _ServiceLocationState extends State<ServiceLocation> {
                 child: DropdownButton<String>(
                   hint: Center(
                     child: Text(
-                      'Select State',
+                      selectedCountry,
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.white,
@@ -208,7 +211,7 @@ class _ServiceLocationState extends State<ServiceLocation> {
                 child: DropdownButton<String>(
                   hint: Center(
                     child: Text(
-                      "select city",
+                      "selectedProvince",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.white,
@@ -268,13 +271,13 @@ class _ServiceLocationState extends State<ServiceLocation> {
                     child: InkWell(
                       splashColor: secondaryColor, // splash color
                       onTap: () {
-                        setState(() {
-                          print(selectedCountry.toString() +
-                              "  " +
-                              selectedProvince.toString() +
-                              "  " +
-                              zipController.text.toString());
-                        });
+                        // setState(() {
+                        //   print(selectedCountry.toString() +
+                        //       "  " +
+                        //       selectedProvince.toString() +
+                        //       "  " +
+                        //       zipController.text.toString());
+                        // });
                         set(
                             selectedCountry.toString(),
                             selectedProvince.toString(),

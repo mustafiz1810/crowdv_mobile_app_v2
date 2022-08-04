@@ -159,6 +159,19 @@ class _EligibilityUpdateState extends State<EligibilityUpdate> {
                           itemBuilder: (context, index) {
                             final post = snapshot.data.data[index];
                             return Column(children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Please click to select eligibility, ",
+                                      style: TextStyle(
+                                          color: primaryColor,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                              ),
                               Card(
                                 child: ListTile(
                                   trailing: isSelected
@@ -180,7 +193,13 @@ class _EligibilityUpdateState extends State<EligibilityUpdate> {
                                     });
                                   },
                                   title: Text("Title:   "+snapshot.data.data[index].title,style: TextStyle(fontWeight: FontWeight.bold),),
-                                  subtitle: Text("Details:   "+snapshot.data.data[index].details,style: TextStyle(fontWeight: FontWeight.bold)),
+                                  subtitle: Text(
+                                    "Details:   " +
+                                        snapshot.data.data[index].details,
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                               ),
                             ]);

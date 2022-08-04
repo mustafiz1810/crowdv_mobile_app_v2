@@ -41,7 +41,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => ForgetPassVerify()),
+              builder: (context) => ForgetPassVerify(email: emailEditingController.text,)),
         );
       } else {
         var data = jsonDecode(response.body.toString());

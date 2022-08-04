@@ -34,7 +34,10 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
         });
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => OtpVolunteer(email: data['data']['email'],)),
+          MaterialPageRoute(
+              builder: (context) => OtpVolunteer(
+                    email: data['data']['email'],
+                  )),
         );
       } else {
         var data = jsonDecode(response.body.toString());

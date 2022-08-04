@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/feature/screen/authentication/sign_up/Volunteer/role_check.dart';
+import 'package:crowdv_mobile_app/feature/screen/authentication/widgets/terms_condition.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/widgets/header_widget.dart';
 import 'package:crowdv_mobile_app/widgets/progres_hud.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
 import '../../../../../widgets/show_toast.dart';
 
@@ -41,12 +43,11 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
         setState(() {
           isApiCallProcess = false;
         });
-        showToast(context, data['message']);
         Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
-          RoleCheck(id: data['data'][0]['id'],)),
+          RoleCheck(id: data['data']['id'],)),
         );
       } else {
         var data = jsonDecode(response.body.toString());
@@ -263,14 +264,33 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                                             state.didChange(value);
                                           });
                                         }),
-                                    Text(
-                                      "I accept all terms and conditions.",
-                                      style: TextStyle(color: Colors.grey),
+                                    InkWell(
+                                      child: RichText(
+                                        text: new TextSpan(
+                                          style: new TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          children: [
+                                            new TextSpan(
+                                                text:
+                                                "I accept all ",
+                                              style: TextStyle(color: Colors.grey),),
+                                            new TextSpan(
+                                                text: "terms and conditions.",
+                                                style: new TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.blue)),
+                                          ],
+                                        ),
+                                      ),
+                                      onTap:(){
+                                        Get.to(()=>TermsCondition());
+                                      },
                                     ),
                                   ],
                                 ),
                                 Container(
-                                  alignment: Alignment.centerLeft,
+                                  alignment: Alignment.bottomCenter,
                                   child: Text(
                                     state.errorText ?? '',
                                     textAlign: TextAlign.left,
@@ -291,7 +311,7 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                             }
                           },
                         ),
-                        // SizedBox(height: 20.0),
+                        SizedBox(height: 20.0),
                         Container(
                           decoration:
                               ThemeHelper().buttonBoxDecoration(context),

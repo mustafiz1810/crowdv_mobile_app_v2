@@ -31,7 +31,7 @@ class _RoleCheckState extends State<RoleCheck> {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         print(data);
-        pageRoute(data['data'][0]['token']);
+        pageRoute(data['data']['token']);
         setState(() {
           isApiCallProcess = false;
         });
