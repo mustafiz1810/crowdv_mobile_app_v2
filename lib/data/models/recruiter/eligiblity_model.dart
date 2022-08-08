@@ -4,11 +4,9 @@
 
 import 'dart:convert';
 
-EligibilityModel eligibilityModelFromJson(String str) =>
-    EligibilityModel.fromJson(json.decode(str));
+EligibilityModel eligibilityModelFromJson(String str) => EligibilityModel.fromJson(json.decode(str));
 
-String eligibilityModelToJson(EligibilityModel data) =>
-    json.encode(data.toJson());
+String eligibilityModelToJson(EligibilityModel data) => json.encode(data.toJson());
 
 class EligibilityModel {
   EligibilityModel({
@@ -21,18 +19,17 @@ class EligibilityModel {
   String message;
   List<Datum> data;
 
-  factory EligibilityModel.fromJson(Map<String, dynamic> json) =>
-      EligibilityModel(
-        success: json["success"],
-        message: json["message"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-      );
+  factory EligibilityModel.fromJson(Map<String, dynamic> json) => EligibilityModel(
+    success: json["success"],
+    message: json["message"],
+    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+  );
 
   Map<String, dynamic> toJson() => {
-        "success": success,
-        "message": message,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-      };
+    "success": success,
+    "message": message,
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+  };
 }
 
 class Datum {
@@ -41,24 +38,28 @@ class Datum {
     this.title,
     this.details,
     this.status,
+    this.isChecked,
   });
 
   int id;
   String title;
   String details;
   int status;
+  bool isChecked;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        id: json["id"],
-        title: json["title"],
-        details: json["details"],
-        status: json["status"],
-      );
+    id: json["id"],
+    title: json["title"],
+    details: json["details"],
+    status: json["status"],
+    isChecked: json["isChecked"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "title": title,
-        "details": details,
-        "status": status,
-      };
+    "id": id,
+    "title": title,
+    "details": details,
+    "status": status,
+    "isChecked": isChecked,
+  };
 }

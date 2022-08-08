@@ -56,7 +56,6 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
   TimeOfDay _time = TimeOfDay.now();
   String _typevalue;
   List<String> _type = ["Online", "Offline", "Both"];
-
   Future<CategoryModel> getAllCategory() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL + 'categories'),
@@ -68,9 +67,14 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
       return CategoryModel.fromJson(data);
     }
   }
-
+  List<int> eligibility = [];
   @override
   void initState() {
+    for(Map map in widget.eligibility){
+      eligibility.add(map['id']);
+    }
+    setState((){});
+    print(eligibility);
     titleController.text = widget.title.toString();
     descriptionController.text = widget.description.toString();
     _typevalue = widget.type.toString();
@@ -517,7 +521,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                     '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
                     etime:
                     '${_time.hour}:${_time.minute.toString().padLeft(2, '0')}',
-                    eligibility:widget.eligibility,
+                    eligibility:eligibility,
                     city:widget.city,
                     state:widget.state,
                     zip: widget.zip,

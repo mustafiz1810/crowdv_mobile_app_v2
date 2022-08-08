@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final profileModel = profileModelFromJson(jsonString);
+
 import 'dart:convert';
 
 ProfileModel profileModelFromJson(String str) => ProfileModel.fromJson(json.decode(str));
@@ -50,6 +54,7 @@ class Data {
     this.serviceCity,
     this.serviceState,
     this.serviceZipCode,
+    this.workingHours,
   });
 
   int id;
@@ -72,6 +77,7 @@ class Data {
   dynamic serviceCity;
   dynamic serviceState;
   dynamic serviceZipCode;
+  dynamic workingHours;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     id: json["id"],
@@ -94,6 +100,7 @@ class Data {
     serviceCity: json["service_city"],
     serviceState: json["service_state"],
     serviceZipCode: json["service_zip_code"],
+    workingHours: json["working_hours"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -117,6 +124,7 @@ class Data {
     "service_city": serviceCity,
     "service_state": serviceState,
     "service_zip_code": serviceZipCode,
+    "working_hours": workingHours,
   };
 }
 

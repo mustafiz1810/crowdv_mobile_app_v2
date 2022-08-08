@@ -11,9 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Result extends StatefulWidget {
   final List<Map<String, int>> answer;
   final int id;
-  final List<String> array;
 
-  Result(this.answer, this.id, this.array);
+  Result(this.answer, this.id);
 
   @override
   State<Result> createState() => _ResultState();

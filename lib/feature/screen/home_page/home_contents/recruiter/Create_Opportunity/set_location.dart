@@ -9,23 +9,24 @@ import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OpLocation extends StatefulWidget {
+  final List<int> answer;
   final dynamic title,
       category,
       type,
       description,
       date,
       time,
-      etime,
-      eligibility;
+      etime;
   OpLocation(
-      {@required this.title,
+      {@required
+      this.answer,
+      this.title,
       this.category,
       this.type,
       this.description,
       this.date,
       this.time,
-      this.etime,
-      this.eligibility});
+      this.etime});
 
   @override
   _OpLocationState createState() => _OpLocationState();
@@ -76,37 +77,38 @@ class _OpLocationState extends State<OpLocation> {
   String selectedCountry;
   String selectedProvince;
   TextEditingController zipController = TextEditingController();
-  void create(String title, category_id, date, start_time, end_time, state,
-      city, eligibility, details, task_type, zip_code) async {
+  void create(title, category_id, date, start_time, end_time, state,
+      city, List<int> answer, details, task_type, zip_code) async {
+    String body = json.encode({ 'title': title,
+      'category_id': category_id,
+      'date': date,
+      'start_time': start_time,
+      'end_time': end_time,
+      'eligibility_id': answer ,
+      'details': details,
+      'task_type': task_type,
+      'city': city,
+      'state': state,
+      'zip_code': zip_code,
+      'is_public': 'true',});
+    print(body);
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'opportunity/store'),
           headers: {
-            "Authorization": "Bearer $token"
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/json"
           },
-          body: {
-            'title': title,
-            'category_id': category_id,
-            'date': date,
-            'start_time': start_time,
-            'end_time': end_time,
-            'eligibility_id': eligibility,
-            'details': details,
-            'task_type': task_type,
-            'city': city,
-            'state': state,
-            'zip_code': zip_code,
-            'is_public': 'true',
-          });
+          body: body);
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         // print(data);
         showToast(context, data['message']);
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-            (Route<dynamic> route) => false);
+        int count = 0;
+        Navigator.popUntil(context, (route) => count++ == 3);
       } else {
         var data = jsonDecode(response.body.toString());
+        print(data);
         showToast(context, data['errors'].toString());
       }
     } catch (e) {
@@ -294,29 +296,6 @@ class _OpLocationState extends State<OpLocation> {
                     child: InkWell(
                       splashColor: secondaryColor, // splash color
                       onTap: () {
-                        setState(() {
-                          print(widget.title +
-                              "  " +
-                              widget.category +
-                              "  " +
-                              widget.date +
-                              "  " +
-                              widget.time +
-                              "  " +
-                              widget.etime +
-                              "  " +
-                              selectedCountry.toString() +
-                              "  " +
-                              selectedProvince.toString() +
-                              "  " +
-                              widget.eligibility +
-                              "  " +
-                              widget.description +
-                              "  " +
-                              widget.type +
-                              "  " +
-                              zipController.text.toString());
-                        });
                         create(
                             widget.title,
                             widget.category,
@@ -325,7 +304,7 @@ class _OpLocationState extends State<OpLocation> {
                             widget.etime,
                             selectedCountry.toString(),
                             selectedProvince.toString(),
-                            widget.eligibility,
+                            widget.answer,
                             widget.description,
                             widget.type,
                             zipController.text.toString());

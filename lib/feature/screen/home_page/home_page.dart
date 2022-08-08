@@ -193,18 +193,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                               '/api/v1/get-category', {
                                             "Authorization": "Bearer ${token}"
                                           }).then((value) async {
-                                            // List<dynamic> data = [];
-                                            // for (var i = 0; i < value["data"]["category"].length; i++) {
-                                            //   dataObject newObject =
-                                            //   new dataObject(name: listA[i], type: listB[i]);
-                                            //   data.add(newObject);
-                                            // }
-                                            // for (var i = 0; i < data.length; i++) {
-                                            //   print("${data[i].name},${data[i].type}");
-                                            // }
-                                            // var list = new List.from(value["data"]["category"])..addAll(value["data"]["category"][0]["name"]);
-                                            // print(list);
-                                            Get.to(() => SetCategory());
+                                            print(value["data"]["category"]);
+                                            List<String> category = [];
+
+                                            for(Map map in value["data"]["category"]){          // where the widget.eligibility is came from previous widget which seems a list of map in your code
+                                              category.add(map["name"]);
+                                            }
+                                            print(category);
+                                            setState((){});
+                                            Get.to(() => SetCategory(category));
                                           });
                                         },
                                       ),

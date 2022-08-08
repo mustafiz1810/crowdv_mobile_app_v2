@@ -5,7 +5,6 @@ import 'package:crowdv_mobile_app/data/models/profile_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/profile_update_basic.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
-import 'package:crowdv_mobile_app/widgets/header_without_logo.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +14,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
-  final disability, chosenValue, dropdown, selectedCountry, selectedProvince,zip;
+  final role,
+      disability,
+      chosenValue,
+      dropdown,
+      selectedCountry,
+      selectedProvince,
+      zip;
   ProfilePage(
-      {this.disability,
+      {this.role,
+      this.disability,
       this.chosenValue,
       this.dropdown,
       this.selectedProvince,
@@ -64,7 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
   List<String> provinces = [];
   List<String> _disability = ["Blind"];
   List<String> _items = ["Business", "Student", "Service", "Self-employer"];
-  List<String> _item = ["Male", "female"];
+  List<String> _item = ["Male", "Female"];
   @override
   void initState() {
     super.initState();
@@ -82,7 +88,9 @@ class _ProfilePageState extends State<ProfilePage> {
     widget.selectedProvince == "unknown"
         ? selectedProvince = "Birmingham"
         : selectedProvince = widget.selectedProvince;
-    widget.zip==null?zipController.text="12345":zipController.text=widget.zip;
+    widget.zip == null
+        ? zipController.text = "12345"
+        : zipController.text = widget.zip;
     print(zipController.text);
   }
 
@@ -207,6 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Stack(
                     clipBehavior: Clip.none,
@@ -219,6 +228,16 @@ class _ProfilePageState extends State<ProfilePage> {
                               bottomLeft: Radius.circular(20),
                               bottomRight: Radius.circular(20)),
                           color: primaryColor,
+                        ),
+                      ),
+                      Positioned(
+                        left: 10,
+                        top: 10,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.transparent,
+                          backgroundImage:
+                              AssetImage("assets/favpng_silver.png"),
+                          radius: 30,
                         ),
                       ),
                       Positioned(
@@ -256,18 +275,36 @@ class _ProfilePageState extends State<ProfilePage> {
                                     " " +
                                     snapshot.data.data.lastName,
                                 style: TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.bold),
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
                               ),
                               SizedBox(
                                 height: 5,
                               ),
-                              Text(
-                                snapshot.data.data.email,
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: 10,
+                              Row(
+                                children: [
+                                  Text("Working Hour : ",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black)),
+                                  snapshot.data.data.workingHours !=
+                                      null
+                                      ? Text(
+                                      snapshot
+                                          .data.data.workingHours,
+                                      style: TextStyle(
+                                          fontWeight:
+                                          FontWeight.bold,
+                                          color: Colors.black))
+                                      : Text(
+                                    "00",
+                                    style: TextStyle(
+                                        fontWeight:
+                                        FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -275,6 +312,85 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ],
                   ),
+                  // child: Container(
+                  //   alignment: Alignment.centerLeft,
+                  //   margin: EdgeInsets.fromLTRB(25, 10, 25, 10),
+                  //   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  //   child: Row(
+                  //     children: [
+                  //       Column(
+                  //         children: [
+                  //           CircleAvatar(
+                  //             backgroundImage:
+                  //                 NetworkImage(snapshot.data.data.image),
+                  //             radius: 30,
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       SizedBox(
+                  //         width: 10,
+                  //       ),
+                  //       Row(
+                  //         children: [
+                  //           Column(
+                  //             children: [
+                  //               Text(
+                  //                 snapshot.data.data.firstName +
+                  //                     " " +
+                  //                     snapshot.data.data.lastName,
+                  //                 style: TextStyle(
+                  //                     fontSize: 22,
+                  //                     fontWeight: FontWeight.bold,
+                  //                     color: Colors.white),
+                  //               ),
+                  //               SizedBox(
+                  //                 height: 5,
+                  //               ),
+                  //               Row(
+                  //                 mainAxisAlignment:
+                  //                 MainAxisAlignment.spaceAround,
+                  //                 children: [
+                  //                   Icon(Icons.watch_later_outlined, color: Colors.white),
+                  //                   Text(
+                  //                       "Working Hour : ",
+                  //                       style: TextStyle(
+                  //                           fontWeight: FontWeight.bold,
+                  //                           color: Colors.white)),
+                  //                   snapshot.data.data.workingHours != null
+                  //                       ? Text(
+                  //                       snapshot.data.data.workingHours,
+                  //                       style: TextStyle(
+                  //                           fontWeight: FontWeight.bold,
+                  //                           color: Colors.white))
+                  //                       : Text(
+                  //                     "00:00",
+                  //                     style: TextStyle(
+                  //                         fontWeight: FontWeight.bold,
+                  //                         color: Colors.white),
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //             ],
+                  //           ),
+                  //           SizedBox(
+                  //             width: 10,
+                  //           ),
+                  //           Column(
+                  //             children: [
+                  //               CircleAvatar(
+                  //                 backgroundColor: Colors.transparent,
+                  //                 backgroundImage: AssetImage(
+                  //                     "assets/favpng_silver.png"
+                  //                 ),
+                  //                 radius: 25,
+                  //               ),
+                  //             ],
+                  //           )
+                  //         ],
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   SizedBox(
                     height: 100,
                   ),

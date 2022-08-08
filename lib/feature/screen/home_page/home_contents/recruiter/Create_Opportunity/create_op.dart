@@ -367,12 +367,6 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       filled: true,
-                      hintStyle: TextStyle(
-                          color: Colors.grey.shade400,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700),
-                      hintText:
-                          "Example: Preffered cake shops,Text on the cake,delivery address in text,Phone number of the recepient,etc.",
                       fillColor: Colors.grey.shade200),
                 ),
               ),
@@ -446,7 +440,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                         width: 5,
                       ),
                       Text(
-                        'TO',
+                        '-',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
@@ -490,7 +484,9 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                   //       " " +
                   //       '${_time.hour}:${_time.minute.toString().padLeft(2, '0') + "  " + slug.toString()}');
                   // });
+
                   Get.to(() => CheckBox(
+                    token:token,
                         slug: slug.toString(),
                         title: titleController.text,
                         category: _selectedIndex.toString(),

@@ -40,6 +40,7 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
       });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
         setState(() {
           isApiCallProcess = false;
         });

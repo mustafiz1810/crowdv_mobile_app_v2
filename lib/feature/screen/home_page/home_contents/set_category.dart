@@ -10,8 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../data/models/recruiter/category_model.dart';
 
 class SetCategory extends StatefulWidget {
-  // final List<String> category;
-  // SetCategory(this.category);
+  final List<String> category;
+  SetCategory(this.category);
 
   @override
   _SetCategoryState createState() => _SetCategoryState();
@@ -22,8 +22,8 @@ class _SetCategoryState extends State<SetCategory> {
 
   @override
   void initState() {
-    // tempArray=widget.category;
-    // print(widget.category);
+    tempArray=widget.category;
+    print(tempArray);
     getCred();
     super.initState();
   }

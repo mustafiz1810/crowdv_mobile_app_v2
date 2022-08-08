@@ -21,6 +21,7 @@ class OpportunityDetails extends StatefulWidget {
 
 class _OpportunityDetailsState extends State<OpportunityDetails>
     with TickerProviderStateMixin {
+  var eligibility;
   final double infoHeight = 364.0;
   AnimationController animationController;
   Animation<double> animation;
@@ -60,6 +61,8 @@ class _OpportunityDetailsState extends State<OpportunityDetails>
         Uri.parse(NetworkConstants.BASE_URL + 'opportunity/view/${widget.id}'),
         headers: {"Authorization": "Bearer ${widget.token}"});
     var data = jsonDecode(response.body.toString());
+    print(data);
+       eligibility = data['data']['eligibility'];
     if (response.statusCode == 200) {
       return OpportunityDetail.fromJson(data);
     } else {
@@ -789,7 +792,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails>
                                       ),
                                     ),
                                     Text(
-                                      'To',
+                                      '-',
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -842,18 +845,21 @@ class _OpportunityDetailsState extends State<OpportunityDetails>
                                         color: primaryColor,
                                       ),
                                     ),
-                                    Container(
-                                      child: Row(
-                                        children: <Widget>[
-                                          Text(
-                                            'over 18 years to assist',
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 22,
-                                              letterSpacing: 0.27,
-                                              color: DesignCourseAppTheme.grey,
-                                            ),
+                                    Expanded(
+                                      child: Column(
+                                        children: [
+                                          ListView.builder(
+                                              scrollDirection: Axis.vertical,
+                                              shrinkWrap: true,
+                                            itemCount: snapshot.data.data.eligibility.length,
+                                              itemBuilder: (context, index){
+                                                return  ListTile(
+                                                  leading: Icon(
+                                                    Icons.check_box
+                                                  ),
+                                                  title: Text(snapshot.data.data.eligibility[index].title),
+                                                );
+                                              }
                                           ),
                                         ],
                                       ),
@@ -1003,8 +1009,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails>
                                         etimem:
                                             snapshot.data.data.endTime.minute,
                                         slug: snapshot.data.data.category.slug,
-                                        eligibility: snapshot
-                                            .data.data.eligibility[0].id,
+                                        eligibility: eligibility,
                                         city: snapshot.data.data.city,
                                         state: snapshot.data.data.state,
                                         zip: snapshot.data.data.zipCode,

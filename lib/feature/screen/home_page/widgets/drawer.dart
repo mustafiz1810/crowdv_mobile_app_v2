@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:crowdv_mobile_app/data/models/profile_model.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/chat.dart';
 import 'package:crowdv_mobile_app/feature/screen/password/change_pass.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/profile.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
@@ -83,13 +84,13 @@ class _NavDrawerState extends State<NavDrawer> {
                           title: Text("Profile"),
                           onTap: () {
                             Get.to(() => ProfilePage(
-                                  disability:
-                                      snapshot.data.data.typeOfDisability,
+                              role:widget.role,
+                                  disability: snapshot.data.data.typeOfDisability,
                                   chosenValue: snapshot.data.data.profession,
                                   dropdown: snapshot.data.data.gender,
                                   selectedCountry: snapshot.data.data.state,
                                   selectedProvince: snapshot.data.data.city,
-                              zip: snapshot.data.data.zipCode,
+                                  zip: snapshot.data.data.zipCode,
                                 ));
                           }),
                     ],
@@ -121,7 +122,7 @@ class _NavDrawerState extends State<NavDrawer> {
               leading: Icon(Icons.settings),
               title: new Text("Settings"),
               onTap: () {
-                Navigator.pop(context);
+                Get.to(() => ChatUi());
               }),
           const ListTile(
             leading: Icon(Icons.info),
@@ -160,7 +161,7 @@ class _NavDrawerState extends State<NavDrawer> {
                       showToast("Logged Out");
                     });
                   },
-          )
+                )
               : Container(
                   height: 0,
                 ),

@@ -7,6 +7,7 @@ import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 class LocationUpdate extends StatefulWidget {
+  final List<int> eligibility;
   final dynamic token,id,title,
       category,
       type,
@@ -14,7 +15,6 @@ class LocationUpdate extends StatefulWidget {
       date,
       time,
       etime,
-      eligibility,
       city,
       state,
   zip;
@@ -75,28 +75,28 @@ class _LocationUpdateState extends State<LocationUpdate> {
   String selectedProvince;
   TextEditingController zipController = TextEditingController();
   void update(String title, category_id, date, start_time, end_time, state,
-      city, eligibility, details, task_type, zip_code) async {
+      city, List<int> eligibility, details, task_type, zip_code) async {
+    String body = json.encode({ 'title': title,
+      'category_id': category_id,
+      'date': date,
+      'start_time': start_time,
+      'end_time': end_time,
+      'eligibility_id': eligibility ,
+      'details': details,
+      'task_type': task_type,
+      'city': city,
+      'state': state,
+      'zip_code': zip_code,
+      'is_public': 'true',});
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'opportunity/update/${widget.id}'),
           headers: {
-            "Authorization": "Bearer ${widget.token}"
+            "Authorization": "Bearer ${widget.token}",
+            "Content-Type": "application/json"
+
           },
-          body: {
-            'title': title,
-            'category_id': category_id,
-            'date': date,
-            'start_time': start_time,
-            'end_time': end_time,
-            'eligibility_id': eligibility,
-            'details': details,
-            'task_type': task_type,
-            'city': city,
-            'state': state,
-            'zip_code': zip_code,
-            'working_hours': '10',
-            'is_public': 'true',
-          });
+          body: body);
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         print(data);
@@ -105,7 +105,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
         Navigator.popUntil(context, (route) => count++ == 3);
       } else {
         var data = jsonDecode(response.body.toString());
-        showToast(context, data['message'].toString());
+        showToast(context, data['error'].toString());
       }
     } catch (e) {
       showDialog(
@@ -306,7 +306,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
                               "  " +
                               selectedProvince.toString() +
                               "  " +
-                              widget.eligibility +
+                              widget.eligibility.toString() +
                               "  " +
                               widget.description +
                               "  " +

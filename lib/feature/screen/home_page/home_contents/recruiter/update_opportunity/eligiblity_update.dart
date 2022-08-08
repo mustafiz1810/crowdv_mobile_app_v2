@@ -29,42 +29,19 @@ class EligibilityUpdate extends StatefulWidget {
   @override
   _EligibilityUpdateState createState() => _EligibilityUpdateState();
 }
-
 class _EligibilityUpdateState extends State<EligibilityUpdate> {
-  Map<String, bool> numbers = {
-    '1': false,
-    '2': false,
-    '3': false,
-    '4': false,
-    '5': false,
-    '6': false,
-    '7': false,
-  };
+  List<int> tempArray = [];
+  Future myFuture;
+  void _answerQuestion(int id) {
+    if(tempArray.contains(id)){
+      tempArray.remove(id);
+      print(tempArray);
+    }else{
+      tempArray.add(id);
+      print(tempArray);
+    }
 
-  var holder_1 = [];
-
-  getItems() {
-    numbers.forEach((key, value) {
-      if (value == true) {
-        holder_1.add(key);
-      }
-    });
-
-    // Printing all selected items on Terminal screen.
-    print(holder_1);
-    // Here you will get all your selected Checkbox items.
-
-    // Clear array after use.
-    holder_1.clear();
   }
-
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedIndex=widget.eligibility;
-  }
-
 
   Future<EligibilityModel> getEligibilityApi() async {
     final response = await http.get(
@@ -79,8 +56,13 @@ class _EligibilityUpdateState extends State<EligibilityUpdate> {
     }
   }
 
-  int _selectedIndex;
-  bool isSelected = false;
+  @override
+  void initState() {
+    super.initState();
+    tempArray = widget.eligibility;
+    myFuture = getEligibilityApi();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,9 +79,9 @@ class _EligibilityUpdateState extends State<EligibilityUpdate> {
           padding: const EdgeInsets.only(bottom: 20.0, left: 40, right: 40),
           child: InkWellSplash(
             onTap: () {
-              getItems();
+              // getItems();
               Get.to(() => LocationUpdate(
-                eligibility: _selectedIndex.toString(),
+                eligibility: tempArray,
                 title: widget.title,
                 category: widget.category,
                 type: widget.type,
@@ -147,69 +129,58 @@ class _EligibilityUpdateState extends State<EligibilityUpdate> {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              Expanded(
-                  child: FutureBuilder<EligibilityModel>(
-                    future: getEligibilityApi(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: snapshot.data.data.length,
-                          itemBuilder: (context, index) {
-                            final post = snapshot.data.data[index];
-                            return Column(children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "Please click to select eligibility, ",
-                                      style: TextStyle(
-                                          color: primaryColor,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Card(
-                                child: ListTile(
-                                  trailing: isSelected
-                                      ? Icon(
-                                    Icons.check_circle,
-                                    color: primaryColor,
-                                  )
-                                      : Icon(
-                                    Icons.check_circle_outline,
-                                    color: Colors.grey,
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "Please select eligibility, ",
+                      style: TextStyle(
+                          color: primaryColor, fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
+              ),
+              Expanded(child: FutureBuilder<EligibilityModel>(
+                future: myFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.data.length,
+                      itemBuilder: (context, index) {
+                        return Column(children: <Widget>[
+                          Card(
+                              child: new CheckboxListTile(
+                                  activeColor: primaryColor,
+                                  dense: true,
+                                  //font change
+                                  title: new Text(
+                                    snapshot.data.data[index].title,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        letterSpacing: 0.5),
                                   ),
-                                  selected:
-                                  snapshot.data.data[index].id == _selectedIndex,
-                                  onTap: () {
+                                  value:  tempArray.contains(
+                                      snapshot.data.data[index].id)
+                                      ?true:snapshot.data.data[index].isChecked,
+                                  onChanged: (bool value) {
                                     setState(() {
-                                      isSelected=true;
-                                      _selectedIndex = snapshot.data.data[index].id;
-                                      print(_selectedIndex.toString());
+                                      snapshot.data.data[index].isChecked = value;
+                                      _answerQuestion(
+                                          snapshot.data.data[index].id);
                                     });
-                                  },
-                                  title: Text("Title:   "+snapshot.data.data[index].title,style: TextStyle(fontWeight: FontWeight.bold),),
-                                  subtitle: Text(
-                                    "Details:   " +
-                                        snapshot.data.data[index].details,
-                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ),
-                            ]);
-                          },
-                        );
-                      } else {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                    },
-                  )),
+                                  })),
+                        ]);
+                      },
+                    );
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
+              )),
             ],
           ),
         ));

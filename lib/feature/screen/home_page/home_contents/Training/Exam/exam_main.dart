@@ -14,7 +14,6 @@ class ExamPage extends StatefulWidget {
 
 class _ExamPageState extends State<ExamPage> {
   List<Map<String, int>> tempArray = [];
-  List<String> array=[];
   var _questionIndex = 0;
   String optionName;
 
@@ -24,8 +23,6 @@ class _ExamPageState extends State<ExamPage> {
       'option_id': optionId,
     };
     tempArray.add(arr);
-    array.add(opName);
-    print(array);
     // print(tempArray);
     setState(() {
       _questionIndex = _questionIndex + 1;
@@ -54,7 +51,6 @@ class _ExamPageState extends State<ExamPage> {
                   : Result(
                       tempArray,
                       widget.data[0]['test_id'],
-                      array
                     ),
             ],
           )), //Padding
