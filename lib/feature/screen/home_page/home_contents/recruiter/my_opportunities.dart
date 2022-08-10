@@ -7,6 +7,7 @@ import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:empty_widget/empty_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -87,10 +88,6 @@ class _MyOpportunityState extends State<MyOpportunity> {
                             height:  MediaQuery.of(context).size.height/3.1,
                             margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                             decoration: BoxDecoration(
-                              // image: DecorationImage(
-                              //   fit: BoxFit.cover,
-                              //   image: AssetImage("assets/undraw_pilates_gpdb.png"),
-                              // ),
                               color: Colors.white,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
@@ -126,23 +123,14 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 20, right: 20, top: 10),
+                                            left: 20, right: 20, top: 10,bottom: 5),
                                         child: Row(
                                           mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              snapshot.data.data[index].title,
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18),
-                                            ),
                                             Container(
                                               width: 80,
                                               height: 35,
-                                              margin: EdgeInsets.fromLTRB(
-                                                  0, 0, 0, 5),
                                               decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius: BorderRadius.all(
@@ -160,114 +148,119 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                         Colors.deepOrange)),
                                               ),
                                             ),
+                                            IconBox(
+                                              child: Icon(Icons.info_outline,color: Colors.white,),
+                                              bgColor: Colors.transparent,
+                                              onTap: (){
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: Text("Details"),
+                                                        content: Text(snapshot.data.data[index]
+                                                            .details,),
+                                                        actions: [
+                                                          FlatButton(
+                                                            child: Text("ok",style: TextStyle(color: Colors.white),),
+                                                            onPressed: () {
+                                                              Navigator.of(context).pop();
+                                                            },
+                                                            color: primaryColor,
+                                                          )
+                                                        ],
+                                                      );
+                                                    });
+
+                                              },
+                                            ),
                                           ],
                                         ),
                                       ),
                                     ),
                                     Padding(
-                                        padding: const EdgeInsets.only(
-                                            top:10,left: 20, right: 20),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                SizedBox(
-                                                  height: 40,
-                                                  child: Text(
-                                                    'Details:  ',
-                                                    style: TextStyle(
-                                                        color: primaryColor,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 250,
-                                                  height: 40,
-                                                  child: Text(
-                                                    snapshot.data.data[index]
-                                                        .details,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 16),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  'Location : ',
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Title : ',
+                                                style: TextStyle(
+                                                    color: primaryColor,
+                                                    fontSize: 16),
+                                              ),
+                                              SizedBox(
+                                                height: 2,
+                                              ),
+                                              Text(
+                                                'Location : ',
+                                                style: TextStyle(
+                                                    color: primaryColor,
+                                                    fontSize: 16),
+                                              ),
+                                              SizedBox(
+                                                height: 2,
+                                              ),
+                                              Text(
+                                                'Job Type: ',
+                                                style: TextStyle(
+                                                    color: primaryColor,
+                                                    fontSize: 16),
+                                              ),
+                                              SizedBox(
+                                                height: 2,
+                                              ),
+                                              Text(
+                                                'Category: ',
+                                                style: TextStyle(
+                                                    color: primaryColor,
+                                                    fontSize: 16),
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                snapshot.data.data[index].title,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14),
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(
+                                                  snapshot
+                                                      .data.data[index].city,
                                                   style: TextStyle(
-                                                      color: primaryColor,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18),
-                                                ),
-                                                Text(
-                                                    snapshot
-                                                        .data.data[index].city,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 14))
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  'Job Type: ',
+                                                      fontSize: 14)),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(
+                                                  snapshot.data.data[index]
+                                                      .taskType,
                                                   style: TextStyle(
-                                                      color: primaryColor,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18),
-                                                ),
-                                                Text(
-                                                    snapshot.data.data[index]
-                                                        .taskType,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 14))
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      'Category: ',
-                                                      style: TextStyle(
-                                                          color: primaryColor,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18),
-                                                    ),
-                                                    Text(
-                                                        snapshot
-                                                            .data
-                                                            .data[index]
-                                                            .category
-                                                            .name,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 14))
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        )),
+                                                      fontSize: 14)),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(
+                                                  snapshot
+                                                      .data
+                                                      .data[index]
+                                                      .category
+                                                      .name,
+                                                  style: TextStyle(
+                                                      fontSize: 14))
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                     Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Container(

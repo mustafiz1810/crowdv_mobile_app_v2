@@ -356,7 +356,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                   textInputAction: TextInputAction.done,
                   controller: descriptionController,
                   maxLines: 5,
-                  maxLength: 100,
+                  maxLength: 200,
                   decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),

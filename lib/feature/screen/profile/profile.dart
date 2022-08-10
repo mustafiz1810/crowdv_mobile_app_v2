@@ -68,7 +68,12 @@ class _ProfilePageState extends State<ProfilePage> {
   List<String> KentuckyProvince = ['Anchorage', 'Juneau', 'California'];
   List<String> LouisianaProvince = ['Anchorage', 'Juneau', 'California'];
   List<String> provinces = [];
-  List<String> _disability = ["Blind"];
+  List<String> _disability = [
+    "Hearing",
+    "Blind",
+    "Vision Impairment",
+    "Physical Disability"
+  ];
   List<String> _items = ["Business", "Student", "Service", "Self-employer"];
   List<String> _item = ["Male", "Female"];
   @override
@@ -230,16 +235,23 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: primaryColor,
                         ),
                       ),
-                      Positioned(
-                        left: 10,
-                        top: 10,
-                        child: CircleAvatar(
+                      widget.role == "volunteer"
+                          ? Positioned(
+                        right: 30,
+                        top: 120,
+                        child: snapshot.data.data.membership.name == "silver"?CircleAvatar(
                           backgroundColor: Colors.transparent,
                           backgroundImage:
                               AssetImage("assets/favpng_silver.png"),
                           radius: 30,
-                        ),
-                      ),
+                        ):snapshot.data.data.membership.name == "gold"?
+                        CircleAvatar(
+                          backgroundColor: Colors.transparent,
+                          backgroundImage:
+                          AssetImage("assets/gold.png"),
+                          radius: 30,
+                        ):Container(),
+                      ):Container(),
                       Positioned(
                         top: 25,
                         child: Container(
@@ -280,117 +292,40 @@ class _ProfilePageState extends State<ProfilePage> {
                                     color: Colors.black),
                               ),
                               SizedBox(
-                                height: 5,
+                                height: 2,
                               ),
-                              Row(
-                                children: [
-                                  Text("Working Hour : ",
+                              widget.role == "volunteer"
+                                  ? Row(
+                                      children: [
+                                        Text("Working Hour : ",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black)),
+                                        snapshot.data.data.workingHours != null
+                                            ? Text(
+                                                snapshot.data.data.workingHours.toString(),
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black))
+                                            : Text(
+                                                "00",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black),
+                                              ),
+                                      ],
+                                    )
+                                  : Text(
+                                      snapshot.data.data.email,
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black)),
-                                  snapshot.data.data.workingHours !=
-                                      null
-                                      ? Text(
-                                      snapshot
-                                          .data.data.workingHours,
-                                      style: TextStyle(
-                                          fontWeight:
-                                          FontWeight.bold,
-                                          color: Colors.black))
-                                      : Text(
-                                    "00",
-                                    style: TextStyle(
-                                        fontWeight:
-                                        FontWeight.bold,
-                                        color: Colors.black),
-                                  ),
-                                ],
-                              ),
+                                          fontSize: 14, color: Colors.grey),
+                                    ),
                             ],
                           ),
                         ),
                       ),
                     ],
                   ),
-                  // child: Container(
-                  //   alignment: Alignment.centerLeft,
-                  //   margin: EdgeInsets.fromLTRB(25, 10, 25, 10),
-                  //   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  //   child: Row(
-                  //     children: [
-                  //       Column(
-                  //         children: [
-                  //           CircleAvatar(
-                  //             backgroundImage:
-                  //                 NetworkImage(snapshot.data.data.image),
-                  //             radius: 30,
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       SizedBox(
-                  //         width: 10,
-                  //       ),
-                  //       Row(
-                  //         children: [
-                  //           Column(
-                  //             children: [
-                  //               Text(
-                  //                 snapshot.data.data.firstName +
-                  //                     " " +
-                  //                     snapshot.data.data.lastName,
-                  //                 style: TextStyle(
-                  //                     fontSize: 22,
-                  //                     fontWeight: FontWeight.bold,
-                  //                     color: Colors.white),
-                  //               ),
-                  //               SizedBox(
-                  //                 height: 5,
-                  //               ),
-                  //               Row(
-                  //                 mainAxisAlignment:
-                  //                 MainAxisAlignment.spaceAround,
-                  //                 children: [
-                  //                   Icon(Icons.watch_later_outlined, color: Colors.white),
-                  //                   Text(
-                  //                       "Working Hour : ",
-                  //                       style: TextStyle(
-                  //                           fontWeight: FontWeight.bold,
-                  //                           color: Colors.white)),
-                  //                   snapshot.data.data.workingHours != null
-                  //                       ? Text(
-                  //                       snapshot.data.data.workingHours,
-                  //                       style: TextStyle(
-                  //                           fontWeight: FontWeight.bold,
-                  //                           color: Colors.white))
-                  //                       : Text(
-                  //                     "00:00",
-                  //                     style: TextStyle(
-                  //                         fontWeight: FontWeight.bold,
-                  //                         color: Colors.white),
-                  //                   ),
-                  //                 ],
-                  //               ),
-                  //             ],
-                  //           ),
-                  //           SizedBox(
-                  //             width: 10,
-                  //           ),
-                  //           Column(
-                  //             children: [
-                  //               CircleAvatar(
-                  //                 backgroundColor: Colors.transparent,
-                  //                 backgroundImage: AssetImage(
-                  //                     "assets/favpng_silver.png"
-                  //                 ),
-                  //                 radius: 25,
-                  //               ),
-                  //             ],
-                  //           )
-                  //         ],
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                   SizedBox(
                     height: 100,
                   ),
@@ -601,12 +536,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                               String>(
                                                           hint: Center(
                                                               child: Text(
-                                                            "Disability:  " +
-                                                                snapshot
-                                                                    .data
-                                                                    .data
-                                                                    .typeOfDisability
-                                                                    .toString(),
+                                                            "Select Disability",
                                                             style: TextStyle(
                                                                 fontSize: 18,
                                                                 color: Colors
@@ -677,7 +607,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 child: DropdownButton<String>(
                                                     hint: Center(
                                                       child: Text(
-                                                        _profession,
+                                                        "Select Profession",
                                                         style: TextStyle(
                                                             fontSize: 18,
                                                             color: Colors.white,
@@ -759,7 +689,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     value: _gender,
                                                     hint: Center(
                                                       child: Text(
-                                                        _gender,
+                                                        "Select Gender",
                                                         style: TextStyle(
                                                             fontSize: 18,
                                                             color: Colors.white,
@@ -878,7 +808,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   child: DropdownButton<String>(
                                                     hint: Center(
                                                       child: Text(
-                                                        "select Country",
+                                                        "Select Country",
                                                         style: TextStyle(
                                                             fontSize: 18,
                                                             color: Colors.white,

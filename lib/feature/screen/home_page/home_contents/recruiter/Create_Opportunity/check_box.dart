@@ -54,6 +54,7 @@ class _CheckBoxState extends State<CheckBox> {
             'category-wise-eligibility/${widget.slug}'),
         headers: {"Authorization": "Bearer ${widget.token}"});
     var data = jsonDecode(response.body.toString());
+    print(data);
     if (response.statusCode == 200) {
       return EligibilityModel.fromJson(data);
     } else {

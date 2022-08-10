@@ -5,6 +5,7 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Trainin
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
+import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +94,7 @@ class _TestState extends State<Test> {
                             child: Column(
                               children: [
                                 Container(
-                                  height: 35,
+                                  height: 45,
                                   width: MediaQuery.of(context).size.width / 1,
                                   decoration: BoxDecoration(
                                     color: primaryColor,
@@ -111,13 +112,13 @@ class _TestState extends State<Test> {
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 20, right: 20, top: 5),
+                                        left: 20, right: 10, top: 5,bottom: 5),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         SizedBox(
-                                          width:250,
+                                          width:200,
                                           height: 20,
                                           child: Text(
                                             snapshot.data.data.tests[index].title,
@@ -127,78 +128,75 @@ class _TestState extends State<Test> {
                                                 fontSize: 18),
                                           ),
                                         ),
+                                        IconBox(
+                                          child: Icon(Icons.info_outline,color: Colors.white,),
+                                          bgColor: Colors.transparent,
+                                          onTap: (){
+                                            showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Text("Details"),
+                                                    content: Text(snapshot.data.data.tests[index].details),
+                                                    actions: [
+                                                      FlatButton(
+                                                        child: Text("ok",style: TextStyle(color: Colors.white),),
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                        color: primaryColor,
+                                                      )
+                                                    ],
+                                                  );
+                                                });
+
+                                          },
+                                        )
                                       ],
                                     ),
                                   ),
                                 ),
-                                Divider(
-                                  thickness: 4,
-                                  height: 10,
-                                  color: Colors.white,
-                                ),
                                 Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 20, right: 20),
+                                        left: 20, right: 20,top: 5),
                                     child: Column(
                                       children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'Name:  ',
-                                              style: TextStyle(
-                                                  color: primaryColor,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18),
-                                            ),
-                                            SizedBox(
-                                              width: 200,
-                                              height: 22,
-                                              child: Text(
-                                                snapshot
-                                                    .data.data.tests[index].title,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                        SizedBox(height: 5,),
                                         Row(
                                           children: [
                                             Text(
                                               'Total Score : ',
                                               style: TextStyle(
                                                   color: primaryColor,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18),
+                                                  fontSize: 16),
                                             ),
+
                                             Text(
                                                 snapshot.data.data.tests[index]
                                                     .totalScore
                                                     .toString(),
                                                 style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
                                                     fontSize: 14))
                                           ],
                                         ),
+                                        SizedBox(height: 5,),
                                         Row(
                                           children: [
                                             Text(
                                               'Passing mark: ',
                                               style: TextStyle(
                                                   color: primaryColor,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18),
+                                                  fontSize: 16),
                                             ),
                                             Text(
                                                 snapshot.data.data.tests[index]
                                                     .totalScore
                                                     .toString(),
                                                 style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
                                                     fontSize: 14))
                                           ],
                                         ),
+                                        SizedBox(height: 10,),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
@@ -209,7 +207,7 @@ class _TestState extends State<Test> {
                                               margin: EdgeInsets.fromLTRB(
                                                   0, 0, 0, 5),
                                               decoration: BoxDecoration(
-                                                color: Colors.teal,
+                                                color: primaryColor,
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(20)),
                                               ),

@@ -162,14 +162,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: widget.role == 'volunteer'
                                 ? GridView.count(
                                     // scrollDirection: Axis.horizontal,
-                                    crossAxisCount: 2,
+                                    crossAxisCount: 3,
                                     childAspectRatio: .90,
-                                    crossAxisSpacing: 5,
-                                    mainAxisSpacing: 5,
+                                    crossAxisSpacing: 2.0,
+                                    mainAxisSpacing: 2.0,
                                     children: <Widget>[
                                       CategoryCard(
                                         title: "Upcoming Opportunity",
-                                        svgSrc: "assets/86.svg",
+                                        svgSrc: "assets/bulb.png",
                                         press: () {
                                           Get.to(() => UpcomingOpportunity(
                                                 role: widget.role,

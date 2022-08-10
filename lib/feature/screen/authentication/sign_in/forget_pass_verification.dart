@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/feature/screen/authentication/sign_in/sign_in.dart';
-import 'package:crowdv_mobile_app/feature/screen/authentication/sign_up/Volunteer/volunteer_sign_up.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
-import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/header_widget.dart';
 import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/cupertino.dart';
@@ -61,6 +59,38 @@ class _ForgetPassVerifyPageState extends State<ForgetPassVerify> {
       setState(() {
         isApiCallProcess = false;
       });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+  resend(String email) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'email-otp/resend'),
+          body: {
+            'email': email,
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
+      }
+    } catch (e) {
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -277,6 +307,7 @@ class _ForgetPassVerifyPageState extends State<ForgetPassVerify> {
                               text: 'Resend',
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
+                                  resend(widget.email);
                                   _controller.start();
                                   showDialog(
                                     context: context,

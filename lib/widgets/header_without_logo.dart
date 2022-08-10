@@ -129,7 +129,7 @@ class _HeaderWidgetState extends State<HeaderWidget>
         padding: const EdgeInsets.all(20.0),
         child: Row(
           children: [
-            Column(
+            widget.role == "organization"?Container(width: 130,):Column(
               children: [
                 widget.role == 'volunteer'
                     ? LiteRollingSwitch(
@@ -176,7 +176,7 @@ class _HeaderWidgetState extends State<HeaderWidget>
                     "Crowd",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 40,
+                        fontSize: 35,
                         color: Colors.white),
                   ),
                   Image.asset('assets/crowdv_png.png',

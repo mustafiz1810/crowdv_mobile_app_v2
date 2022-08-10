@@ -23,8 +23,9 @@ class _ResultState extends State<Result> {
   bool isVisible = false;
   bool isShow = true;
   String score = "00";
-  String remark = "jsadj";
-  String name = "jsadj";
+  String remark = "pass";
+  String name = "name";
+  String lastName = "name";
 
   @override
   void initState() {
@@ -57,6 +58,7 @@ class _ResultState extends State<Result> {
           score = data['data'][0]['total_score'].toString();
           remark = data['data'][0]['result'].toString();
           name = data['data'][0]['user']['first_name'].toString();
+          lastName = data['data'][0]['user']['last_name'].toString();
           // name=
           if (isVisible == false) {
             isVisible = true;
@@ -187,7 +189,7 @@ class _ResultState extends State<Result> {
                                   fontWeight: FontWeight.bold, fontSize: 18),
                             ),
                             Text(
-                              name,
+                              name+" "+lastName,
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,

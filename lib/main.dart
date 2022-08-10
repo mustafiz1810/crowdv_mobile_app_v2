@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   await GetStorage.init();
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
     return DefaultTabController(
       length: 3,
       child: GetMaterialApp(
+        theme: ThemeData(
+            fontFamily: 'Nunito Sans'
+        ),
         debugShowCheckedModeBanner: false,
         defaultTransition: Transition.rightToLeft,
         initialRoute: "/",

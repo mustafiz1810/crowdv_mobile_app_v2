@@ -80,12 +80,16 @@ class _NavDrawerState extends State<NavDrawer> {
                         ),
                       ),
                       ListTile(
-                          leading: Icon(Icons.person),
+                          leading: Icon(
+                            Icons.person_outline_rounded,
+                            color: Colors.black,
+                          ),
                           title: Text("Profile"),
                           onTap: () {
                             Get.to(() => ProfilePage(
-                              role:widget.role,
-                                  disability: snapshot.data.data.typeOfDisability,
+                                  role: widget.role,
+                                  disability:
+                                      snapshot.data.data.typeOfDisability,
                                   chosenValue: snapshot.data.data.profession,
                                   dropdown: snapshot.data.data.gender,
                                   selectedCountry: snapshot.data.data.state,
@@ -106,26 +110,27 @@ class _NavDrawerState extends State<NavDrawer> {
           token != null
               ? Container()
               : ListTile(
-                  leading: Icon(FontAwesomeIcons.signInAlt),
+                  leading:
+                      Icon(FontAwesomeIcons.signInAlt, color: Colors.black),
                   title: const Text("Sign In"),
                   onTap: () {
                     // Navigator.pushNamed(context, '/categories');
                     Get.to(const LoginPage());
                   }),
           ListTile(
-              leading: Icon(Icons.password_rounded),
+              leading: Icon(Icons.password_rounded, color: Colors.black),
               title: Text("Change Password"),
               onTap: () {
                 Get.to(() => ChangePassword());
               }),
           ListTile(
-              leading: Icon(Icons.settings),
+              leading: Icon(Icons.settings, color: Colors.black),
               title: new Text("Settings"),
               onTap: () {
                 Get.to(() => ChatUi());
               }),
           const ListTile(
-            leading: Icon(Icons.info),
+            leading: Icon(Icons.info_outline_rounded, color: Colors.black),
             title: Text("About"),
             // onTap: () {
             //   Navigator.push(
@@ -135,7 +140,7 @@ class _NavDrawerState extends State<NavDrawer> {
             // }
           ),
           const ListTile(
-            leading: Icon(Icons.policy),
+            leading: Icon(Icons.policy_outlined, color: Colors.black),
             title: Text("Policy"),
             // onTap: () {
             //   Navigator.push(
@@ -146,7 +151,7 @@ class _NavDrawerState extends State<NavDrawer> {
           ),
           token != null
               ? new ListTile(
-                  leading: Icon(Icons.power_settings_new),
+                  leading: Icon(Icons.power_settings_new, color: Colors.black),
                   title: new Text("Logout"),
                   onTap: () async {
                     getRequest('/api/v1/logout', null, {

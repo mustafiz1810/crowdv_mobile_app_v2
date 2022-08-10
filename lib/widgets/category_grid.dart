@@ -36,24 +36,24 @@ class CategoryCard extends StatelessWidget {
           child: InkWell(
             onTap: press,
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(10.0),
               child: Column(
                 children: <Widget>[
                   Spacer(),
                   Container(
-                    height: 100,
-                    width: 300,
-                    child: SvgPicture.asset(
+                    child: Image.asset(
                         svgSrc,
                     ),
                   ),
-                  Spacer(),
+                  Spacer(
+                    flex: 1,
+                  ),
                   Text(
                     title,
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme.titleSmall
-                        .copyWith(fontSize: 15),
+                        .copyWith(fontSize: 11),
                   )
                 ],
               ),

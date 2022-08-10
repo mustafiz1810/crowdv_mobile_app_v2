@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/data/models/recruiter/apply_volunteer.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/chat.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:http/http.dart' as http;
 import '../../../../../widgets/show_toast.dart';
 
@@ -269,6 +271,9 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
                                                 size: 18,
                                               ),
                                               bgColor: primaryColor,
+                                                onTap: () {
+                                                  Get.to(() => ChatUi());
+                                                }
                                             ),
                                           ],
                                         )),
