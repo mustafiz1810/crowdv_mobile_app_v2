@@ -25,8 +25,8 @@ class CategoryCard extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               offset: Offset(0, 0),
-              blurRadius: 18,
-              spreadRadius: -14,
+              blurRadius: 4,
+              spreadRadius: -1,
               color: kShadowColor,
             ),
           ],
@@ -41,18 +41,19 @@ class CategoryCard extends StatelessWidget {
                 children: <Widget>[
                   Spacer(),
                   Container(
-                    child: Image.asset(
-                        svgSrc,
+                    height: 32,
+                    width: 40,
+                    child: SvgPicture.asset(
+                      svgSrc,
                     ),
                   ),
-                  Spacer(
-                    flex: 1,
-                  ),
+                  Spacer(),
                   Text(
                     title,
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
-                        .textTheme.titleSmall
+                        .textTheme
+                        .titleSmall
                         .copyWith(fontSize: 11),
                   )
                 ],

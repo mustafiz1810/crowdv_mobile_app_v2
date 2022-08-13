@@ -57,7 +57,7 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
                   child: FutureBuilder<ApplyVolunteer>(
                     future: getApplyApi(),
                     builder: (context, snapshot) {
-                      if (snapshot.hasData) {
+                      if (snapshot.hasData && snapshot.data.data.applyVolunteer.isNotEmpty) {
                         return ListView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,

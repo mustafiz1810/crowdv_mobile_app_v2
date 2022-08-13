@@ -150,83 +150,131 @@ class _LocationUpdateState extends State<LocationUpdate> {
           children: [
             Container(
               width: 360,
-              padding: EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+              padding: EdgeInsets.symmetric(
+                  vertical: 2,
+                  horizontal: 15),
               decoration: BoxDecoration(
-                  color: primaryColor, borderRadius: BorderRadius.circular(30)),
+                  color: Colors.white,
+                  borderRadius:
+                  const BorderRadius.all(
+                      Radius.circular(
+                          12.0)),
+                  border: Border.all(
+                      color: Colors.black)),
               child: Center(
                 child: DropdownButton<String>(
                   hint: Center(
                     child: Text(
-                      'Select State',
+                      "Select Country",
                       style: TextStyle(
                           fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
+                          color: Colors.black,
+                          fontWeight:
+                          FontWeight
+                              .bold),
                     ),
                   ),
                   underline: SizedBox(),
-                  iconEnabledColor: Colors.white,
+                  iconEnabledColor:
+                  Colors.black,
                   value: selectedCountry,
                   isExpanded: true,
-                  items: countries.map((String value) {
-                    return DropdownMenuItem<String>(
+                  items: countries
+                      .map((String value) {
+                    return DropdownMenuItem<
+                        String>(
                       value: value,
                       child: Text(value),
                     );
                   }).toList(),
-                  selectedItemBuilder: (BuildContext context) => countries
-                      .map((e) => Center(
-                            child: Text(
-                              e,
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ))
-                      .toList(),
+                  selectedItemBuilder:
+                      (BuildContext
+                  context) =>
+                      countries
+                          .map(
+                              (e) =>
+                              Center(
+                                child:
+                                Text(
+                                  e,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ))
+                          .toList(),
                   onChanged: (country) {
-                    if (country == 'Alabama') {
-                      provinces = AlabamaProvince;
-                    } else if (country == 'Alaska') {
-                      provinces = AlaskaProvince;
-                    } else if (country == 'California') {
-                      provinces = CaliforniaProvince;
-                    } else if (country == 'Connecticut') {
-                      provinces = ConnecticutProvince;
-                    } else if (country == 'Delaware') {
-                      provinces = DelawareProvince;
-                    } else if (country == 'Florida') {
-                      provinces = FloridaProvince;
-                    } else if (country == 'Illinois') {
-                      provinces = IllinoisProvince;
-                    } else if (country == 'Kansas') {
-                      provinces = KansasProvince;
-                    } else if (country == 'Kentucky') {
-                      provinces = KentuckyProvince;
-                    } else if (country == 'Louisiana') {
-                      provinces = LouisianaProvince;
+                    if (country ==
+                        'Alabama') {
+                      provinces =
+                          AlabamaProvince;
+                    } else if (country ==
+                        'Alaska') {
+                      provinces =
+                          AlaskaProvince;
+                    } else if (country ==
+                        'California') {
+                      provinces =
+                          CaliforniaProvince;
+                    } else if (country ==
+                        'Connecticut') {
+                      provinces =
+                          ConnecticutProvince;
+                    } else if (country ==
+                        'Delaware') {
+                      provinces =
+                          DelawareProvince;
+                    } else if (country ==
+                        'Florida') {
+                      provinces =
+                          FloridaProvince;
+                    } else if (country ==
+                        'Illinois') {
+                      provinces =
+                          IllinoisProvince;
+                    } else if (country ==
+                        'Kansas') {
+                      provinces =
+                          KansasProvince;
+                    } else if (country ==
+                        'Kentucky') {
+                      provinces =
+                          KentuckyProvince;
+                    } else if (country ==
+                        'Louisiana') {
+                      provinces =
+                          LouisianaProvince;
                     } else {
                       provinces = [];
                     }
                     setState(() {
                       selectedProvince = null;
-                      selectedCountry = country;
-                      print(selectedCountry.toString());
+                      selectedCountry =
+                          country;
+                      print(selectedCountry
+                          .toString());
                     });
                   },
                 ),
               ),
             ),
             SizedBox(
-              height: 5,
+              height: 20,
             ),
             Container(
               width: 360,
-              padding: EdgeInsets.symmetric(vertical: 1, horizontal: 15),
+              padding: EdgeInsets.symmetric(
+                  vertical: 1,
+                  horizontal: 15),
               decoration: BoxDecoration(
-                  color: secondaryColor,
-                  borderRadius: BorderRadius.circular(30)),
+                  color: Colors.white,
+                  borderRadius:
+                  const BorderRadius.all(
+                      Radius.circular(
+                          12.0)),
+                  border: Border.all(
+                      color: Colors.black)),
               child: Center(
                 child: DropdownButton<String>(
                   hint: Center(
@@ -234,48 +282,65 @@ class _LocationUpdateState extends State<LocationUpdate> {
                       widget.city.toString(),
                       style: TextStyle(
                           fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
+                          color: Colors.black,
+                          fontWeight:
+                          FontWeight
+                              .bold),
                     ),
                   ),
                   underline: SizedBox(),
-                  iconEnabledColor: Colors.white,
+                  iconEnabledColor:
+                  Colors.black,
                   value: selectedProvince,
                   isExpanded: true,
-                  items: provinces.map((String value) {
-                    return DropdownMenuItem<String>(
+                  items: provinces
+                      .map((String value) {
+                    return DropdownMenuItem<
+                        String>(
                       value: value,
                       child: Text(value),
                     );
                   }).toList(),
-                  selectedItemBuilder: (BuildContext context) => provinces
-                      .map((e) => Center(
-                            child: Text(
-                              e,
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ))
-                      .toList(),
+                  selectedItemBuilder:
+                      (BuildContext
+                  context) =>
+                      provinces
+                          .map(
+                              (e) =>
+                              Center(
+                                child:
+                                Text(
+                                  e,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ))
+                          .toList(),
                   onChanged: (province) {
                     setState(() {
-                      selectedProvince = province;
-                      print(selectedProvince.toString());
+                      selectedProvince =
+                          province;
+                      print(selectedProvince
+                          .toString());
                     });
                   },
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 20),
             Container(
+              height: 50,
               child: TextFormField(
                 controller: zipController,
                 decoration: ThemeHelper()
-                    .textInputDecoration('Zip Code', 'Enter your zip code'),
+                    .textInputDecoration(
+                    'Zip Code',
+                    'Enter your zip code'),
               ),
-              decoration: ThemeHelper().inputBoxDecorationShaddow(),
+              decoration: ThemeHelper()
+                  .inputBoxDecorationShaddow(),
             ),
             SizedBox(
               height: 20,

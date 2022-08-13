@@ -12,10 +12,10 @@ class ThemeHelper{
       labelStyle: TextStyle(fontWeight: FontWeight.bold),
       filled: true,
       contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100.0), borderSide: BorderSide(color: Colors.grey)),
-      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100.0), borderSide: BorderSide(color: Colors.grey.shade400)),
-      errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100.0), borderSide: BorderSide(color: Colors.red, width: 2.0)),
-      focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100.0), borderSide: BorderSide(color: Colors.red, width: 2.0)),
+      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
+      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
+      errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.red, width: 2.0)),
+      focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.red, width: 2.0)),
     );
   }
 
@@ -34,12 +34,13 @@ class ThemeHelper{
       focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100.0), borderSide: BorderSide(color: Colors.red, width: 2.0)),
     );
   }
+
   BoxDecoration inputBoxDecorationShaddow() {
     return BoxDecoration(boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.1),
-        blurRadius: 20,
-        offset: const Offset(0, 5),
+        color: Colors.white,
+        blurRadius: 60,
+        offset: Offset(1,1),
       )
     ]);
   }

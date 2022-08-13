@@ -121,54 +121,58 @@ class _HeaderWidgetState extends State<HeaderWidget>
       height: 100,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20)),
-        color: primaryColor,
+            bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+        color: Colors.white,
       ),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Row(
           children: [
-            widget.role == "organization"?Container(width: 130,):Column(
-              children: [
-                widget.role == 'volunteer'
-                    ? LiteRollingSwitch(
-                  value: volunteer,
-                  iconOn: Icons.accessibility,
-                  iconOff: Icons.accessible,
-                  colorOff: Colors.blue,
-                  colorOn: secondaryColor,
-                  onChanged: (val) {
-                    volunteer = val;
-                    print("volunteer");
-                  },
-                  onTap: () {
-                    vol();
-                  },
-                  animationDuration: Duration(seconds: 1),
-                  textOn: "Volunteer",
-                  textOff: "Recruiter",
-                )
-                    : LiteRollingSwitch(
-                  value: recruiter,
-                  iconOn: Icons.accessibility,
-                  iconOff: Icons.accessible,
-                  colorOff: Colors.blue,
-                  colorOn: secondaryColor,
-                  onChanged: (val) {
-                    recruiter = val;
-                    print("recruiter");
-                  },
-                  onTap: () {
-                    rec();
-                  },
-                  animationDuration: Duration(milliseconds: 1),
-                  textOn: "Volunteer",
-                  textOff: "Recruiter",
-                ),
-              ],
+            widget.role == "organization"
+                ? Container(
+                    width: 130,
+                  )
+                : Column(
+                    children: [
+                      widget.role == 'volunteer'
+                          ? LiteRollingSwitch(
+                              value: volunteer,
+                              iconOn: Icons.accessibility,
+                              iconOff: Icons.accessible,
+                              colorOff: Color(0xFF508991),
+                              colorOn: Color(0xFF09bc8a),
+                              onChanged: (val) {
+                                volunteer = val;
+                              },
+                              onTap: () {
+                                vol();
+                              },
+                              animationDuration: Duration(seconds: 1),
+                              textOn: "Volunteer",
+                              textOff: "Recruiter",
+                            )
+                          : LiteRollingSwitch(
+                              value: recruiter,
+                              iconOn: Icons.accessibility,
+                              iconOff: Icons.accessible,
+                              colorOff: Color(0xFF508991),
+                              colorOn: Color(0xFF09bc8a),
+                              onChanged: (val) {
+                                recruiter = val;
+                                print("recruiter");
+                              },
+                              onTap: () {
+                                rec();
+                              },
+                              animationDuration: Duration(milliseconds: 1),
+                              textOn: "Volunteer",
+                              textOff: "Recruiter",
+                            ),
+                    ],
+                  ),
+            SizedBox(
+              width: 60,
             ),
-            SizedBox(width: 60,),
             Column(
               children: [
                 Row(children: [
@@ -177,10 +181,9 @@ class _HeaderWidgetState extends State<HeaderWidget>
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 35,
-                        color: Colors.white),
+                        color: Colors.black),
                   ),
-                  Image.asset('assets/crowdv_png.png',
-                      width: 40, height: 50),
+                  Image.asset('assets/crowdv_png.png', width: 40, height: 50),
                 ]),
               ],
             ),

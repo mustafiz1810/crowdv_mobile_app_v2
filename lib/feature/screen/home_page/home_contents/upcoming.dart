@@ -282,10 +282,11 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                 ),
                                 Positioned(
                                     left: 20,
-                                    top: 202,
+                                    top: 195,
                                     child: Row(
                                       children: [
-                                        Text("Recruiter Name: "),
+                                        Icon(Icons.wheelchair_pickup_sharp),
+                                        SizedBox(width: 10,),
                                         Text(
                                           snapshot.data.data[index].recruiter
                                                   .firstName +
@@ -300,52 +301,48 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                 Positioned(
                                     right: 20,
                                     top: 193,
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 80,
-                                          height: 35,
-                                          margin:
-                                              EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                          decoration: BoxDecoration(
-                                            color: primaryColor,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)),
-                                          ),
-                                          child: Center(
-                                            child: InkWell(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => OpportunityDetails(
-                                                          role: widget.role,
-                                                          id: snapshot
-                                                              .data.data[index].id,
-                                                          token: token)),
-                                                ).then((value) => setState(() {}));
-                                              },
-                                              child: Container(
-                                                // width: 80,
-                                                // height: 30,
-                                                // margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                                // decoration: BoxDecoration(
-                                                //   color: primaryColor,
-                                                //   borderRadius: BorderRadius.all(Radius.circular(20)),
-                                                // ),
-                                                child: Center(
-                                                    child: Text('Details',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 16,
-                                                            color:
-                                                                Colors.white))),
-                                              ),
-                                            ),
+                                    child: Container(
+                                      width: 80,
+                                      height: 35,
+                                      margin:
+                                      EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                      decoration: BoxDecoration(
+                                        color: primaryColor,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20)),
+                                      ),
+                                      child: Center(
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => OpportunityDetails(
+                                                      role: widget.role,
+                                                      id: snapshot
+                                                          .data.data[index].id,
+                                                      token: token)),
+                                            ).then((value) => setState(() {}));
+                                          },
+                                          child: Container(
+                                            // width: 80,
+                                            // height: 30,
+                                            // margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                            // decoration: BoxDecoration(
+                                            //   color: primaryColor,
+                                            //   borderRadius: BorderRadius.all(Radius.circular(20)),
+                                            // ),
+                                            child: Center(
+                                                child: Text('Details',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                        FontWeight.bold,
+                                                        fontSize: 16,
+                                                        color:
+                                                        Colors.white))),
                                           ),
                                         ),
-                                      ],
+                                      ),
                                     )),
                               ],
                             ),

@@ -22,18 +22,16 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: primaryColor,
-        systemNavigationBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.dark,
       ),
     );
     return DefaultTabController(
       length: 3,
       child: GetMaterialApp(
-        theme: ThemeData(
-            fontFamily: 'Nunito Sans'
-        ),
+        theme: ThemeData(fontFamily: 'Airbnb Cereal'),
         debugShowCheckedModeBanner: false,
-        defaultTransition: Transition.rightToLeft,
+        defaultTransition: Transition.fadeIn,
         initialRoute: "/",
         home: SplashView(),
         builder: EasyLoading.init(),

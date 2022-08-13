@@ -4,10 +4,12 @@ import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/data/models/profile_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/profile_update_basic.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
+import 'package:crowdv_mobile_app/utils/design_details.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -132,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data);
+        setState(() {});
         showToast(context, data['message']);
       } else {
         var data = jsonDecode(response.body.toString());
@@ -172,7 +174,7 @@ class _ProfilePageState extends State<ProfilePage> {
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data);
+        setState(() {});
         showToast(context, data['message']);
       } else {
         var data = jsonDecode(response.body.toString());
@@ -205,13 +207,13 @@ class _ProfilePageState extends State<ProfilePage> {
         appBar: AppBar(
           title: Text(
             "Profile Page",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           elevation: 0.5,
-          iconTheme: IconThemeData(color: Colors.white),
+          iconTheme: IconThemeData(color: Colors.black),
           flexibleSpace: Container(
             decoration: BoxDecoration(
-              color: primaryColor,
+              color: Colors.white,
             ),
           ),
         ),
@@ -222,112 +224,144 @@ class _ProfilePageState extends State<ProfilePage> {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Stack(
-                    clipBehavior: Clip.none,
+                  Container(
                     alignment: Alignment.center,
-                    children: [
-                      Container(
-                        height: 110,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              bottomRight: Radius.circular(20)),
-                          color: primaryColor,
+                    margin: EdgeInsets.fromLTRB(25, 10, 25, 10),
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Column(
+                      children: [
+                        Stack(children: [
+                          Container(
+                            height: 70,
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(snapshot.data.data.image),
+                              radius: 35,
+                            ),
+                          ),
+                          Positioned(
+                            top: 40,
+                            child: snapshot.data.data.membership.name ==
+                                    "Silver"
+                                ? CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    backgroundImage:
+                                        AssetImage("assets/favpng_silver.png"),
+                                    radius: 15,
+                                  )
+                                : snapshot.data.data.membership.name == "Gold"
+                                    ? CircleAvatar(
+                                        backgroundColor: Colors.transparent,
+                                        backgroundImage:
+                                            AssetImage("assets/gold.png"),
+                                        radius: 15,
+                                      )
+                                    : Container(),
+                          )
+                        ]),
+                        SizedBox(
+                          height: 5,
                         ),
-                      ),
-                      widget.role == "volunteer"
-                          ? Positioned(
-                        right: 30,
-                        top: 120,
-                        child: snapshot.data.data.membership.name == "silver"?CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          backgroundImage:
-                              AssetImage("assets/favpng_silver.png"),
-                          radius: 30,
-                        ):snapshot.data.data.membership.name == "gold"?
-                        CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          backgroundImage:
-                          AssetImage("assets/gold.png"),
-                          radius: 30,
-                        ):Container(),
-                      ):Container(),
-                      Positioned(
-                        top: 25,
-                        child: Container(
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.fromLTRB(25, 10, 25, 10),
-                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 100,
-                                width: 100,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border:
-                                      Border.all(width: 5, color: Colors.white),
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black12,
-                                      blurRadius: 20,
-                                      offset: const Offset(5, 5),
+                        Text(
+                          snapshot.data.data.firstName +
+                              " " +
+                              snapshot.data.data.lastName,
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.location_on_rounded,size: 13,),
+                            Text(
+                              snapshot.data.data.city,
+                              style: TextStyle(fontSize: 14, color: Colors.black),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  "4",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                                Text(
+                                  "Opportunity",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.black),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      "4.5",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
                                     ),
+                                    Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                      size: 16,
+                                    )
                                   ],
                                 ),
-                                child: Image.network(snapshot.data.data.image),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                snapshot.data.data.firstName +
-                                    " " +
-                                    snapshot.data.data.lastName,
-                                style: TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-                              SizedBox(
-                                height: 2,
-                              ),
-                              widget.role == "volunteer"
-                                  ? Row(
-                                      children: [
-                                        Text("Working Hour : ",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black)),
-                                        snapshot.data.data.workingHours != null
-                                            ? Text(
-                                                snapshot.data.data.workingHours.toString(),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black))
-                                            : Text(
-                                                "00",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                      ],
-                                    )
-                                  : Text(
-                                      snapshot.data.data.email,
+                                Text(
+                                  "Rating",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.black),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                snapshot.data.data.workingHours != null
+                                        ? Text(
+                                        snapshot.data.data.workingHours
+                                            .toString(),
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black))
+                                        : Text(
+                                      "00",
                                       style: TextStyle(
-                                          fontSize: 14, color: Colors.grey),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
                                     ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                                Text("Working Hour",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black)),
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    height: 10,
+                    color: Colors.black,
                   ),
                   SizedBox(
-                    height: 100,
+                    height: 10,
                   ),
                   Expanded(
                     child: DefaultTabController(
@@ -347,17 +381,20 @@ class _ProfilePageState extends State<ProfilePage> {
                                     icon: Icon(Icons.phone),
                                     child: const Text('Contact')),
                               ],
+                              labelColor: Colors.black,
                               unselectedLabelColor: Colors.black38,
                               indicatorSize: TabBarIndicatorSize.tab,
-                              indicator: BubbleTabIndicator(
-                                indicatorHeight: 70.0,
-                                indicatorColor: primaryColor,
-                                indicatorRadius: 5,
-                                tabBarIndicatorSize: TabBarIndicatorSize.tab,
-                                // Other flags
-                                // indicatorRadius: 1,
-                                insets: EdgeInsets.all(2),
-                                // padding: EdgeInsets.all(10)
+                              indicator: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: Color(0xFFfaf9f9),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black38,
+                                    blurRadius: 2,
+                                    offset: Offset(
+                                        1, 1), // changes position of shadow
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -391,44 +428,43 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     ),
                                                     textAlign: TextAlign.left,
                                                   ),
-                                                  IconBox(
-                                                    child: Icon(
-                                                      Icons.create,
-                                                      color: Colors.white,
-                                                    ),
-                                                    bgColor: Colors.lightBlue,
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                ProfileUpdate(
-                                                                  token: token,
-                                                                  fname: snapshot
-                                                                      .data
-                                                                      .data
-                                                                      .firstName,
-                                                                  lname: snapshot
-                                                                      .data
-                                                                      .data
-                                                                      .lastName,
-                                                                  email: snapshot
-                                                                      .data
-                                                                      .data
-                                                                      .email,
-                                                                  phone: snapshot
-                                                                      .data
-                                                                      .data
-                                                                      .phone,
-                                                                  dob: snapshot
-                                                                      .data
-                                                                      .data
-                                                                      .dob,
-                                                                )),
-                                                      ).then((value) =>
-                                                          setState(() {}));
-                                                    },
-                                                  ),
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  ProfileUpdate(
+                                                                    token:
+                                                                        token,
+                                                                    fname: snapshot
+                                                                        .data
+                                                                        .data
+                                                                        .firstName,
+                                                                    lname: snapshot
+                                                                        .data
+                                                                        .data
+                                                                        .lastName,
+                                                                    email: snapshot
+                                                                        .data
+                                                                        .data
+                                                                        .email,
+                                                                    phone: snapshot
+                                                                        .data
+                                                                        .data
+                                                                        .phone,
+                                                                    dob: snapshot
+                                                                        .data
+                                                                        .data
+                                                                        .dob,
+                                                                  )),
+                                                        ).then((value) =>
+                                                            setState(() {}));
+                                                      },
+                                                      child: Icon(
+                                                        Icons.edit,
+                                                        color: Colors.black,
+                                                      ))
                                                 ],
                                               ),
                                             ),
@@ -513,24 +549,27 @@ class _ProfilePageState extends State<ProfilePage> {
                                         ),
                                       ),
                                       Container(
-                                        padding: EdgeInsets.all(10),
+                                        padding: EdgeInsets.all(18),
                                         child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
                                           children: [
                                             snapshot.data.data.role ==
                                                     "recruiter"
                                                 ? Container(
-                                                    width: 300,
+                                                    width: 360,
                                                     padding:
                                                         EdgeInsets.symmetric(
-                                                            vertical: 5,
+                                                            vertical: 2,
                                                             horizontal: 15),
                                                     decoration: BoxDecoration(
-                                                        color: primaryColor,
+                                                        color: Colors.white,
                                                         borderRadius:
-                                                            BorderRadius
-                                                                .circular(30)),
+                                                            const BorderRadius
+                                                                    .all(
+                                                                Radius.circular(
+                                                                    12.0)),
+                                                        border: Border.all(
+                                                            color:
+                                                                Colors.black)),
                                                     child: Center(
                                                       child: DropdownButton<
                                                               String>(
@@ -540,11 +579,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             style: TextStyle(
                                                                 fontSize: 18,
                                                                 color: Colors
-                                                                    .white,
+                                                                    .black,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold),
                                                           )),
+                                                          isExpanded: true,
                                                           value: disability,
                                                           // elevation: 5,
                                                           style: TextStyle(
@@ -555,7 +595,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                   FontWeight
                                                                       .w600),
                                                           iconEnabledColor:
-                                                              Colors.white,
+                                                              Colors.black,
                                                           items: _disability.map<
                                                                   DropdownMenuItem<
                                                                       String>>(
@@ -575,7 +615,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                             child:
                                                                                 Text(
                                                                               e,
-                                                                              style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+                                                                              style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
                                                                             ),
                                                                           ))
                                                                       .toList(),
@@ -592,17 +632,20 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   )
                                                 : Container(),
                                             SizedBox(
-                                              height: 10,
+                                              height: 20,
                                             ),
                                             Container(
-                                              width: 300,
+                                              width: 360,
                                               padding: EdgeInsets.symmetric(
-                                                  vertical: 5, horizontal: 15),
+                                                  vertical: 2, horizontal: 15),
                                               decoration: BoxDecoration(
-                                                  color: secondaryColor,
+                                                  color: Colors.white,
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          30)),
+                                                      const BorderRadius.all(
+                                                          Radius.circular(
+                                                              12.0)),
+                                                  border: Border.all(
+                                                      color: Colors.black)),
                                               child: Center(
                                                 child: DropdownButton<String>(
                                                     hint: Center(
@@ -610,13 +653,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         "Select Profession",
                                                         style: TextStyle(
                                                             fontSize: 18,
-                                                            color: Colors.white,
+                                                            color: Colors.black,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold),
                                                       ),
                                                     ),
                                                     value: _profession,
+                                                    isExpanded: true,
                                                     // elevation: 5,
                                                     style: TextStyle(
                                                         color: Colors.black,
@@ -624,7 +668,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         fontWeight:
                                                             FontWeight.w600),
                                                     iconEnabledColor:
-                                                        Colors.white,
+                                                        Colors.black,
                                                     items: _items.map<
                                                             DropdownMenuItem<
                                                                 String>>(
@@ -647,24 +691,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                             e,
                                                                             style: TextStyle(
                                                                                 fontSize: 18,
-                                                                                color: Colors.white,
+                                                                                color: Colors.black,
                                                                                 fontWeight: FontWeight.bold),
                                                                           ),
                                                                         ))
                                                                 .toList(),
                                                     underline: Container(),
-                                                    // hint: Text(
-                                                    //   "Please choose a service",
-                                                    //   style: TextStyle(
-                                                    //       fontSize: 18,
-                                                    //       color: Colors.white,
-                                                    //       fontWeight: FontWeight.bold),
-                                                    // ),
-                                                    // icon: Icon(
-                                                    //   Icons.arrow_downward,
-                                                    //   color: Colors.yellow,
-                                                    // ),
-                                                    // isExpanded: true,
                                                     onChanged: (String value) {
                                                       setState(() {
                                                         _profession = value;
@@ -673,19 +705,23 @@ class _ProfilePageState extends State<ProfilePage> {
                                               ),
                                             ),
                                             SizedBox(
-                                              height: 10,
+                                              height: 20,
                                             ),
                                             Container(
-                                              width: 300,
+                                              width: 360,
                                               padding: EdgeInsets.symmetric(
-                                                  vertical: 5, horizontal: 15),
+                                                  vertical: 2, horizontal: 15),
                                               decoration: BoxDecoration(
-                                                  color: primaryColor,
+                                                  color: Colors.white,
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          30)),
+                                                      const BorderRadius.all(
+                                                          Radius.circular(
+                                                              12.0)),
+                                                  border: Border.all(
+                                                      color: Colors.black)),
                                               child: Center(
                                                 child: DropdownButton<String>(
+                                                    isExpanded: true,
                                                     value: _gender,
                                                     hint: Center(
                                                       child: Text(
@@ -705,7 +741,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         fontWeight:
                                                             FontWeight.w600),
                                                     iconEnabledColor:
-                                                        Colors.white,
+                                                        Colors.black,
                                                     items: _item.map<
                                                             DropdownMenuItem<
                                                                 String>>(
@@ -728,7 +764,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                             value,
                                                                             style: TextStyle(
                                                                                 fontSize: 18,
-                                                                                color: Colors.white,
+                                                                                color: Colors.black,
                                                                                 fontWeight: FontWeight.bold),
                                                                           ),
                                                                         ))
@@ -741,51 +777,32 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     }),
                                               ),
                                             ),
-                                            SizedBox(height: 70),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                SizedBox.fromSize(
-                                                  size: Size(70,
-                                                      70), // button width and height
-                                                  child: ClipOval(
-                                                    child: Material(
-                                                      color:
-                                                          primaryColor, // button color
-                                                      child: InkWell(
-                                                        splashColor:
-                                                            secondaryColor, // splash color
-                                                        onTap: () {
-                                                          set(
-                                                              _gender,
-                                                              disability,
-                                                              _profession);
-                                                        }, // button pressed
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: <Widget>[
-                                                            Icon(
-                                                              Icons.save,
-                                                              color:
-                                                                  Colors.white,
-                                                            ), // icon
-                                                            Text(
-                                                              "Save",
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white),
-                                                            ), // text
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
+                                            SizedBox(height: 50),
+                                            SizedBox(
+                                              height: 50,
+                                              width: 300,
+                                              child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: primaryColor,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              13)),
+                                                ),
+                                                onPressed: () {
+                                                  set(_gender, disability,
+                                                      _profession);
+                                                },
+                                                child: Center(
+                                                  child: Text(
+                                                    "Save",
+                                                    style: GoogleFonts.kanit(
+                                                        color: Colors.white,
+                                                        fontSize: 16),
                                                   ),
                                                 ),
-                                              ],
-                                            )
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -794,16 +811,22 @@ class _ProfilePageState extends State<ProfilePage> {
                                         child: SingleChildScrollView(
                                           child: Column(
                                             children: [
+                                              SizedBox(
+                                                height: 20,
+                                              ),
                                               Container(
                                                 width: 360,
                                                 padding: EdgeInsets.symmetric(
                                                     vertical: 2,
                                                     horizontal: 15),
                                                 decoration: BoxDecoration(
-                                                    color: primaryColor,
+                                                    color: Colors.white,
                                                     borderRadius:
-                                                        BorderRadius.circular(
-                                                            30)),
+                                                        const BorderRadius.all(
+                                                            Radius.circular(
+                                                                12.0)),
+                                                    border: Border.all(
+                                                        color: Colors.black)),
                                                 child: Center(
                                                   child: DropdownButton<String>(
                                                     hint: Center(
@@ -811,7 +834,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         "Select Country",
                                                         style: TextStyle(
                                                             fontSize: 18,
-                                                            color: Colors.white,
+                                                            color: Colors.black,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold),
@@ -819,7 +842,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     ),
                                                     underline: SizedBox(),
                                                     iconEnabledColor:
-                                                        Colors.white,
+                                                        Colors.black,
                                                     value: selectedCountry,
                                                     isExpanded: true,
                                                     items: countries
@@ -842,7 +865,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                             e,
                                                                             style: TextStyle(
                                                                                 fontSize: 18,
-                                                                                color: Colors.white,
+                                                                                color: Colors.black,
                                                                                 fontWeight: FontWeight.bold),
                                                                           ),
                                                                         ))
@@ -903,7 +926,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 ),
                                               ),
                                               SizedBox(
-                                                height: 5,
+                                                height: 20,
                                               ),
                                               Container(
                                                 width: 360,
@@ -911,10 +934,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     vertical: 1,
                                                     horizontal: 15),
                                                 decoration: BoxDecoration(
-                                                    color: secondaryColor,
+                                                    color: Colors.white,
                                                     borderRadius:
-                                                        BorderRadius.circular(
-                                                            30)),
+                                                        const BorderRadius.all(
+                                                            Radius.circular(
+                                                                12.0)),
+                                                    border: Border.all(
+                                                        color: Colors.black)),
                                                 child: Center(
                                                   child: DropdownButton<String>(
                                                     hint: Center(
@@ -922,7 +948,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         'select city',
                                                         style: TextStyle(
                                                             fontSize: 18,
-                                                            color: Colors.white,
+                                                            color: Colors.black,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold),
@@ -930,7 +956,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     ),
                                                     underline: SizedBox(),
                                                     iconEnabledColor:
-                                                        Colors.white,
+                                                        Colors.black,
                                                     value: selectedProvince,
                                                     isExpanded: true,
                                                     items: provinces
@@ -953,7 +979,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                             e,
                                                                             style: TextStyle(
                                                                                 fontSize: 18,
-                                                                                color: Colors.white,
+                                                                                color: Colors.black,
                                                                                 fontWeight: FontWeight.bold),
                                                                           ),
                                                                         ))
@@ -969,7 +995,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   ),
                                                 ),
                                               ),
-                                              SizedBox(height: 10),
+                                              SizedBox(height: 20),
                                               Container(
                                                 child: TextFormField(
                                                   controller: zipController,
@@ -981,55 +1007,38 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 decoration: ThemeHelper()
                                                     .inputBoxDecorationShaddow(),
                                               ),
+                                              SizedBox(height: 50),
                                               SizedBox(
-                                                height: 20,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  SizedBox.fromSize(
-                                                    size: Size(70,
-                                                        70), // button width and height
-                                                    child: ClipOval(
-                                                      child: Material(
-                                                        color:
-                                                            primaryColor, // button color
-                                                        child: InkWell(
-                                                          splashColor:
-                                                              secondaryColor, // splash color
-                                                          onTap: () {
-                                                            location(
-                                                                selectedCountry,
-                                                                selectedProvince,
-                                                                zipController
-                                                                    .text
-                                                                    .toString());
-                                                          }, // button pressed
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: <Widget>[
-                                                              Icon(
-                                                                Icons.save,
-                                                                color: Colors
-                                                                    .white,
-                                                              ), // icon
-                                                              Text(
-                                                                "Save",
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white),
-                                                              ), // text
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
+                                                height: 50,
+                                                width: 300,
+                                                child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    primary: primaryColor,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        13)),
+                                                  ),
+                                                  onPressed: () {
+                                                    location(
+                                                        selectedCountry,
+                                                        selectedProvince,
+                                                        zipController.text
+                                                            .toString());
+                                                  },
+                                                  child: Center(
+                                                    child: Text(
+                                                      "Save",
+                                                      style: GoogleFonts.kanit(
+                                                          color: Colors.white,
+                                                          fontSize: 16),
                                                     ),
                                                   ),
-                                                ],
-                                              )
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         ),

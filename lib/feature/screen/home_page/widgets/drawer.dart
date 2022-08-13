@@ -1,11 +1,6 @@
-import 'dart:convert';
-
-import 'package:crowdv_mobile_app/data/models/profile_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/chat.dart';
 import 'package:crowdv_mobile_app/feature/screen/password/change_pass.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/profile.dart';
-import 'package:crowdv_mobile_app/utils/constants.dart';
-import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/get_prefs.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:flutter/material.dart';
@@ -14,18 +9,26 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../utils/view_utils/common_util.dart';
-import 'package:http/http.dart' as http;
 
 class NavDrawer extends StatefulWidget {
-  final dynamic id, role;
-  NavDrawer({@required this.id, this.role});
+  final dynamic id, role, fname, lname, email, image,disability,prof,gender,state,city,zip;
+  NavDrawer(
+      {@required this.id,
+      this.role,
+      this.fname,
+      this.lname,
+      this.email,
+      this.image,
+      this.disability,
+      this.prof,
+      this.gender,
+      this.state,this.zip,this.city});
   @override
   _NavDrawerState createState() => _NavDrawerState();
 }
 
 class _NavDrawerState extends State<NavDrawer> {
   String token = "";
-  String role;
   @override
   void initState() {
     super.initState();
@@ -39,73 +42,43 @@ class _NavDrawerState extends State<NavDrawer> {
     });
   }
 
-  Future<ProfileModel> getAcApi() async {
-    final response = await http.get(
-        Uri.parse(NetworkConstants.BASE_URL + 'profile'),
-        headers: {"Authorization": "Bearer $token"});
-    var data = jsonDecode(response.body.toString());
-    if (response.statusCode == 200) {
-      return ProfileModel.fromJson(data);
-    } else {
-      return ProfileModel.fromJson(data);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         children: <Widget>[
-          const SizedBox(
-            height: 10,
+          UserAccountsDrawerHeader(
+            accountName: new Text(widget.fname + " " + widget.lname,
+                style: TextStyle(color: Colors.black)),
+            accountEmail: new Text(
+              widget.email,
+              style: TextStyle(color: Colors.black),
+            ),
+            decoration: new BoxDecoration(
+              color: Colors.white,
+            ),
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: NetworkImage(widget.image),
+              backgroundColor: Colors.transparent,
+            ),
           ),
-          FutureBuilder<ProfileModel>(
-              future: getAcApi(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Column(
-                    children: [
-                      UserAccountsDrawerHeader(
-                        accountName: new Text(snapshot.data.data.firstName +
-                            " " +
-                            snapshot.data.data.lastName),
-                        accountEmail: new Text(snapshot.data.data.email),
-                        decoration: new BoxDecoration(
-                          color: primaryColor,
-                        ),
-                        currentAccountPicture: CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(snapshot.data.data.image),
-                          backgroundColor: Colors.transparent,
-                        ),
-                      ),
-                      ListTile(
-                          leading: Icon(
-                            Icons.person_outline_rounded,
-                            color: Colors.black,
-                          ),
-                          title: Text("Profile"),
-                          onTap: () {
-                            Get.to(() => ProfilePage(
-                                  role: widget.role,
-                                  disability:
-                                      snapshot.data.data.typeOfDisability,
-                                  chosenValue: snapshot.data.data.profession,
-                                  dropdown: snapshot.data.data.gender,
-                                  selectedCountry: snapshot.data.data.state,
-                                  selectedProvince: snapshot.data.data.city,
-                                  zip: snapshot.data.data.zipCode,
-                                ));
-                          }),
-                    ],
-                  );
-                } else {
-                  return Container(
-                    color: Colors.white,
-                    height: 100,
-                    width: 100,
-                  );
-                }
+          ListTile(
+              leading: Icon(
+                Icons.person_outline_rounded,
+                color: Colors.black,
+              ),
+              title: Text("Profile"),
+              onTap: () {
+                Get.to(() => ProfilePage(
+                  role: widget.role,
+                  disability:
+                  widget.disability,
+                  chosenValue:widget.prof,
+                  dropdown: widget.gender,
+                  selectedCountry: widget.state,
+                  selectedProvince: widget.city,
+                  zip: widget.zip,
+                ));
               }),
           token != null
               ? Container()
@@ -118,14 +91,24 @@ class _NavDrawerState extends State<NavDrawer> {
                     Get.to(const LoginPage());
                   }),
           ListTile(
-              leading: Icon(Icons.password_rounded, color: Colors.black),
+              leading: Icon(Icons.lock_outline_rounded, color: Colors.black),
               title: Text("Change Password"),
               onTap: () {
                 Get.to(() => ChangePassword());
               }),
+          const ListTile(
+            leading: Icon(Icons.list_alt_rounded, color: Colors.black),
+            title: Text("Terms & Conditions"),
+            // onTap: () {
+            //   Navigator.push(
+            //     context,
+            //     MaterialPageRoute(builder: (context) => PrivacyPolicy()),
+            //   );
+            // }
+          ),
           ListTile(
-              leading: Icon(Icons.settings, color: Colors.black),
-              title: new Text("Settings"),
+              leading: Icon(Icons.question_answer_outlined, color: Colors.black),
+              title: new Text("FAQ"),
               onTap: () {
                 Get.to(() => ChatUi());
               }),
@@ -136,16 +119,6 @@ class _NavDrawerState extends State<NavDrawer> {
             //   Navigator.push(
             //     context,
             //     MaterialPageRoute(builder: (context) => AboutUs()),
-            //   );
-            // }
-          ),
-          const ListTile(
-            leading: Icon(Icons.policy_outlined, color: Colors.black),
-            title: Text("Policy"),
-            // onTap: () {
-            //   Navigator.push(
-            //     context,
-            //     MaterialPageRoute(builder: (context) => PrivacyPolicy()),
             //   );
             // }
           ),

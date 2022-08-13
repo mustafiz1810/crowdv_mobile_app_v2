@@ -34,30 +34,18 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
           init: SplashController(), // intialize with the Controller
           builder: (splashController) {
             return Scaffold(
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Stack(children: [
-                    Positioned(
-                        child: Center(
-                            child: SizedBox(
-                                child: Lottie.asset('assets/108859-wordl.json',
-                                    repeat: false)))),
-                    Center(
-                        child: ScaleTransition(
-                      scale: animation,
-                      child: SizedBox(
-                        height: 120,
+              body: Center(
+                  child: ScaleTransition(
+                    scale: animation,
+                    child: SizedBox(
+                      height: 120,
+                      width: 120,
+                      child: Image.asset(
+                        'assets/crowdv_png.png',
                         width: 120,
-                        child: Image.asset(
-                          'assets/crowdv_png.png',
-                          width: 120,
-                        ),
                       ),
-                    )),
-                  ]),
-                ],
-              ),
+                    ),
+                  )),
             );
           }),
     );

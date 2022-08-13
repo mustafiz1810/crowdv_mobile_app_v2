@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:crowdv_mobile_app/data/models/profile_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/Search/search.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/certificate.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/organization/create_opportunity.dart';
@@ -9,7 +11,8 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/upcomin
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/volunteer_opportunities.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/notification.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/drawer.dart';
-import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
+import 'package:crowdv_mobile_app/utils/constants.dart';
+import 'package:http/http.dart' as http;
 import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
 import 'package:crowdv_mobile_app/widgets/category_grid.dart';
 import 'package:crowdv_mobile_app/widgets/header_without_logo.dart';
@@ -25,7 +28,6 @@ class HomeScreen extends StatefulWidget {
   HomeScreen({this.id, this.role});
   @override
   _HomeScreenState createState() => new _HomeScreenState();
-
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -46,22 +48,55 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future<ProfileModel> getAcApi() async {
+    final response = await http.get(
+        Uri.parse(NetworkConstants.BASE_URL + 'profile'),
+        headers: {"Authorization": "Bearer $token"});
+    var data = jsonDecode(response.body.toString());
+    if (response.statusCode == 200) {
+      return ProfileModel.fromJson(data);
+    } else {
+      return ProfileModel.fromJson(data);
+    }
+  }
+
   final List users = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: NavDrawer(id: widget.id, role: widget.role),
+      drawer: FutureBuilder<ProfileModel>(
+          future: getAcApi(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return NavDrawer(
+                id: widget.id,
+                role: widget.role,
+                fname: snapshot.data.data.firstName,
+                lname: snapshot.data.data.lastName,
+                email: snapshot.data.data.email,
+                image: snapshot.data.data.image,
+                disability:  snapshot.data.data.typeOfDisability,
+                prof: snapshot.data.data.profession,
+                gender: snapshot.data.data.gender,
+                  state: snapshot.data.data.state,
+                city: snapshot.data.data.city,
+                zip: snapshot.data.data.zipCode,
+              );
+            } else {
+              return Container(
+                color: Colors.white,
+                height: 100,
+                width: 100,
+              );
+            }
+          }),
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.black),
         // collapsedHeight: 150,
-        title: const Text(
-          'Home Page',
-          style: TextStyle(color: Colors.white),
-        ),
         // ),
         // centerTitle: true,
-        backgroundColor: primaryColor,
+        backgroundColor: Colors.white,
         // pinned: true,
         // floating: true,
         // forceElevated: innerBoxIsScrolled,
@@ -74,7 +109,10 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Stack(
               children: <Widget>[
                 InkWell(
-                    child: Icon(Icons.notifications),
+                    child: Icon(
+                      Icons.notifications,
+                      color: Colors.black,
+                    ),
                     onTap: () {
                       Get.to(() => NotificationPage());
                     }),
@@ -110,8 +148,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: primaryColor,
-        child: Icon(Icons.search),
+        backgroundColor: Colors.white,
+        child: Icon(
+          Icons.search,
+          color: Colors.black,
+        ),
         onPressed: () {
           Get.to(() => SearchPage());
         },
@@ -125,6 +166,10 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 100,
               child: HeaderWidget(role: widget.role, id: widget.id),
             ),
+            Divider(
+              height: 2,
+              color: Colors.black,
+            ),
             Expanded(
               child: Padding(
                 padding:
@@ -136,10 +181,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ? Expanded(
                             child: GridView.count(
                               // scrollDirection: Axis.horizontal,
-                              crossAxisCount: 2,
+                              crossAxisCount: 3,
                               childAspectRatio: .90,
-                              crossAxisSpacing: 5,
-                              mainAxisSpacing: 5,
+                              crossAxisSpacing: 2.0,
+                              mainAxisSpacing: 2.0,
                               children: <Widget>[
                                 CategoryCard(
                                   title: "Create Opportunity",
@@ -169,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     children: <Widget>[
                                       CategoryCard(
                                         title: "Upcoming Opportunity",
-                                        svgSrc: "assets/bulb.png",
+                                        svgSrc: "assets/bulb_svg.svg",
                                         press: () {
                                           Get.to(() => UpcomingOpportunity(
                                                 role: widget.role,
@@ -178,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       CategoryCard(
                                         title: "My Opportunity",
-                                        svgSrc: "assets/457.svg",
+                                        svgSrc: "assets/list-check.svg",
                                         press: () {
                                           Get.to(VolunteerMyOpportunity(
                                             role: widget.role,
@@ -187,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       CategoryCard(
                                         title: "Set category",
-                                        svgSrc: "assets/162.svg",
+                                        svgSrc: "assets/microsoft-line.svg",
                                         press: () async {
                                           getRequestWithoutParam(
                                               '/api/v1/get-category', {
@@ -196,24 +241,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                             print(value["data"]["category"]);
                                             List<String> category = [];
 
-                                            for(Map map in value["data"]["category"]){          // where the widget.eligibility is came from previous widget which seems a list of map in your code
+                                            for (Map map in value["data"]
+                                                ["category"]) {
+                                              // where the widget.eligibility is came from previous widget which seems a list of map in your code
                                               category.add(map["name"]);
                                             }
                                             print(category);
-                                            setState((){});
+                                            setState(() {});
                                             Get.to(() => SetCategory(category));
                                           });
                                         },
                                       ),
                                       CategoryCard(
                                         title: "Service Location",
-                                        svgSrc: "assets/214.svg",
+                                        svgSrc: "assets/home-location-alt.svg",
                                         press: () async {
                                           getRequestWithoutParam(
                                               '/api/v1/get-category', {
                                             "Authorization": "Bearer ${token}"
                                           }).then((value) async {
-                                            print(value["data"]['service_state']);
+                                            print(
+                                                value["data"]['service_state']);
                                             Get.to(() => ServiceLocation(
                                                   country: value['data']
                                                       ['service_state'],
@@ -227,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       CategoryCard(
                                         title: "Training",
-                                        svgSrc: "assets/179.svg",
+                                        svgSrc: "assets/e-learning.svg",
                                         press: () {
                                           Get.to(() => TrainingList());
                                         },
@@ -239,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       // ),
                                       CategoryCard(
                                         title: "Certificate",
-                                        svgSrc: "assets/185.svg",
+                                        svgSrc: "assets/diploma.svg",
                                         press: () {
                                           Get.to(() => Certificate());
                                         },
@@ -248,21 +296,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                   )
                                 : GridView.count(
                                     // scrollDirection: Axis.horizontal,
-                                    crossAxisCount: 2,
+                                    crossAxisCount: 3,
                                     childAspectRatio: .90,
-                                    crossAxisSpacing: 5,
-                                    mainAxisSpacing: 5,
+                                    crossAxisSpacing: 2.0,
+                                    mainAxisSpacing: 2.0,
                                     children: <Widget>[
                                       CategoryCard(
                                         title: "Create Opportunity",
-                                        svgSrc: "assets/471.svg",
+                                        svgSrc: "assets/edit.svg",
                                         press: () {
                                           Get.to(CreateOpportunity());
                                         },
                                       ),
                                       CategoryCard(
                                         title: "My Opportunity",
-                                        svgSrc: "assets/457.svg",
+                                        svgSrc: "assets/ballot.svg",
                                         press: () {
                                           Get.to(MyOpportunity(
                                             role: widget.role,
@@ -275,6 +323,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
+            ),
+            Divider(
+              height: 2,
+              color: Colors.black,
             ),
           ],
         ),

@@ -481,7 +481,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                         width: 5,
                       ),
                       Text(
-                        'TO',
+                        '-',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(

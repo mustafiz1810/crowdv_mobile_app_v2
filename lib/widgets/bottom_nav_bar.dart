@@ -34,7 +34,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
       selectedFontSize: 14,
       unselectedFontSize: 14,
       selectedItemColor: primaryColor,
-      elevation: 20,
+      elevation: 10,
       unselectedItemColor: Colors.grey,
       onTap: (index) {
         switch (index) {
