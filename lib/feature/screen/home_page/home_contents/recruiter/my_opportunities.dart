@@ -100,378 +100,359 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                 ),
                               ],
                             ),
-                            child: Stack(
+                            child: Column(
                               children: [
-                                Column(
-                                  children: [
-                                    Container(
+                                Container(
+                                  height: 55,
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    color: primaryColor,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: shadowColor.withOpacity(0.2),
+                                        spreadRadius: .1,
+                                        blurRadius: 3,
+                                        // offset: Offset(0, 1), // changes position of shadow
+                                      ),
+                                    ],
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 20, right: 20, top: 10,bottom: 5),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          width: 80,
+                                          height: 35,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                                snapshot.data.data[index]
+                                                    .status,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                    FontWeight.bold,
+                                                    fontSize: 14,
+                                                    color:
+                                                    Colors.deepOrange)),
+                                          ),
+                                        ),
+                                        IconBox(
+                                          child: Icon(Icons.info_outline,color: Colors.white,),
+                                          bgColor: Colors.transparent,
+                                          onTap: (){
+                                            showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Text("Details"),
+                                                    content: Text(snapshot.data.data[index]
+                                                        .details,),
+                                                    actions: [
+                                                      FlatButton(
+                                                        child: Text("ok",style: TextStyle(color: Colors.white),),
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                        color: primaryColor,
+                                                      )
+                                                    ],
+                                                  );
+                                                });
+
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Title : ',
+                                            style: TextStyle(
+                                                color: primaryColor,
+                                                fontSize: 16),
+                                          ),
+                                          SizedBox(
+                                            height: 2,
+                                          ),
+                                          Text(
+                                            'Location : ',
+                                            style: TextStyle(
+                                                color: primaryColor,
+                                                fontSize: 16),
+                                          ),
+                                          SizedBox(
+                                            height: 2,
+                                          ),
+                                          Text(
+                                            'Job Type: ',
+                                            style: TextStyle(
+                                                color: primaryColor,
+                                                fontSize: 16),
+                                          ),
+                                          SizedBox(
+                                            height: 2,
+                                          ),
+                                          Text(
+                                            'Category: ',
+                                            style: TextStyle(
+                                                color: primaryColor,
+                                                fontSize: 16),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            snapshot.data.data[index].title,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                              snapshot
+                                                  .data.data[index].city,
+                                              style: TextStyle(
+                                                  fontSize: 14)),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                              snapshot.data.data[index]
+                                                  .taskType,
+                                              style: TextStyle(
+                                                  fontSize: 14)),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                              snapshot
+                                                  .data
+                                                  .data[index]
+                                                  .category
+                                                  .name,
+                                              style: TextStyle(
+                                                  fontSize: 14))
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Container(
                                       height: 55,
-                                      width: MediaQuery.of(context).size.width,
+                                      width: MediaQuery.of(context).size.width/1.1,
                                       decoration: BoxDecoration(
-                                        color: primaryColor,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            topRight: Radius.circular(20)),
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20)),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: shadowColor.withOpacity(0.2),
+                                            color:
+                                            shadowColor.withOpacity(0.2),
                                             spreadRadius: .1,
                                             blurRadius: 3,
                                             // offset: Offset(0, 1), // changes position of shadow
                                           ),
                                         ],
                                       ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 20, right: 20, top: 10,bottom: 5),
+                                      child:  Padding(
+                                        padding: const EdgeInsets.all(10.0),
                                         child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
+                                            snapshot.data.data[index].status ==
+                                                'Hired'
+                                                ? IconBox(
+                                              child: Icon(
+                                                Icons.message,
+                                                color: Colors.white,
+                                                size: 18,
+                                              ),
+                                              bgColor: primaryColor,
+                                            )
+                                                : Row(
+                                              children: [
+                                                Stack(
+                                                    children:[
+                                                      IconBox(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    AppliedVolunteer(
+                                                                      token: token,
+                                                                      id: snapshot
+                                                                          .data
+                                                                          .data[index]
+                                                                          .id,
+                                                                    )),
+                                                          ).then((value) =>
+                                                              setState(() {}));
+                                                        },
+                                                        child: Icon(
+                                                          Icons.person_pin,
+                                                          color: Colors.white,
+                                                          size: 20,
+                                                        ),
+                                                        bgColor: primaryColor,
+                                                      ),
+                                                      Positioned(
+                                                        top: 2,
+                                                        left: 3,
+                                                        child: Container(
+                                                          padding: EdgeInsets.all(1),
+                                                          decoration: BoxDecoration(
+                                                            color: Colors.red,
+                                                            borderRadius:
+                                                            BorderRadius.circular(6),
+                                                          ),
+                                                          constraints: BoxConstraints(
+                                                            minWidth: 12,
+                                                            minHeight: 12,
+                                                          ),
+                                                          child: Text(
+                                                            '1',
+                                                            style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontSize: 8,
+                                                            ),
+                                                            textAlign: TextAlign.center,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ]
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                IconBox(
+                                                  onTap: () {
+                                                    SweetAlert.show(context,
+                                                        subtitle:
+                                                        "Do you want to delete this opportunity?",
+                                                        style: SweetAlertStyle
+                                                            .confirm,
+                                                        showCancelButton: true,
+                                                        onPress:
+                                                            (bool isConfirm) {
+                                                          if (isConfirm) {
+                                                            //Return false to keep dialog
+                                                            if (isConfirm) {
+                                                              // SweetAlert.show(context,
+                                                              //     subtitle:
+                                                              //         "Deleting...",
+                                                              //     style:
+                                                              //         SweetAlertStyle
+                                                              //             .loading);
+                                                              new Future.delayed(
+                                                                  new Duration(
+                                                                      seconds: 1),
+                                                                      () {
+                                                                    getRequestWithoutParam(
+                                                                        '/api/v1/opportunity/delete/${snapshot.data.data[index].id}',
+                                                                        {
+                                                                          'Content-Type':
+                                                                          "application/json",
+                                                                          "Authorization":
+                                                                          "Bearer ${token}"
+                                                                        }).then(
+                                                                            (value) async {
+                                                                          SweetAlert.show(
+                                                                              context,
+                                                                              subtitle:
+                                                                              "Success!",
+                                                                              style:
+                                                                              SweetAlertStyle
+                                                                                  .success);
+                                                                          setState(() {});
+                                                                        });
+                                                                  });
+                                                            } else {
+                                                              SweetAlert.show(context,
+                                                                  subtitle:
+                                                                  "Canceled!",
+                                                                  style:
+                                                                  SweetAlertStyle
+                                                                      .error);
+                                                            }
+                                                            return false;
+                                                          }
+                                                          return null;
+                                                        });
+                                                  },
+                                                  child: Icon(
+                                                    Icons.delete,
+                                                    color: Colors.white,
+                                                    size: 20,
+                                                  ),
+                                                  bgColor: Colors.red,
+                                                ),
+                                              ],
+                                            ),
                                             Container(
                                               width: 80,
-                                              height: 35,
+                                              height: 45,
                                               decoration: BoxDecoration(
-                                                color: Colors.white,
+                                                color: primaryColor,
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(20)),
                                               ),
                                               child: Center(
-                                                child: Text(
-                                                    snapshot.data.data[index]
-                                                        .status,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontSize: 14,
-                                                        color:
-                                                        Colors.deepOrange)),
-                                              ),
-                                            ),
-                                            IconBox(
-                                              child: Icon(Icons.info_outline,color: Colors.white,),
-                                              bgColor: Colors.transparent,
-                                              onTap: (){
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title: Text("Details"),
-                                                        content: Text(snapshot.data.data[index]
-                                                            .details,),
-                                                        actions: [
-                                                          FlatButton(
-                                                            child: Text("ok",style: TextStyle(color: Colors.white),),
-                                                            onPressed: () {
-                                                              Navigator.of(context).pop();
-                                                            },
-                                                            color: primaryColor,
-                                                          )
-                                                        ],
-                                                      );
-                                                    });
-
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                'Title : ',
-                                                style: TextStyle(
-                                                    color: primaryColor,
-                                                    fontSize: 16),
-                                              ),
-                                              SizedBox(
-                                                height: 2,
-                                              ),
-                                              Text(
-                                                'Location : ',
-                                                style: TextStyle(
-                                                    color: primaryColor,
-                                                    fontSize: 16),
-                                              ),
-                                              SizedBox(
-                                                height: 2,
-                                              ),
-                                              Text(
-                                                'Job Type: ',
-                                                style: TextStyle(
-                                                    color: primaryColor,
-                                                    fontSize: 16),
-                                              ),
-                                              SizedBox(
-                                                height: 2,
-                                              ),
-                                              Text(
-                                                'Category: ',
-                                                style: TextStyle(
-                                                    color: primaryColor,
-                                                    fontSize: 16),
-                                              ),
-                                            ],
-                                          ),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.end,
-                                            children: [
-                                              Text(
-                                                snapshot.data.data[index].title,
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 14),
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Text(
-                                                  snapshot
-                                                      .data.data[index].city,
-                                                  style: TextStyle(
-                                                      fontSize: 14)),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Text(
-                                                  snapshot.data.data[index]
-                                                      .taskType,
-                                                  style: TextStyle(
-                                                      fontSize: 14)),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Text(
-                                                  snapshot
-                                                      .data
-                                                      .data[index]
-                                                      .category
-                                                      .name,
-                                                  style: TextStyle(
-                                                      fontSize: 14))
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Container(
-                                        height: 55,
-                                        width: MediaQuery.of(context).size.width/1.1,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                              shadowColor.withOpacity(0.2),
-                                              spreadRadius: .1,
-                                              blurRadius: 3,
-                                              // offset: Offset(0, 1), // changes position of shadow
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Positioned(
-                                    left: 20,
-                                    top: 195,
-                                    child: snapshot.data.data[index].status ==
-                                            'Hired'
-                                        ? Row(
-                                            children: [
-                                              IconBox(
-                                                child: Icon(
-                                                  Icons.message,
-                                                  color: Colors.white,
-                                                  size: 18,
-                                                ),
-                                                bgColor: primaryColor,
-                                              )
-                                            ],
-                                          )
-                                        : Row(
-                                            children: [
-                                              IconBox(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            AppliedVolunteer(
-                                                              token: token,
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => OpportunityDetails(
+                                                              role: widget.role,
                                                               id: snapshot
-                                                                  .data
-                                                                  .data[index]
-                                                                  .id,
-                                                            )),
-                                                  ).then((value) =>
-                                                      setState(() {}));
-                                                },
-                                                child: Icon(
-                                                  Icons.person_pin,
-                                                  color: Colors.white,
-                                                  size: 20,
-                                                ),
-                                                bgColor: primaryColor,
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              IconBox(
-                                                onTap: () {
-                                                  SweetAlert.show(context,
-                                                      subtitle:
-                                                          "Do you want to delete this opportunity?",
-                                                      style: SweetAlertStyle
-                                                          .confirm,
-                                                      showCancelButton: true,
-                                                      onPress:
-                                                          (bool isConfirm) {
-                                                    if (isConfirm) {
-                                                      //Return false to keep dialog
-                                                      if (isConfirm) {
-                                                        // SweetAlert.show(context,
-                                                        //     subtitle:
-                                                        //         "Deleting...",
-                                                        //     style:
-                                                        //         SweetAlertStyle
-                                                        //             .loading);
-                                                        new Future.delayed(
-                                                            new Duration(
-                                                                seconds: 1),
-                                                            () {
-                                                          getRequestWithoutParam(
-                                                              '/api/v1/opportunity/delete/${snapshot.data.data[index].id}',
-                                                              {
-                                                                'Content-Type':
-                                                                    "application/json",
-                                                                "Authorization":
-                                                                    "Bearer ${token}"
-                                                              }).then(
-                                                              (value) async {
-                                                            SweetAlert.show(
-                                                                context,
-                                                                subtitle:
-                                                                    "Success!",
-                                                                style:
-                                                                    SweetAlertStyle
-                                                                        .success);
-                                                            setState(() {});
-                                                          });
-                                                        });
-                                                      } else {
-                                                        SweetAlert.show(context,
-                                                            subtitle:
-                                                                "Canceled!",
-                                                            style:
-                                                                SweetAlertStyle
-                                                                    .error);
-                                                      }
-                                                      return false;
-                                                    }
-                                                    return null;
-                                                  });
-                                                },
-                                                child: Icon(
-                                                  Icons.delete,
-                                                  color: Colors.white,
-                                                  size: 20,
-                                                ),
-                                                bgColor: Colors.red,
-                                              ),
-                                            ],
-                                          )),
-                                // -----------------------------------Notification
-                                snapshot.data.data[index].status == 'Hired'
-                                    ? SizedBox()
-                                    : Positioned(
-                                        top: 195,
-                                        left: 40,
-                                        child: Container(
-                                          padding: EdgeInsets.all(1),
-                                          decoration: BoxDecoration(
-                                            color: Colors.red,
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                          ),
-                                          constraints: BoxConstraints(
-                                            minWidth: 12,
-                                            minHeight: 12,
-                                          ),
-                                          child: Text(
-                                            '1',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 8,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ),
-                                // -----------------------------Detail
-                                Positioned(
-                                    right: 20,
-                                    top: 193,
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 80,
-                                          height: 35,
-                                          margin:
-                                              EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                          decoration: BoxDecoration(
-                                            color: primaryColor,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)),
-                                          ),
-                                          child: Center(
-                                            child: InkWell(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => OpportunityDetails(
-                                                          role: widget.role,
-                                                          id: snapshot
-                                                              .data.data[index].id,
-                                                          token: token)),
-                                                ).then((value) => setState(() {}));
+                                                                  .data.data[index].id,
+                                                              token: token)),
+                                                    ).then((value) => setState(() {}));
 
-                                              },
-                                              child: Container(
-                                                // width: 80,
-                                                // height: 30,
-                                                // margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                                // decoration: BoxDecoration(
-                                                //   color: primaryColor,
-                                                //   borderRadius: BorderRadius.all(Radius.circular(20)),
-                                                // ),
-                                                child: Center(
-                                                    child: Text('Details',
-                                                        style: TextStyle(
-                                                            fontWeight:
+                                                  },
+                                                  child: Container(
+                                                    child: Center(
+                                                        child: Text('Details',
+                                                            style: TextStyle(
+                                                                fontWeight:
                                                                 FontWeight.bold,
-                                                            fontSize: 16,
-                                                            color:
+                                                                fontSize: 16,
+                                                                color:
                                                                 Colors.white))),
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                      ],
-                                    )),
+                                      )
+                                  ),
+                                )
                               ],
                             ),
                           ),

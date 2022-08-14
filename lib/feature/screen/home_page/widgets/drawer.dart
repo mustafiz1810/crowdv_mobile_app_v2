@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../utils/view_utils/common_util.dart';
+import '../../authentication/widgets/terms_condition.dart';
 
 class NavDrawer extends StatefulWidget {
   final dynamic id, role, fname, lname, email, image,disability,prof,gender,state,city,zip;
@@ -106,15 +107,15 @@ class _NavDrawerState extends State<NavDrawer> {
               onTap: () {
                 Get.to(() => ChangePassword());
               }),
-          const ListTile(
+           ListTile(
             leading: Icon(Icons.list_alt_rounded, color: Colors.black),
             title: Text("Terms & Conditions"),
-            // onTap: () {
-            //   Navigator.push(
-            //     context,
-            //     MaterialPageRoute(builder: (context) => PrivacyPolicy()),
-            //   );
-            // }
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TermsCondition()),
+              );
+            }
           ),
           ListTile(
               leading: Icon(Icons.question_answer_outlined, color: Colors.black),

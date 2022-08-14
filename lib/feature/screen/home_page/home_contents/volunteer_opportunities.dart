@@ -311,13 +311,6 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                         });
                                                       },
                                                       child: Container(
-                                                        // width: 80,
-                                                        // height: 30,
-                                                        // margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                                        // decoration: BoxDecoration(
-                                                        //   color: primaryColor,
-                                                        //   borderRadius: BorderRadius.all(Radius.circular(20)),
-                                                        // ),
                                                         child: Center(
                                                             child: Text(
                                                                 'Complete',

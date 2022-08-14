@@ -260,90 +260,84 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                     Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Container(
-                                        height: 55,
-                                        width: MediaQuery.of(context).size.width/1.1,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                              shadowColor.withOpacity(0.2),
-                                              spreadRadius: .1,
-                                              blurRadius: 3,
-                                              // offset: Offset(0, 1), // changes position of shadow
+                                          height: 55,
+                                          width: MediaQuery.of(context).size.width/1.1,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color:
+                                                shadowColor.withOpacity(0.2),
+                                                spreadRadius: .1,
+                                                blurRadius: 3,
+                                                // offset: Offset(0, 1), // changes position of shadow
+                                              ),
+                                            ],
+                                          ),
+                                          child:  Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Icon(Icons.wheelchair_pickup_sharp),
+                                                    SizedBox(width: 10,),
+                                                    Text(
+                                                      snapshot.data.data[index].recruiter
+                                                          .firstName +
+                                                          " " +
+                                                          snapshot.data.data[index]
+                                                              .recruiter.lastName,
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight.bold),
+                                                    )
+                                                  ],
+                                                ),
+                                                Container(
+                                                  width: 80,
+                                                  height: 45,
+                                                  decoration: BoxDecoration(
+                                                    color: primaryColor,
+                                                    borderRadius: BorderRadius.all(
+                                                        Radius.circular(20)),
+                                                  ),
+                                                  child: Center(
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) => OpportunityDetails(
+                                                                  role: widget.role,
+                                                                  id: snapshot
+                                                                      .data.data[index].id,
+                                                                  token: token)),
+                                                        ).then((value) => setState(() {}));
+
+                                                      },
+                                                      child: Container(
+                                                        child: Center(
+                                                            child: Text('Details',
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                    FontWeight.bold,
+                                                                    fontSize: 16,
+                                                                    color:
+                                                                    Colors.white))),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
+                                          )
                                       ),
                                     )
                                   ],
                                 ),
-                                Positioned(
-                                    left: 20,
-                                    top: 195,
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.wheelchair_pickup_sharp),
-                                        SizedBox(width: 10,),
-                                        Text(
-                                          snapshot.data.data[index].recruiter
-                                                  .firstName +
-                                              " " +
-                                              snapshot.data.data[index]
-                                                  .recruiter.lastName,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        )
-                                      ],
-                                    )),
-                                Positioned(
-                                    right: 20,
-                                    top: 193,
-                                    child: Container(
-                                      width: 80,
-                                      height: 35,
-                                      margin:
-                                      EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                      decoration: BoxDecoration(
-                                        color: primaryColor,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20)),
-                                      ),
-                                      child: Center(
-                                        child: InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => OpportunityDetails(
-                                                      role: widget.role,
-                                                      id: snapshot
-                                                          .data.data[index].id,
-                                                      token: token)),
-                                            ).then((value) => setState(() {}));
-                                          },
-                                          child: Container(
-                                            // width: 80,
-                                            // height: 30,
-                                            // margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                            // decoration: BoxDecoration(
-                                            //   color: primaryColor,
-                                            //   borderRadius: BorderRadius.all(Radius.circular(20)),
-                                            // ),
-                                            child: Center(
-                                                child: Text('Details',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        fontSize: 16,
-                                                        color:
-                                                        Colors.white))),
-                                          ),
-                                        ),
-                                      ),
-                                    )),
                               ],
                             ),
                           ),
