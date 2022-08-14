@@ -1,12 +1,9 @@
 import 'dart:convert';
-import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/data/models/profile_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/profile_update_basic.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
-import 'package:crowdv_mobile_app/utils/design_details.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
-import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,7 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
-  final role,
+  final data,
+      role,
       disability,
       chosenValue,
       dropdown,
@@ -24,7 +22,8 @@ class ProfilePage extends StatefulWidget {
       selectedProvince,
       zip;
   ProfilePage(
-      {this.role,
+      {this.data,
+      this.role,
       this.disability,
       this.chosenValue,
       this.dropdown,
@@ -39,9 +38,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   String token = "";
-  String disability;
-  String _profession;
-  String _gender;
+  bool isCheck = false;
   String selectedCountry;
   String selectedProvince;
   List<String> countries = [
@@ -70,25 +67,24 @@ class _ProfilePageState extends State<ProfilePage> {
   List<String> KentuckyProvince = ['Anchorage', 'Juneau', 'California'];
   List<String> LouisianaProvince = ['Anchorage', 'Juneau', 'California'];
   List<String> provinces = [];
-  List<String> _disability = [
-    "Hearing",
-    "Blind",
-    "Vision Impairment",
-    "Physical Disability"
-  ];
-  List<String> _items = ["Business", "Student", "Service", "Self-employer"];
-  List<String> _item = ["Male", "Female"];
-  @override
+
+
+  List<dynamic> array = [];
+
+  void _answerQuestion(int id) {
+    if (array.contains(id)) {
+      array.remove(id);
+    } else {
+      array.add(id);
+    }
+
+  }
+
   void initState() {
     super.initState();
     getCred();
-    widget.disability == null
-        ? disability = "Blind"
-        : disability = widget.disability;
-    widget.chosenValue == null
-        ? _profession = "Business"
-        : _profession = widget.chosenValue;
-    widget.dropdown == null ? _gender = "Male" : _gender = widget.dropdown;
+    array = widget.disability;
+    print(array);
     widget.selectedCountry == "unknown"
         ? selectedCountry = "Alabama"
         : selectedCountry = widget.selectedCountry;
@@ -98,7 +94,6 @@ class _ProfilePageState extends State<ProfilePage> {
     widget.zip == null
         ? zipController.text = "12345"
         : zipController.text = widget.zip;
-    print(zipController.text);
   }
 
   void getCred() async {
@@ -120,18 +115,18 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  void set(String gender, disable, prof) async {
+  void set(List<dynamic>disable) async {
+    String body = json.encode({
+      'type_of_disability': disable,
+    });
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'profile/update?type=service'),
           headers: {
-            "Authorization": "Bearer $token"
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/json"
           },
-          body: {
-            'gender': gender,
-            'type_of_disability': disable,
-            'profession': prof,
-          });
+          body: body);
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         setState(() {});
@@ -274,10 +269,14 @@ class _ProfilePageState extends State<ProfilePage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.location_on_rounded,size: 13,),
+                            Icon(
+                              Icons.location_on_rounded,
+                              size: 13,
+                            ),
                             Text(
                               snapshot.data.data.city,
-                              style: TextStyle(fontSize: 14, color: Colors.black),
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.black),
                             ),
                           ],
                         ),
@@ -290,7 +289,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             Column(
                               children: [
                                 Text(
-                                  "4",
+                                  snapshot.data.data.opportunities.toString(),
                                   style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
@@ -308,7 +307,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Row(
                                   children: [
                                     Text(
-                                      "4.5",
+                                      snapshot.data.data.rating.toString(),
                                       style: TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold,
@@ -330,25 +329,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             Column(
                               children: [
-                                snapshot.data.data.workingHours != null
-                                        ? Text(
-                                        snapshot.data.data.workingHours
-                                            .toString(),
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black))
-                                        : Text(
-                                      "00",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
+                                Text(snapshot.data.data.workingHours.toString(),
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black)),
                                 Text("Working Hour",
                                     style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black)),
+                                        fontSize: 14, color: Colors.black)),
                               ],
                             )
                           ],
@@ -375,8 +363,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     icon: Icon(Icons.info_rounded),
                                     child: const Text('Basic Info')),
                                 Tab(
-                                    icon: Icon(Icons.handshake),
-                                    child: const Text('Service')),
+                                    icon: Icon(Icons.wheelchair_pickup_rounded),
+                                    child: const Text('Disabilities')),
                                 Tab(
                                     icon: Icon(Icons.phone),
                                     child: const Text('Contact')),
@@ -407,377 +395,177 @@ class _ProfilePageState extends State<ProfilePage> {
                                       Container(
                                         padding:
                                             EdgeInsets.only(left: 5, right: 5),
-                                        child: Column(
-                                          children: <Widget>[
-                                            Container(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8.0, bottom: 4.0),
-                                              alignment: Alignment.topLeft,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    "User Information",
-                                                    style: TextStyle(
-                                                      color: Colors.black87,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontSize: 16,
-                                                    ),
-                                                    textAlign: TextAlign.left,
-                                                  ),
-                                                  TextButton(
-                                                      onPressed: () {
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  ProfileUpdate(
-                                                                    token:
-                                                                        token,
-                                                                    fname: snapshot
-                                                                        .data
-                                                                        .data
-                                                                        .firstName,
-                                                                    lname: snapshot
-                                                                        .data
-                                                                        .data
-                                                                        .lastName,
-                                                                    email: snapshot
-                                                                        .data
-                                                                        .data
-                                                                        .email,
-                                                                    phone: snapshot
-                                                                        .data
-                                                                        .data
-                                                                        .phone,
-                                                                    dob: snapshot
-                                                                        .data
-                                                                        .data
-                                                                        .dob,
-                                                                  )),
-                                                        ).then((value) =>
-                                                            setState(() {}));
-                                                      },
-                                                      child: Icon(
-                                                        Icons.edit,
-                                                        color: Colors.black,
-                                                      ))
-                                                ],
-                                              ),
-                                            ),
-                                            Card(
-                                              child: Container(
-                                                alignment: Alignment.topLeft,
-                                                padding: EdgeInsets.all(15),
-                                                child: Column(
-                                                  children: <Widget>[
-                                                    Column(
-                                                      children: <Widget>[
-                                                        ...ListTile.divideTiles(
-                                                          color: Colors.grey,
-                                                          tiles: [
-                                                            ListTile(
-                                                              contentPadding:
-                                                                  EdgeInsets.symmetric(
-                                                                      horizontal:
-                                                                          12,
-                                                                      vertical:
-                                                                          4),
-                                                              leading: Icon(
-                                                                  Icons.person),
-                                                              title:
-                                                                  Text("Name:"),
-                                                              subtitle: Text(
-                                                                snapshot
-                                                                        .data
-                                                                        .data
-                                                                        .firstName
-                                                                        .toString() +
-                                                                    " " +
-                                                                    snapshot
-                                                                        .data
-                                                                        .data
-                                                                        .lastName,
-                                                              ),
-                                                            ),
-                                                            ListTile(
-                                                              leading: Icon(
-                                                                  Icons.email),
-                                                              title: Text(
-                                                                  "Email:"),
-                                                              subtitle: Text(
-                                                                  snapshot
-                                                                      .data
-                                                                      .data
-                                                                      .email),
-                                                            ),
-                                                            ListTile(
-                                                              leading: Icon(
-                                                                  Icons.phone),
-                                                              title: Text(
-                                                                  "Phone:"),
-                                                              subtitle: Text(
-                                                                  snapshot
-                                                                      .data
-                                                                      .data
-                                                                      .phone),
-                                                            ),
-                                                            ListTile(
-                                                                leading: Icon(
-                                                                    Icons
-                                                                        .person),
-                                                                title: Text(
-                                                                    "Date of Birth:"),
-                                                                subtitle: Text(DateFormat
-                                                                        .yMMMd()
-                                                                    .format(snapshot
-                                                                        .data
-                                                                        .data
-                                                                        .dob))),
-                                                          ],
+                                        child: SingleChildScrollView(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              children: <Widget>[
+                                                Container(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        "User Information",
+                                                        style: TextStyle(
+                                                          color: Colors.black87,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 16,
                                                         ),
-                                                      ],
-                                                    )
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                      ),
+                                                      TextButton(
+                                                          onPressed: () {
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          ProfileUpdate(
+                                                                            token:
+                                                                                token,
+                                                                            fname:
+                                                                                snapshot.data.data.firstName,
+                                                                            lname:
+                                                                                snapshot.data.data.lastName,
+                                                                            email:
+                                                                                snapshot.data.data.email,
+                                                                            phone:
+                                                                                snapshot.data.data.phone,
+                                                                            dob:
+                                                                                snapshot.data.data.dob,
+                                                                            prof:
+                                                                                snapshot.data.data.profession,
+                                                                            gender:
+                                                                                snapshot.data.data.gender,
+                                                                          )),
+                                                            ).then((value) =>
+                                                                setState(
+                                                                    () {}));
+                                                          },
+                                                          child: Icon(
+                                                            Icons.edit,
+                                                            color: Colors.black,
+                                                          ))
+                                                    ],
+                                                  ),
+                                                ),
+                                                ...ListTile.divideTiles(
+                                                  color: Colors.grey,
+                                                  tiles: [
+                                                    ListTile(
+                                                      leading: Icon(Icons
+                                                          .person_outline_rounded),
+                                                      title: Text("Name:"),
+                                                      subtitle: Text(
+                                                        snapshot.data.data
+                                                                .firstName
+                                                                .toString() +
+                                                            " " +
+                                                            snapshot.data.data
+                                                                .lastName,
+                                                      ),
+                                                    ),
+                                                    ListTile(
+                                                      leading: Icon(
+                                                          Icons.email_outlined),
+                                                      title: Text("Email:"),
+                                                      subtitle: Text(snapshot
+                                                          .data.data.email),
+                                                    ),
+                                                    ListTile(
+                                                      leading: Icon(Icons
+                                                          .phone_android_rounded),
+                                                      title: Text("Phone:"),
+                                                      subtitle: Text(snapshot
+                                                          .data.data.phone),
+                                                    ),
+                                                    ListTile(
+                                                        leading: Icon(Icons
+                                                            .date_range_rounded),
+                                                        title: Text(
+                                                            "Date of Birth:"),
+                                                        subtitle: Text(
+                                                            DateFormat.yMMMd()
+                                                                .format(snapshot
+                                                                    .data
+                                                                    .data
+                                                                    .dob))),
+                                                    ListTile(
+                                                        leading: Icon(Icons
+                                                            .work_outline_rounded),
+                                                        title:
+                                                            Text("Profession:"),
+                                                        subtitle: Text(snapshot
+                                                                    .data
+                                                                    .data
+                                                                    .profession !=
+                                                                null
+                                                            ? snapshot.data.data
+                                                                .profession
+                                                            : "")),
+                                                    ListTile(
+                                                        leading:
+                                                            Icon(Icons.male),
+                                                        title: Text("Gender:"),
+                                                        subtitle: Text(snapshot
+                                                            .data.data.gender)),
                                                   ],
                                                 ),
-                                              ),
-                                            )
-                                          ],
+                                              ],
+                                            ),
+                                          ),
                                         ),
                                       ),
                                       Container(
-                                        padding: EdgeInsets.all(18),
+                                        padding: EdgeInsets.only(left: 15,right: 15,top: 10),
                                         child: Column(
                                           children: [
-                                            snapshot.data.data.role ==
-                                                    "recruiter"
-                                                ? Container(
-                                                    width: 360,
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 2,
-                                                            horizontal: 15),
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                    .all(
-                                                                Radius.circular(
-                                                                    12.0)),
-                                                        border: Border.all(
-                                                            color:
-                                                                Colors.black)),
-                                                    child: Center(
-                                                      child: DropdownButton<
-                                                              String>(
-                                                          hint: Center(
-                                                              child: Text(
-                                                            "Select Disability",
+                                            Expanded(
+                                              child: ListView.builder(
+                                                scrollDirection: Axis.vertical,
+                                                shrinkWrap: true,
+                                                itemCount: widget.data.length,
+                                                itemBuilder: (context, index) {
+                                                  return Card(
+                                                      child:
+                                                      new CheckboxListTile(
+                                                          activeColor:
+                                                          primaryColor,
+                                                          dense: true,
+                                                          //font change
+                                                          title: new Text(
+                                                            widget.data[
+                                                            index]
+                                                            ["title"],
                                                             style: TextStyle(
-                                                                fontSize: 18,
-                                                                color: Colors
-                                                                    .black,
+                                                                fontSize:
+                                                                14,
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          )),
-                                                          isExpanded: true,
-                                                          value: disability,
-                                                          // elevation: 5,
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600),
-                                                          iconEnabledColor:
-                                                              Colors.black,
-                                                          items: _disability.map<
-                                                                  DropdownMenuItem<
-                                                                      String>>(
-                                                              (String value) {
-                                                            return DropdownMenuItem<
-                                                                String>(
-                                                              value: value,
-                                                              child:
-                                                                  Text(value),
-                                                            );
-                                                          }).toList(),
-                                                          selectedItemBuilder:
-                                                              (BuildContext context) =>
-                                                                  _disability
-                                                                      .map((e) =>
-                                                                          Center(
-                                                                            child:
-                                                                                Text(
-                                                                              e,
-                                                                              style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
-                                                                            ),
-                                                                          ))
-                                                                      .toList(),
-                                                          underline:
-                                                              Container(),
-                                                          onChanged:
-                                                              (String value) {
+                                                                FontWeight
+                                                                    .w600,
+                                                                letterSpacing:
+                                                                0.5),
+                                                          ),
+                                                          value:array.contains(
+                                                              widget.data[index]["id"])
+                                                              ?true:widget.data[index]["is_check"],
+                                                          onChanged: (bool
+                                                          value) {
                                                             setState(() {
-                                                              disability =
+                                                              widget.data[index]["is_check"] =
                                                                   value;
+                                                              _answerQuestion(
+                                                                  widget.data[index]["id"]);
                                                             });
-                                                          }),
-                                                    ),
-                                                  )
-                                                : Container(),
-                                            SizedBox(
-                                              height: 20,
-                                            ),
-                                            Container(
-                                              width: 360,
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 2, horizontal: 15),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(
-                                                              12.0)),
-                                                  border: Border.all(
-                                                      color: Colors.black)),
-                                              child: Center(
-                                                child: DropdownButton<String>(
-                                                    hint: Center(
-                                                      child: Text(
-                                                        "Select Profession",
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ),
-                                                    value: _profession,
-                                                    isExpanded: true,
-                                                    // elevation: 5,
-                                                    style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                    iconEnabledColor:
-                                                        Colors.black,
-                                                    items: _items.map<
-                                                            DropdownMenuItem<
-                                                                String>>(
-                                                        (String value) {
-                                                      return DropdownMenuItem<
-                                                          String>(
-                                                        value: value,
-                                                        child: Text(value),
-                                                      );
-                                                    }).toList(),
-                                                    selectedItemBuilder:
-                                                        (BuildContext
-                                                                context) =>
-                                                            _items
-                                                                .map(
-                                                                    (e) =>
-                                                                        Center(
-                                                                          child:
-                                                                              Text(
-                                                                            e,
-                                                                            style: TextStyle(
-                                                                                fontSize: 18,
-                                                                                color: Colors.black,
-                                                                                fontWeight: FontWeight.bold),
-                                                                          ),
-                                                                        ))
-                                                                .toList(),
-                                                    underline: Container(),
-                                                    onChanged: (String value) {
-                                                      setState(() {
-                                                        _profession = value;
-                                                      });
-                                                    }),
+                                                          }));
+                                                },
                                               ),
                                             ),
-                                            SizedBox(
-                                              height: 20,
-                                            ),
-                                            Container(
-                                              width: 360,
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 2, horizontal: 15),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(
-                                                              12.0)),
-                                                  border: Border.all(
-                                                      color: Colors.black)),
-                                              child: Center(
-                                                child: DropdownButton<String>(
-                                                    isExpanded: true,
-                                                    value: _gender,
-                                                    hint: Center(
-                                                      child: Text(
-                                                        "Select Gender",
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ),
-                                                    // elevation: 5,
-                                                    style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                    iconEnabledColor:
-                                                        Colors.black,
-                                                    items: _item.map<
-                                                            DropdownMenuItem<
-                                                                String>>(
-                                                        (String value) {
-                                                      return DropdownMenuItem<
-                                                          String>(
-                                                        value: value,
-                                                        child: Text(value),
-                                                      );
-                                                    }).toList(),
-                                                    selectedItemBuilder:
-                                                        (BuildContext
-                                                                context) =>
-                                                            _item
-                                                                .map(
-                                                                    (value) =>
-                                                                        Center(
-                                                                          child:
-                                                                              Text(
-                                                                            value,
-                                                                            style: TextStyle(
-                                                                                fontSize: 18,
-                                                                                color: Colors.black,
-                                                                                fontWeight: FontWeight.bold),
-                                                                          ),
-                                                                        ))
-                                                                .toList(),
-                                                    underline: Container(),
-                                                    onChanged: (String value) {
-                                                      setState(() {
-                                                        _gender = value;
-                                                      });
-                                                    }),
-                                              ),
-                                            ),
-                                            SizedBox(height: 50),
+                                            SizedBox(height: 10,),
                                             SizedBox(
                                               height: 50,
                                               width: 300,
@@ -786,12 +574,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   primary: primaryColor,
                                                   shape: RoundedRectangleBorder(
                                                       borderRadius:
-                                                          BorderRadius.circular(
-                                                              13)),
+                                                      BorderRadius.circular(
+                                                          13)),
                                                 ),
                                                 onPressed: () {
-                                                  set(_gender, disability,
-                                                      _profession);
+                                                  set(array);
                                                 },
                                                 child: Center(
                                                   child: Text(
@@ -814,186 +601,216 @@ class _ProfilePageState extends State<ProfilePage> {
                                               SizedBox(
                                                 height: 20,
                                               ),
-                                              Container(
-                                                width: 360,
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 2,
-                                                    horizontal: 15),
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                12.0)),
-                                                    border: Border.all(
-                                                        color: Colors.black)),
-                                                child: Center(
-                                                  child: DropdownButton<String>(
-                                                    hint: Center(
-                                                      child: Text(
-                                                        "Select Country",
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            color: Colors.black,
-                                                            fontWeight:
+                                              FormField<String>(
+                                                builder: (FormFieldState<String> state) {
+                                                  return InputDecorator(
+                                                    decoration: InputDecoration(
+                                                      labelText: "State",
+                                                      hintText: "State",
+                                                      fillColor: Colors.white,
+                                                      labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                                                      filled: true,
+                                                      contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                                      focusedBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(12.0),
+                                                          borderSide: BorderSide(color: Colors.black)),
+                                                      enabledBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(12.0),
+                                                          borderSide: BorderSide(color: Colors.black)),
+                                                      errorBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(12.0),
+                                                          borderSide:
+                                                          BorderSide(color: Colors.red, width: 2.0)),
+                                                      focusedErrorBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(12.0),
+                                                          borderSide:
+                                                          BorderSide(color: Colors.red, width: 2.0)),
+                                                    ),
+                                                    isEmpty: selectedCountry == '',
+                                                    child:  Center(
+                                                      child: DropdownButton<String>(
+                                                        hint: Center(
+                                                          child: Text(
+                                                            "Select Country",
+                                                            style: TextStyle(
+                                                                fontSize: 18,
+                                                                color: Colors.black,
+                                                                fontWeight:
                                                                 FontWeight
                                                                     .bold),
-                                                      ),
-                                                    ),
-                                                    underline: SizedBox(),
-                                                    iconEnabledColor:
+                                                          ),
+                                                        ),
+                                                        underline: SizedBox(),
+                                                        iconEnabledColor:
                                                         Colors.black,
-                                                    value: selectedCountry,
-                                                    isExpanded: true,
-                                                    items: countries
-                                                        .map((String value) {
-                                                      return DropdownMenuItem<
-                                                          String>(
-                                                        value: value,
-                                                        child: Text(value),
-                                                      );
-                                                    }).toList(),
-                                                    selectedItemBuilder:
-                                                        (BuildContext
-                                                                context) =>
+                                                        value: selectedCountry,
+                                                        isExpanded: true,
+                                                        items: countries
+                                                            .map((String value) {
+                                                          return DropdownMenuItem<
+                                                              String>(
+                                                            value: value,
+                                                            child: Text(value),
+                                                          );
+                                                        }).toList(),
+                                                        selectedItemBuilder:
+                                                            (BuildContext
+                                                        context) =>
                                                             countries
                                                                 .map(
                                                                     (e) =>
-                                                                        Center(
-                                                                          child:
-                                                                              Text(
-                                                                            e,
-                                                                            style: TextStyle(
-                                                                                fontSize: 18,
-                                                                                color: Colors.black,
-                                                                                fontWeight: FontWeight.bold),
-                                                                          ),
-                                                                        ))
+                                                                    Center(
+                                                                      child:
+                                                                      Text(
+                                                                        e,
+                                                                        style: TextStyle(
+                                                                            fontSize: 18,
+                                                                            color: Colors.black,
+                                                                            fontWeight: FontWeight.bold),
+                                                                      ),
+                                                                    ))
                                                                 .toList(),
-                                                    onChanged: (country) {
-                                                      if (country ==
-                                                          'Alabama') {
-                                                        provinces =
-                                                            AlabamaProvince;
-                                                      } else if (country ==
-                                                          'Alaska') {
-                                                        provinces =
-                                                            AlaskaProvince;
-                                                      } else if (country ==
-                                                          'California') {
-                                                        provinces =
-                                                            CaliforniaProvince;
-                                                      } else if (country ==
-                                                          'Connecticut') {
-                                                        provinces =
-                                                            ConnecticutProvince;
-                                                      } else if (country ==
-                                                          'Delaware') {
-                                                        provinces =
-                                                            DelawareProvince;
-                                                      } else if (country ==
-                                                          'Florida') {
-                                                        provinces =
-                                                            FloridaProvince;
-                                                      } else if (country ==
-                                                          'Illinois') {
-                                                        provinces =
-                                                            IllinoisProvince;
-                                                      } else if (country ==
-                                                          'Kansas') {
-                                                        provinces =
-                                                            KansasProvince;
-                                                      } else if (country ==
-                                                          'Kentucky') {
-                                                        provinces =
-                                                            KentuckyProvince;
-                                                      } else if (country ==
-                                                          'Louisiana') {
-                                                        provinces =
-                                                            LouisianaProvince;
-                                                      } else {
-                                                        provinces = [];
-                                                      }
-                                                      setState(() {
-                                                        selectedProvince = null;
-                                                        selectedCountry =
-                                                            country;
-                                                        print(selectedCountry
-                                                            .toString());
-                                                      });
-                                                    },
-                                                  ),
-                                                ),
+                                                        onChanged: (country) {
+                                                          if (country ==
+                                                              'Alabama') {
+                                                            provinces =
+                                                                AlabamaProvince;
+                                                          } else if (country ==
+                                                              'Alaska') {
+                                                            provinces =
+                                                                AlaskaProvince;
+                                                          } else if (country ==
+                                                              'California') {
+                                                            provinces =
+                                                                CaliforniaProvince;
+                                                          } else if (country ==
+                                                              'Connecticut') {
+                                                            provinces =
+                                                                ConnecticutProvince;
+                                                          } else if (country ==
+                                                              'Delaware') {
+                                                            provinces =
+                                                                DelawareProvince;
+                                                          } else if (country ==
+                                                              'Florida') {
+                                                            provinces =
+                                                                FloridaProvince;
+                                                          } else if (country ==
+                                                              'Illinois') {
+                                                            provinces =
+                                                                IllinoisProvince;
+                                                          } else if (country ==
+                                                              'Kansas') {
+                                                            provinces =
+                                                                KansasProvince;
+                                                          } else if (country ==
+                                                              'Kentucky') {
+                                                            provinces =
+                                                                KentuckyProvince;
+                                                          } else if (country ==
+                                                              'Louisiana') {
+                                                            provinces =
+                                                                LouisianaProvince;
+                                                          } else {
+                                                            provinces = [];
+                                                          }
+                                                          setState(() {
+                                                            selectedProvince = null;
+                                                            selectedCountry =
+                                                                country;
+                                                            print(selectedCountry
+                                                                .toString());
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
                                               ),
                                               SizedBox(
                                                 height: 20,
                                               ),
-                                              Container(
-                                                width: 360,
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 1,
-                                                    horizontal: 15),
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                12.0)),
-                                                    border: Border.all(
-                                                        color: Colors.black)),
-                                                child: Center(
-                                                  child: DropdownButton<String>(
-                                                    hint: Center(
-                                                      child: Text(
-                                                        'select city',
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            color: Colors.black,
-                                                            fontWeight:
+                                              FormField<String>(
+                                                builder: (FormFieldState<String> state) {
+                                                  return InputDecorator(
+                                                    decoration: InputDecoration(
+                                                      labelText: "City",
+                                                      hintText: "City",
+                                                      fillColor: Colors.white,
+                                                      labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                                                      filled: true,
+                                                      contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                                      focusedBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(12.0),
+                                                          borderSide: BorderSide(color: Colors.black)),
+                                                      enabledBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(12.0),
+                                                          borderSide: BorderSide(color: Colors.black)),
+                                                      errorBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(12.0),
+                                                          borderSide:
+                                                          BorderSide(color: Colors.red, width: 2.0)),
+                                                      focusedErrorBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(12.0),
+                                                          borderSide:
+                                                          BorderSide(color: Colors.red, width: 2.0)),
+                                                    ),
+                                                    isEmpty: selectedProvince == '',
+                                                    child:  Center(
+                                                      child: DropdownButton<String>(
+                                                        hint: Center(
+                                                          child: Text(
+                                                            'select city',
+                                                            style: TextStyle(
+                                                                fontSize: 18,
+                                                                color: Colors.black,
+                                                                fontWeight:
                                                                 FontWeight
                                                                     .bold),
-                                                      ),
-                                                    ),
-                                                    underline: SizedBox(),
-                                                    iconEnabledColor:
+                                                          ),
+                                                        ),
+                                                        underline: SizedBox(),
+                                                        iconEnabledColor:
                                                         Colors.black,
-                                                    value: selectedProvince,
-                                                    isExpanded: true,
-                                                    items: provinces
-                                                        .map((String value) {
-                                                      return DropdownMenuItem<
-                                                          String>(
-                                                        value: value,
-                                                        child: Text(value),
-                                                      );
-                                                    }).toList(),
-                                                    selectedItemBuilder:
-                                                        (BuildContext
-                                                                context) =>
+                                                        value: selectedProvince,
+                                                        isExpanded: true,
+                                                        items: provinces
+                                                            .map((String value) {
+                                                          return DropdownMenuItem<
+                                                              String>(
+                                                            value: value,
+                                                            child: Text(value),
+                                                          );
+                                                        }).toList(),
+                                                        selectedItemBuilder:
+                                                            (BuildContext
+                                                        context) =>
                                                             provinces
                                                                 .map(
                                                                     (e) =>
-                                                                        Center(
-                                                                          child:
-                                                                              Text(
-                                                                            e,
-                                                                            style: TextStyle(
-                                                                                fontSize: 18,
-                                                                                color: Colors.black,
-                                                                                fontWeight: FontWeight.bold),
-                                                                          ),
-                                                                        ))
+                                                                    Center(
+                                                                      child:
+                                                                      Text(
+                                                                        e,
+                                                                        style: TextStyle(
+                                                                            fontSize: 18,
+                                                                            color: Colors.black,
+                                                                            fontWeight: FontWeight.bold),
+                                                                      ),
+                                                                    ))
                                                                 .toList(),
-                                                    onChanged: (province) {
-                                                      setState(() {
-                                                        selectedProvince =
-                                                            province;
-                                                        print(selectedProvince
-                                                            .toString());
-                                                      });
-                                                    },
-                                                  ),
-                                                ),
+                                                        onChanged: (province) {
+                                                          setState(() {
+                                                            selectedProvince =
+                                                                province;
+                                                            print(selectedProvince
+                                                                .toString());
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
                                               ),
                                               SizedBox(height: 20),
                                               Container(

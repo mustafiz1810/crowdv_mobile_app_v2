@@ -52,6 +52,9 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
         future: getDetailsApi(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            print("V"+snapshot.data.data.volunteer.rating.toString());
+            print(snapshot.data.data.recruiter.rating.toString());
+
             return Container(
               color: Color(0xFFe9ecef),
               child: Column(
@@ -164,6 +167,48 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                       BorderRadius.all(
                                                           Radius.circular(12))),
                                               child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(15.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      'Job Type',
+                                                      textAlign: TextAlign.left,
+                                                      style: GoogleFonts.lato(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18,
+                                                        letterSpacing: 0.27,
+                                                        color:
+                                                            DesignCourseAppTheme
+                                                                .nearlyBlack,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      snapshot
+                                                          .data.data.taskType,
+                                                      textAlign: TextAlign.left,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(12))),
+                                              child: Padding(
                                                   padding: const EdgeInsets.all(
                                                       15.0),
                                                   child: Row(
@@ -232,48 +277,6 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                       ),
                                                     ],
                                                   )),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Container(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(12))),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(15.0),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      'Job Type',
-                                                      textAlign: TextAlign.left,
-                                                      style: GoogleFonts.lato(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18,
-                                                        letterSpacing: 0.27,
-                                                        color:
-                                                            DesignCourseAppTheme
-                                                                .nearlyBlack,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      snapshot
-                                                          .data.data.taskType,
-                                                      textAlign: TextAlign.left,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
                                             ),
                                             SizedBox(
                                               height: 10,
@@ -664,7 +667,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                             .spaceBetween,
                                                     children: [
                                                       Text(
-                                                        'Gender',
+                                                        'Rating',
                                                         textAlign:
                                                             TextAlign.left,
                                                         style: GoogleFonts.lato(
@@ -677,15 +680,22 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                                   .nearlyBlack,
                                                         ),
                                                       ),
-                                                      Text(snapshot
-                                                                  .data
-                                                                  .data
-                                                                  .recruiter
-                                                                  .gender !=
-                                                              null
-                                                          ? snapshot.data.data
-                                                              .recruiter.gender
-                                                          : "s"),
+                                                      Row(
+                                                        children: [
+                                                          Text(snapshot
+                                                                      .data
+                                                                      .data
+                                                                      .recruiter.rating !=
+                                                                  null
+                                                              ? snapshot
+                                                                  .data.data.recruiter.rating.toString()
+                                                              : "none"),
+                                                          Icon(
+                                                            Icons.star,
+                                                            size: 12,
+                                                          )
+                                                        ],
+                                                      ),
                                                     ],
                                                   ),
                                                 ),
@@ -892,7 +902,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                           Text(snapshot
                                                               .data
                                                               .data
-                                                              .volunteer
+                                                              .recruiter
                                                               .phone),
                                                         ],
                                                       ),
@@ -922,7 +932,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                                 .spaceBetween,
                                                         children: [
                                                           Text(
-                                                            'Gender',
+                                                            'Rating',
                                                             textAlign:
                                                                 TextAlign.left,
                                                             style: GoogleFonts
@@ -937,66 +947,27 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                                   .nearlyBlack,
                                                             ),
                                                           ),
-                                                          Text(snapshot
+                                                          Row(
+                                                            children: [
+                                                              Text(snapshot
+                                                                          .data
+                                                                          .data
+                                                                          .volunteer
+                                                                          .rating !=
+                                                                      null
+                                                                  ? snapshot
                                                                       .data
                                                                       .data
                                                                       .volunteer
-                                                                      .gender !=
-                                                                  null
-                                                              ? snapshot
-                                                                  .data
-                                                                  .data
-                                                                  .volunteer
-                                                                  .gender
-                                                              : "none"),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Container(
-                                                    width:
-                                                    MediaQuery.of(context)
-                                                        .size
-                                                        .width,
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                12))),
-                                                    child: Padding(
-                                                      padding:
-                                                      const EdgeInsets.all(
-                                                          15.0),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            'Phone',
-                                                            textAlign:
-                                                            TextAlign.left,
-                                                            style: GoogleFonts
-                                                                .lato(
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold,
-                                                              fontSize: 18,
-                                                              letterSpacing:
-                                                              0.27,
-                                                              color: DesignCourseAppTheme
-                                                                  .nearlyBlack,
-                                                            ),
+                                                                      .rating
+                                                                      .toString()
+                                                                  : "none"),
+                                                              Icon(
+                                                                Icons.star,
+                                                                size: 12,
+                                                              )
+                                                            ],
                                                           ),
-                                                          Text(snapshot
-                                                              .data
-                                                              .data
-                                                              .volunteer
-                                                              .phone),
                                                         ],
                                                       ),
                                                     ),

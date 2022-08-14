@@ -41,17 +41,17 @@ class Data {
     this.city,
     this.zipCode,
     this.taskType,
-    this.category,
-    this.eligibility,
-    this.volunteer,
-    this.recruiter,
     this.date,
     this.startTime,
     this.endTime,
     this.workingHours,
     this.benefits,
-    this.status,
     this.isPublic,
+    this.status,
+    this.category,
+    this.eligibility,
+    this.volunteer,
+    this.recruiter,
   });
 
   int id;
@@ -61,17 +61,17 @@ class Data {
   String city;
   String zipCode;
   String taskType;
-  Category category;
-  List<Eligibility> eligibility;
-  Recruiter volunteer;
-  Recruiter recruiter;
   DateTime date;
   DateTime startTime;
   DateTime endTime;
   int workingHours;
   dynamic benefits;
-  String status;
   bool isPublic;
+  String status;
+  Category category;
+  List<Eligibility> eligibility;
+  Recruiter volunteer;
+  Recruiter recruiter;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     id: json["id"],
@@ -81,17 +81,17 @@ class Data {
     city: json["city"],
     zipCode: json["zip_code"],
     taskType: json["task_type"],
-    category: Category.fromJson(json["category"]),
-    eligibility: List<Eligibility>.from(json["eligibility"].map((x) => Eligibility.fromJson(x))),
-    volunteer: Recruiter.fromJson(json["volunteer"]),
-    recruiter: Recruiter.fromJson(json["recruiter"]),
     date: DateTime.parse(json["date"]),
     startTime: DateTime.parse(json["start_time"]),
     endTime: DateTime.parse(json["end_time"]),
     workingHours: json["working_hours"],
     benefits: json["benefits"],
-    status: json["status"],
     isPublic: json["is_public"],
+    status: json["status"],
+    category: Category.fromJson(json["category"]),
+    eligibility: List<Eligibility>.from(json["eligibility"].map((x) => Eligibility.fromJson(x))),
+    volunteer: Recruiter.fromJson(json["volunteer"]),
+    recruiter: Recruiter.fromJson(json["recruiter"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -102,17 +102,17 @@ class Data {
     "city": city,
     "zip_code": zipCode,
     "task_type": taskType,
-    "category": category.toJson(),
-    "eligibility": List<dynamic>.from(eligibility.map((x) => x.toJson())),
-    "volunteer": volunteer.toJson(),
-    "recruiter": recruiter.toJson(),
     "date": "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
     "start_time": startTime.toIso8601String(),
     "end_time": endTime.toIso8601String(),
     "working_hours": workingHours,
     "benefits": benefits,
-    "status": status,
     "is_public": isPublic,
+    "status": status,
+    "category": category.toJson(),
+    "eligibility": List<dynamic>.from(eligibility.map((x) => x.toJson())),
+    "volunteer": volunteer.toJson(),
+    "recruiter": recruiter.toJson(),
   };
 }
 
@@ -155,7 +155,7 @@ class Eligibility {
   int id;
   int categoryId;
   String title;
-  String details;
+  dynamic details;
   int status;
   DateTime createdAt;
   DateTime updatedAt;
@@ -209,61 +209,61 @@ class Recruiter {
     this.id,
     this.firstName,
     this.lastName,
-    this.surName,
-    this.image,
-    this.phone,
     this.email,
-    this.gender,
+    this.phone,
+    this.image,
     this.typeOfDisability,
     this.state,
     this.city,
     this.zipCode,
-    this.profession,
+    this.role,
+    this.rating,
+    this.review,
   });
 
   int id;
   String firstName;
   String lastName;
-  dynamic surName;
-  String image;
-  String phone;
   String email;
-  String gender;
-  dynamic typeOfDisability;
+  String phone;
+  String image;
+  String typeOfDisability;
   String state;
   String city;
   String zipCode;
-  dynamic profession;
+  String role;
+  int rating;
+  String review;
 
   factory Recruiter.fromJson(Map<String, dynamic> json) => Recruiter(
-    id: json["id"] == null ? null : json["id"],
-    firstName: json["first_name"] == null ? null : json["first_name"],
-    lastName: json["last_name"] == null ? null : json["last_name"],
-    surName: json["sur_name"],
-    image: json["image"] == null ? null : json["image"],
-    phone: json["phone"] == null ? null : json["phone"],
-    email: json["email"] == null ? null : json["email"],
-    gender: json["gender"] == null ? null : json["gender"],
-    typeOfDisability: json["type_of_disability"],
-    state: json["state"] == null ? null : json["state"],
-    city: json["city"] == null ? null : json["city"],
-    zipCode: json["zip_code"] == null ? null : json["zip_code"],
-    profession: json["profession"],
+    id: json["id"],
+    firstName: json["first_name"],
+    lastName: json["last_name"],
+    email: json["email"],
+    phone: json["phone"],
+    image: json["image"],
+    typeOfDisability: json["type_of_disability"] == null ? null : json["type_of_disability"],
+    state: json["state"],
+    city: json["city"],
+    zipCode: json["zip_code"],
+    role: json["role"],
+    rating: json["rating"],
+    review: json["review"] == null ? null : json["review"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "first_name": firstName == null ? null : firstName,
-    "last_name": lastName == null ? null : lastName,
-    "sur_name": surName,
-    "image": image == null ? null : image,
-    "phone": phone == null ? null : phone,
-    "email": email == null ? null : email,
-    "gender": gender == null ? null : gender,
-    "type_of_disability": typeOfDisability,
-    "state": state == null ? null : state,
-    "city": city == null ? null : city,
-    "zip_code": zipCode == null ? null : zipCode,
-    "profession": profession,
+    "id": id,
+    "first_name": firstName,
+    "last_name": lastName,
+    "email": email,
+    "phone": phone,
+    "image": image,
+    "type_of_disability": typeOfDisability == null ? null : typeOfDisability,
+    "state": state,
+    "city": city,
+    "zip_code": zipCode,
+    "role": role,
+    "rating": rating,
+    "review": review == null ? null : review,
   };
 }

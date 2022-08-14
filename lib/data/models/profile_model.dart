@@ -55,6 +55,8 @@ class Data {
     this.serviceState,
     this.serviceZipCode,
     this.workingHours,
+    this.rating,
+    this.opportunities,
   });
 
   int id;
@@ -77,7 +79,9 @@ class Data {
   dynamic serviceCity;
   dynamic serviceState;
   dynamic serviceZipCode;
-  dynamic workingHours;
+  int workingHours;
+  int rating;
+  int opportunities;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     id: json["id"],
@@ -101,6 +105,8 @@ class Data {
     serviceState: json["service_state"],
     serviceZipCode: json["service_zip_code"],
     workingHours: json["working_hours"],
+    rating: json["rating"],
+    opportunities: json["opportunities"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -125,6 +131,8 @@ class Data {
     "service_state": serviceState,
     "service_zip_code": serviceZipCode,
     "working_hours": workingHours,
+    "rating": rating,
+    "opportunities": opportunities,
   };
 }
 
@@ -132,18 +140,22 @@ class Membership {
   Membership({
     this.id,
     this.name,
+    this.icon,
   });
 
   int id;
   String name;
+  String icon;
 
   factory Membership.fromJson(Map<String, dynamic> json) => Membership(
     id: json["id"],
     name: json["name"],
+    icon: json["icon"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "name": name,
+    "icon": icon,
   };
 }

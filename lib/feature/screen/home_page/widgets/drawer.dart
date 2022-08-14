@@ -68,18 +68,28 @@ class _NavDrawerState extends State<NavDrawer> {
                 color: Colors.black,
               ),
               title: Text("Profile"),
-              onTap: () {
-                Get.to(() => ProfilePage(
-                  role: widget.role,
-                  disability:
-                  widget.disability,
-                  chosenValue:widget.prof,
-                  dropdown: widget.gender,
-                  selectedCountry: widget.state,
-                  selectedProvince: widget.city,
-                  zip: widget.zip,
-                ));
-              }),
+              onTap: () async {
+                getRequest('/api/v1/disability/list', null, {
+                  'Content-Type': "application/json",
+                  "Authorization": "Bearer ${token}"
+                }).then((value) async {
+                  print(value["data"]);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfilePage(
+                      data:value["data"],
+                      role: widget.role,
+                      disability:
+                      widget.disability,
+                      chosenValue:widget.prof,
+                      dropdown: widget.gender,
+                      selectedCountry: widget.state,
+                      selectedProvince: widget.city,
+                      zip: widget.zip,
+                    )),
+                  );
+                });
+              },),
           token != null
               ? Container()
               : ListTile(

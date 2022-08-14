@@ -140,7 +140,7 @@ class _HeaderWidgetState extends State<HeaderWidget>
                               iconOn: Icons.accessibility,
                               iconOff: Icons.accessible,
                               colorOff: Color(0xFF508991),
-                              colorOn: Color(0xFF09bc8a),
+                              colorOn: Colors.blueAccent,
                               onChanged: (val) {
                                 volunteer = val;
                               },
@@ -156,7 +156,7 @@ class _HeaderWidgetState extends State<HeaderWidget>
                               iconOn: Icons.accessibility,
                               iconOff: Icons.accessible,
                               colorOff: Color(0xFF508991),
-                              colorOn: Color(0xFF09bc8a),
+                              colorOn: Colors.blueAccent,
                               onChanged: (val) {
                                 recruiter = val;
                                 print("recruiter");
