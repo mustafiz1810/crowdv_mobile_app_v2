@@ -47,7 +47,6 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        // print(data);
         Navigator.of(context).pop();
         showToast(context, data['message']);
       } else {
@@ -85,7 +84,6 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data);
         showToast(context, data['message']);
       } else {
         var data = jsonDecode(response.body.toString());

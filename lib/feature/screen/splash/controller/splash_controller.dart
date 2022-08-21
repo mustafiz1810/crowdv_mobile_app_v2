@@ -1,8 +1,14 @@
 import 'dart:async';
 import 'package:crowdv_mobile_app/feature/screen/authentication/sign_in/sign_in.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
 import 'package:get/get.dart';
 
+
 class SplashController extends GetxController {
+  String token,role;
+  int id;
+  SplashController({this.token,this.role,this.id});
+
   @override
   void onReady() {
     Timer(
@@ -13,6 +19,11 @@ class SplashController extends GetxController {
   }
 
   void nextPage() {
-    Get.off(LoginPage());
+    print(token);
+    print(id);
+    print(role);
+    // token == null?
+    // Get.off(LoginPage())
+    //     :Get.off(HomeScreen());
   }
 }

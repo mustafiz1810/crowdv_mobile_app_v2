@@ -85,7 +85,6 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data);
         showToast(context, data['message']);
       } else {
         var data = jsonDecode(response.body.toString());
@@ -115,7 +114,6 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
         Uri.parse(NetworkConstants.BASE_URL + 'opportunity/history'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
-    print(data.toString());
     showToast(context, data['message']);
     if (response.statusCode == 200) {
       return RecruiterHistoryModel.fromJson(data);

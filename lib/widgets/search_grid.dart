@@ -22,18 +22,10 @@ class SearchCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              offset: Offset(0, 0),
-              blurRadius: 15,
-              spreadRadius: -13,
-              color: kShadowColor,
-            ),
-          ],
         ),
         child: Material(
           borderRadius: BorderRadiusDirectional.circular(13),
-          elevation: 4,
+          elevation: 2,
           color: Colors.white,
           child: InkWell(
             onTap: press,
@@ -45,7 +37,7 @@ class SearchCard extends StatelessWidget {
                   Container(
                     height: 45,
                     width: 80,
-                    child: SvgPicture.asset(
+                    child: Image.network(
                       svgSrc,
                     ),
                   ),
@@ -55,7 +47,7 @@ class SearchCard extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme.titleSmall
-                        .copyWith(fontSize: 15),
+                        .copyWith(fontSize: 14),
                   ),
                   Spacer(),
                 ],

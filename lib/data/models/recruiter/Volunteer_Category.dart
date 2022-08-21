@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final profileModel = profileModelFromJson(jsonString);
+//     final categoryVolunteer = categoryVolunteerFromJson(jsonString);
 
 import 'dart:convert';
 
-ProfileModel profileModelFromJson(String str) => ProfileModel.fromJson(json.decode(str));
+CategoryVolunteer categoryVolunteerFromJson(String str) => CategoryVolunteer.fromJson(json.decode(str));
 
-String profileModelToJson(ProfileModel data) => json.encode(data.toJson());
+String categoryVolunteerToJson(CategoryVolunteer data) => json.encode(data.toJson());
 
-class ProfileModel {
-  ProfileModel({
+class CategoryVolunteer {
+  CategoryVolunteer({
     this.success,
     this.message,
     this.data,
@@ -17,23 +17,23 @@ class ProfileModel {
 
   bool success;
   String message;
-  Data data;
+  List<Datum> data;
 
-  factory ProfileModel.fromJson(Map<String, dynamic> json) => ProfileModel(
+  factory CategoryVolunteer.fromJson(Map<String, dynamic> json) => CategoryVolunteer(
     success: json["success"],
     message: json["message"],
-    data: Data.fromJson(json["data"]),
+    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "success": success,
     "message": message,
-    "data": data.toJson(),
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
   };
 }
 
-class Data {
-  Data({
+class Datum {
+  Datum({
     this.id,
     this.token,
     this.firstName,
@@ -66,14 +66,14 @@ class Data {
   String lastName;
   String email;
   String phone;
-  dynamic state;
-  dynamic city;
-  dynamic zipCode;
+  String state;
+  String city;
+  String zipCode;
   List<dynamic> typeOfDisability;
-  dynamic profession;
+  String profession;
   bool termsAndConditions;
   Membership membership;
-  dynamic gender;
+  String gender;
   DateTime dob;
   String image;
   String role;
@@ -81,11 +81,11 @@ class Data {
   dynamic serviceState;
   dynamic serviceZipCode;
   int workingHours;
-  int rating;
+  String rating;
   int opportunities;
   bool isOnline;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
     token: json["token"],
     firstName: json["first_name"],

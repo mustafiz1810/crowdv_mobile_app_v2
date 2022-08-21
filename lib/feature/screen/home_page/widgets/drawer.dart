@@ -1,3 +1,4 @@
+import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/about_us.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/chat.dart';
 import 'package:crowdv_mobile_app/feature/screen/password/change_pass.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/profile.dart';
@@ -74,7 +75,6 @@ class _NavDrawerState extends State<NavDrawer> {
                   'Content-Type': "application/json",
                   "Authorization": "Bearer ${token}"
                 }).then((value) async {
-                  print(value["data"]);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => ProfilePage(
@@ -121,17 +121,17 @@ class _NavDrawerState extends State<NavDrawer> {
               leading: Icon(Icons.question_answer_outlined, color: Colors.black),
               title: new Text("FAQ"),
               onTap: () {
-                Get.to(() => ChatUi());
+
               }),
-          const ListTile(
+           ListTile(
             leading: Icon(Icons.info_outline_rounded, color: Colors.black),
             title: Text("About"),
-            // onTap: () {
-            //   Navigator.push(
-            //     context,
-            //     MaterialPageRoute(builder: (context) => AboutUs()),
-            //   );
-            // }
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AboutUs()),
+              );
+            }
           ),
           token != null
               ? new ListTile(
@@ -142,7 +142,8 @@ class _NavDrawerState extends State<NavDrawer> {
                       'Content-Type': "application/json",
                       "Authorization": "Bearer ${token}"
                     }).then((value) async {
-                      await prefs.clear();
+                      final pref = await SharedPreferences.getInstance();
+                      await pref.clear();
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => LoginPage()),

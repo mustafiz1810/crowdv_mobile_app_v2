@@ -1,21 +1,25 @@
+import 'dart:convert';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/applied_volunteer.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
+import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
+import 'package:crowdv_mobile_app/widgets/show_toast.dart';
+import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:inkwell_splash/inkwell_splash.dart';
+import '../../../data/models/notification_model.dart';
+import '../../../utils/constants.dart';
 
 class NotificationPage extends StatefulWidget {
-  const NotificationPage({Key key}) : super(key: key);
+  final dynamic data, token;
+  NotificationPage({this.data, this.token});
 
   @override
   _NotificationPageState createState() => _NotificationPageState();
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  List<String> notify = ['Job Accepted', 'Job on going', 'Job completed'];
-  List<IconData> icon = [
-    Icons.check_box_outlined,
-    Icons.watch_later_outlined,
-    Icons.check_box
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,78 +27,119 @@ class _NotificationPageState extends State<NotificationPage> {
         title: Text('Notification list'),
         backgroundColor: primaryColor,
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: notify.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                    child: Container(
-                      height: 100,
-                      margin: const EdgeInsets.only(
-                        top: 10,
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: <Color>[
-                            Colors.white,
-                            Colors.white,
-                          ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.4),
-                            blurRadius: 5,
-                            spreadRadius: 0.5,
-                            offset: Offset(1, 1),
-                          ),
-                        ],
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: ListTile(
-                        trailing: Container(
-                          color: Colors.transparent,
-                          height: 200,
-                          width: 100,
-                          child: Column(
-                            children: [
-                              CircleAvatar(
-                                backgroundImage:
-                                    AssetImage('assets/avater.png'),
-                                backgroundColor: Colors.transparent,
+            Expanded(child: FutureBuilder<NotificationModel>(
+              builder: (context, snapshot) {
+                if (widget.data != null) {
+                  return ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: widget.data.length,
+                    itemBuilder: (context, index) {
+                      return InkWellSplash(
+                        splashColor: Colors.white,
+                        onTap: (){
+                          // print(widget.data[index].data.opportunityId.toString());
+                          getRequest(
+                              '/api/v1/mark-notification/${widget.data[index].id}',
+                              null, {
+                            'Content-Type': "application/json",
+                            "Authorization": "Bearer ${widget.token}"
+                          }).then((value) async {
+                            setState(() {});
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AppliedVolunteer(
+                                        id: widget
+                                            .data[index].data.opportunityId,
+                                        token: widget.token,
+                                      )),
+                            );
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Container(
+                            height: 90,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Color(0xFFe5e5e5),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.4),
+                                  blurRadius: 1,
+                                  spreadRadius: 0.2,
+                                  offset: Offset(0, .5),
+                                ),
+                              ],
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: ListTile(
+                              leading: IconBox(
+                                child: Icon(
+                                  Icons.notifications,
+                                  color: Colors.white,
+                                  size: 25,
+                                ),
+                                bgColor: primaryColor,
                               ),
-                              Text('Jhon doe')
-                            ],
+                              title: Row(
+                                children: [
+                                  Text(widget.data[index].data.volunteer,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black)),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(widget.data[index].data.status,
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.black)),
+                                ],
+                              ),
+                              trailing: Container(
+                                height: 10,
+                                width: 10,
+                                decoration: BoxDecoration(
+                                    color: Color(0xFF1d4e89),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(100))),
+                              ),
+                              subtitle: Text(widget.data[index].data.title),
+                            ),
                           ),
                         ),
-                        leading: IconBox(
-                          child: Icon(
-                            icon[index],
-                            color: Colors.white,
-                            size: 25,
-                          ),
-                          bgColor: primaryColor,
-                        ),
-                        title: Text(notify[index].toString(),
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: primaryColor)),
-                        subtitle: Text('massage detail'),
+                      );
+                    },
+                  );
+                } else {
+                  return Container(
+                    alignment: Alignment.center,
+                    child: EmptyWidget(
+                      image: null,
+                      packageImage: PackageImage.Image_1,
+                      title: 'Empty',
+                      subTitle: 'Notification Empty',
+                      titleTextStyle: TextStyle(
+                        fontSize: 22,
+                        color: Color(0xff9da9c7),
+                        fontWeight: FontWeight.w500,
+                      ),
+                      subtitleTextStyle: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xffabb8d6),
                       ),
                     ),
                   );
-                },
-              ),
-            ),
+                }
+              },
+            )),
           ],
         ),
       ),

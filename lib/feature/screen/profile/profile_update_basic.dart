@@ -34,17 +34,13 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
     widget.gender == null ? _gender = "Male" : _gender = widget.gender;
     fnameController.text = widget.fname.toString();
     lnameController.text = widget.lname.toString();
-    emailController.text = widget.email.toString();
-    phoneController.text = widget.phone.toString();
     dateTime = widget.dob;
     super.initState();
   }
 
   TextEditingController fnameController = TextEditingController();
   TextEditingController lnameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  void update(String fname, lname, email, phone, date) async {
+  void update(String fname, lname,date,profession,gender) async {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'profile/update?type=basic'),
@@ -54,9 +50,9 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
           body: {
             "first_name": fname,
             "last_name": lname,
-            "email": email,
-            "phone": phone,
             "dob": date,
+            "profession":profession,
+            "gender":gender,
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
@@ -120,9 +116,10 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                     update(
                         fnameController.text.toString(),
                         lnameController.text.toString(),
-                        emailController.text.toString(),
-                        phoneController.text.toString(),
-                        dateTime.toString());
+                        dateTime.toString(),
+                        _profession,
+                        _gender);
+
                   }, // button pressed
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -178,30 +175,6 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
               ),
               SizedBox(
                 height: 25,
-              ),
-              //--------------------------------here is email
-              Container(
-                child: TextFormField(
-                  controller: emailController,
-                  decoration: ThemeHelper()
-                      .textInputDecoration('Email', 'Update Your email'),
-                ),
-                decoration: ThemeHelper().inputBoxDecorationShaddow(),
-              ),
-              SizedBox(
-                height: 25,
-              ),
-              //--------------------------------here is phone
-              Container(
-                child: TextFormField(
-                  controller: phoneController,
-                  decoration: ThemeHelper()
-                      .textInputDecoration('Phone', 'Update Your phone'),
-                ),
-                decoration: ThemeHelper().inputBoxDecorationShaddow(),
-              ),
-              SizedBox(
-                height: 20,
               ),
               FormField<String>(
                 builder: (FormFieldState<String> state) {

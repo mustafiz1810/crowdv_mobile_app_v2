@@ -30,8 +30,10 @@ class _RoleCheckState extends State<RoleCheck> {
           NetworkConstants.BASE_URL + 'role/${widget.id}/$_dropdown'));
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data);
+        print(data['data']['id']);
         pageRoute(data['data']['token'].toString());
+        idRoute(data['data']['id']);
+        roleRoute(data['data']['role']);
         setState(() {
           isApiCallProcess = false;
         });
@@ -39,7 +41,8 @@ class _RoleCheckState extends State<RoleCheck> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => HomeScreen(id: widget.id, role: _dropdown)),
+              builder: (context) => HomeScreen( id: data['data']['id'],
+                  role: data['data']['role'])),
         );
       } else {
         var data = jsonDecode(response.body.toString());
@@ -75,7 +78,14 @@ class _RoleCheckState extends State<RoleCheck> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString("user", token);
   }
-
+  void idRoute(int id) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setInt("id", id);
+  }
+  void roleRoute(String role) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString("role", role);
+  }
   bool isApiCallProcess = false;
   @override
   Widget build(BuildContext context) {

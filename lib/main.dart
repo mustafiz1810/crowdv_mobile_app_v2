@@ -1,14 +1,17 @@
 import 'package:crowdv_mobile_app/feature/screen/splash/view/splash_view.dart';
-import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 
 void main() async {
   await GetStorage.init();
+  await Firebase.initializeApp();
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }

@@ -5,6 +5,7 @@ import 'package:crowdv_mobile_app/feature/screen/authentication/widgets/terms_co
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/widgets/header_widget.dart';
 import 'package:crowdv_mobile_app/widgets/progres_hud.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
@@ -27,7 +28,8 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
   TextEditingController passwordController = TextEditingController();
   bool checkedValue = false;
   bool checkboxValue = false;
-  void signup(String fname, lname, email, phone, password, check) async {
+  var fcmToken;
+  void signup(String fname, lname, email, phone, password,fcmToken, check) async {
     try {
       Response response =
       await post(Uri.parse(NetworkConstants.BASE_URL + 'registration'), body: {
@@ -36,10 +38,12 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
         'email': email,
         'phone': phone,
         'password': password,
+        'fcm_token':fcmToken,
         'terms_and_conditions': check,
       });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
+        print(data);
         showToast(context, data['message']);
         setState(() {
           isApiCallProcess = false;
@@ -52,6 +56,7 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
         );
       } else {
         var data = jsonDecode(response.body.toString());
+        print(data);
         showToast(context, data['message']);
         setState(() {
           isApiCallProcess = false;
@@ -112,41 +117,6 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        // GestureDetector(
-                        //   child: Stack(
-                        //     children: [
-                        //       // Container(
-                        //       //   padding: EdgeInsets.all(10),
-                        //       //   decoration: BoxDecoration(
-                        //       //     borderRadius: BorderRadius.circular(100),
-                        //       //     border: Border.all(
-                        //       //         width: 5, color: Colors.white),
-                        //       //     color: Colors.white,
-                        //       //     boxShadow: [
-                        //       //       BoxShadow(
-                        //       //         color: Colors.black12,
-                        //       //         blurRadius: 20,
-                        //       //         offset: const Offset(5, 5),
-                        //       //       ),
-                        //       //     ],
-                        //       //   ),
-                        //       //   child: Icon(
-                        //       //     Icons.person,
-                        //       //     color: Colors.grey.shade300,
-                        //       //     size: 80.0,
-                        //       //   ),
-                        //       // ),
-                        //       // Container(
-                        //       //   padding: EdgeInsets.fromLTRB(80, 80, 0, 0),
-                        //       //   child: Icon(
-                        //       //     Icons.add_circle,
-                        //       //     color: Colors.grey.shade700,
-                        //       //     size: 25.0,
-                        //       //   ),
-                        //       // ),
-                        //     ],
-                        //   ),
-                        // ),
                         SizedBox(
                           height: 250,
                         ),
@@ -182,58 +152,6 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                           decoration: ThemeHelper().inputBoxDecorationShaddow(),
                         ),
                         SizedBox(height: 30.0),
-
-                        // Container(
-                        //   child: TextField(
-                        //     controller: emailController,
-                        //     keyboardType: TextInputType.multiline,
-                        //     decoration: InputDecoration(
-                        //         enabled: false,
-                        //         contentPadding:
-                        //             EdgeInsets.fromLTRB(20, 10, 20, 10),
-                        //         focusedBorder: OutlineInputBorder(
-                        //             borderRadius: BorderRadius.circular(100.0),
-                        //             borderSide: BorderSide(color: Colors.grey)),
-                        //         disabledBorder: OutlineInputBorder(
-                        //             borderRadius: BorderRadius.circular(100.0),
-                        //             borderSide: BorderSide(
-                        //                 color: Colors.grey.shade400)),
-                        //         errorBorder: OutlineInputBorder(
-                        //             borderRadius: BorderRadius.circular(100.0),
-                        //             borderSide: BorderSide(
-                        //                 color: Colors.red, width: 2.0)),
-                        //         focusedErrorBorder: OutlineInputBorder(
-                        //             borderRadius: BorderRadius.circular(100.0),
-                        //             borderSide: BorderSide(
-                        //                 color: Colors.red, width: 2.0)),
-                        //         filled: true,
-                        //         hintStyle: TextStyle(
-                        //             color: Colors.black,
-                        //             fontWeight: FontWeight.bold,
-                        //             fontSize: 16),
-                        //         hintText: widget.email.toString(),
-                        //         fillColor: Colors.grey.shade200),
-                        //   ),
-                        //   decoration: ThemeHelper().inputBoxDecorationShaddow(),
-                        // ),
-                        // SizedBox(height: 20.0),
-                        // Container(
-                        //   child: TextFormField(
-                        //     controller: phoneController,
-                        //     decoration: ThemeHelper().textInputDecoration(
-                        //         "Mobile Number", "Enter your mobile number"),
-                        //     keyboardType: TextInputType.phone,
-                        //     validator: (val) {
-                        //       if ((val.isEmpty) &&
-                        //           !RegExp(r"^(\d+)*$").hasMatch(val)) {
-                        //         return "Enter a valid phone number";
-                        //       }
-                        //       return null;
-                        //     },
-                        //   ),
-                        //   decoration: ThemeHelper().inputBoxDecorationShaddow(),
-                        // ),
-                        // SizedBox(height: 20.0),
                         Container(
                           child: TextFormField(
                             controller: passwordController,
@@ -257,6 +175,44 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                                 Row(
                                   children: <Widget>[
                                     Checkbox(
+                                        value: checkedValue,
+                                        onChanged: (value) {
+                                          FirebaseMessaging.instance.getToken().then((newToken){
+                                            setState(() {
+                                              fcmToken=newToken;
+                                              print(fcmToken);
+                                              checkedValue = value;
+                                              state.didChange(value);
+                                            });
+                                          }
+                                          );
+                                        }),
+                                    RichText(
+                                      text: new TextSpan(
+                                        style: new TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        children: [
+                                          new TextSpan(
+                                            text:
+                                            "Allow Notification",
+                                            style: TextStyle(color: Colors.grey),),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        FormField<bool>(
+                          builder: (state) {
+                            return Column(
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Checkbox(
                                         value: checkboxValue,
                                         onChanged: (value) {
                                           setState(() {
@@ -273,8 +229,8 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                                           ),
                                           children: [
                                             new TextSpan(
-                                                text:
-                                                "I accept all ",
+                                              text:
+                                              "I accept all ",
                                               style: TextStyle(color: Colors.grey),),
                                             new TextSpan(
                                                 text: "terms and conditions.",
@@ -347,6 +303,7 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                                     widget.email.toString(),
                                     widget.phone.toString(),
                                     passwordController.text.toString(),
+                                    fcmToken,
                                     checkboxValue.toString(),);
                               }
                             },

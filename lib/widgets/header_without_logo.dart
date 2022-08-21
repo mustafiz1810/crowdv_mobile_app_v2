@@ -19,7 +19,6 @@ class HeaderWidget extends StatefulWidget {
 
 class _HeaderWidgetState extends State<HeaderWidget>
     with TickerProviderStateMixin {
-  var user;
   bool volunteer = true;
   bool recruiter = false;
   void rec() async {
@@ -28,9 +27,6 @@ class _HeaderWidgetState extends State<HeaderWidget>
           Uri.parse(NetworkConstants.BASE_URL + 'role/${widget.id}/volunteer'));
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data);
-        prefs.clear();
-        pageRoute(data['data']['token']);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) =>
@@ -67,9 +63,6 @@ class _HeaderWidgetState extends State<HeaderWidget>
           Uri.parse(NetworkConstants.BASE_URL + 'role/${widget.id}/recruiter'));
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data);
-        prefs.clear();
-        pageRoute(data['data']['token']);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) =>
@@ -98,21 +91,6 @@ class _HeaderWidgetState extends State<HeaderWidget>
             );
           });
     }
-  }
-
-  void pageRoute(String token) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    await pref.setString("user", token);
-  }
-
-  @override
-  void initState() {
-    getUser().then((value) {
-      setState(() {
-        user = value;
-      });
-    });
-    super.initState();
   }
 
   @override
@@ -159,7 +137,6 @@ class _HeaderWidgetState extends State<HeaderWidget>
                               colorOn: Colors.blueAccent,
                               onChanged: (val) {
                                 recruiter = val;
-                                print("recruiter");
                               },
                               onTap: () {
                                 rec();

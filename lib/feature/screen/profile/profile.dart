@@ -68,7 +68,6 @@ class _ProfilePageState extends State<ProfilePage> {
   List<String> LouisianaProvince = ['Anchorage', 'Juneau', 'California'];
   List<String> provinces = [];
 
-
   List<dynamic> array = [];
 
   void _answerQuestion(int id) {
@@ -77,22 +76,21 @@ class _ProfilePageState extends State<ProfilePage> {
     } else {
       array.add(id);
     }
-
   }
 
   void initState() {
     super.initState();
     getCred();
     array = widget.disability;
-    print(array);
-    widget.selectedCountry == "unknown"
+    // print(array);
+    widget.selectedCountry == null
         ? selectedCountry = "Alabama"
         : selectedCountry = widget.selectedCountry;
-    widget.selectedProvince == "unknown"
+    widget.selectedProvince == null
         ? selectedProvince = "Birmingham"
         : selectedProvince = widget.selectedProvince;
     widget.zip == null
-        ? zipController.text = "12345"
+        ? zipController.text = ""
         : zipController.text = widget.zip;
   }
 
@@ -115,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  void set(List<dynamic>disable) async {
+  void set(List<dynamic> disable) async {
     String body = json.encode({
       'type_of_disability': disable,
     });
@@ -169,6 +167,7 @@ class _ProfilePageState extends State<ProfilePage> {
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
+        print(data);
         setState(() {});
         showToast(context, data['message']);
       } else {
@@ -274,7 +273,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               size: 13,
                             ),
                             Text(
-                              snapshot.data.data.city,
+                              snapshot.data.data.state != null
+                                  ? snapshot.data.data.state
+                                  : "",
                               style:
                                   TextStyle(fontSize: 14, color: Colors.black),
                             ),
@@ -512,7 +513,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             Icon(Icons.male),
                                                         title: Text("Gender:"),
                                                         subtitle: Text(snapshot
-                                                            .data.data.gender)),
+                                                                    .data
+                                                                    .data
+                                                                    .gender !=
+                                                                null
+                                                            ? snapshot.data.data
+                                                                .gender
+                                                            : "")),
                                                   ],
                                                 ),
                                               ],
@@ -521,7 +528,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         ),
                                       ),
                                       Container(
-                                        padding: EdgeInsets.only(left: 15,right: 15,top: 10),
+                                        padding: EdgeInsets.only(
+                                            left: 15, right: 15, top: 10),
                                         child: Column(
                                           children: [
                                             Expanded(
@@ -532,40 +540,54 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 itemBuilder: (context, index) {
                                                   return Card(
                                                       child:
-                                                      new CheckboxListTile(
-                                                          activeColor:
-                                                          primaryColor,
-                                                          dense: true,
-                                                          //font change
-                                                          title: new Text(
-                                                            widget.data[
-                                                            index]
-                                                            ["title"],
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                14,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .w600,
-                                                                letterSpacing:
-                                                                0.5),
-                                                          ),
-                                                          value:array.contains(
-                                                              widget.data[index]["id"])
-                                                              ?true:widget.data[index]["is_check"],
-                                                          onChanged: (bool
-                                                          value) {
-                                                            setState(() {
-                                                              widget.data[index]["is_check"] =
-                                                                  value;
-                                                              _answerQuestion(
-                                                                  widget.data[index]["id"]);
-                                                            });
-                                                          }));
+                                                          new CheckboxListTile(
+                                                              activeColor:
+                                                                  primaryColor,
+                                                              dense: true,
+                                                              //font change
+                                                              title: new Text(
+                                                                widget.data[
+                                                                        index]
+                                                                    ["title"],
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    letterSpacing:
+                                                                        0.5),
+                                                              ),
+                                                              value: array.contains(
+                                                                      widget.data[
+                                                                              index]
+                                                                          [
+                                                                          "id"])
+                                                                  ? true
+                                                                  : widget.data[
+                                                                          index]
+                                                                      [
+                                                                      "is_check"],
+                                                              onChanged:
+                                                                  (bool value) {
+                                                                setState(() {
+                                                                  widget.data[
+                                                                          index]
+                                                                      [
+                                                                      "is_check"] = value;
+                                                                  _answerQuestion(
+                                                                      widget.data[
+                                                                              index]
+                                                                          [
+                                                                          "id"]);
+                                                                });
+                                                              }));
                                                 },
                                               ),
                                             ),
-                                            SizedBox(height: 10,),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
                                             SizedBox(
                                               height: 50,
                                               width: 300,
@@ -574,8 +596,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   primary: primaryColor,
                                                   shape: RoundedRectangleBorder(
                                                       borderRadius:
-                                                      BorderRadius.circular(
-                                                          13)),
+                                                          BorderRadius.circular(
+                                                              13)),
                                                 ),
                                                 onPressed: () {
                                                   set(array);
@@ -590,7 +612,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(height: 15,),
+                                            SizedBox(
+                                              height: 15,
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -603,51 +627,92 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 height: 20,
                                               ),
                                               FormField<String>(
-                                                builder: (FormFieldState<String> state) {
+                                                builder: (FormFieldState<String>
+                                                    state) {
                                                   return InputDecorator(
                                                     decoration: InputDecoration(
                                                       labelText: "State",
                                                       hintText: "State",
                                                       fillColor: Colors.white,
-                                                      labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                                                      labelStyle: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
                                                       filled: true,
-                                                      contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                                                      focusedBorder: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.circular(12.0),
-                                                          borderSide: BorderSide(color: Colors.black)),
-                                                      enabledBorder: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.circular(12.0),
-                                                          borderSide: BorderSide(color: Colors.black)),
-                                                      errorBorder: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.circular(12.0),
-                                                          borderSide:
-                                                          BorderSide(color: Colors.red, width: 2.0)),
-                                                      focusedErrorBorder: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.circular(12.0),
-                                                          borderSide:
-                                                          BorderSide(color: Colors.red, width: 2.0)),
+                                                      contentPadding:
+                                                          EdgeInsets.fromLTRB(
+                                                              20, 10, 20, 10),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12.0),
+                                                              borderSide: BorderSide(
+                                                                  color: Colors
+                                                                      .black)),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12.0),
+                                                              borderSide: BorderSide(
+                                                                  color: Colors
+                                                                      .black)),
+                                                      errorBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12.0),
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                      color: Colors
+                                                                          .red,
+                                                                      width:
+                                                                          2.0)),
+                                                      focusedErrorBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12.0),
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                      color: Colors
+                                                                          .red,
+                                                                      width:
+                                                                          2.0)),
                                                     ),
-                                                    isEmpty: selectedCountry == '',
-                                                    child:  Center(
-                                                      child: DropdownButton<String>(
+                                                    isEmpty:
+                                                        selectedCountry == '',
+                                                    child: Center(
+                                                      child: DropdownButton<
+                                                          String>(
                                                         hint: Center(
                                                           child: Text(
-                                                            "Select Country",
+                                                            snapshot.data.data
+                                                                        .state !=
+                                                                    null
+                                                                ? snapshot.data
+                                                                    .data.state
+                                                                : "Select Country",
                                                             style: TextStyle(
                                                                 fontSize: 18,
-                                                                color: Colors.black,
+                                                                color: Colors
+                                                                    .black,
                                                                 fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                                    FontWeight
+                                                                        .bold),
                                                           ),
                                                         ),
                                                         underline: SizedBox(),
                                                         iconEnabledColor:
-                                                        Colors.black,
+                                                            Colors.black,
                                                         value: selectedCountry,
                                                         isExpanded: true,
-                                                        items: countries
-                                                            .map((String value) {
+                                                        items: countries.map(
+                                                            (String value) {
                                                           return DropdownMenuItem<
                                                               String>(
                                                             value: value,
@@ -656,21 +721,20 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         }).toList(),
                                                         selectedItemBuilder:
                                                             (BuildContext
-                                                        context) =>
-                                                            countries
-                                                                .map(
-                                                                    (e) =>
-                                                                    Center(
-                                                                      child:
-                                                                      Text(
-                                                                        e,
-                                                                        style: TextStyle(
-                                                                            fontSize: 18,
-                                                                            color: Colors.black,
-                                                                            fontWeight: FontWeight.bold),
-                                                                      ),
-                                                                    ))
-                                                                .toList(),
+                                                                    context) =>
+                                                                countries
+                                                                    .map((e) =>
+                                                                        Center(
+                                                                          child:
+                                                                              Text(
+                                                                            e,
+                                                                            style: TextStyle(
+                                                                                fontSize: 18,
+                                                                                color: Colors.black,
+                                                                                fontWeight: FontWeight.bold),
+                                                                          ),
+                                                                        ))
+                                                                    .toList(),
                                                         onChanged: (country) {
                                                           if (country ==
                                                               'Alabama') {
@@ -716,7 +780,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             provinces = [];
                                                           }
                                                           setState(() {
-                                                            selectedProvince = null;
+                                                            selectedProvince =
+                                                                null;
                                                             selectedCountry =
                                                                 country;
                                                             print(selectedCountry
@@ -732,51 +797,92 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 height: 20,
                                               ),
                                               FormField<String>(
-                                                builder: (FormFieldState<String> state) {
+                                                builder: (FormFieldState<String>
+                                                    state) {
                                                   return InputDecorator(
                                                     decoration: InputDecoration(
                                                       labelText: "City",
                                                       hintText: "City",
                                                       fillColor: Colors.white,
-                                                      labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                                                      labelStyle: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
                                                       filled: true,
-                                                      contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                                                      focusedBorder: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.circular(12.0),
-                                                          borderSide: BorderSide(color: Colors.black)),
-                                                      enabledBorder: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.circular(12.0),
-                                                          borderSide: BorderSide(color: Colors.black)),
-                                                      errorBorder: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.circular(12.0),
-                                                          borderSide:
-                                                          BorderSide(color: Colors.red, width: 2.0)),
-                                                      focusedErrorBorder: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.circular(12.0),
-                                                          borderSide:
-                                                          BorderSide(color: Colors.red, width: 2.0)),
+                                                      contentPadding:
+                                                          EdgeInsets.fromLTRB(
+                                                              20, 10, 20, 10),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12.0),
+                                                              borderSide: BorderSide(
+                                                                  color: Colors
+                                                                      .black)),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12.0),
+                                                              borderSide: BorderSide(
+                                                                  color: Colors
+                                                                      .black)),
+                                                      errorBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12.0),
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                      color: Colors
+                                                                          .red,
+                                                                      width:
+                                                                          2.0)),
+                                                      focusedErrorBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12.0),
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                      color: Colors
+                                                                          .red,
+                                                                      width:
+                                                                          2.0)),
                                                     ),
-                                                    isEmpty: selectedProvince == '',
-                                                    child:  Center(
-                                                      child: DropdownButton<String>(
+                                                    isEmpty:
+                                                        selectedProvince == '',
+                                                    child: Center(
+                                                      child: DropdownButton<
+                                                          String>(
                                                         hint: Center(
                                                           child: Text(
-                                                            'select city',
+                                                            snapshot.data.data
+                                                                        .city !=
+                                                                    null
+                                                                ? snapshot.data
+                                                                    .data.city
+                                                                : "Select City",
                                                             style: TextStyle(
                                                                 fontSize: 18,
-                                                                color: Colors.black,
+                                                                color: Colors
+                                                                    .black,
                                                                 fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                                    FontWeight
+                                                                        .bold),
                                                           ),
                                                         ),
                                                         underline: SizedBox(),
                                                         iconEnabledColor:
-                                                        Colors.black,
+                                                            Colors.black,
                                                         value: selectedProvince,
                                                         isExpanded: true,
-                                                        items: provinces
-                                                            .map((String value) {
+                                                        items: provinces.map(
+                                                            (String value) {
                                                           return DropdownMenuItem<
                                                               String>(
                                                             value: value,
@@ -785,27 +891,27 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         }).toList(),
                                                         selectedItemBuilder:
                                                             (BuildContext
-                                                        context) =>
-                                                            provinces
-                                                                .map(
-                                                                    (e) =>
-                                                                    Center(
-                                                                      child:
-                                                                      Text(
-                                                                        e,
-                                                                        style: TextStyle(
-                                                                            fontSize: 18,
-                                                                            color: Colors.black,
-                                                                            fontWeight: FontWeight.bold),
-                                                                      ),
-                                                                    ))
-                                                                .toList(),
+                                                                    context) =>
+                                                                provinces
+                                                                    .map((e) =>
+                                                                        Center(
+                                                                          child:
+                                                                              Text(
+                                                                            e,
+                                                                            style: TextStyle(
+                                                                                fontSize: 18,
+                                                                                color: Colors.black,
+                                                                                fontWeight: FontWeight.bold),
+                                                                          ),
+                                                                        ))
+                                                                    .toList(),
                                                         onChanged: (province) {
                                                           setState(() {
                                                             selectedProvince =
                                                                 province;
-                                                            print(selectedProvince
-                                                                .toString());
+                                                            print(
+                                                                selectedProvince
+                                                                    .toString());
                                                           });
                                                         },
                                                       ),

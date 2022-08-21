@@ -295,56 +295,28 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                             )
                                                 : Row(
                                               children: [
-                                                Stack(
-                                                    children:[
-                                                      IconBox(
-                                                        onTap: () {
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    AppliedVolunteer(
-                                                                      token: token,
-                                                                      id: snapshot
-                                                                          .data
-                                                                          .data[index]
-                                                                          .id,
-                                                                    )),
-                                                          ).then((value) =>
-                                                              setState(() {}));
-                                                        },
-                                                        child: Icon(
-                                                          Icons.person_pin,
-                                                          color: Colors.white,
-                                                          size: 20,
-                                                        ),
-                                                        bgColor: primaryColor,
-                                                      ),
-                                                      Positioned(
-                                                        top: 2,
-                                                        left: 3,
-                                                        child: Container(
-                                                          padding: EdgeInsets.all(1),
-                                                          decoration: BoxDecoration(
-                                                            color: Colors.red,
-                                                            borderRadius:
-                                                            BorderRadius.circular(6),
-                                                          ),
-                                                          constraints: BoxConstraints(
-                                                            minWidth: 12,
-                                                            minHeight: 12,
-                                                          ),
-                                                          child: Text(
-                                                            '1',
-                                                            style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontSize: 8,
-                                                            ),
-                                                            textAlign: TextAlign.center,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ]
+                                                IconBox(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              AppliedVolunteer(
+                                                                token: token,
+                                                                id: snapshot
+                                                                    .data
+                                                                    .data[index]
+                                                                    .id,
+                                                              )),
+                                                    ).then((value) =>
+                                                        setState(() {}));
+                                                  },
+                                                  child: Icon(
+                                                    Icons.person_pin,
+                                                    color: Colors.white,
+                                                    size: 20,
+                                                  ),
+                                                  bgColor: primaryColor,
                                                 ),
                                                 SizedBox(
                                                   width: 10,

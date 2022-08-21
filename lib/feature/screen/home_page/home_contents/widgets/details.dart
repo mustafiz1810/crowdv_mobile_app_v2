@@ -52,9 +52,6 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
         future: getDetailsApi(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            print("V"+snapshot.data.data.volunteer.rating.toString());
-            print(snapshot.data.data.recruiter.rating.toString());
-
             return Container(
               color: Color(0xFFe9ecef),
               child: Column(

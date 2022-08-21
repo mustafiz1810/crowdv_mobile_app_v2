@@ -34,6 +34,8 @@ class _LoginPageState extends State<LoginPage> {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         pageRoute(data['result']['token'].toString());
+        idRoute(data['result']['data']['id']);
+        roleRoute(data['result']['data']['role']);
         // print('created');
         setState(() {
           isApiCallProcess = false;
@@ -78,6 +80,14 @@ class _LoginPageState extends State<LoginPage> {
   void pageRoute(String token) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString("user", token);
+  }
+  void idRoute(int id) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setInt("id", id);
+  }
+  void roleRoute(String role) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString("role", role);
   }
 
   bool isApiCallProcess = false;

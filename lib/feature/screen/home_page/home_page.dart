@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:crowdv_mobile_app/data/models/profile_model.dart';
+import 'package:crowdv_mobile_app/data/models/notification_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/Search/search.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/certificate.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/organization/create_opportunity.dart';
@@ -9,9 +9,12 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/service
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/set_category.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/upcoming.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/volunteer_opportunities.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/applied_volunteer.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/notification.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/drawer.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
+import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
 import 'package:crowdv_mobile_app/widgets/category_grid.dart';
@@ -19,6 +22,7 @@ import 'package:crowdv_mobile_app/widgets/header_without_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../data/models/ac_model.dart';
 import '../../../widgets/http_request.dart';
 import 'home_contents/Training/training_list.dart';
 import 'home_contents/recruiter/my_opportunities.dart';
@@ -33,12 +37,58 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool navbarScrolled = false;
-  String token = "";
+  String token;
+  int count;
 
   @override
   void initState() {
     getCred();
+    getAcApi();
+    getNotifyApi();
     super.initState();
+
+    //Foreground State
+    FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.onMessage.listen((message) {
+      if(message.notification != null){
+        print(message.notification.title);
+        print(message.notification.body);
+      }
+    });
+
+    //app open but not terminated
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      if(message.notification != null){
+        print(message.notification.title);
+        print(message.notification.body);
+        print(message.data['opportunity_id']);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AppliedVolunteer(
+                id: message.data['opportunity_id'],
+                token:token,
+              )),
+        );
+      }
+    });
+
+    //when app is terminated
+    FirebaseMessaging.instance.getInitialMessage().then((message){
+      if(message != null){
+        print(message.notification.title);
+        print(message.notification.body);
+        print(message.data['opportunity_id']);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AppliedVolunteer(
+                id: message.data['opportunity_id'],
+                token:token,
+              )),
+        );
+      }
+    });
   }
 
   void getCred() async {
@@ -48,15 +98,28 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Future<ProfileModel> getAcApi() async {
+  Future<AccountModel> getAcApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL + 'profile'),
         headers: {"Authorization": "Bearer $token"});
-    var data = jsonDecode(response.body.toString());
+    var data = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      return ProfileModel.fromJson(data);
+      return AccountModel.fromJson(data);
     } else {
-      return ProfileModel.fromJson(data);
+      return AccountModel.fromJson(data);
+    }
+  }
+
+  Future<NotificationModel> getNotifyApi() async {
+    final response = await http.get(
+        Uri.parse(NetworkConstants.BASE_URL + 'notifications'),
+        headers: {"Authorization": "Bearer $token"});
+    var data = jsonDecode(response.body.toString());
+    print(data);
+    if (response.statusCode == 200) {
+      return NotificationModel.fromJson(data);
+    } else {
+      return NotificationModel.fromJson(data);
     }
   }
 
@@ -65,81 +128,90 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: FutureBuilder<ProfileModel>(
+      drawer: FutureBuilder<AccountModel>(
           future: getAcApi(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return NavDrawer(
                 id: widget.id,
-                role: widget.role,
+                role: snapshot.data.data.role,
                 fname: snapshot.data.data.firstName,
                 lname: snapshot.data.data.lastName,
                 email: snapshot.data.data.email,
                 image: snapshot.data.data.image,
-                disability:  snapshot.data.data.typeOfDisability,
+                disability: snapshot.data.data.typeOfDisability,
                 prof: snapshot.data.data.profession,
                 gender: snapshot.data.data.gender,
-                  state: snapshot.data.data.state,
+                state: snapshot.data.data.state,
                 city: snapshot.data.data.city,
                 zip: snapshot.data.data.zipCode,
               );
             } else {
-              return Container(
-                color: Colors.white,
-                height: 100,
-                width: 100,
-              );
+              return Container();
             }
           }),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
-        // collapsedHeight: 150,
-        // ),
-        // centerTitle: true,
         backgroundColor: Colors.white,
-        // pinned: true,
-        // floating: true,
-        // forceElevated: innerBoxIsScrolled,
         actions: [
           Container(
             margin: EdgeInsets.only(
               top: 16,
               right: 16,
             ),
-            child: Stack(
-              children: <Widget>[
-                InkWell(
-                    child: Icon(
-                      Icons.notifications,
-                      color: Colors.black,
-                    ),
-                    onTap: () {
-                      Get.to(() => NotificationPage());
-                    }),
-                Positioned(
-                  right: 0,
-                  child: Container(
-                    padding: EdgeInsets.all(1),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    constraints: BoxConstraints(
-                      minWidth: 12,
-                      minHeight: 12,
-                    ),
-                    child: Text(
-                      '5',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 8,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                )
-              ],
-            ),
+            child: FutureBuilder<NotificationModel>(
+                future: getNotifyApi(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Stack(
+                      children: <Widget>[
+                        InkWell(
+                            child: Icon(
+                              Icons.notifications,
+                              color: Colors.black,
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => NotificationPage(
+                                            data: snapshot.data.data.list,
+                                            token: token,
+                                          ))).then((value) {
+                                setState(() {});
+                              });
+                            }),
+                        snapshot.data.data.count != 0 &&
+                                widget.role == "recruiter"
+                            ? Positioned(
+                                right: 0,
+                                child: Container(
+                                  padding: EdgeInsets.all(1),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  constraints: BoxConstraints(
+                                    minWidth: 12,
+                                    minHeight: 12,
+                                  ),
+                                  child: Text(
+                                    snapshot.data.data.count.toString(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 8,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                      ],
+                    );
+                  } else {
+                    return Container();
+                  }
+                }),
           )
         ],
       ),

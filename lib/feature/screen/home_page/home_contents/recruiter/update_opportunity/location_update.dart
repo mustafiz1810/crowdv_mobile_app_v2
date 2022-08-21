@@ -105,7 +105,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
         Navigator.popUntil(context, (route) => count++ == 3);
       } else {
         var data = jsonDecode(response.body.toString());
-        showToast(context, data['error'].toString());
+        showToast(context, data['errors'].toString());
       }
     } catch (e) {
       showDialog(
