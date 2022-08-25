@@ -25,6 +25,7 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
         Uri.parse(NetworkConstants.BASE_URL + 'apply-volunteer-list/${widget.id}'),
         headers: {"Authorization": "Bearer ${widget.token}"});
     var data = jsonDecode(response.body.toString());
+    print(data);
     if (response.statusCode == 200) {
       return ApplyVolunteer.fromJson(data);
     } else {
@@ -165,7 +166,7 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
                                                           fontSize: 18),
                                                     ),
                                                     Text(
-                                                      snapshot.data.data.applyVolunteer[index].volunteers.firstName+" "+snapshot.data.data.applyVolunteer[index].volunteers.lastName,
+                                                      snapshot.data.data.applyVolunteer[index].volunteers.name,
                                                       style: TextStyle(
                                                           fontWeight:
                                                           FontWeight.bold,

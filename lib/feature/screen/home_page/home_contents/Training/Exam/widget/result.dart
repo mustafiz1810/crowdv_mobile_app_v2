@@ -124,9 +124,9 @@ class _ResultState extends State<Result> {
             //     );
             //   },
             // ),
-             Visibility(
-               visible: isShow,
-               child: Container(
+            Visibility(
+              visible: isShow,
+              child: Container(
                 height: 50,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
@@ -136,25 +136,25 @@ class _ResultState extends State<Result> {
                   children: [
                     Text("Click to check your result"),
                     ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: primaryColor,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30)),
-                            ),
-                            onPressed: () {
-                              submit(widget.id, widget.answer);
-                              setState(() {
-                                if (isShow == true) {
-                                  isShow = false;
-                                }
-                              });
-                            },
-                            child: Text("Check"),
-                          ),
+                      style: ElevatedButton.styleFrom(
+                        primary: primaryColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                      ),
+                      onPressed: () {
+                        submit(widget.id, widget.answer);
+                        setState(() {
+                          if (isShow == true) {
+                            isShow = false;
+                          }
+                        });
+                      },
+                      child: Text("Check"),
+                    ),
                   ],
                 ),
+              ),
             ),
-             ),
             SizedBox(
               height: 5,
             ),
@@ -189,7 +189,7 @@ class _ResultState extends State<Result> {
                                   fontWeight: FontWeight.bold, fontSize: 18),
                             ),
                             Text(
-                              name+" "+lastName,
+                              name + " " + lastName,
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,

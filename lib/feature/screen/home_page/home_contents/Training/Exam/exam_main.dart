@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 class ExamPage extends StatefulWidget {
   final data;
-  ExamPage({this.data});
+  final id;
+  ExamPage({this.data,this.id});
   @override
   State<StatefulWidget> createState() {
     return _ExamPageState();
@@ -50,7 +51,7 @@ class _ExamPageState extends State<ExamPage> {
                     ) //Quiz
                   : Result(
                       tempArray,
-                      widget.data[0]['test_id'],
+                      widget.id,
                     ),
             ],
           )), //Padding

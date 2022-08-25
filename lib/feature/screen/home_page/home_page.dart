@@ -13,7 +13,6 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets
 import 'package:crowdv_mobile_app/feature/screen/home_page/notification.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/drawer.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
-import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
@@ -43,8 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     getCred();
-    getAcApi();
-    getNotifyApi();
     super.initState();
 
     //Foreground State

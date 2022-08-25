@@ -36,22 +36,26 @@ class Data {
   Data({
     this.task,
     this.applyVolunteer,
+    this.applyVolunteersCount,
     this.status,
   });
 
   Task task;
   List<ApplyVolunteerElement> applyVolunteer;
+  int applyVolunteersCount;
   String status;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     task: Task.fromJson(json["task"]),
     applyVolunteer: List<ApplyVolunteerElement>.from(json["apply_volunteer"].map((x) => ApplyVolunteerElement.fromJson(x))),
+    applyVolunteersCount: json["apply_volunteers_count"],
     status: json["status"],
   );
 
   Map<String, dynamic> toJson() => {
     "task": task.toJson(),
     "apply_volunteer": List<dynamic>.from(applyVolunteer.map((x) => x.toJson())),
+    "apply_volunteers_count": applyVolunteersCount,
     "status": status,
   };
 }
@@ -59,19 +63,47 @@ class Data {
 class ApplyVolunteerElement {
   ApplyVolunteerElement({
     this.id,
+    this.taskId,
+    this.title,
+    this.details,
+    this.city,
+    this.taskStatus,
+    this.status,
+    this.categoryIcon,
     this.volunteers,
   });
 
   int id;
+  int taskId;
+  String title;
+  String details;
+  String city;
+  String taskStatus;
+  String status;
+  String categoryIcon;
   Volunteers volunteers;
 
   factory ApplyVolunteerElement.fromJson(Map<String, dynamic> json) => ApplyVolunteerElement(
     id: json["id"],
+    taskId: json["task_id"],
+    title: json["title"],
+    details: json["details"],
+    city: json["city"],
+    taskStatus: json["task_status"],
+    status: json["status"],
+    categoryIcon: json["category_icon"],
     volunteers: Volunteers.fromJson(json["volunteers"]),
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "task_id": taskId,
+    "title": title,
+    "details": details,
+    "city": city,
+    "task_status": taskStatus,
+    "status": status,
+    "category_icon": categoryIcon,
     "volunteers": volunteers.toJson(),
   };
 }
@@ -79,44 +111,24 @@ class ApplyVolunteerElement {
 class Volunteers {
   Volunteers({
     this.id,
-    this.firstName,
-    this.lastName,
-    this.image,
+    this.name,
     this.phone,
-    this.email,
-    this.gender,
-    this.profession,
   });
 
   int id;
-  String firstName;
-  String lastName;
-  String image;
+  String name;
   String phone;
-  String email;
-  String gender;
-  dynamic profession;
 
   factory Volunteers.fromJson(Map<String, dynamic> json) => Volunteers(
     id: json["id"],
-    firstName: json["first_name"],
-    lastName: json["last_name"],
-    image: json["image"],
+    name: json["name"],
     phone: json["phone"],
-    email: json["email"],
-    gender: json["gender"],
-    profession: json["profession"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "first_name": firstName,
-    "last_name": lastName,
-    "image": image,
+    "name": name,
     "phone": phone,
-    "email": email,
-    "gender": gender,
-    "profession": profession,
   };
 }
 

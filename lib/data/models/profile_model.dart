@@ -57,6 +57,7 @@ class Data {
     this.workingHours,
     this.rating,
     this.opportunities,
+    this.isComplete,
     this.isOnline,
   });
 
@@ -66,23 +67,24 @@ class Data {
   String lastName;
   String email;
   String phone;
-  dynamic state;
-  dynamic city;
-  dynamic zipCode;
-  List<dynamic> typeOfDisability;
-  dynamic profession;
+  String state;
+  String city;
+  String zipCode;
+  List<int> typeOfDisability;
+  String profession;
   bool termsAndConditions;
   Membership membership;
-  dynamic gender;
+  String gender;
   DateTime dob;
   String image;
   String role;
-  dynamic serviceCity;
-  dynamic serviceState;
-  dynamic serviceZipCode;
+  String serviceCity;
+  String serviceState;
+  String serviceZipCode;
   int workingHours;
   int rating;
   int opportunities;
+  int isComplete;
   bool isOnline;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -95,7 +97,7 @@ class Data {
     state: json["state"],
     city: json["city"],
     zipCode: json["zip_code"],
-    typeOfDisability: List<dynamic>.from(json["type_of_disability"].map((x) => x)),
+    typeOfDisability: List<int>.from(json["type_of_disability"].map((x) => x)),
     profession: json["profession"],
     termsAndConditions: json["terms_and_conditions"],
     membership: Membership.fromJson(json["membership"]),
@@ -109,6 +111,7 @@ class Data {
     workingHours: json["working_hours"],
     rating: json["rating"],
     opportunities: json["opportunities"],
+    isComplete: json["is_complete"],
     isOnline: json["is_online"],
   );
 
@@ -136,6 +139,7 @@ class Data {
     "working_hours": workingHours,
     "rating": rating,
     "opportunities": opportunities,
+    "is_complete": isComplete,
     "is_online": isOnline,
   };
 }

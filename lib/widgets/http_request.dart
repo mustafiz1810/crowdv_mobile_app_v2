@@ -5,8 +5,8 @@ import 'package:flutter_html/html_parser.dart';
 import 'package:http/http.dart' as http;
 
 Future getRequest(path, qparam, headers) async {
-  final response = await http.get(Uri.http('192.168.68.115:8000', path, qparam),
-      headers: headers);
+  final response = await http
+      .get(Uri.https('system.getcrowdv.com', path, qparam), headers: headers);
 
   // debugPrint(response.body);
 
@@ -17,15 +17,6 @@ Future getRequest(path, qparam, headers) async {
   } else {
     var data = json.decode(response.body);
     showToast(data["message"]);
-    // print(
-    //   path,
-    // );
-    // print(
-    //   headers,
-    // );
-    // print(
-    //   qparam,
-    // );
     print(HtmlParser.parseHTML(response.body).body.innerHtml);
     throw Exception('Failed to load data');
   }
@@ -33,7 +24,7 @@ Future getRequest(path, qparam, headers) async {
 
 Future getRequestWithoutParam(path, headers) async {
   final response =
-      await http.get(Uri.http('192.168.68.115:8000', path), headers: headers);
+      await http.get(Uri.https('system.getcrowdv.com', path), headers: headers);
 
   // debugPrint(response.body);
 
@@ -55,7 +46,7 @@ Future getRequestWithoutParam(path, headers) async {
 }
 
 Future postRequest(path, headers, body) async {
-  final response = await http.post(Uri.https('192.168.68.115:8000', path),
+  final response = await http.post(Uri.https('system.getcrowdv.com', path),
       headers: headers, body: body);
 
   if (response.statusCode == 200 || response.statusCode == 201) {
@@ -81,8 +72,10 @@ Future putRequest(path, headers, qparam, body) async {
   print(qparam.runtimeType);
   print(body.runtimeType);
 
-  final response = await http.put(Uri.http('192.168.68.115:8000', path, qparam),
-      headers: headers, body: body);
+  final response = await http.put(
+      Uri.https('system.getcrowdv.com', path, qparam),
+      headers: headers,
+      body: body);
 
   if (response.statusCode == 200) {
     var data = json.decode(response.body);

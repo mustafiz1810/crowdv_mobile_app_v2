@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/feature/screen/authentication/otp_config/volunteer/otp_v.dart';
+import 'package:crowdv_mobile_app/feature/screen/authentication/otp_config/volunteer/phone_v.dart';
+import 'package:crowdv_mobile_app/feature/screen/authentication/sign_in/sign_in.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/widgets/header_widget.dart';
 import 'package:crowdv_mobile_app/widgets/progres_hud.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import '../../../../../widgets/show_toast.dart';
+import '../../sign_up/Volunteer/role_check.dart';
+import '../../sign_up/Volunteer/volunteer_sign_up.dart';
 
 class EmailVolunteer extends StatefulWidget {
   const EmailVolunteer({Key key}) : super(key: key);
@@ -27,18 +31,51 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
         print(data);
-        // print('created');
         setState(() {
           isApiCallProcess = false;
         });
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => OtpVolunteer(
-                    email: data['data']['email'],
-                  )),
-        );
+        if (data['data']['verified'] == 0) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OtpVolunteer(
+                      email: data['data']['email'],
+                    )),
+          );
+        }
+        else if (data['data']['is_phone_verified'] == 0){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PhoneVerify(
+                  email: data['data']['email'],
+                )),
+          );
+        }
+        else if(data['data']['first_name'] ==null ){
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => VolunteerSignUp(email: data['data']['email'].toString(),phone:  data['data']['phone'].toString(),),
+              ));
+        }
+        else if(data['data']['first_name'] !=null && data['data']['role'] ==null){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    RoleCheck(id: data['data']['id'],)),
+          );
+        }else{
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>LoginPage()),
+          );
+        }
+
       } else {
         var data = jsonDecode(response.body.toString());
         showToast(context, data['message']);
@@ -69,7 +106,6 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
   }
 
   bool isApiCallProcess = false;
-
   @override
   Widget build(BuildContext context) {
     return ProgressHUD(
@@ -153,8 +189,9 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
                                           r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
                                       .hasMatch(val)) {
                                     return "Enter a valid email address";
+                                  } else {
+                                    return null;
                                   }
-                                  return null;
                                 },
                               ),
                               decoration:
@@ -186,7 +223,10 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
                                     email(
                                       emailEditingController.text.toString(),
                                     );
+                                  } else {
+                                    setState(() {});
                                   }
+                                  ;
                                 },
                               ),
                             ),

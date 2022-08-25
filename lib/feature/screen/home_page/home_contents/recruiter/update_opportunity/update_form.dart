@@ -79,8 +79,8 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
     descriptionController.text = widget.description.toString();
     _typevalue = widget.type.toString();
     dateTime = widget.date;
-    time = TimeOfDay(hour: widget.timeh, minute: widget.timem);
-    _time = TimeOfDay(hour: widget.etimeh, minute: widget.etimem);
+    time = widget.timeh;
+    _time = widget.timem;
     _selectedIndex = widget.category;
     sslug = widget.slug;
     super.initState();

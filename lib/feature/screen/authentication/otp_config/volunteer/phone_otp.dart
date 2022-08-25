@@ -43,11 +43,11 @@ class _PhoneOtpPageState extends State<PhoneOtp> {
           isApiCallProcess = false;
         });
         showToast(context, data['message']);
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (context) => VolunteerSignUp(email: widget.email.toString(),phone: widget.phone.toString(),
-                )),
-                (Route<dynamic> route) => false);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => VolunteerSignUp(email: widget.email.toString(),phone: widget.phone.toString(),),
+        ));
       } else {
         var data = jsonDecode(response.body.toString());
         showToast(context, data['message']);

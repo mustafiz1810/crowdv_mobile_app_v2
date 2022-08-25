@@ -44,12 +44,13 @@ class _OtpVolunteerPageState extends State<OtpVolunteer> {
           isApiCallProcess = false;
         });
         showToast(context, data['message'],);
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (context) => PhoneVerify(
-                      email: widget.email,
-                    )),
-            (Route<dynamic> route) => false);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => PhoneVerify(
+                email: widget.email,
+              )),
+        );
       } else {
         var data = jsonDecode(response.body.toString());
         showToast(context, data['message']);

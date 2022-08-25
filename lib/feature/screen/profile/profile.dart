@@ -61,11 +61,11 @@ class _ProfilePageState extends State<ProfilePage> {
   List<String> CaliforniaProvince = ['Los Angeles', 'Sacramento'];
   List<String> ConnecticutProvince = ['Bridgeport', 'Hartford'];
   List<String> DelawareProvince = ['Dover', 'Wilmington'];
-  List<String> FloridaProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> IllinoisProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> KansasProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> KentuckyProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> LouisianaProvince = ['Anchorage', 'Juneau', 'California'];
+  List<String> FloridaProvince = ['Jacksonville', 'Tallahassee'];
+  List<String> IllinoisProvince = ['Addison', 'Algonquin', 'Alton','Arlington Heights','Aurora','Bartlett','Batavia','Belleville','Belvidere','Berwyn','Bloomington','Bolingbrook','Buffalo Grove','Chicago',];
+  List<String> KansasProvince = ['Topeka', 'Wichita'];
+  List<String> KentuckyProvince = ['Frankfort', 'Louisville'];
+  List<String> LouisianaProvince = ['Baton Rouge', 'New Orleans'];
   List<String> provinces = [];
 
   List<dynamic> array = [];
@@ -226,31 +226,21 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         Stack(children: [
                           Container(
-                            height: 70,
+                            height: 95,
                             child: CircleAvatar(
+                              backgroundColor: Colors.blue,
                               backgroundImage:
                                   NetworkImage(snapshot.data.data.image),
-                              radius: 35,
+                              radius: 46,
                             ),
                           ),
                           Positioned(
-                            top: 40,
-                            child: snapshot.data.data.membership.name ==
-                                    "Silver"
-                                ? CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    backgroundImage:
-                                        AssetImage("assets/favpng_silver.png"),
-                                    radius: 15,
-                                  )
-                                : snapshot.data.data.membership.name == "Gold"
-                                    ? CircleAvatar(
-                                        backgroundColor: Colors.transparent,
-                                        backgroundImage:
-                                            AssetImage("assets/gold.png"),
-                                        radius: 15,
-                                      )
-                                    : Container(),
+                            top: 49,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              backgroundImage:NetworkImage(snapshot.data.data.membership.icon),
+                              radius: 22,
+                            )
                           )
                         ]),
                         SizedBox(
@@ -687,32 +677,25 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     isEmpty:
                                                         selectedCountry == '',
                                                     child: Center(
-                                                      child: DropdownButton<
-                                                          String>(
+                                                      child: DropdownButton<String>(
                                                         hint: Center(
                                                           child: Text(
-                                                            snapshot.data.data
-                                                                        .state !=
-                                                                    null
-                                                                ? snapshot.data
-                                                                    .data.state
-                                                                : "Select Country",
+                                                            "Select Country",
                                                             style: TextStyle(
                                                                 fontSize: 18,
-                                                                color: Colors
-                                                                    .black,
+                                                                color: Colors.black,
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
+                                                                FontWeight
+                                                                    .bold),
                                                           ),
                                                         ),
                                                         underline: SizedBox(),
                                                         iconEnabledColor:
-                                                            Colors.black,
+                                                        Colors.black,
                                                         value: selectedCountry,
                                                         isExpanded: true,
-                                                        items: countries.map(
-                                                            (String value) {
+                                                        items: countries
+                                                            .map((String value) {
                                                           return DropdownMenuItem<
                                                               String>(
                                                             value: value,
@@ -721,20 +704,21 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         }).toList(),
                                                         selectedItemBuilder:
                                                             (BuildContext
-                                                                    context) =>
-                                                                countries
-                                                                    .map((e) =>
-                                                                        Center(
-                                                                          child:
-                                                                              Text(
-                                                                            e,
-                                                                            style: TextStyle(
-                                                                                fontSize: 18,
-                                                                                color: Colors.black,
-                                                                                fontWeight: FontWeight.bold),
-                                                                          ),
-                                                                        ))
-                                                                    .toList(),
+                                                        context) =>
+                                                            countries
+                                                                .map(
+                                                                    (e) =>
+                                                                    Center(
+                                                                      child:
+                                                                      Text(
+                                                                        e,
+                                                                        style: TextStyle(
+                                                                            fontSize: 18,
+                                                                            color: Colors.black,
+                                                                            fontWeight: FontWeight.bold),
+                                                                      ),
+                                                                    ))
+                                                                .toList(),
                                                         onChanged: (country) {
                                                           if (country ==
                                                               'Alabama') {
@@ -780,8 +764,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             provinces = [];
                                                           }
                                                           setState(() {
-                                                            selectedProvince =
-                                                                null;
+                                                            selectedProvince = null;
                                                             selectedCountry =
                                                                 country;
                                                             print(selectedCountry
@@ -931,7 +914,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 decoration: ThemeHelper()
                                                     .inputBoxDecorationShaddow(),
                                               ),
-                                              SizedBox(height: 50),
+                                              SizedBox(height: 35),
                                               SizedBox(
                                                 height: 50,
                                                 width: 300,

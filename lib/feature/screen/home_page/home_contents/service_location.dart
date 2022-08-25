@@ -25,7 +25,7 @@ class _ServiceLocationState extends State<ServiceLocation> {
   void initState() {
     widget.country != null?selectedCountry=widget.country:selectedCountry="Alabama";
     // widget.city != null ? selectedProvince=widget.city:selectedProvince="Birmingham";
-    widget.zip != null ? zipController.text=widget.zip:zipController.text="your zip here";
+    widget.zip != null ? zipController.text=widget.zip:zipController.text="";
     super.initState();
     getCred();
   }
@@ -57,11 +57,11 @@ class _ServiceLocationState extends State<ServiceLocation> {
   List<String> CaliforniaProvince = ['Los Angeles', 'Sacramento'];
   List<String> ConnecticutProvince = ['Bridgeport', 'Hartford'];
   List<String> DelawareProvince = ['Dover', 'Wilmington'];
-  List<String> FloridaProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> IllinoisProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> KansasProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> KentuckyProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> LouisianaProvince = ['Anchorage', 'Juneau', 'California'];
+  List<String> FloridaProvince = ['Jacksonville', 'Tallahassee'];
+  List<String> IllinoisProvince = ['Addison', 'Algonquin', 'Alton','Arlington Heights','Aurora','Bartlett','Batavia','Belleville','Belvidere','Berwyn','Bloomington','Bolingbrook','Buffalo Grove','Chicago',];
+  List<String> KansasProvince = ['Topeka', 'Wichita'];
+  List<String> KentuckyProvince = ['Frankfort', 'Louisville'];
+  List<String> LouisianaProvince = ['Baton Rouge', 'New Orleans'];
   List<String> provinces = [];
   String selectedCountry;
   String selectedProvince;
@@ -289,7 +289,7 @@ class _ServiceLocationState extends State<ServiceLocation> {
                       child: DropdownButton<String>(
                         hint: Center(
                           child: Text(
-                            'select city',
+                            widget.city != null?widget.city:"Select City",
                             style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.black,

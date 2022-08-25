@@ -84,6 +84,15 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
           });
     }
   }
+  bool _obscured = false;
+  final textFieldFocusNode = FocusNode();
+  void _toggleObscured() {
+    setState(() {
+      _obscured = !_obscured;
+      if (textFieldFocusNode.hasPrimaryFocus) return; // If focus is on text field, dont unfocus
+      textFieldFocusNode.canRequestFocus = false;     // Prevents focus if tap on eye
+    });
+  }
   bool isApiCallProcess = false;
   @override
   Widget build(BuildContext context) {
@@ -153,11 +162,35 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                         ),
                         SizedBox(height: 30.0),
                         Container(
-                          child: TextFormField(
+                          child:TextFormField(
                             controller: passwordController,
-                            obscureText: true,
-                            decoration: ThemeHelper().textInputDecoration(
-                                "Password", "Enter your password"),
+                            keyboardType: TextInputType.visiblePassword,
+                            obscureText: _obscured,
+                            obscuringCharacter: "*",
+                            style: TextStyle(fontSize: 16),
+                            decoration: InputDecoration(
+                              labelText: "Password",
+                              fillColor: Colors.white,
+                              contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                              labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                              filled: true,
+                              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
+                              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
+                              errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.red, width: 2.0)),
+                              focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.red, width: 2.0)), //Hides label on focus or if filled
+                              suffixIcon: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+                                child: GestureDetector(
+                                  onTap: _toggleObscured,
+                                  child: Icon(
+                                    _obscured
+                                        ? Icons.visibility_rounded
+                                        : Icons.visibility_off_rounded,
+                                    size: 24,
+                                  ),
+                                ),
+                              ),
+                            ),
                             validator: (val) {
                               if (val.isEmpty) {
                                 return "Please enter your password";

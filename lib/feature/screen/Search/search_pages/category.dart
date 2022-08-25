@@ -1,12 +1,8 @@
 import 'dart:convert';
-
 import 'package:crowdv_mobile_app/data/models/recruiter/Volunteer_Category.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
-import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
-import 'package:crowdv_mobile_app/widgets/category_grid.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
-import 'package:crowdv_mobile_app/widgets/sample_card.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/route_manager.dart';

@@ -64,7 +64,7 @@ class Quiz extends StatelessWidget {
                     questions[questionIndex]['question'],
                   ),
                   Divider(
-                    height: 10,
+                    height: 5,
                     thickness: 2,
                     color: Colors.grey,
                   ),

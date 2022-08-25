@@ -65,11 +65,11 @@ class _LocationUpdateState extends State<LocationUpdate> {
   List<String> CaliforniaProvince = ['Los Angeles', 'Sacramento'];
   List<String> ConnecticutProvince = ['Bridgeport', 'Hartford'];
   List<String> DelawareProvince = ['Dover', 'Wilmington'];
-  List<String> FloridaProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> IllinoisProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> KansasProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> KentuckyProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> LouisianaProvince = ['Anchorage', 'Juneau', 'California'];
+  List<String> FloridaProvince = ['Jacksonville', 'Tallahassee'];
+  List<String> IllinoisProvince = ['Addison', 'Algonquin', 'Alton','Arlington Heights','Aurora','Bartlett','Batavia','Belleville','Belvidere','Berwyn','Bloomington','Bolingbrook','Buffalo Grove','Chicago',];
+  List<String> KansasProvince = ['Topeka', 'Wichita'];
+  List<String> KentuckyProvince = ['Frankfort', 'Louisville'];
+  List<String> LouisianaProvince = ['Baton Rouge', 'New Orleans'];
   List<String> provinces = [];
   String selectedCountry;
   String selectedProvince;
@@ -105,7 +105,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
         Navigator.popUntil(context, (route) => count++ == 3);
       } else {
         var data = jsonDecode(response.body.toString());
-        showToast(context, data['errors'].toString());
+        showToast(context, data['message'].toString());
       }
     } catch (e) {
       showDialog(

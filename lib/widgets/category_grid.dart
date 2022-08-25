@@ -25,7 +25,7 @@ class CategoryCard extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               offset: Offset(0, 0),
-              blurRadius: 4,
+              blurRadius: 2,
               spreadRadius: -1,
               color: kShadowColor,
             ),

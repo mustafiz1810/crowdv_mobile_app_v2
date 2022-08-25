@@ -1,15 +1,12 @@
 import 'dart:convert';
-import 'package:crowdv_mobile_app/data/models/volunteer/exam_model.dart';
 import 'package:crowdv_mobile_app/data/models/volunteer/test_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/Exam/exam_main.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
-import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -41,6 +38,7 @@ class _TestState extends State<Test> {
         Uri.parse(NetworkConstants.BASE_URL + 'test/list/${widget.trainingId}'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
+    print(data);
     if (response.statusCode == 200) {
       return TestModel.fromJson(data);
     } else {
@@ -218,10 +216,10 @@ class _TestState extends State<Test> {
                                                       'Content-Type': "application/json",
                                                       "Authorization": "Bearer ${token}"
                                                     }).then((value) async {
-                                                      // print(snapshot.data.data.tests[index].id);
+                                                      print(value["data"]["questions"]);
                                                       Navigator.push(
                                                         context,
-                                                        MaterialPageRoute(builder: (context) => ExamPage(data:value["data"]["questions"])),
+                                                        MaterialPageRoute(builder: (context) => ExamPage(data:value["data"]["questions"],id:snapshot.data.data.tests[index].id)),
                                                       );
                                                     });
                                                   },

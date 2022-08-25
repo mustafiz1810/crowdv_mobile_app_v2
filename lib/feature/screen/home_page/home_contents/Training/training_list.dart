@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/data/models/volunteer/training_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/training_video_list.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/widget/videos_screen.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
-import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -77,10 +75,6 @@ class _TrainingListState extends State<TrainingList> {
                           height: MediaQuery.of(context).size.height / 5,
                           margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                           decoration: BoxDecoration(
-                            // image: DecorationImage(
-                            //   fit: BoxFit.cover,
-                            //   image: AssetImage("assets/undraw_pilates_gpdb.png"),
-                            // ),
                             color: Colors.white,
                             borderRadius:
                             BorderRadius.all(Radius.circular(20)),
@@ -89,7 +83,6 @@ class _TrainingListState extends State<TrainingList> {
                                 color: shadowColor.withOpacity(0.4),
                                 spreadRadius: .1,
                                 blurRadius: 2,
-                                // offset: Offset(0, 1), // changes position of shadow
                               ),
                             ],
                           ),
@@ -115,10 +108,10 @@ class _TrainingListState extends State<TrainingList> {
                                     ),
                                     IconBox(
                                       child: Icon(
-                                        Icons.info_outline,
-                                        color: Colors.white,
+                                        Icons.info,
+                                        color: primaryColor,
                                       ),
-                                      bgColor: primaryColor,
+                                      bgColor: Colors.white,
                                       onTap: () {
                                         showDialog(
                                             context: context,

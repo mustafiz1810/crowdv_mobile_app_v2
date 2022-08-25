@@ -16,17 +16,23 @@ class SearchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10.0,left: 2,right: 2),
+      padding: const EdgeInsets.all(8.0),
       child: Container(
         // padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(0, 0),
+              blurRadius: 2,
+              spreadRadius: -1,
+              color: kShadowColor,
+            ),
+          ],
         ),
         child: Material(
-          borderRadius: BorderRadiusDirectional.circular(13),
-          elevation: 2,
-          color: Colors.white,
+          color: Colors.transparent,
           child: InkWell(
             onTap: press,
             child: Padding(
@@ -46,8 +52,9 @@ class SearchCard extends StatelessWidget {
                     title,
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
-                        .textTheme.titleSmall
-                        .copyWith(fontSize: 14),
+                        .textTheme
+                        .titleSmall
+                        .copyWith(fontSize: 11),
                   ),
                   Spacer(),
                 ],

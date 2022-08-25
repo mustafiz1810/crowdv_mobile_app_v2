@@ -58,7 +58,7 @@ dependencies:
   sweetalert: ^0.0.1
   empty_widget: ^0.0.5
   dependency_validator: ^3.2.0
-  better_player: any
+  better_player: ^0.0.82
   url_launcher: ^6.1.5
   flutter_math_fork: ^0.5.0
   firebase_core: ^1.14.1
@@ -67,6 +67,7 @@ dependencies:
   cloud_firestore: ^3.1.12
   firebase_messaging: ^11.2.13
   device_info_plus: ^3.2.3
+  random_color: ^1.0.5
 
 dev_dependencies:
   flutter_test:

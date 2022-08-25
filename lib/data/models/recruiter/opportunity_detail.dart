@@ -62,8 +62,8 @@ class Data {
   String zipCode;
   String taskType;
   DateTime date;
-  DateTime startTime;
-  DateTime endTime;
+  String startTime;
+  String endTime;
   int workingHours;
   dynamic benefits;
   bool isPublic;
@@ -82,8 +82,8 @@ class Data {
     zipCode: json["zip_code"],
     taskType: json["task_type"],
     date: DateTime.parse(json["date"]),
-    startTime: DateTime.parse(json["start_time"]),
-    endTime: DateTime.parse(json["end_time"]),
+    startTime: json["start_time"],
+    endTime: json["end_time"],
     workingHours: json["working_hours"],
     benefits: json["benefits"],
     isPublic: json["is_public"],
@@ -103,8 +103,8 @@ class Data {
     "zip_code": zipCode,
     "task_type": taskType,
     "date": "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
-    "start_time": startTime.toIso8601String(),
-    "end_time": endTime.toIso8601String(),
+    "start_time": startTime,
+    "end_time": endTime,
     "working_hours": workingHours,
     "benefits": benefits,
     "is_public": isPublic,
@@ -121,22 +121,26 @@ class Category {
     this.id,
     this.name,
     this.slug,
+    this.icon,
   });
 
   int id;
   String name;
   String slug;
+  String icon;
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
     id: json["id"],
     name: json["name"],
     slug: json["slug"],
+    icon: json["icon"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "name": name,
     "slug": slug,
+    "icon": icon,
   };
 }
 
@@ -157,8 +161,8 @@ class Eligibility {
   String title;
   dynamic details;
   int status;
-  DateTime createdAt;
-  DateTime updatedAt;
+  dynamic createdAt;
+  dynamic updatedAt;
   Pivot pivot;
 
   factory Eligibility.fromJson(Map<String, dynamic> json) => Eligibility(
@@ -167,8 +171,8 @@ class Eligibility {
     title: json["title"],
     details: json["details"],
     status: json["status"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    createdAt: json["created_at"],
+    updatedAt: json["updated_at"],
     pivot: Pivot.fromJson(json["pivot"]),
   );
 
@@ -178,8 +182,8 @@ class Eligibility {
     "title": title,
     "details": details,
     "status": status,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
+    "created_at": createdAt,
+    "updated_at": updatedAt,
     "pivot": pivot.toJson(),
   };
 }
@@ -219,6 +223,7 @@ class Recruiter {
     this.role,
     this.rating,
     this.review,
+    this.gender,
   });
 
   int id;
@@ -233,37 +238,40 @@ class Recruiter {
   String zipCode;
   String role;
   int rating;
-  String review;
+  dynamic review;
+  dynamic gender;
 
   factory Recruiter.fromJson(Map<String, dynamic> json) => Recruiter(
-    id: json["id"],
-    firstName: json["first_name"],
-    lastName: json["last_name"],
-    email: json["email"],
-    phone: json["phone"],
-    image: json["image"],
+    id: json["id"] == null ? null : json["id"],
+    firstName: json["first_name"] == null ? null : json["first_name"],
+    lastName: json["last_name"] == null ? null : json["last_name"],
+    email: json["email"] == null ? null : json["email"],
+    phone: json["phone"] == null ? null : json["phone"],
+    image: json["image"] == null ? null : json["image"],
     typeOfDisability: json["type_of_disability"] == null ? null : json["type_of_disability"],
-    state: json["state"],
-    city: json["city"],
-    zipCode: json["zip_code"],
-    role: json["role"],
+    state: json["state"] == null ? null : json["state"],
+    city: json["city"] == null ? null : json["city"],
+    zipCode: json["zip_code"] == null ? null : json["zip_code"],
+    role: json["role"] == null ? null : json["role"],
     rating: json["rating"],
-    review: json["review"] == null ? null : json["review"],
+    review: json["review"],
+    gender: json["gender"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "first_name": firstName,
-    "last_name": lastName,
-    "email": email,
-    "phone": phone,
-    "image": image,
+    "id": id == null ? null : id,
+    "first_name": firstName == null ? null : firstName,
+    "last_name": lastName == null ? null : lastName,
+    "email": email == null ? null : email,
+    "phone": phone == null ? null : phone,
+    "image": image == null ? null : image,
     "type_of_disability": typeOfDisability == null ? null : typeOfDisability,
-    "state": state,
-    "city": city,
-    "zip_code": zipCode,
-    "role": role,
+    "state": state == null ? null : state,
+    "city": city == null ? null : city,
+    "zip_code": zipCode == null ? null : zipCode,
+    "role": role == null ? null : role,
     "rating": rating,
-    "review": review == null ? null : review,
+    "review": review,
+    "gender": gender,
   };
 }

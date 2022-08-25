@@ -11,7 +11,7 @@ import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
+// import 'package:random_color/random_color.dart';
 class TrainingVideo extends StatefulWidget {
   final id;
   TrainingVideo({this.id});
@@ -21,7 +21,7 @@ class TrainingVideo extends StatefulWidget {
 
 class _TrainingVideoState extends State<TrainingVideo> {
   String token = "";
-
+  // RandomColor _randomColor = RandomColor();
   @override
   void initState() {
     getCred();
@@ -160,57 +160,27 @@ class _TrainingVideoState extends State<TrainingVideo> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
-                            height: MediaQuery.of(context).size.height / 7,
+                            // color: _randomColor.randomColor(colorHue: ColorHue.random,colorSaturation: ColorSaturation.monochrome,colorBrightness: ColorBrightness.veryLight),
+                            height: MediaQuery.of(context).size.height / 4,
                             width: MediaQuery.of(context).size.width,
-                            child: Card(
-                                child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        SizedBox(
-                                          width: 150,
-                                          height: 18,
-                                          child: Text(
-                                            "Title: " +
-                                                snapshot.data.data.videos[index]
-                                                    .title,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                            height: 50,
-                                            width: 150,
-                                            child: Text("Details:  " +
-                                                snapshot.data.data.videos[index]
-                                                    .details))
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    height:
-                                        MediaQuery.of(context).size.height / 6,
-                                    width:
-                                        MediaQuery.of(context).size.width / 3,
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: AssetImage(
-                                                'assets/128-1282287_health-safety-induction-training-videos-online-video-logo.png'))),
-                                  ),
-                                ],
-                              ),
-                            )),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height:140,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/128-1282287_health-safety-induction-training-videos-online-video-logo.png'),
+                                      fit: BoxFit.fitHeight,),),
+                                ),
+                                SizedBox(
+                                    child: Text(
+                                      "Title: " + snapshot.data.data.videos[index].title,
+                                      style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
+                                    ))
+                              ],
+                            ),
                           ),
                         ),
                       );

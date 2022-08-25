@@ -75,35 +75,78 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            snapshot.data.data.title.toUpperCase(),
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24,
-                              letterSpacing: 0.20,
-                              color: DesignCourseAppTheme.nearlyBlack,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          Column(
                             children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.blue,
+                                backgroundImage: NetworkImage(
+                                    snapshot.data.data.recruiter.image),
+                                radius: 25,
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
                               Text(
-                                'Starts from:',
+                                snapshot.data.data.recruiter.firstName +
+                                    " " +
+                                    snapshot.data.data.recruiter.lastName,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    snapshot.data.data.recruiter.rating
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                    size: 16,
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                          VerticalDivider(
+                            width: 5,
+                            color: Colors.grey.withOpacity(.5),
+                            thickness: 2,
+                          ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                height:40,
+                                child: Text(
+                                  snapshot.data.data.title,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    letterSpacing: 0.20,
+                                    color: DesignCourseAppTheme.nearlyBlack,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                'Starts from',
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
-                                  letterSpacing: 0.27,
+                                  letterSpacing: 0.20,
                                   color: Colors.black,
                                 ),
                               ),
@@ -172,7 +215,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                           .spaceBetween,
                                                   children: [
                                                     Text(
-                                                      'Job Type',
+                                                      'Opportunity type',
                                                       textAlign: TextAlign.left,
                                                       style: GoogleFonts.lato(
                                                         fontWeight:
@@ -229,51 +272,58 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                       ),
                                                       Row(
                                                         children: [
+                                                          getTimeBoxUI(snapshot.data.data.startTime),
+                                                          Text('-'),
                                                           getTimeBoxUI(snapshot
                                                                   .data
                                                                   .data
-                                                                  .startTime
-                                                                  .hour
-                                                                  .toString() +
-                                                              ":" +
-                                                              snapshot
-                                                                  .data
-                                                                  .data
-                                                                  .startTime
-                                                                  .minute
-                                                                  .toString()),
-                                                          Text(
-                                                            '-',
-                                                            textAlign:
-                                                                TextAlign.left,
-                                                            style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 16,
-                                                              letterSpacing:
-                                                                  0.27,
-                                                              color:
-                                                                  primaryColor,
-                                                            ),
-                                                          ),
-                                                          getTimeBoxUI(snapshot
-                                                                  .data
-                                                                  .data
-                                                                  .endTime
-                                                                  .hour
-                                                                  .toString() +
-                                                              ":" +
-                                                              snapshot
-                                                                  .data
-                                                                  .data
-                                                                  .endTime
-                                                                  .minute
-                                                                  .toString()),
+                                                                  .endTime),
                                                         ],
                                                       ),
                                                     ],
                                                   )),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(12))),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(15.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      'Opportunity category',
+                                                      textAlign: TextAlign.left,
+                                                      style: GoogleFonts.lato(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18,
+                                                        letterSpacing: 0.27,
+                                                        color:
+                                                            DesignCourseAppTheme
+                                                                .nearlyBlack,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      snapshot.data.data
+                                                          .category.name,
+                                                      textAlign: TextAlign.left,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                             ),
                                             SizedBox(
                                               height: 10,
@@ -497,7 +547,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  snapshot.data.data.zipCode,
+                                                  snapshot.data.data.zipCode!=null?snapshot.data.data.zipCode:"",
                                                   textAlign: TextAlign.left,
                                                 ),
                                               ],
@@ -642,108 +692,113 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                   ),
                                                 ),
                                               ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                12))),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      15.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        'Rating',
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                        style: GoogleFonts.lato(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18,
-                                                          letterSpacing: 0.27,
-                                                          color:
-                                                              DesignCourseAppTheme
-                                                                  .nearlyBlack,
-                                                        ),
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          Text(snapshot
-                                                                      .data
-                                                                      .data
-                                                                      .recruiter.rating !=
-                                                                  null
-                                                              ? snapshot
-                                                                  .data.data.recruiter.rating.toString()
-                                                              : "none"),
-                                                          Icon(
-                                                            Icons.star,
-                                                            size: 12,
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                12))),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      15.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        'Address',
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                        style: GoogleFonts.lato(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18,
-                                                          letterSpacing: 0.27,
-                                                          color:
-                                                              DesignCourseAppTheme
-                                                                  .nearlyBlack,
-                                                        ),
-                                                      ),
-                                                      Text(snapshot.data.data
-                                                              .recruiter.state +
-                                                          "," +
-                                                          snapshot.data.data
-                                                              .recruiter.city),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
+                                              // SizedBox(
+                                              //   height: 10,
+                                              // ),
+                                              // Container(
+                                              //   width: MediaQuery.of(context)
+                                              //       .size
+                                              //       .width,
+                                              //   decoration: BoxDecoration(
+                                              //       color: Colors.white,
+                                              //       borderRadius:
+                                              //           BorderRadius.all(
+                                              //               Radius.circular(
+                                              //                   12))),
+                                              //   child: Padding(
+                                              //     padding: const EdgeInsets.all(
+                                              //         15.0),
+                                              //     child: Row(
+                                              //       mainAxisAlignment:
+                                              //           MainAxisAlignment
+                                              //               .spaceBetween,
+                                              //       children: [
+                                              //         Text(
+                                              //           'Rating',
+                                              //           textAlign:
+                                              //               TextAlign.left,
+                                              //           style: GoogleFonts.lato(
+                                              //             fontWeight:
+                                              //                 FontWeight.bold,
+                                              //             fontSize: 18,
+                                              //             letterSpacing: 0.27,
+                                              //             color:
+                                              //                 DesignCourseAppTheme
+                                              //                     .nearlyBlack,
+                                              //           ),
+                                              //         ),
+                                              //         Row(
+                                              //           children: [
+                                              //             Text(snapshot
+                                              //                         .data
+                                              //                         .data
+                                              //                         .recruiter
+                                              //                         .rating !=
+                                              //                     null
+                                              //                 ? snapshot
+                                              //                     .data
+                                              //                     .data
+                                              //                     .recruiter
+                                              //                     .rating
+                                              //                     .toString()
+                                              //                 : "none"),
+                                              //             Icon(
+                                              //               Icons.star,
+                                              //               size: 12,
+                                              //             )
+                                              //           ],
+                                              //         ),
+                                              //       ],
+                                              //     ),
+                                              //   ),
+                                              // ),
+                                              // SizedBox(
+                                              //   height: 10,
+                                              // ),
+                                              // Container(
+                                              //   width: MediaQuery.of(context)
+                                              //       .size
+                                              //       .width,
+                                              //   decoration: BoxDecoration(
+                                              //       color: Colors.white,
+                                              //       borderRadius:
+                                              //           BorderRadius.all(
+                                              //               Radius.circular(
+                                              //                   12))),
+                                              //   child: Padding(
+                                              //     padding: const EdgeInsets.all(
+                                              //         15.0),
+                                              //     child: Row(
+                                              //       mainAxisAlignment:
+                                              //           MainAxisAlignment
+                                              //               .spaceBetween,
+                                              //       children: [
+                                              //         Text(
+                                              //           'Address',
+                                              //           textAlign:
+                                              //               TextAlign.left,
+                                              //           style: GoogleFonts.lato(
+                                              //             fontWeight:
+                                              //                 FontWeight.bold,
+                                              //             fontSize: 18,
+                                              //             letterSpacing: 0.27,
+                                              //             color:
+                                              //                 DesignCourseAppTheme
+                                              //                     .nearlyBlack,
+                                              //           ),
+                                              //         ),
+                                              //         Text(snapshot.data.data
+                                              //                 .recruiter.state +
+                                              //             "," +
+                                              //             snapshot.data.data
+                                              //                 .recruiter.city),
+                                              //       ],
+                                              //     ),
+                                              //   ),
+                                              // ),
+                                              // SizedBox(
+                                              //   height: 10,
+                                              // ),
                                             ],
                                           ))
                                         : snapshot.data.data.status == 'Pending'
@@ -1065,13 +1120,9 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                 snapshot.data.data.details,
                                             date: snapshot.data.data.date,
                                             timeh: snapshot
-                                                .data.data.startTime.hour,
+                                                .data.data.startTime,
                                             timem: snapshot
-                                                .data.data.startTime.minute,
-                                            etimeh:
-                                                snapshot.data.data.endTime.hour,
-                                            etimem: snapshot
-                                                .data.data.endTime.minute,
+                                                .data.data.endTime,
                                             slug: snapshot
                                                 .data.data.category.slug,
                                             eligibility: eligibility,
