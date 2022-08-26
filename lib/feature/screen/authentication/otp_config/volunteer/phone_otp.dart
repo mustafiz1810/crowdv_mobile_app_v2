@@ -34,7 +34,11 @@ class _PhoneOtpPageState extends State<PhoneOtp> {
   void otp(String otp) async {
     try {
       Response response =
-      await post(Uri.parse(NetworkConstants.BASE_URL + 'phone-number-otp/check'), body: {
+      await post(Uri.parse(NetworkConstants.BASE_URL + 'phone-number-otp/check'),
+          headers: {
+            "Accept": "application/json"
+          },
+          body: {
         'otp': otp,
       });
       if (response.statusCode == 200) {

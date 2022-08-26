@@ -27,7 +27,10 @@ class _RoleCheckState extends State<RoleCheck> {
   void role() async {
     try {
       Response response = await post(Uri.parse(
-          NetworkConstants.BASE_URL + 'role/${widget.id}/$_dropdown'));
+          NetworkConstants.BASE_URL + 'role/${widget.id}/$_dropdown'),
+        headers: {
+          "Accept": "application/json"
+        },);
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         print(data['data']['id']);

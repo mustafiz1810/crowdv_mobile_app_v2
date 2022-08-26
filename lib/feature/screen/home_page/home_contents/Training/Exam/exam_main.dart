@@ -16,7 +16,6 @@ class ExamPage extends StatefulWidget {
 class _ExamPageState extends State<ExamPage> {
   List<Map<String, int>> tempArray = [];
   var _questionIndex = 0;
-  String optionName;
 
   void _answerQuestion(int id, int optionId, String opName) {
     var arr = {
@@ -41,19 +40,21 @@ class _ExamPageState extends State<ExamPage> {
       ),
       body: Padding(
           padding: const EdgeInsets.all(30.0),
-          child: Column(
-            children: [
-              _questionIndex < widget.data.length
-                  ? Quiz(
-                      answerQuestion: _answerQuestion,
-                      questionIndex: _questionIndex,
-                      questions: widget.data,
-                    ) //Quiz
-                  : Result(
-                      tempArray,
-                      widget.id,
-                    ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                _questionIndex < widget.data.length
+                    ? Quiz(
+                        answerQuestion: _answerQuestion,
+                        questionIndex: _questionIndex,
+                        questions: widget.data,
+                      ) //Quiz
+                    : Result(
+                        tempArray,
+                        widget.id,
+                      ),
+              ],
+            ),
           )), //Padding
     ); //MaterialApp
   }

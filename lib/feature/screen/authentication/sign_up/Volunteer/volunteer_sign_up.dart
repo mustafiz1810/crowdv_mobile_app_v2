@@ -32,7 +32,11 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
   void signup(String fname, lname, email, phone, password,fcmToken, check) async {
     try {
       Response response =
-      await post(Uri.parse(NetworkConstants.BASE_URL + 'registration'), body: {
+      await post(Uri.parse(NetworkConstants.BASE_URL + 'registration'),
+          headers: {
+            "Accept": "application/json"
+          },
+          body: {
         'first_name': fname,
         'last_name': lname,
         'email': email,

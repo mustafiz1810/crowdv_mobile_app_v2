@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crowdv_mobile_app/data/models/volunteer/video_list_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/test.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/widget/videos_screen.dart';
@@ -11,6 +12,7 @@ import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+
 // import 'package:random_color/random_color.dart';
 class TrainingVideo extends StatefulWidget {
   final id;
@@ -49,7 +51,7 @@ class _TrainingVideoState extends State<TrainingVideo> {
     }
   }
 
-  void train(int id, String name, mediaUrl, details) async {
+  void train(int id, String name, mediaUrl, details, videos) async {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'track-video-info/$id'),
@@ -67,8 +69,8 @@ class _TrainingVideoState extends State<TrainingVideo> {
           context,
           MaterialPageRoute(
               builder: (context) => VideoScreen(
-                id: id,
-                token:token,
+                    id: id,
+                    token: token,
                     name: name,
                     mediaUrl: mediaUrl,
                     details: details,
@@ -155,7 +157,8 @@ class _TrainingVideoState extends State<TrainingVideo> {
                               snapshot.data.data.videos[index].id,
                               snapshot.data.data.videos[index].title,
                               snapshot.data.data.videos[index].video,
-                              snapshot.data.data.videos[index].details);
+                              snapshot.data.data.videos[index].details,
+                              snapshot.data.data.videos);
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -167,18 +170,32 @@ class _TrainingVideoState extends State<TrainingVideo> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  height:140,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                          'assets/128-1282287_health-safety-induction-training-videos-online-video-logo.png'),
-                                      fit: BoxFit.fitHeight,),),
-                                ),
+                                    height: 140,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: CachedNetworkImage(
+                                      imageUrl: snapshot.data.data.videos[index].thumbnail,
+                                      imageBuilder:
+                                          (context, imageProvider) =>
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.fill,),
+                                            ),
+                                          ),
+                                      placeholder: (context, url) =>
+                                          Icon(Icons.downloading_rounded,size: 100,),
+                                      errorWidget: (context, url, error)
+                                      => Icon(Icons.image_outlined,size: 100,),
+                                    )),
                                 SizedBox(
                                     child: Text(
-                                      "Title: " + snapshot.data.data.videos[index].title,
-                                      style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
-                                    ))
+                                  "Title: " +
+                                      snapshot.data.data.videos[index].title,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ))
                               ],
                             ),
                           ),
@@ -187,7 +204,7 @@ class _TrainingVideoState extends State<TrainingVideo> {
                     },
                   );
                 } else {
-                 return Container(
+                  return Container(
                     alignment: Alignment.center,
                     child: EmptyWidget(
                       image: null,

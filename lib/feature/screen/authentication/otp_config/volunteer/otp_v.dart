@@ -34,6 +34,9 @@ class _OtpVolunteerPageState extends State<OtpVolunteer> {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'email-otp/check'),
+          headers: {
+            "Accept": "application/json"
+          },
           body: {
             'otp': otp,
           });

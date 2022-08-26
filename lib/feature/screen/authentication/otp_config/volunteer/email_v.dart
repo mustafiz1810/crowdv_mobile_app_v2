@@ -26,6 +26,9 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'email-send'),
+          headers: {
+            "Accept": "application/json"
+          },
           body: {
             'email': email,
           });

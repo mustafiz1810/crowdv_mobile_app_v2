@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:better_player/better_player.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/test.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
@@ -7,7 +6,6 @@ import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
 
 class VideoScreen extends StatefulWidget {
@@ -20,6 +18,14 @@ class VideoScreen extends StatefulWidget {
 }
 
 class _VideoScreenState extends State<VideoScreen> {
+ var videoIndex =0;
+ void _videoPlay(int id, int optionId, String opName) {
+
+   setState(() {
+     videoIndex = videoIndex + 1;
+   });
+   // print(optionId);
+ }
   BetterPlayerController _betterPlayerController;
   GlobalKey _betterPlayerKey = GlobalKey();
   @override
@@ -28,7 +34,6 @@ class _VideoScreenState extends State<VideoScreen> {
     var betterPlayerConfiguration = BetterPlayerConfiguration(
       controlsConfiguration: BetterPlayerControlsConfiguration(
         enableSkips: false,
-        enableProgressBarDrag: false
       ),
       aspectRatio: 16 / 9,
       fit: BoxFit.contain,
@@ -168,7 +173,8 @@ class _VideoScreenState extends State<VideoScreen> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                          },
                           child: Row(
                             children: [
                               Text("Next Lesson"),

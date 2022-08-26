@@ -68,6 +68,7 @@ dependencies:
   firebase_messaging: ^11.2.13
   device_info_plus: ^3.2.3
   random_color: ^1.0.5
+  cached_network_image: any
 
 dev_dependencies:
   flutter_test:

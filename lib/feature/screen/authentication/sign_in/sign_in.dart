@@ -27,7 +27,11 @@ class _LoginPageState extends State<LoginPage> {
   void signin(String email, password) async {
     try {
       Response response =
-          await post(Uri.parse(NetworkConstants.BASE_URL + 'login'), body: {
+          await post(Uri.parse(NetworkConstants.BASE_URL + 'login'),
+              headers: {
+                "Accept": "application/json"
+              },
+              body: {
         'email': email,
         'password': password,
       });

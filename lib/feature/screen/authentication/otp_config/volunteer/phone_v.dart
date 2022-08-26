@@ -25,6 +25,9 @@ class _PhoneVerifyPageState extends State<PhoneVerify> {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'phone-number-verify'),
+          headers: {
+            "Accept": "application/json"
+          },
           body: {
             'phone': phone,
             'email': email,

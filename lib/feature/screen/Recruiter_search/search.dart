@@ -1,13 +1,12 @@
 import 'dart:convert';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/op_card.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/data/models/recruiter/category_model.dart';
-import 'package:crowdv_mobile_app/feature/screen/Search/search_pages/category.dart';
-import 'package:crowdv_mobile_app/feature/screen/Search/search_pages/location.dart';
-import 'package:crowdv_mobile_app/feature/screen/Search/search_pages/search_v.dart';
+import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/search_pages/category.dart';
+import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/search_pages/location.dart';
+import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/search_pages/search_v.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/search_grid.dart';
@@ -25,7 +24,6 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   String token = "";
-
   @override
   void initState() {
     getCred();
@@ -79,6 +77,7 @@ class _SearchPageState extends State<SearchPage> {
   List<String> provinces = [];
   String selectedCountry;
   String selectedProvince;
+  TextEditingController volunteerController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,7 +105,7 @@ class _SearchPageState extends State<SearchPage> {
                       child: const Text('Location')),
                   Tab(
                       icon: Icon(Icons.person),
-                      child: const Text('Individual')),
+                      child: const Text('Volunteer')),
                 ],
                 unselectedLabelColor: Colors.black38,
                 indicatorSize: TabBarIndicatorSize.tab,
@@ -419,7 +418,7 @@ class _SearchPageState extends State<SearchPage> {
                                             splashColor:
                                                 secondaryColor, // splash color
                                             onTap: () {
-                                              Get.to(Location());
+                                              Get.to(Location(token: token,location: selectedCountry,));
                                             }, // button pressed
                                             child: Column(
                                               mainAxisAlignment:
@@ -453,9 +452,9 @@ class _SearchPageState extends State<SearchPage> {
                             children: [
                               Container(
                                 child: TextFormField(
+                                  controller: volunteerController,
                                   decoration: ThemeHelper().textInputDecoration(
-                                      'Search volunteer/recruiter',
-                                      'Enter your zip code'),
+                                      'Search volunteer/recruiter'),
                                 ),
                                 decoration:
                                     ThemeHelper().inputBoxDecorationShaddow(),
@@ -476,7 +475,7 @@ class _SearchPageState extends State<SearchPage> {
                                           splashColor:
                                               secondaryColor, // splash color
                                           onTap: () {
-                                            Get.to(() => Search());
+                                            Get.to(() => Search(token: token,search: volunteerController.text.toString(),));
                                           }, // button pressed
                                           child: Column(
                                             mainAxisAlignment:

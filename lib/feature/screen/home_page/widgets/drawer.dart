@@ -13,7 +13,18 @@ import '../../../../utils/view_utils/common_util.dart';
 import '../../authentication/widgets/terms_condition.dart';
 
 class NavDrawer extends StatefulWidget {
-  final dynamic id, role, fname, lname, email, image,disability,prof,gender,state,city,zip;
+  final dynamic id,
+      role,
+      fname,
+      lname,
+      email,
+      image,
+      disability,
+      prof,
+      gender,
+      state,
+      city,
+      zip;
   NavDrawer(
       {@required this.id,
       this.role,
@@ -24,7 +35,9 @@ class NavDrawer extends StatefulWidget {
       this.disability,
       this.prof,
       this.gender,
-      this.state,this.zip,this.city});
+      this.state,
+      this.zip,
+      this.city});
   @override
   _NavDrawerState createState() => _NavDrawerState();
 }
@@ -65,32 +78,33 @@ class _NavDrawerState extends State<NavDrawer> {
             ),
           ),
           ListTile(
-              leading: Icon(
-                Icons.person_outline_rounded,
-                color: Colors.black,
-              ),
-              title: Text("Profile"),
-              onTap: () async {
-                getRequest('/api/v1/disability/list', null, {
-                  'Content-Type': "application/json",
-                  "Authorization": "Bearer ${token}"
-                }).then((value) async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ProfilePage(
-                      data:value["data"],
-                      role: widget.role,
-                      disability:
-                      widget.disability,
-                      chosenValue:widget.prof,
-                      dropdown: widget.gender,
-                      selectedCountry: widget.state,
-                      selectedProvince: widget.city,
-                      zip: widget.zip,
-                    )),
-                  );
-                });
-              },),
+            leading: Icon(
+              Icons.person_outline_rounded,
+              color: Colors.black,
+            ),
+            title: Text("Profile"),
+            onTap: () async {
+              getRequest('/api/v1/disability/list', null, {
+                'Content-Type': "application/json",
+                "Authorization": "Bearer ${token}"
+              }).then((value) async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProfilePage(
+                            data: value["data"],
+                            role: widget.role,
+                            disability: widget.disability,
+                            chosenValue: widget.prof,
+                            dropdown: widget.gender,
+                            selectedCountry: widget.state,
+                            selectedProvince: widget.city,
+                            zip: widget.zip,
+                          )),
+                );
+              });
+            },
+          ),
           token != null
               ? Container()
               : ListTile(
@@ -107,32 +121,29 @@ class _NavDrawerState extends State<NavDrawer> {
               onTap: () {
                 Get.to(() => ChangePassword());
               }),
-           ListTile(
-            leading: Icon(Icons.list_alt_rounded, color: Colors.black),
-            title: Text("Terms & Conditions"),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TermsCondition()),
-              );
-            }
-          ),
           ListTile(
-              leading: Icon(Icons.question_answer_outlined, color: Colors.black),
-              title: new Text("FAQ"),
+              leading: Icon(Icons.list_alt_rounded, color: Colors.black),
+              title: Text("Terms & Conditions"),
               onTap: () {
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TermsCondition()),
+                );
               }),
-           ListTile(
-            leading: Icon(Icons.info_outline_rounded, color: Colors.black),
-            title: Text("About"),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AboutUs()),
-              );
-            }
-          ),
+          ListTile(
+              leading:
+                  Icon(Icons.question_answer_outlined, color: Colors.black),
+              title: new Text("FAQ"),
+              onTap: () {}),
+          ListTile(
+              leading: Icon(Icons.info_outline_rounded, color: Colors.black),
+              title: Text("About"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AboutUs()),
+                );
+              }),
           token != null
               ? new ListTile(
                   leading: Icon(Icons.power_settings_new, color: Colors.black),

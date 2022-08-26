@@ -71,6 +71,7 @@ class Video {
     this.title,
     this.details,
     this.video,
+    this.thumbnail,
   });
 
   int id;
@@ -78,6 +79,7 @@ class Video {
   String title;
   String details;
   String video;
+  String thumbnail;
 
   factory Video.fromJson(Map<String, dynamic> json) => Video(
     id: json["id"],
@@ -85,6 +87,7 @@ class Video {
     title: json["title"],
     details: json["details"],
     video: json["video"],
+    thumbnail: json["thumbnail"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -93,5 +96,6 @@ class Video {
     "title": title,
     "details": details,
     "video": video,
+    "thumbnail": thumbnail,
   };
 }

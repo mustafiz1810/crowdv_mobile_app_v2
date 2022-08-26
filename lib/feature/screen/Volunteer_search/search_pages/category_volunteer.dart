@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/data/models/recruiter/Volunteer_Category.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/chat.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
@@ -9,16 +10,15 @@ import 'package:get/route_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
-import '../../home_page/widgets/chat.dart';
 
-class Category extends StatefulWidget {
+class VolunteerCategory extends StatefulWidget {
   final dynamic token,categoryId;
-  Category({this.token,this.categoryId});
+  VolunteerCategory({this.token,this.categoryId});
   @override
   _HistoryState createState() => _HistoryState();
 }
 
-class _HistoryState extends State<Category> {
+class _HistoryState extends State<VolunteerCategory> {
 
   Future<CategoryVolunteer> getCateVolunteerApi() async {
     final response = await http.get(
@@ -202,7 +202,7 @@ class _HistoryState extends State<Category> {
                                               Text(
                                                   snapshot
                                                       .data
-                                                      .data[index].rating,
+                                                      .data[index].rating.toString(),
                                                   style: TextStyle(
                                                       fontSize: 14))
                                             ],

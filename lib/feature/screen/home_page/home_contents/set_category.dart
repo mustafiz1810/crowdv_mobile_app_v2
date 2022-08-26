@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
@@ -38,7 +39,10 @@ class _SetCategoryState extends State<SetCategory> {
   Future<CategoryModel> getCategoryApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL + 'categories'),
-        headers: {"Authorization": "Bearer ${token}"});
+      headers: {
+        "Authorization": "Bearer $token",
+        "Accept": "application/json"
+      },);
     var data = jsonDecode(response.body.toString());
     if (response.statusCode == 200) {
       return CategoryModel.fromJson(data);
@@ -97,8 +101,22 @@ class _SetCategoryState extends State<SetCategory> {
                           child: ListTile(
                             leading: CircleAvatar(
                               backgroundColor: Colors.white,
-                              child: Image.network(
-                                  snapshot.data.data[index].image),
+                              child: CachedNetworkImage(
+                                imageUrl: snapshot.data.data[index].image,
+                                imageBuilder:
+                                    (context, imageProvider) =>
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                        ),
+                                      ),
+                                    ),
+                                placeholder: (context, url) =>
+                                    Icon(Icons.downloading_rounded,size: 40,color: Colors.grey),
+                                errorWidget: (context, url, error)
+                                => Icon(Icons.image_outlined,size: 40,color: Colors.grey,),
+                              ),
                             ),
                             title: Text(snapshot.data.data[index].name,
                                 style: TextStyle(

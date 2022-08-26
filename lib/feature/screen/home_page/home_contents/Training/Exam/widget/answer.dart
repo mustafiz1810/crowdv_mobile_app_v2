@@ -1,5 +1,6 @@
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Answer extends StatefulWidget {
   final Function selectHandler;
@@ -15,18 +16,39 @@ class _AnswerState extends State<Answer> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(5.0),
       child: Container(
         width: double.infinity,
-        child: ElevatedButton(
+        child: ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
+            onPrimary: primaryColor,
+            elevation: 6,
             primary: Colors.white,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
           onPressed: widget.selectHandler,
-          child: Text(widget.answerText,style: TextStyle(color: primaryColor),),
-        ),//RaisedButton
+          icon: Icon(Icons.fiber_manual_record_rounded,
+            color: Colors.black12,),
+          label: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    widget.answerText,
+                    style: GoogleFonts.ubuntu(
+                      textStyle: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ), //RaisedButton
       ),
     ); //Container
   }

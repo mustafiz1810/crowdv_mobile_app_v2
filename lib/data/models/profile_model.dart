@@ -78,9 +78,9 @@ class Data {
   DateTime dob;
   String image;
   String role;
-  String serviceCity;
-  String serviceState;
-  String serviceZipCode;
+  dynamic serviceCity;
+  dynamic serviceState;
+  dynamic serviceZipCode;
   int workingHours;
   int rating;
   int opportunities;

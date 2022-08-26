@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/data/models/notification_model.dart';
-import 'package:crowdv_mobile_app/feature/screen/Search/search.dart';
+import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/search.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/certificate.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/organization/create_opportunity.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/organization/op_list.dart';
@@ -23,6 +23,7 @@ import 'package:get/route_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/models/ac_model.dart';
 import '../../../widgets/http_request.dart';
+import '../Volunteer_search/search_volunteer.dart';
 import 'home_contents/Training/training_list.dart';
 import 'home_contents/recruiter/my_opportunities.dart';
 
@@ -223,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Colors.black,
         ),
         onPressed: () {
-          Get.to(() => SearchPage());
+          widget.role == "volunteer"?Get.to(() => VolunteerSearchPage()):Get.to(() => SearchPage());
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

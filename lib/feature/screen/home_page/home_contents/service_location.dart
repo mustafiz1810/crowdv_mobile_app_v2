@@ -8,8 +8,6 @@ import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../Search/search_pages/location.dart';
-
 class ServiceLocation extends StatefulWidget {
   final country,city,zip;
   ServiceLocation({this.country,this.city,this.zip});
@@ -71,7 +69,8 @@ class _ServiceLocationState extends State<ServiceLocation> {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'set-location'),
           headers: {
-            "Authorization": "Bearer $token"
+            "Authorization": "Bearer $token",
+            "Accept": "application/json"
           },
           body: {
             'service_state': state,

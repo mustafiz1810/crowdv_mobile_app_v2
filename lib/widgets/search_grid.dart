@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -43,8 +44,21 @@ class SearchCard extends StatelessWidget {
                   Container(
                     height: 45,
                     width: 80,
-                    child: Image.network(
-                      svgSrc,
+                    child: CachedNetworkImage(
+                      imageUrl: svgSrc,
+                      imageBuilder:
+                          (context, imageProvider) =>
+                          Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: imageProvider,
+                              ),
+                            ),
+                          ),
+                      placeholder: (context, url) =>
+                          Icon(Icons.downloading_rounded,size: 40,),
+                      errorWidget: (context, url, error)
+                      => Icon(Icons.image_outlined,size: 40,),
                     ),
                   ),
                   Spacer(),

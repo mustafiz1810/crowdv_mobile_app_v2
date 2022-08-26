@@ -38,7 +38,8 @@ class _OrgOpportunityState extends State<OrgOpportunity> {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'organization/opportunity'),
           headers: {
-            "Authorization": "Bearer $token"
+            "Authorization": "Bearer $token",
+            "Accept": "application/json"
           },
           body: {
             'title': title,

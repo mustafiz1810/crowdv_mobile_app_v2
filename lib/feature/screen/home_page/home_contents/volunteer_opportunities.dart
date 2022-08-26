@@ -186,61 +186,40 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                     ),
                                                     bgColor: primaryColor,
                                                   )
-                                                : Container(
-                                                    width: 100,
-                                                    height: 35,
-                                                    margin: EdgeInsets.fromLTRB(
-                                                        0, 0, 0, 5),
-                                                    decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          color: Colors.green),
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                        Radius.circular(20),
-                                                      ),
-                                                    ),
-                                                    child: Center(
-                                                      child: InkWell(
-                                                        onTap: () {
-                                                          getRequestWithoutParam(
-                                                              '/api/v1/volunteer-request-for-task-complete/${snapshot.data.data[index].taskId}',
-                                                              {
-                                                                'Content-Type':
-                                                                    "application/json",
-                                                                "Authorization":
-                                                                    "Bearer ${token}"
-                                                              }).then(
-                                                              (value) async {
-                                                            SweetAlert.show(
-                                                                context,
-                                                                title:
-                                                                    "Your Task is completed",
-                                                                subtitle:
-                                                                    "Please go to History ",
-                                                                style:
-                                                                    SweetAlertStyle
-                                                                        .success,
-                                                                onPress: (bool
-                                                                    isConfirm) {
-                                                              if (isConfirm) {
-                                                                // return false to keep dialog
-                                                              }
-                                                              return null;
-                                                            });
-                                                            setState(() {});
+                                                : IconBox(
+                                              child: Icon(Icons.check_circle,color: Colors.green,),
+                                              bgColor: Colors.white,
+                                              borderColor: Colors.black12,
+                                              onTap: (){
+                                                getRequestWithoutParam(
+                                                    '/api/v1/volunteer-request-for-task-complete/${snapshot.data.data[index].taskId}',
+                                                    {
+                                                      'Content-Type':
+                                                      "application/json",
+                                                      "Authorization":
+                                                      "Bearer ${token}"
+                                                    }).then(
+                                                        (value) async {
+                                                      SweetAlert.show(
+                                                          context,
+                                                          title:
+                                                          "Your Task is completed",
+                                                          subtitle:
+                                                          "Please go to History ",
+                                                          style:
+                                                          SweetAlertStyle
+                                                              .success,
+                                                          onPress: (bool
+                                                          isConfirm) {
+                                                            if (isConfirm) {
+                                                              // return false to keep dialog
+                                                            }
+                                                            return null;
                                                           });
-                                                        },
-                                                        child: Text('Complete',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 16,
-                                                                color: Colors
-                                                                    .green)),
-                                                      ),
-                                                    ),
-                                                  ),
+                                                      setState(() {});
+                                                    });
+                                              },
+                                            ),
                                             Container(
                                               width: 80,
                                               height: 35,

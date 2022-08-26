@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final accountModel = accountModelFromJson(jsonString);
+//     final locationVolunteer = locationVolunteerFromJson(jsonString);
 
 import 'dart:convert';
 
-AccountModel accountModelFromJson(String str) => AccountModel.fromJson(json.decode(str));
+LocationVolunteer locationVolunteerFromJson(String str) => LocationVolunteer.fromJson(json.decode(str));
 
-String accountModelToJson(AccountModel data) => json.encode(data.toJson());
+String locationVolunteerToJson(LocationVolunteer data) => json.encode(data.toJson());
 
-class AccountModel {
-  AccountModel({
+class LocationVolunteer {
+  LocationVolunteer({
     this.success,
     this.message,
     this.data,
@@ -17,23 +17,23 @@ class AccountModel {
 
   bool success;
   String message;
-  Data data;
+  List<Datum> data;
 
-  factory AccountModel.fromJson(Map<String, dynamic> json) => AccountModel(
+  factory LocationVolunteer.fromJson(Map<String, dynamic> json) => LocationVolunteer(
     success: json["success"],
     message: json["message"],
-    data: Data.fromJson(json["data"]),
+    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "success": success,
     "message": message,
-    "data": data.toJson(),
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
   };
 }
 
-class Data {
-  Data({
+class Datum {
+  Datum({
     this.id,
     this.token,
     this.firstName,
@@ -78,16 +78,16 @@ class Data {
   DateTime dob;
   String image;
   String role;
-  dynamic serviceCity;
-  dynamic serviceState;
-  dynamic serviceZipCode;
+  String serviceCity;
+  String serviceState;
+  String serviceZipCode;
   int workingHours;
   int rating;
   int opportunities;
   int isComplete;
   bool isOnline;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
     token: json["token"],
     firstName: json["first_name"],

@@ -35,6 +35,9 @@ class _ForgetPassVerifyPageState extends State<ForgetPassVerify> {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'reset-password'),
+          headers: {
+            "Accept": "application/json"
+          },
           body: {
             'otp': otp,
             'password': password,

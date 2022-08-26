@@ -42,7 +42,9 @@ class Datum {
     this.zipCode,
     this.taskType,
     this.date,
+    this.datumStartTime,
     this.startTime,
+    this.datumEndTime,
     this.endTime,
     this.workingHours,
     this.benefits,
@@ -62,7 +64,9 @@ class Datum {
   String zipCode;
   String taskType;
   DateTime date;
+  String datumStartTime;
   DateTime startTime;
+  String datumEndTime;
   DateTime endTime;
   int workingHours;
   dynamic benefits;
@@ -82,8 +86,10 @@ class Datum {
     zipCode: json["zip_code"],
     taskType: json["task_type"],
     date: DateTime.parse(json["date"]),
-    startTime: DateTime.parse(json["start_time"]),
-    endTime: DateTime.parse(json["end_time"]),
+    datumStartTime: json["start_time"],
+    startTime: DateTime.parse(json["startTime"]),
+    datumEndTime: json["end_time"],
+    endTime: DateTime.parse(json["endTime"]),
     workingHours: json["working_hours"],
     benefits: json["benefits"],
     isPublic: json["is_public"],
@@ -103,8 +109,10 @@ class Datum {
     "zip_code": zipCode,
     "task_type": taskType,
     "date": "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
-    "start_time": startTime.toIso8601String(),
-    "end_time": endTime.toIso8601String(),
+    "start_time": datumStartTime,
+    "startTime": startTime.toIso8601String(),
+    "end_time": datumEndTime,
+    "endTime": endTime.toIso8601String(),
     "working_hours": workingHours,
     "benefits": benefits,
     "is_public": isPublic,

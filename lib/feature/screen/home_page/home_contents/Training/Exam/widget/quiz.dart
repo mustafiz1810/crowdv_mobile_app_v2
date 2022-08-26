@@ -51,42 +51,19 @@ class Quiz extends StatelessWidget {
             )
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 60.0),
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12), color: primaryColor),
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  Question(
-                    questions[questionIndex]['question'],
-                  ),
-                  Divider(
-                    height: 5,
-                    thickness: 2,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(
-                    height: 40,
-                    child: Center(
-                        child: Text(
-                      "Select the right answer from below, ",
-                      style: TextStyle(color: Colors.white),
-                    )),
-                  ), //Question
-                  ...(questions[questionIndex]['options']).map((answer) {
-                    return Answer(
-                        () => answerQuestion(
-                            answer['question_id'], answer['id'],answer['option_name']),
-                        answer['option_name']);
-                  }).toList()
-                ],
-              ),
-            ),
-          ),
+        SizedBox(height: 20,),
+        Question(
+          questions[questionIndex]['question'],
         ),
+        SizedBox(
+          height: 40,
+        ), //Question
+        ...(questions[questionIndex]['options']).map((answer) {
+          return Answer(
+                  () => answerQuestion(
+                  answer['question_id'], answer['id'],answer['option_name']),
+              answer['option_name']);
+        }).toList()
       ],
     ); //Column
   }

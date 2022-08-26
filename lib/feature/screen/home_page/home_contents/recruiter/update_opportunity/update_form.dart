@@ -79,8 +79,8 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
     descriptionController.text = widget.description.toString();
     _typevalue = widget.type.toString();
     dateTime = widget.date;
-    time = widget.timeh;
-    _time = widget.timem;
+    time = TimeOfDay(hour: widget.timeh, minute: widget.timem);
+    _time = TimeOfDay(hour: widget.etimeh, minute: widget.etimem);
     _selectedIndex = widget.category;
     sslug = widget.slug;
     super.initState();
@@ -248,50 +248,6 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                   },
                 ),
               ),
-              // Container(
-              //   width: 365,
-              //   padding:
-              //   EdgeInsets.symmetric(vertical: 2, horizontal: 15),
-              //   child: Center(
-              //     child:  DropdownButton(
-              //       hint: Center(
-              //         child: Text(
-              //           "Select Category",
-              //           style: TextStyle(
-              //               fontSize: 18,
-              //               color: primaryColor,
-              //               fontWeight: FontWeight.bold),
-              //         ),
-              //       ),
-              //       iconEnabledColor: primaryColor,
-              //       isExpanded: true,
-              //       underline: Container(),
-              //       items: _category.map((item) {
-              //         return DropdownMenuItem(
-              //           value: item['id'].toString(),
-              //           child: Text(item['name'].toString()),
-              //         );
-              //       }).toList(),
-              //       onChanged: (newVal) {
-              //         setState(() {
-              //           dropdownvalue = newVal;
-              //           print(dropdownvalue.toString());
-              //         });
-              //       },
-              //       value: dropdownvalue,
-              //     ),
-              //   ),
-              //   decoration: BoxDecoration(
-              //     boxShadow: [
-              //       BoxShadow(
-              //           color: Colors.black26,
-              //           offset: Offset(0, 2),
-              //           blurRadius: 2.0)
-              //     ],
-              //     color: Colors.white,
-              //     borderRadius: BorderRadius.circular(30),
-              //   ),
-              // ),
               SizedBox(
                 height: 25,
               ),
@@ -391,7 +347,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                   textInputAction: TextInputAction.done,
                   controller: descriptionController,
                   maxLines: 5,
-                  maxLength: 100,
+                  maxLength: 200,
                   decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),

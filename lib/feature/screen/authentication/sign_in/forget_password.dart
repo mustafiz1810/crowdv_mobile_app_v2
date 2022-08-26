@@ -27,6 +27,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'forget-password-post'),
+          headers: {
+            "Accept": "application/json"
+          },
           body: {
             'email': email,
           });
