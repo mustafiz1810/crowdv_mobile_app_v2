@@ -78,7 +78,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
   List<String> provinces = [];
   String selectedCountry;
   String selectedProvince;
-  TextEditingController volunteerController = TextEditingController();
+  TextEditingController taskController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -454,7 +454,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                             children: [
                               Container(
                                 child: TextFormField(
-                                  controller: volunteerController,
+                                  controller: taskController,
                                   decoration: ThemeHelper().textInputDecoration(
                                       'Search recruiter'),
                                 ),
@@ -477,7 +477,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                           splashColor:
                                               secondaryColor, // splash color
                                           onTap: () {
-                                            Get.to(() => VolunteerSearch(token: token,search: volunteerController.text.toString(),));
+                                            Get.to(() => VolunteerSearch(token: token,search: taskController.text.toString(),));
                                           }, // button pressed
                                           child: Column(
                                             mainAxisAlignment:

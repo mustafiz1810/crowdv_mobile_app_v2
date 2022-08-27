@@ -18,7 +18,7 @@ class VolunteerLocation extends StatefulWidget {
 }
 
 class _HistoryState extends State<VolunteerLocation> {
-  Future<LocationWiseTask> getLocVolunteerApi() async {
+  Future<LocationWiseTask> getLocTaskApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL +
             'location-wise-task-search?state=${widget.state}&city=${widget.city}'),
@@ -45,7 +45,7 @@ class _HistoryState extends State<VolunteerLocation> {
           children: [
             Expanded(
                 child: FutureBuilder<LocationWiseTask>(
-                  future: getLocVolunteerApi(),
+                  future: getLocTaskApi(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return ListView.builder(

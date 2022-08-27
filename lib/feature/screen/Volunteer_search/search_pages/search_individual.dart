@@ -7,6 +7,7 @@ import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import '../../../../data/models/volunteer/task_search_individual.dart';
 import '../../../../data/models/volunteer/task_search_location.dart';
 import '../../home_page/home_contents/widgets/details.dart';
 
@@ -18,7 +19,7 @@ class VolunteerSearch extends StatefulWidget {
 }
 
 class _HistoryState extends State<VolunteerSearch> {
-  Future<LocationWiseTask> getLocVolunteerApi() async {
+  Future<IndividualWiseTask> getIndTaskApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL +
             'location-wise-task-search?search=${widget.search}'),
@@ -26,9 +27,9 @@ class _HistoryState extends State<VolunteerSearch> {
     var data = jsonDecode(response.body.toString());
     print(data);
     if (response.statusCode == 200) {
-      return LocationWiseTask.fromJson(data);
+      return IndividualWiseTask.fromJson(data);
     } else {
-      return LocationWiseTask.fromJson(data);
+      return IndividualWiseTask.fromJson(data);
     }
   }
 
@@ -44,8 +45,8 @@ class _HistoryState extends State<VolunteerSearch> {
         child: Column(
           children: [
             Expanded(
-                child: FutureBuilder<LocationWiseTask>(
-                  future: getLocVolunteerApi(),
+                child: FutureBuilder<IndividualWiseTask>(
+                  future: getIndTaskApi(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return ListView.builder(

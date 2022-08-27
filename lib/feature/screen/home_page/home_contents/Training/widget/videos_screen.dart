@@ -8,6 +8,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
+import '../../../../../../widgets/http_request.dart';
+
 class VideoScreen extends StatefulWidget {
   final String token, name, mediaUrl, details;
   final int id;
@@ -18,14 +20,6 @@ class VideoScreen extends StatefulWidget {
 }
 
 class _VideoScreenState extends State<VideoScreen> {
- var videoIndex =0;
- void _videoPlay(int id, int optionId, String opName) {
-
-   setState(() {
-     videoIndex = videoIndex + 1;
-   });
-   // print(optionId);
- }
   BetterPlayerController _betterPlayerController;
   GlobalKey _betterPlayerKey = GlobalKey();
   @override
@@ -156,7 +150,21 @@ class _VideoScreenState extends State<VideoScreen> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            getRequest('/api/v1/previous-video/${widget.id}', null, {
+                              'Content-Type': "application/json",
+                              "Authorization": "Bearer ${widget.token}"
+                            }).then((value) async {
+                              print(value["data"]["questions"]);
+                              VideoScreen(
+                                id: value["data"]["id"],
+                                token: widget.token,
+                                name: value["data"]["title"],
+                                mediaUrl: value["data"]["details"],
+                                details: value["data"]["details"],
+                              );
+                            });
+                          },
                           child: Row(
                             children: [
                               Icon(Icons.arrow_back_ios_rounded),
@@ -173,7 +181,20 @@ class _VideoScreenState extends State<VideoScreen> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
+                            getRequest('/api/v1/next-video/${widget.id}', null, {
+                              'Content-Type': "application/json",
+                              "Authorization": "Bearer ${widget.token}"
+                            }).then((value) async {
+                              print(value["data"]["questions"]);
+                              VideoScreen(
+                                id: value["data"]["id"],
+                                token: widget.token,
+                                name: value["data"]["title"],
+                                mediaUrl: value["data"]["details"],
+                                details: value["data"]["details"],
+                              );
+                            });
                           },
                           child: Row(
                             children: [
