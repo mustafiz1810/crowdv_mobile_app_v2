@@ -1,5 +1,6 @@
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/about_us.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/chat.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/faq.dart';
 import 'package:crowdv_mobile_app/feature/screen/password/change_pass.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/profile.dart';
 import 'package:crowdv_mobile_app/widgets/get_prefs.dart';
@@ -134,7 +135,12 @@ class _NavDrawerState extends State<NavDrawer> {
               leading:
                   Icon(Icons.question_answer_outlined, color: Colors.black),
               title: new Text("FAQ"),
-              onTap: () {}),
+              onTap: () {Get.to(() => Faq());}),
+          ListTile(
+              leading:
+              Icon(Icons.settings, color: Colors.black),
+              title: new Text("Settings"),
+              onTap: () {Get.to(() => Faq());}),
           ListTile(
               leading: Icon(Icons.info_outline_rounded, color: Colors.black),
               title: Text("About"),

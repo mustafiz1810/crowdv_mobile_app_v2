@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:crowdv_mobile_app/data/models/volunteer/upcoming_opportunity.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
@@ -34,7 +33,6 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
   @override
   void initState() {
     super.initState();
-    getUOpportunityApi();
     getCred();
   }
 

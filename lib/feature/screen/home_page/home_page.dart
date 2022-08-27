@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //Foreground State
     FirebaseMessaging.instance.getInitialMessage();
     FirebaseMessaging.onMessage.listen((message) {
-      if(message.notification != null){
+      if (message.notification != null) {
         print(message.notification.title);
         print(message.notification.body);
       }
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     //app open but not terminated
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      if(message.notification != null){
+      if (message.notification != null) {
         print(message.notification.title);
         print(message.notification.body);
         print(message.data['opportunity_id']);
@@ -64,16 +64,16 @@ class _HomeScreenState extends State<HomeScreen> {
           context,
           MaterialPageRoute(
               builder: (context) => AppliedVolunteer(
-                id: message.data['opportunity_id'],
-                token:token,
-              )),
+                    id: message.data['opportunity_id'],
+                    token: token,
+                  )),
         );
       }
     });
 
     //when app is terminated
-    FirebaseMessaging.instance.getInitialMessage().then((message){
-      if(message != null){
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if (message != null) {
         print(message.notification.title);
         print(message.notification.body);
         print(message.data['opportunity_id']);
@@ -81,9 +81,9 @@ class _HomeScreenState extends State<HomeScreen> {
           context,
           MaterialPageRoute(
               builder: (context) => AppliedVolunteer(
-                id: message.data['opportunity_id'],
-                token:token,
-              )),
+                    id: message.data['opportunity_id'],
+                    token: token,
+                  )),
         );
       }
     });
@@ -224,7 +224,9 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Colors.black,
         ),
         onPressed: () {
-          widget.role == "volunteer"?Get.to(() => VolunteerSearchPage()):Get.to(() => SearchPage());
+          widget.role == "volunteer"
+              ? Get.to(() => VolunteerSearchPage())
+              : Get.to(() => SearchPage());
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

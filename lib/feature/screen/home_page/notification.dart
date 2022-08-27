@@ -33,7 +33,7 @@ class _NotificationPageState extends State<NotificationPage> {
           children: [
             Expanded(child: FutureBuilder<NotificationModel>(
               builder: (context, snapshot) {
-                if (widget.data != null) {
+                if (snapshot.hasData) {
                   return ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
