@@ -1,215 +1,281 @@
 import 'dart:convert';
-import 'package:crowdv_mobile_app/data/models/recruiter/Volunteer_Category.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/chat.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/route_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import '../../../../data/models/volunteer/task_search_location.dart';
+import '../../home_page/home_contents/widgets/details.dart';
 
 class VolunteerSearch extends StatefulWidget {
-  final dynamic token,search;
-  VolunteerSearch({this.token,this.search});
+  final dynamic token,role, search;
+  VolunteerSearch({this.token,this.role, this.search});
   @override
   _HistoryState createState() => _HistoryState();
 }
 
 class _HistoryState extends State<VolunteerSearch> {
-
-  Future<CategoryVolunteer> getCateVolunteerApi() async {
+  Future<LocationWiseTask> getLocVolunteerApi() async {
     final response = await http.get(
-        Uri.parse(NetworkConstants.BASE_URL + 'Category-wise-volunteer-search?location=${widget.search}'),
+        Uri.parse(NetworkConstants.BASE_URL +
+            'location-wise-task-search?search=${widget.search}'),
         headers: {"Authorization": "Bearer ${widget.token}"});
     var data = jsonDecode(response.body.toString());
+    print(data);
     if (response.statusCode == 200) {
-      return CategoryVolunteer.fromJson(data);
+      return LocationWiseTask.fromJson(data);
     } else {
-      return CategoryVolunteer.fromJson(data);
+      return LocationWiseTask.fromJson(data);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text('Volunteer'),
+        title: Text('Location'),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-                child: FutureBuilder<CategoryVolunteer>(
-                  future: getCateVolunteerApi(),
+                child: FutureBuilder<LocationWiseTask>(
+                  future: getLocVolunteerApi(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
                         itemCount: snapshot.data.data.length,
                         itemBuilder: (context, index) {
                           return Padding(
-                            padding: const EdgeInsets.only(
-                                left: 10, top: 10, right: 10),
-                            child: Container(
-                              width: 350,
-                              height: 200,
-                              margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                              decoration: BoxDecoration(
-                                // image: DecorationImage(
-                                //   fit: BoxFit.cover,
-                                //   image: AssetImage("assets/undraw_pilates_gpdb.png"),
-                                // ),
-                                color: Colors.white,
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(20)),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: shadowColor.withOpacity(0.4),
-                                    spreadRadius: .1,
-                                    blurRadius: 2,
-                                    // offset: Offset(0, 1), // changes position of shadow
-                                  ),
-                                ],
-                              ),
-                              child:  Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 20, right: 20, top: 10,bottom: 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              snapshot.data.data[index].firstName+" "+snapshot.data.data[index].lastName,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18),
-                                            ),
-                                            snapshot.data.data[index].isOnline == true ?Icon(
-                                              Icons
-                                                  .fiber_manual_record_rounded,
-                                              size: 12,
-                                              color:
-                                              Colors.green,
-                                            ):Icon(
-                                              Icons
-                                                  .fiber_manual_record_rounded,
-                                              size: 12,
-                                              color:
-                                              Colors.grey,
-                                            ),
-                                          ],
-                                        ),
-                                        IconBox(
-                                          child: Icon(
-                                            Icons.message_rounded,
-                                            color: Colors.white,
-                                            size: 20,
+                            padding: const EdgeInsets.all(5),
+                            child: InkWell(
+                              onTap: () {
+                                print(
+                                  snapshot.data.data[index].status,
+                                );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => OpportunityDetails(
+                                          status:
+                                          snapshot.data.data[index].status,
+                                          role: widget.role,
+                                          id: snapshot.data.data[index].id,
+                                          token: widget.token)),
+                                ).then((value) => setState(() {}));
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height / 3.3,
+                                margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: shadowColor.withOpacity(0.6),
+                                      spreadRadius: -1,
+                                      blurRadius: 4,
+                                      // offset: Offset(0, 1), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(23.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            snapshot.data.data[index].title,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                                fontSize: 16),
                                           ),
-                                          onTap: (){
-                                            Get.to(() => ChatUi());
-                                          },
-                                          bgColor: primaryColor,
-                                        ),
-                                      ],
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          SizedBox(
+                                            width: 200,
+                                            height: 50,
+                                            child: Text(
+                                              snapshot.data.data[index].details,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 25,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.location_on_rounded,
+                                                color: Colors.blueAccent,
+                                                size: 20,
+                                              ),
+                                              Text(
+                                                snapshot.data.data[index].city !=
+                                                    null
+                                                    ? snapshot
+                                                    .data.data[index].city
+                                                    : "",
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.blueAccent,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Divider(
+                                            height: 5,
+                                            color: Colors.grey.withOpacity(.5),
+                                            thickness: 1,
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons
+                                                            .watch_later_outlined,
+                                                        color: Colors.black,
+                                                        size: 15,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text(
+                                                        snapshot.data.data[index].datumStartTime,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text(
+                                                        "-",
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text(
+                                                        snapshot.data.data[index]
+                                                            .datumEndTime,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.calendar_today,
+                                                        size: 15,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text(snapshot
+                                                          .data.data[index].date.toString()),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                              // Stack(
+                                              //   children: [
+                                              //     Container(
+                                              //       width:80,
+                                              //       child: Row(
+                                              //         children: [
+                                              //           CircleAvatar(
+                                              //           backgroundImage: AssetImage("assets/avater.png"),
+                                              //           backgroundColor: Colors.black12,
+                                              //           radius: 20,
+                                              //   ),
+                                              //         ],
+                                              //       ),
+                                              //     ),
+                                              //     Positioned(
+                                              //       left: 25,
+                                              //       child: CircleAvatar(
+                                              //       backgroundImage: AssetImage("assets/avater.png"),
+                                              //       backgroundColor: Colors.black12,
+                                              //       radius: 20,
+                                              //     ),)
+                                              //   ]
+                                              // ),
+                                              Container(
+                                                width: 80,
+                                                height: 35,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(20)),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                      snapshot.data.data[index]
+                                                          .status,
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                          FontWeight.bold,
+                                                          fontSize: 14,
+                                                          color:
+                                                          Colors.deepOrange)),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Divider(
-                                    thickness: 1,
-                                    height: 5,
-                                    color: primaryColor,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Email : ',
-                                              style: TextStyle(
-                                                  color: primaryColor,
-                                                  fontSize: 15),
-                                            ),
-                                            SizedBox(
-                                              height: 2,
-                                            ),
-                                            Text(
-                                              'Phone : ',
-                                              style: TextStyle(
-                                                  color: primaryColor,
-                                                  fontSize: 15),
-                                            ),
-                                            SizedBox(
-                                              height: 2,
-                                            ),
-                                            Text(
-                                              'Location: ',
-                                              style: TextStyle(
-                                                  color: primaryColor,
-                                                  fontSize: 15),
-                                            ),
-                                            SizedBox(
-                                              height: 2,
-                                            ),
-                                            Text(
-                                              'Rating: ',
-                                              style: TextStyle(
-                                                  color: primaryColor,
-                                                  fontSize: 15),
-                                            ),
-                                          ],
-                                        ),
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              snapshot.data.data[index].email,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                                snapshot
-                                                    .data.data[index].phone,
-                                                style: TextStyle(
-                                                    fontSize: 14)),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                                snapshot
-                                                    .data
-                                                    .data[index].state+", "+ snapshot
-                                                    .data
-                                                    .data[index].city,
-                                                style: TextStyle(
-                                                    fontSize: 14)),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                                snapshot
-                                                    .data
-                                                    .data[index].rating.toString(),
-                                                style: TextStyle(
-                                                    fontSize: 14))
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                                    Positioned(
+                                        top: 20,
+                                        right: 20,
+                                        child: Container(
+                                          height: 50,
+                                          width: 50,
+                                          child: IconBox(
+                                            child:CachedNetworkImage(
+                                              imageUrl: snapshot
+                                                  .data.data[index].category.icon,
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                        image: imageProvider,
+                                                      ),
+                                                    ),
+                                                  ),
+                                              placeholder: (context, url) =>
+                                                  Icon(Icons.downloading_rounded,size: 40,),
+                                              errorWidget: (context, url, error)
+                                              => Icon(Icons.image_outlined,size: 40,),
+                                            ) ,
+                                            bgColor: Colors.white,
+                                          ),
+                                        ))
+                                  ],
+                                ),
                               ),
                             ),
                           );
@@ -220,8 +286,9 @@ class _HistoryState extends State<VolunteerSearch> {
                         alignment: Alignment.center,
                         child: EmptyWidget(
                           image: null,
-                          packageImage: PackageImage.Image_1,
-                          title: 'Empty',
+                          packageImage: PackageImage.Image_3,
+                          title: 'No Opportunity',
+                          subTitle: 'No  Opportunity available',
                           titleTextStyle: TextStyle(
                             fontSize: 22,
                             color: Color(0xff9da9c7),

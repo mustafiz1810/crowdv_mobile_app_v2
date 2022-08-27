@@ -341,13 +341,11 @@ class _SearchPageState extends State<SearchPage> {
                                         child: DropdownButton<String>(
                                           hint: Center(
                                             child: Text(
-                                              'select city',
+                                              'Select City',
                                               style: TextStyle(
                                                   fontSize: 18,
                                                   color: Colors.black,
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .bold),
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                           ),
                                           underline: SizedBox(),

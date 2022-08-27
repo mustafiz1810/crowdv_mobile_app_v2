@@ -23,7 +23,7 @@ class VolunteerSearchPage extends StatefulWidget {
 }
 
 class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
-  String token = "";
+  String token = "",role = "";
   @override
   void initState() {
     getCred();
@@ -34,6 +34,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       token = pref.getString("user");
+      role = pref.getString("role");
     });
   }
 
@@ -145,6 +146,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                         press: () {
                                           Get.to(() => VolunteerCategory(
                                             token: token,
+                                            role:role,
                                             categoryId: snapshot
                                                 .data.data[index].id,
                                           ));
@@ -341,7 +343,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                         child: DropdownButton<String>(
                                           hint: Center(
                                             child: Text(
-                                              'select city',
+                                              'Select City',
                                               style: TextStyle(
                                                   fontSize: 18,
                                                   color: Colors.black,
@@ -418,7 +420,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                             splashColor:
                                                 secondaryColor, // splash color
                                             onTap: () {
-                                              Get.to(VolunteerLocation(token: token,location: selectedCountry,));
+                                              Get.to(VolunteerLocation(token: token,role:role,state: selectedCountry,city:selectedProvince));
                                             }, // button pressed
                                             child: Column(
                                               mainAxisAlignment:

@@ -21,9 +21,10 @@ class _HistoryState extends State<Search> {
 
   Future<CategoryVolunteer> getCateVolunteerApi() async {
     final response = await http.get(
-        Uri.parse(NetworkConstants.BASE_URL + 'Category-wise-volunteer-search?location=${widget.search}'),
+        Uri.parse(NetworkConstants.BASE_URL + 'category-wise-volunteer-search?search=${widget.search}'),
         headers: {"Authorization": "Bearer ${widget.token}"});
     var data = jsonDecode(response.body.toString());
+    print(data);
     if (response.statusCode == 200) {
       return CategoryVolunteer.fromJson(data);
     } else {
