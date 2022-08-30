@@ -190,8 +190,8 @@ class _LoginPageState extends State<LoginPage> {
                                         onTap: _toggleObscured,
                                         child: Icon(
                                           _obscured
-                                              ? Icons.visibility_rounded
-                                              : Icons.visibility_off_rounded,
+                                              ? Icons.visibility_off_rounded
+                                              : Icons.visibility_rounded,
                                           size: 24,
                                         ),
                                       ),

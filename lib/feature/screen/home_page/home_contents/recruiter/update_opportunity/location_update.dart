@@ -105,7 +105,8 @@ class _LocationUpdateState extends State<LocationUpdate> {
         Navigator.popUntil(context, (route) => count++ == 3);
       } else {
         var data = jsonDecode(response.body.toString());
-        showToast(context, data['message'].toString());
+        print(data);
+        showToast(context, data['error']['errors'].toString());
       }
     } catch (e) {
       showDialog(
@@ -333,6 +334,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
             Container(
               height: 50,
               child: TextFormField(
+                keyboardType: TextInputType.number,
                 controller: zipController,
                 decoration: ThemeHelper()
                     .textInputDecoration(

@@ -343,6 +343,7 @@ class _ServiceLocationState extends State<ServiceLocation> {
               SizedBox(height: 20),
               Container(
                 child: TextFormField(
+                  keyboardType: TextInputType.number,
                   controller: zipController,
                   decoration: ThemeHelper()
                       .textInputDecoration(

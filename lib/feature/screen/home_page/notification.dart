@@ -10,10 +10,11 @@ import 'package:http/http.dart' as http;
 import 'package:inkwell_splash/inkwell_splash.dart';
 import '../../../data/models/notification_model.dart';
 import '../../../utils/constants.dart';
+import 'home_contents/volunteer_opportunities.dart';
 
 class NotificationPage extends StatefulWidget {
-  final dynamic data, token;
-  NotificationPage({this.data, this.token});
+  final dynamic data, token,role;
+  NotificationPage({this.data, this.token,this.role});
 
   @override
   _NotificationPageState createState() => _NotificationPageState();
@@ -33,7 +34,26 @@ class _NotificationPageState extends State<NotificationPage> {
           children: [
             Expanded(child: FutureBuilder<NotificationModel>(
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
+                if (widget.data.length == 0) {
+                  return Container(
+                    alignment: Alignment.center,
+                    child: EmptyWidget(
+                      image: null,
+                      packageImage: PackageImage.Image_1,
+                      title: 'Empty',
+                      subTitle: 'Notification Empty',
+                      titleTextStyle: TextStyle(
+                        fontSize: 22,
+                        color: Color(0xff9da9c7),
+                        fontWeight: FontWeight.w500,
+                      ),
+                      subtitleTextStyle: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xffabb8d6),
+                      ),
+                    ),
+                  );
+                } else {
                   return ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
@@ -49,16 +69,19 @@ class _NotificationPageState extends State<NotificationPage> {
                             'Content-Type': "application/json",
                             "Authorization": "Bearer ${widget.token}"
                           }).then((value) async {
-                            setState(() {});
-                            Navigator.push(
+                            widget.role == "recruiter"?Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => AppliedVolunteer(
-                                        id: widget
-                                            .data[index].data.opportunityId,
-                                        token: widget.token,
-                                      )),
-                            );
+                                    id: widget
+                                        .data[index].data.opportunityId,
+                                    token: widget.token,
+                                  )),
+                            ):MaterialPageRoute(
+                                builder: (context) => VolunteerMyOpportunity(
+                                  role: widget.role,
+                                ));
+                            setState(() {});
                           });
                         },
                         child: Padding(
@@ -77,7 +100,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                 ),
                               ],
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
+                              BorderRadius.all(Radius.circular(20)),
                             ),
                             child: ListTile(
                               leading: IconBox(
@@ -109,7 +132,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                 decoration: BoxDecoration(
                                     color: Color(0xFF1d4e89),
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(100))),
+                                    BorderRadius.all(Radius.circular(100))),
                               ),
                               subtitle: Text(widget.data[index].data.title),
                             ),
@@ -117,25 +140,6 @@ class _NotificationPageState extends State<NotificationPage> {
                         ),
                       );
                     },
-                  );
-                } else {
-                  return Container(
-                    alignment: Alignment.center,
-                    child: EmptyWidget(
-                      image: null,
-                      packageImage: PackageImage.Image_1,
-                      title: 'Empty',
-                      subTitle: 'Notification Empty',
-                      titleTextStyle: TextStyle(
-                        fontSize: 22,
-                        color: Color(0xff9da9c7),
-                        fontWeight: FontWeight.w500,
-                      ),
-                      subtitleTextStyle: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xffabb8d6),
-                      ),
-                    ),
                   );
                 }
               },

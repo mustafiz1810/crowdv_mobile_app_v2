@@ -145,84 +145,91 @@ class _TrainingVideoState extends State<TrainingVideo> {
                 child: FutureBuilder<VideoListModel>(
               future: getVideoListApi(),
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: snapshot.data.data.videos.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          train(
-                              snapshot.data.data.videos[index].id,
-                              snapshot.data.data.videos[index].title,
-                              snapshot.data.data.videos[index].video,
-                              snapshot.data.data.videos[index].details,
-                              snapshot.data.data.videos);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            // color: _randomColor.randomColor(colorHue: ColorHue.random,colorSaturation: ColorSaturation.monochrome,colorBrightness: ColorBrightness.veryLight),
-                            height: MediaQuery.of(context).size.height / 4,
-                            width: MediaQuery.of(context).size.width,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                    height: 140,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: CachedNetworkImage(
-                                      imageUrl: snapshot.data.data.videos[index].thumbnail,
-                                      imageBuilder:
-                                          (context, imageProvider) =>
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.data.data.videos.length == 0) {
+                    return Container(
+                      alignment: Alignment.center,
+                      child: EmptyWidget(
+                        image: null,
+                        packageImage: PackageImage.Image_3,
+                        title: 'Empty',
+                        subTitle: 'No videos available',
+                        titleTextStyle: TextStyle(
+                          fontSize: 22,
+                          color: Color(0xff9da9c7),
+                          fontWeight: FontWeight.w500,
+                        ),
+                        subtitleTextStyle: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xffabb8d6),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.data.videos.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            train(
+                                snapshot.data.data.videos[index].id,
+                                snapshot.data.data.videos[index].title,
+                                snapshot.data.data.videos[index].video,
+                                snapshot.data.data.videos[index].details,
+                                snapshot.data.data.videos);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              // color: _randomColor.randomColor(colorHue: ColorHue.random,colorSaturation: ColorSaturation.monochrome,colorBrightness: ColorBrightness.veryLight),
+                              height: MediaQuery.of(context).size.height / 4,
+                              width: MediaQuery.of(context).size.width,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                      height: 140,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: CachedNetworkImage(
+                                        imageUrl: snapshot.data.data.videos[index].thumbnail,
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
                                                   image: imageProvider,
                                                   fit: BoxFit.fill,),
+                                              ),
                                             ),
-                                          ),
-                                      placeholder: (context, url) =>
-                                          Icon(Icons.downloading_rounded,size: 100,),
-                                      errorWidget: (context, url, error)
-                                      => Icon(Icons.image_outlined,size: 100,),
-                                    )),
-                                SizedBox(
-                                    child: Text(
-                                  "Title: " +
-                                      snapshot.data.data.videos[index].title,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ))
-                              ],
+                                        placeholder: (context, url) =>
+                                            Icon(Icons.downloading_rounded,size: 100,),
+                                        errorWidget: (context, url, error)
+                                        => Icon(Icons.image_outlined,size: 100,),
+                                      )),
+                                  SizedBox(
+                                      child: Text(
+                                        "Title: " +
+                                            snapshot.data.data.videos[index].title,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      ))
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  );
+                        );
+                      },
+                    );
+                  }
+                } else if (snapshot.connectionState == ConnectionState.none) {
+                  return Text('Error'); // error
                 } else {
-                  return Container(
-                    alignment: Alignment.center,
-                    child: EmptyWidget(
-                      image: null,
-                      packageImage: PackageImage.Image_3,
-                      title: 'Empty',
-                      subTitle: 'No videos available',
-                      titleTextStyle: TextStyle(
-                        fontSize: 22,
-                        color: Color(0xff9da9c7),
-                        fontWeight: FontWeight.w500,
-                      ),
-                      subtitleTextStyle: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xffabb8d6),
-                      ),
-                    ),
-                  );
+                  return Center(child: CircularProgressIndicator()); // loading
                 }
+
               },
             )),
           ],

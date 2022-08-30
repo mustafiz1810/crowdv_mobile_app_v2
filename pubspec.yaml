@@ -69,6 +69,9 @@ dependencies:
   device_info_plus: ^3.2.3
   random_color: ^1.0.5
   cached_network_image: any
+  settings_ui: ^2.0.2
+  carousel_pro: ^1.0.0
+
 
 dev_dependencies:
   flutter_test:

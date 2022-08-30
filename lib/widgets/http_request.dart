@@ -33,6 +33,7 @@ Future getRequestWithoutParam(path, headers) async {
     return data;
   } else {
     var data = json.decode(response.body);
+    print(data);
     showToast(data['message']);
     // print(
     //   path,

@@ -4,6 +4,7 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Trainin
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
+import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,165 +63,187 @@ class _TrainingListState extends State<TrainingList> {
                 child: FutureBuilder<TrainingModel>(
               future: getTrainingApi(),
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: snapshot.data.data.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width / 1.1,
-                          height: MediaQuery.of(context).size.height / 5,
-                          margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(20)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: shadowColor.withOpacity(0.4),
-                                spreadRadius: .1,
-                                blurRadius: 2,
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 20, right: 20, top: 5,bottom: 5),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SizedBox(
-                                      width: 200,
-                                      height: 20,
-                                      child: Text(
-                                        snapshot.data.data[index].trainingTitle,
-                                        style: TextStyle(
-                                            color: primaryColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
-                                      ),
-                                    ),
-                                    IconBox(
-                                      child: Icon(
-                                        Icons.info,
-                                        color: primaryColor,
-                                      ),
-                                      bgColor: Colors.white,
-                                      onTap: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: Text("Details"),
-                                                content: Text(snapshot
-                                                    .data
-                                                    .data[index]
-                                                    .trainingDescription),
-                                                actions: [
-                                                  FlatButton(
-                                                    child: Text(
-                                                      "ok",
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    color: primaryColor,
-                                                  )
-                                                ],
-                                              );
-                                            });
-                                      },
-                                    )
-                                  ],
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.data.data.length == 0) {
+                    return Container(
+                      alignment: Alignment.center,
+                      child: EmptyWidget(
+                        image: null,
+                        packageImage: PackageImage.Image_3,
+                        title: 'Empty',
+                        titleTextStyle: TextStyle(
+                          fontSize: 22,
+                          color: Color(0xff9da9c7),
+                          fontWeight: FontWeight.w500,
+                        ),
+                        subtitleTextStyle: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xffabb8d6),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.data.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width / 1.1,
+                            height: MediaQuery.of(context).size.height / 5,
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(20)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: shadowColor.withOpacity(0.4),
+                                  spreadRadius: .1,
+                                  blurRadius: 2,
                                 ),
-                              ),
-                              Divider(
-                                thickness: 2,
-                                height: 5,
-                                color: primaryColor,
-                              ),
-                              Padding(
+                              ],
+                            ),
+                            child: Column(
+                              children: [
+                                Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 20, right: 20, top: 10),
-                                  child: Column(
+                                      left: 20, right: 20, top: 5,bottom: 5),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'Status:  ',
-                                            style: TextStyle(
-                                                color: primaryColor,
-                                                fontSize: 16),
-                                          ),
-                                          Text(
-                                            snapshot.data.data[index]
-                                                .trainingStatus,
-                                            style: TextStyle(
-                                                fontSize: 14),
-                                          ),
-                                        ],
-                                      ),
                                       SizedBox(
+                                        width: 200,
                                         height: 25,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.end,
-                                        children: [
-                                          Container(
-                                            width: 120,
-                                            height: 30,
-                                            margin:
-                                            EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                            decoration: BoxDecoration(
+                                        child: Text(
+                                          snapshot.data.data[index].trainingTitle,
+                                          style: TextStyle(
                                               color: primaryColor,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20)),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18),
+                                        ),
+                                      ),
+                                      IconBox(
+                                        child: Icon(
+                                          Icons.info,
+                                          color: primaryColor,
+                                        ),
+                                        bgColor: Colors.white,
+                                        onTap: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: Text("Details"),
+                                                  content: Text(snapshot
+                                                      .data
+                                                      .data[index]
+                                                      .trainingDescription),
+                                                  actions: [
+                                                    FlatButton(
+                                                      child: Text(
+                                                        "ok",
+                                                        style: TextStyle(
+                                                            color: Colors.white),
+                                                      ),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      color: primaryColor,
+                                                    )
+                                                  ],
+                                                );
+                                              });
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Divider(
+                                  thickness: 2,
+                                  height: 5,
+                                  color: primaryColor,
+                                ),
+                                Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 20, right: 20, top: 10),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Status:  ',
+                                              style: TextStyle(
+                                                  color: primaryColor,
+                                                  fontSize: 16),
                                             ),
-                                            child: Center(
-                                              child: InkWell(
-                                                onTap: () {
-                                                  Get.to(() => TrainingVideo(
-                                                      id: snapshot
-                                                          .data
-                                                          .data[index]
-                                                          .trainingId));
-                                                },
-                                                child: Container(
-                                                  child: Center(
-                                                      child: Text('Watch Video',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold,
-                                                              fontSize: 16,
-                                                              color: Colors
-                                                                  .white))),
+                                            Text(
+                                              snapshot.data.data[index]
+                                                  .trainingStatus,
+                                              style: TextStyle(
+                                                  fontSize: 14),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 25,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              width: 120,
+                                              height: 30,
+                                              margin:
+                                              EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                              decoration: BoxDecoration(
+                                                color: primaryColor,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
+                                              ),
+                                              child: Center(
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    Get.to(() => TrainingVideo(
+                                                        id: snapshot
+                                                            .data
+                                                            .data[index]
+                                                            .trainingId));
+                                                  },
+                                                  child: Container(
+                                                    child: Center(
+                                                        child: Text('Watch Video',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 16,
+                                                                color: Colors
+                                                                    .white))),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  )),
-                            ],
+                                          ],
+                                        )
+                                      ],
+                                    )),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  );
+                        );
+                      },
+                    );
+                  }
+                } else if (snapshot.connectionState == ConnectionState.none) {
+                  return Text('Error'); // error
                 } else {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator()); // loading
                 }
               },
             )),

@@ -155,6 +155,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
               //--------------------------------here is Fname
               Container(
                 child: TextFormField(
+                  keyboardType: TextInputType.text,
                   controller: fnameController,
                   decoration: ThemeHelper()
                       .textInputDecoration('First Name', 'Update Your name'),

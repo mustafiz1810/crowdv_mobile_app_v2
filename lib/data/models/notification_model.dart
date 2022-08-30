@@ -114,20 +114,20 @@ class ListData {
   String volunteer;
 
   factory ListData.fromJson(Map<String, dynamic> json) => ListData(
-    opportunityId: json["opportunity_id"],
+    opportunityId: json["opportunity_id"] == null ? null : json["opportunity_id"],
     title: json["title"],
-    taskType: json["task_type"],
-    date: DateTime.parse(json["date"]),
-    status: json["status"],
-    volunteer: json["volunteer"],
+    taskType: json["task_type"] == null ? null : json["task_type"],
+    date: json["date"] == null ? null : DateTime.parse(json["date"]),
+    status: json["status"] == null ? null : json["status"],
+    volunteer: json["volunteer"] == null ? null : json["volunteer"],
   );
 
   Map<String, dynamic> toJson() => {
-    "opportunity_id": opportunityId,
+    "opportunity_id": opportunityId == null ? null : opportunityId,
     "title": title,
-    "task_type": taskType,
-    "date": date.toIso8601String(),
-    "status": status,
-    "volunteer": volunteer,
+    "task_type": taskType == null ? null : taskType,
+    "date": date == null ? null : date.toIso8601String(),
+    "status": status == null ? null : status,
+    "volunteer": volunteer == null ? null : volunteer,
   };
 }

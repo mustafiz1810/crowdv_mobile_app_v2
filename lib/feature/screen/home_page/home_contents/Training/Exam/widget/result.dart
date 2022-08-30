@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/certificate.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:inkwell_splash/inkwell_splash.dart';
@@ -112,27 +114,6 @@ class _ResultState extends State<Result> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Text(
-            //   "Your Answer",
-            //   style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-            //   textAlign: TextAlign.center,
-            // ),
-            // ListView.builder(
-            //   scrollDirection: Axis.vertical,
-            //   shrinkWrap: true,
-            //   itemCount: widget.array.length,
-            //   itemBuilder: (context, index) {
-            //     return ListTile(
-            //       title: Card(
-            //         child: Container(
-            //           width: MediaQuery.of(context).size.width,
-            //           height: 50,
-            //           child: Center(child: Text(widget.array[index].toString())),
-            //         ),
-            //       ),
-            //     );
-            //   },
-            // ),
             Visibility(
               visible: isShow,
               child: Column(
@@ -171,9 +152,6 @@ class _ResultState extends State<Result> {
                   ),
                 ],
               ),
-            ),
-            SizedBox(
-              height: 5,
             ),
             Visibility(
               visible: isVisible,
@@ -304,7 +282,7 @@ class _ResultState extends State<Result> {
                               child: Padding(
                                 padding: const EdgeInsets.all(18.0),
                                 child: Text(
-                                  "Take Another Test",
+                                  "Retry",
                                   style: GoogleFonts.ubuntu(
                                     textStyle: TextStyle(
                                         fontSize: 16,
@@ -431,12 +409,12 @@ class _ResultState extends State<Result> {
                                     borderRadius: BorderRadius.circular(40)),
                               ),
                               onPressed: () {
-                                Navigator.pop(context);
+                                Get.to(()=>Certificate());
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(18.0),
                                 child: Text(
-                                  "Take Another Test",
+                                  "Claim Certificate",
                                   style: GoogleFonts.ubuntu(
                                     textStyle: TextStyle(
                                         fontSize: 16,

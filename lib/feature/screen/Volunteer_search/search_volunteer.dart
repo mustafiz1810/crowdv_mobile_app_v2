@@ -23,7 +23,7 @@ class VolunteerSearchPage extends StatefulWidget {
 }
 
 class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
-  String token = "",role = "";
+  String token = "", role = "";
   @override
   void initState() {
     getCred();
@@ -104,9 +104,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                   Tab(
                       icon: Icon(Icons.location_on_rounded),
                       child: const Text('Location')),
-                  Tab(
-                      icon: Icon(Icons.person),
-                      child: const Text('Recruiter')),
+                  Tab(icon: Icon(Icons.person), child: const Text('Recruiter')),
                 ],
                 unselectedLabelColor: Colors.black38,
                 indicatorSize: TabBarIndicatorSize.tab,
@@ -128,50 +126,56 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                         FutureBuilder<CategoryModel>(
                           future: getCategoryApi(),
                           builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: GridView.builder(
-                                    gridDelegate:
-                                    const SliverGridDelegateWithMaxCrossAxisExtent(
-                                        maxCrossAxisExtent: 150,
-                                        childAspectRatio: 2 / 2,
-                                        crossAxisSpacing: 15,
-                                        mainAxisSpacing: 15),
-                                    itemCount: snapshot.data.data.length,
-                                    itemBuilder: (BuildContext ctx, index) {
-                                      return SearchCard(
-                                        title: snapshot.data.data[index].name,
-                                        svgSrc: snapshot.data.data[index].image,
-                                        press: () {
-                                          Get.to(() => VolunteerCategory(
-                                            token: token,
-                                            role:role,
-                                            categoryId: snapshot
-                                                .data.data[index].id,
-                                          ));
-                                        },
-                                      );
-                                    }),
-                              );
+                            if (snapshot.connectionState == ConnectionState.done) {
+                              if (snapshot.data.data.length == 0) {
+                                return Container(
+                                  alignment: Alignment.center,
+                                  child: EmptyWidget(
+                                    image: null,
+                                    packageImage: PackageImage.Image_1,
+                                    title: 'Empty',
+                                    titleTextStyle: TextStyle(
+                                      fontSize: 22,
+                                      color: Color(0xff9da9c7),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    subtitleTextStyle: TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xffabb8d6),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: GridView.builder(
+                                      gridDelegate:
+                                      const SliverGridDelegateWithMaxCrossAxisExtent(
+                                          maxCrossAxisExtent: 150,
+                                          childAspectRatio: 2 / 2,
+                                          crossAxisSpacing: 15,
+                                          mainAxisSpacing: 15),
+                                      itemCount: snapshot.data.data.length,
+                                      itemBuilder: (BuildContext ctx, index) {
+                                        return SearchCard(
+                                          title: snapshot.data.data[index].name,
+                                          svgSrc: snapshot.data.data[index].image,
+                                          press: () {
+                                            Get.to(() => VolunteerCategory(
+                                              token: token,
+                                              role: role,
+                                              categoryId: snapshot
+                                                  .data.data[index].id,
+                                            ));
+                                          },
+                                        );
+                                      }),
+                                );
+                              }
+                            } else if (snapshot.connectionState == ConnectionState.none) {
+                              return Text('Error'); // error
                             } else {
-                              return Container(
-                                alignment: Alignment.center,
-                                child: EmptyWidget(
-                                  image: null,
-                                  packageImage: PackageImage.Image_1,
-                                  title: 'Empty',
-                                  titleTextStyle: TextStyle(
-                                    fontSize: 22,
-                                    color: Color(0xff9da9c7),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  subtitleTextStyle: TextStyle(
-                                    fontSize: 14,
-                                    color: Color(0xffabb8d6),
-                                  ),
-                                ),
-                              );
+                              return Center(child: CircularProgressIndicator()); // loading
                             }
                           },
                         ),
@@ -191,118 +195,100 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                         labelText: "State",
                                         hintText: "State",
                                         fillColor: Colors.white,
-                                        labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                                        labelStyle: TextStyle(
+                                            fontWeight: FontWeight.bold),
                                         filled: true,
-                                        contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                        contentPadding:
+                                            EdgeInsets.fromLTRB(20, 10, 20, 10),
                                         focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            borderSide: BorderSide(color: Colors.black)),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
                                         enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            borderSide: BorderSide(color: Colors.black)),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
                                         errorBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            borderSide:
-                                            BorderSide(color: Colors.red, width: 2.0)),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            borderSide: BorderSide(
+                                                color: Colors.red, width: 2.0)),
                                         focusedErrorBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            borderSide:
-                                            BorderSide(color: Colors.red, width: 2.0)),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            borderSide: BorderSide(
+                                                color: Colors.red, width: 2.0)),
                                       ),
                                       isEmpty: selectedCountry == '',
-                                      child:  Center(
+                                      child: Center(
                                         child: DropdownButton<String>(
                                           hint: Center(
                                             child: Text(
-                                              "Select Country",
+                                              "Select State",
                                               style: TextStyle(
                                                   fontSize: 18,
                                                   color: Colors.black,
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .bold),
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                           ),
                                           underline: SizedBox(),
-                                          iconEnabledColor:
-                                          Colors.black,
+                                          iconEnabledColor: Colors.black,
                                           value: selectedCountry,
                                           isExpanded: true,
-                                          items: countries
-                                              .map((String value) {
-                                            return DropdownMenuItem<
-                                                String>(
+                                          items: countries.map((String value) {
+                                            return DropdownMenuItem<String>(
                                               value: value,
                                               child: Text(value),
                                             );
                                           }).toList(),
                                           selectedItemBuilder:
-                                              (BuildContext
-                                          context) =>
-                                              countries
-                                                  .map(
-                                                      (e) =>
-                                                      Center(
-                                                        child:
-                                                        Text(
-                                                          e,
-                                                          style: TextStyle(
-                                                              fontSize: 18,
-                                                              color: Colors.black,
-                                                              fontWeight: FontWeight.bold),
-                                                        ),
-                                                      ))
-                                                  .toList(),
+                                              (BuildContext context) =>
+                                                  countries
+                                                      .map((e) => Center(
+                                                            child: Text(
+                                                              e,
+                                                              style: TextStyle(
+                                                                  fontSize: 18,
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          ))
+                                                      .toList(),
                                           onChanged: (country) {
-                                            if (country ==
-                                                'Alabama') {
-                                              provinces =
-                                                  AlabamaProvince;
-                                            } else if (country ==
-                                                'Alaska') {
-                                              provinces =
-                                                  AlaskaProvince;
+                                            if (country == 'Alabama') {
+                                              provinces = AlabamaProvince;
+                                            } else if (country == 'Alaska') {
+                                              provinces = AlaskaProvince;
                                             } else if (country ==
                                                 'California') {
-                                              provinces =
-                                                  CaliforniaProvince;
+                                              provinces = CaliforniaProvince;
                                             } else if (country ==
                                                 'Connecticut') {
-                                              provinces =
-                                                  ConnecticutProvince;
-                                            } else if (country ==
-                                                'Delaware') {
-                                              provinces =
-                                                  DelawareProvince;
-                                            } else if (country ==
-                                                'Florida') {
-                                              provinces =
-                                                  FloridaProvince;
-                                            } else if (country ==
-                                                'Illinois') {
-                                              provinces =
-                                                  IllinoisProvince;
-                                            } else if (country ==
-                                                'Kansas') {
-                                              provinces =
-                                                  KansasProvince;
-                                            } else if (country ==
-                                                'Kentucky') {
-                                              provinces =
-                                                  KentuckyProvince;
-                                            } else if (country ==
-                                                'Louisiana') {
-                                              provinces =
-                                                  LouisianaProvince;
+                                              provinces = ConnecticutProvince;
+                                            } else if (country == 'Delaware') {
+                                              provinces = DelawareProvince;
+                                            } else if (country == 'Florida') {
+                                              provinces = FloridaProvince;
+                                            } else if (country == 'Illinois') {
+                                              provinces = IllinoisProvince;
+                                            } else if (country == 'Kansas') {
+                                              provinces = KansasProvince;
+                                            } else if (country == 'Kentucky') {
+                                              provinces = KentuckyProvince;
+                                            } else if (country == 'Louisiana') {
+                                              provinces = LouisianaProvince;
                                             } else {
                                               provinces = [];
                                             }
                                             setState(() {
                                               selectedProvince = null;
-                                              selectedCountry =
-                                                  country;
-                                              print(selectedCountry
-                                                  .toString());
+                                              selectedCountry = country;
+                                              print(selectedCountry.toString());
                                             });
                                           },
                                         ),
@@ -320,26 +306,34 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                         labelText: "City",
                                         hintText: "City",
                                         fillColor: Colors.white,
-                                        labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                                        labelStyle: TextStyle(
+                                            fontWeight: FontWeight.bold),
                                         filled: true,
-                                        contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                        contentPadding:
+                                            EdgeInsets.fromLTRB(20, 10, 20, 10),
                                         focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            borderSide: BorderSide(color: Colors.black)),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
                                         enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            borderSide: BorderSide(color: Colors.black)),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
                                         errorBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            borderSide:
-                                            BorderSide(color: Colors.red, width: 2.0)),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            borderSide: BorderSide(
+                                                color: Colors.red, width: 2.0)),
                                         focusedErrorBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            borderSide:
-                                            BorderSide(color: Colors.red, width: 2.0)),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            borderSide: BorderSide(
+                                                color: Colors.red, width: 2.0)),
                                       ),
                                       isEmpty: selectedProvince == '',
-                                      child:  Center(
+                                      child: Center(
                                         child: DropdownButton<String>(
                                           hint: Center(
                                             child: Text(
@@ -347,47 +341,40 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                               style: TextStyle(
                                                   fontSize: 18,
                                                   color: Colors.black,
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .bold),
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                           ),
                                           underline: SizedBox(),
-                                          iconEnabledColor:
-                                          Colors.black,
+                                          iconEnabledColor: Colors.black,
                                           value: selectedProvince,
                                           isExpanded: true,
-                                          items: provinces
-                                              .map((String value) {
-                                            return DropdownMenuItem<
-                                                String>(
+                                          items: provinces.map((String value) {
+                                            return DropdownMenuItem<String>(
                                               value: value,
                                               child: Text(value),
                                             );
                                           }).toList(),
                                           selectedItemBuilder:
-                                              (BuildContext
-                                          context) =>
-                                              provinces
-                                                  .map(
-                                                      (e) =>
-                                                      Center(
-                                                        child:
-                                                        Text(
-                                                          e,
-                                                          style: TextStyle(
-                                                              fontSize: 18,
-                                                              color: Colors.black,
-                                                              fontWeight: FontWeight.bold),
-                                                        ),
-                                                      ))
-                                                  .toList(),
+                                              (BuildContext context) =>
+                                                  provinces
+                                                      .map((e) => Center(
+                                                            child: Text(
+                                                              e,
+                                                              style: TextStyle(
+                                                                  fontSize: 18,
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          ))
+                                                      .toList(),
                                           onChanged: (province) {
                                             setState(() {
-                                              selectedProvince =
-                                                  province;
-                                              print(selectedProvince
-                                                  .toString());
+                                              selectedProvince = province;
+                                              print(
+                                                  selectedProvince.toString());
                                             });
                                           },
                                         ),
@@ -398,21 +385,21 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                 SizedBox(height: 20),
                                 Container(
                                   child: TextFormField(
+                                    keyboardType: TextInputType.number,
                                     decoration: ThemeHelper()
                                         .textInputDecoration(
-                                        'Zip Code',
-                                        'Enter your zip code'),
+                                            'Zip Code', 'Enter your zip code'),
                                   ),
-                                  decoration: ThemeHelper()
-                                      .inputBoxDecorationShaddow(),
+                                  decoration:
+                                      ThemeHelper().inputBoxDecorationShaddow(),
                                 ),
                                 SizedBox(height: 50),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     SizedBox.fromSize(
-                                      size:
-                                          Size(70, 70), // button width and height
+                                      size: Size(
+                                          70, 70), // button width and height
                                       child: ClipOval(
                                         child: Material(
                                           color: primaryColor, // button color
@@ -420,7 +407,11 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                             splashColor:
                                                 secondaryColor, // splash color
                                             onTap: () {
-                                              Get.to(VolunteerLocation(token: token,role:role,state: selectedCountry,city:selectedProvince));
+                                              Get.to(VolunteerLocation(
+                                                  token: token,
+                                                  role: role,
+                                                  state: selectedCountry,
+                                                  city: selectedProvince));
                                             }, // button pressed
                                             child: Column(
                                               mainAxisAlignment:
@@ -455,8 +446,8 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                               Container(
                                 child: TextFormField(
                                   controller: taskController,
-                                  decoration: ThemeHelper().textInputDecoration(
-                                      'Search recruiter'),
+                                  decoration: ThemeHelper()
+                                      .textInputDecoration('Search recruiter'),
                                 ),
                                 decoration:
                                     ThemeHelper().inputBoxDecorationShaddow(),
@@ -477,7 +468,12 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                           splashColor:
                                               secondaryColor, // splash color
                                           onTap: () {
-                                            Get.to(() => VolunteerSearch(token: token,search: taskController.text.toString(),));
+                                            Get.to(() => VolunteerSearch(
+                                                  token: token,
+                                                  role: role,
+                                                  search: taskController.text
+                                                      .toString(),
+                                                ));
                                           }, // button pressed
                                           child: Column(
                                             mainAxisAlignment:

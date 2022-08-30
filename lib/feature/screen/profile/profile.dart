@@ -905,6 +905,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                               SizedBox(height: 20),
                                               Container(
                                                 child: TextFormField(
+                                                  keyboardType: TextInputType.number,
                                                   controller: zipController,
                                                   decoration: ThemeHelper()
                                                       .textInputDecoration(

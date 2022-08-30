@@ -182,6 +182,7 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
                           children: <Widget>[
                             Container(
                               child: TextFormField(
+                                textCapitalization: TextCapitalization.sentences,
                                 controller: emailEditingController,
                                 decoration: ThemeHelper().textInputDecoration(
                                     "Email", "Enter your email"),
@@ -196,6 +197,11 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
                                     return null;
                                   }
                                 },
+    onChanged: (value) {
+    emailEditingController.value = TextEditingValue(
+    text: value.toLowerCase(),
+    selection: emailEditingController.selection
+    );}
                               ),
                               decoration:
                                   ThemeHelper().inputBoxDecorationShaddow(),

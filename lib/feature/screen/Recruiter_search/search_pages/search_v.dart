@@ -46,194 +46,200 @@ class _HistoryState extends State<Search> {
                 child: FutureBuilder<CategoryVolunteer>(
                   future: getCateVolunteerApi(),
                   builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                        itemCount: snapshot.data.data.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                left: 10, top: 10, right: 10),
-                            child: Container(
-                              width: 350,
-                              height: 200,
-                              margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                              decoration: BoxDecoration(
-                                // image: DecorationImage(
-                                //   fit: BoxFit.cover,
-                                //   image: AssetImage("assets/undraw_pilates_gpdb.png"),
-                                // ),
-                                color: Colors.white,
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(20)),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: shadowColor.withOpacity(0.4),
-                                    spreadRadius: .1,
-                                    blurRadius: 2,
-                                    // offset: Offset(0, 1), // changes position of shadow
-                                  ),
-                                ],
-                              ),
-                              child:  Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 20, right: 20, top: 10,bottom: 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              snapshot.data.data[index].firstName+" "+snapshot.data.data[index].lastName,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18),
-                                            ),
-                                            snapshot.data.data[index].isOnline == true ?Icon(
-                                              Icons
-                                                  .fiber_manual_record_rounded,
-                                              size: 12,
-                                              color:
-                                              Colors.green,
-                                            ):Icon(
-                                              Icons
-                                                  .fiber_manual_record_rounded,
-                                              size: 12,
-                                              color:
-                                              Colors.grey,
-                                            ),
-                                          ],
-                                        ),
-                                        IconBox(
-                                          child: Icon(
-                                            Icons.message_rounded,
-                                            color: Colors.white,
-                                            size: 20,
-                                          ),
-                                          onTap: (){
-                                            Get.to(() => ChatUi());
-                                          },
-                                          bgColor: primaryColor,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Divider(
-                                    thickness: 1,
-                                    height: 5,
-                                    color: primaryColor,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Email : ',
-                                              style: TextStyle(
-                                                  color: primaryColor,
-                                                  fontSize: 15),
-                                            ),
-                                            SizedBox(
-                                              height: 2,
-                                            ),
-                                            Text(
-                                              'Phone : ',
-                                              style: TextStyle(
-                                                  color: primaryColor,
-                                                  fontSize: 15),
-                                            ),
-                                            SizedBox(
-                                              height: 2,
-                                            ),
-                                            Text(
-                                              'Location: ',
-                                              style: TextStyle(
-                                                  color: primaryColor,
-                                                  fontSize: 15),
-                                            ),
-                                            SizedBox(
-                                              height: 2,
-                                            ),
-                                            Text(
-                                              'Rating: ',
-                                              style: TextStyle(
-                                                  color: primaryColor,
-                                                  fontSize: 15),
-                                            ),
-                                          ],
-                                        ),
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              snapshot.data.data[index].email,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                                snapshot
-                                                    .data.data[index].phone,
-                                                style: TextStyle(
-                                                    fontSize: 14)),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                                snapshot
-                                                    .data
-                                                    .data[index].state+", "+ snapshot
-                                                    .data
-                                                    .data[index].city,
-                                                style: TextStyle(
-                                                    fontSize: 14)),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                                snapshot
-                                                    .data
-                                                    .data[index].rating.toString(),
-                                                style: TextStyle(
-                                                    fontSize: 14))
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.data.data.length == 0) {
+                        return Container(
+                          alignment: Alignment.center,
+                          child: EmptyWidget(
+                            image: null,
+                            packageImage: PackageImage.Image_1,
+                            title: 'Empty',
+                            titleTextStyle: TextStyle(
+                              fontSize: 22,
+                              color: Color(0xff9da9c7),
+                              fontWeight: FontWeight.w500,
                             ),
-                          );
-                        },
-                      );
+                            subtitleTextStyle: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xffabb8d6),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return ListView.builder(
+                          itemCount: snapshot.data.data.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 10, top: 10, right: 10),
+                              child: Container(
+                                width: 350,
+                                height: 200,
+                                margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                decoration: BoxDecoration(
+                                  // image: DecorationImage(
+                                  //   fit: BoxFit.cover,
+                                  //   image: AssetImage("assets/undraw_pilates_gpdb.png"),
+                                  // ),
+                                  color: Colors.white,
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: shadowColor.withOpacity(0.4),
+                                      spreadRadius: .1,
+                                      blurRadius: 2,
+                                      // offset: Offset(0, 1), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
+                                child:  Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20, right: 20, top: 10,bottom: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                snapshot.data.data[index].firstName+" "+snapshot.data.data[index].lastName,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18),
+                                              ),
+                                              snapshot.data.data[index].isOnline == true ?Icon(
+                                                Icons
+                                                    .fiber_manual_record_rounded,
+                                                size: 12,
+                                                color:
+                                                Colors.green,
+                                              ):Icon(
+                                                Icons
+                                                    .fiber_manual_record_rounded,
+                                                size: 12,
+                                                color:
+                                                Colors.grey,
+                                              ),
+                                            ],
+                                          ),
+                                          IconBox(
+                                            child: Icon(
+                                              Icons.message_rounded,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                            onTap: (){
+                                              Get.to(() => ChatUi());
+                                            },
+                                            bgColor: primaryColor,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Divider(
+                                      thickness: 1,
+                                      height: 5,
+                                      color: primaryColor,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Email : ',
+                                                style: TextStyle(
+                                                    color: primaryColor,
+                                                    fontSize: 15),
+                                              ),
+                                              SizedBox(
+                                                height: 2,
+                                              ),
+                                              Text(
+                                                'Phone : ',
+                                                style: TextStyle(
+                                                    color: primaryColor,
+                                                    fontSize: 15),
+                                              ),
+                                              SizedBox(
+                                                height: 2,
+                                              ),
+                                              Text(
+                                                'Location: ',
+                                                style: TextStyle(
+                                                    color: primaryColor,
+                                                    fontSize: 15),
+                                              ),
+                                              SizedBox(
+                                                height: 2,
+                                              ),
+                                              Text(
+                                                'Rating: ',
+                                                style: TextStyle(
+                                                    color: primaryColor,
+                                                    fontSize: 15),
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                snapshot.data.data[index].email,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14),
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(
+                                                  snapshot
+                                                      .data.data[index].phone,
+                                                  style: TextStyle(
+                                                      fontSize: 14)),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(
+                                                  snapshot
+                                                      .data
+                                                      .data[index].state+", "+ snapshot
+                                                      .data
+                                                      .data[index].city,
+                                                  style: TextStyle(
+                                                      fontSize: 14)),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(
+                                                  snapshot
+                                                      .data
+                                                      .data[index].rating.toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 14))
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    } else if (snapshot.connectionState == ConnectionState.none) {
+                      return Text('Error'); // error
                     } else {
-                      return Container(
-                        alignment: Alignment.center,
-                        child: EmptyWidget(
-                          image: null,
-                          packageImage: PackageImage.Image_1,
-                          title: 'Empty',
-                          titleTextStyle: TextStyle(
-                            fontSize: 22,
-                            color: Color(0xff9da9c7),
-                            fontWeight: FontWeight.w500,
-                          ),
-                          subtitleTextStyle: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xffabb8d6),
-                          ),
-                        ),
-                      );
+                      return Center(child: CircularProgressIndicator()); // loading
                     }
                   },
                 )),

@@ -50,11 +50,12 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
+        print(data);
         Navigator.of(context).pop();
         showToast(context, data['message']);
       } else {
         var data = jsonDecode(response.body.toString());
-        showToast(context, data['message']);
+        showToast(context, data['error']['errors']);
       }
     } catch (e) {
       showDialog(
@@ -88,6 +89,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
+        print(data);
         Navigator.of(context).pop();
         showToast(context, data['message']);
       } else {
@@ -157,7 +159,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
         Uri.parse(NetworkConstants.BASE_URL + 'volunteer/task/history'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
-    showToast(context, data['message']);
+    print(data);
     if (response.statusCode == 200) {
       return VolunteerHistoryModel.fromJson(data);
     } else {
@@ -180,30 +182,34 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                   child: FutureBuilder<VolunteerHistoryModel>(
                 future: getVHistoryApi(),
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: snapshot.data.data.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: (){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => OpportunityDetails(
-                                        role: snapshot
-                                            .data
-                                            .data[index]
-                                            .volunteer
-                                            .role,
-                                        id: snapshot
-                                            .data.data[index].id,
-                                        token: token)),
-                              );
-                            },
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.data.data.length == 0) {
+                      return Container(
+                        alignment: Alignment.center,
+                        child: EmptyWidget(
+                          image: null,
+                          packageImage: PackageImage.Image_1,
+                          title: 'Empty',
+                          subTitle: 'No  History available',
+                          titleTextStyle: TextStyle(
+                            fontSize: 22,
+                            color: Color(0xff9da9c7),
+                            fontWeight: FontWeight.w500,
+                          ),
+                          subtitleTextStyle: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xffabb8d6),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: snapshot.data.data.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(5),
                             child: Container(
                               width: MediaQuery.of(context).size.width,
                               height:  MediaQuery.of(context).size.width/1.7,
@@ -229,99 +235,122 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                       crossAxisAlignment:
                                       CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          snapshot.data.data[index].title,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                              fontSize: 16),
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          children: [
-                                            SizedBox(
-                                                height: 50,
-                                                child: Text("Review:  ")
-                                            ),
-                                            SizedBox(
-                                              width: 200,
-                                              height: 50,
-                                              child: Text(
-                                                    snapshot
-                                                        .data
-                                                        .data[index]
-                                                        .volunteer
-                                                        .review !=
-                                                        null
-                                                        ? snapshot
-                                                        .data
-                                                        .data[index]
-                                                        .volunteer
-                                                        .review
-                                                        : "none",
-                                                    style: TextStyle(
-                                                        fontSize: 14))
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.location_on_rounded,
-                                                  color: Colors.blueAccent,
-                                                  size: 20,
-                                                ),
-                                                Text(
-                                                  snapshot.data.data[index].city !=
-                                                      null
-                                                      ? snapshot
-                                                      .data.data[index].city
-                                                      : "",
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.blueAccent,
-                                                      fontWeight: FontWeight.bold),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                    snapshot
-                                                        .data
-                                                        .data[index]
-                                                        .volunteer
-                                                        .rating.toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 14)),
-                                                Icon(
-                                                  Icons.star,
-                                                  color: Colors.amber,
-                                                  size: 16,
-                                                )
-                                              ],
-                                            ),
+                                        InkWell(
+                                          onTap: (){
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => OpportunityDetails(
+                                                      role: snapshot
+                                                          .data
+                                                          .data[index]
+                                                          .volunteer
+                                                          .role,
+                                                      id: snapshot
+                                                          .data.data[index].id,
+                                                      token: token)),
+                                            );
+                                          },
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                snapshot.data.data[index].title,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                    fontSize: 16),
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  SizedBox(
+                                                      height: 50,
+                                                      child: Text("Review:  ")
+                                                  ),
+                                                  SizedBox(
+                                                      width: 200,
+                                                      height: 50,
+                                                      child: Text(
+                                                          snapshot
+                                                              .data
+                                                              .data[index]
+                                                              .volunteer
+                                                              .review !=
+                                                              null
+                                                              ? snapshot
+                                                              .data
+                                                              .data[index]
+                                                              .volunteer
+                                                              .review
+                                                              : "none",
+                                                          style: TextStyle(
+                                                              fontSize: 14))
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.location_on_rounded,
+                                                        color: Colors.blueAccent,
+                                                        size: 20,
+                                                      ),
+                                                      Text(
+                                                        snapshot.data.data[index].city !=
+                                                            null
+                                                            ? snapshot
+                                                            .data.data[index].city
+                                                            : "",
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            color: Colors.blueAccent,
+                                                            fontWeight: FontWeight.bold),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                          snapshot
+                                                              .data
+                                                              .data[index]
+                                                              .volunteer
+                                                              .rating.toString(),
+                                                          style: TextStyle(
+                                                              fontSize: 14)),
+                                                      Icon(
+                                                        Icons.star,
+                                                        color: Colors.amber,
+                                                        size: 16,
+                                                      )
+                                                    ],
+                                                  ),
 
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Divider(
-                                          height: 5,
-                                          color: Colors.grey.withOpacity(.5),
-                                          thickness: 1,
-                                        ),
-                                        SizedBox(
-                                          height: 15,
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Divider(
+                                                height: 5,
+                                                color: Colors.grey.withOpacity(.5),
+                                                thickness: 1,
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -354,7 +383,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                       maxLines: 1,
                                                       overflow: TextOverflow.ellipsis,
                                                       style: TextStyle(
-                                                          fontSize: 14,),
+                                                        fontSize: 14,),
                                                     ),
                                                     SizedBox(
                                                       height: 5,
@@ -409,7 +438,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                   child: Icon(
                                                     Icons.rate_review_rounded,
                                                     color: Colors.white,
-                                                    size: 24,
+                                                    size: 20,
                                                   ),
                                                   bgColor: Colors.teal,
                                                   onTap: () {
@@ -419,12 +448,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                           return AlertDialog(
                                                             title: Row(
                                                               children: [
-                                                                Text(
-                                                                    'Give a review to the user'),
-                                                                SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Icon(Icons.create),
+                                                                Text('Give a review to the user'),
                                                               ],
                                                             ),
                                                             content: TextFormField(
@@ -534,7 +558,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                                     controller:
                                                                     reportController,
                                                                     decoration: ThemeHelper().textInputDecoration(
-                                                                  'Remark'),
+                                                                        'Remark'),
                                                                   ),
                                                                   SizedBox(
                                                                     height: 10,
@@ -548,34 +572,34 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                                     maxLength: 100,
                                                                     decoration:
                                                                     InputDecoration(
-                                                                        focusedBorder:
-                                                                        OutlineInputBorder(
-                                                                          borderSide: BorderSide(
-                                                                              color: Colors
-                                                                                  .white),
-                                                                          borderRadius:
-                                                                          BorderRadius
-                                                                              .circular(
-                                                                              10.0),
-                                                                        ),
-                                                                        enabledBorder:
-                                                                        UnderlineInputBorder(
-                                                                          borderSide: BorderSide(
-                                                                              color: Colors
-                                                                                  .white),
-                                                                          borderRadius:
-                                                                          BorderRadius
-                                                                              .circular(
-                                                                              10.0),
-                                                                        ),
-                                                                        filled: true,
-                                                                        hintStyle:
-                                                                        TextStyle(
-                                                                          color: Colors
-                                                                              .black,
-                                                                          fontSize: 16,
-                                                                        ),
-                                                                       ),
+                                                                      focusedBorder:
+                                                                      OutlineInputBorder(
+                                                                        borderSide: BorderSide(
+                                                                            color: Colors
+                                                                                .white),
+                                                                        borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(
+                                                                            10.0),
+                                                                      ),
+                                                                      enabledBorder:
+                                                                      UnderlineInputBorder(
+                                                                        borderSide: BorderSide(
+                                                                            color: Colors
+                                                                                .white),
+                                                                        borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(
+                                                                            10.0),
+                                                                      ),
+                                                                      filled: true,
+                                                                      hintStyle:
+                                                                      TextStyle(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontSize: 16,
+                                                                      ),
+                                                                    ),
                                                                   ),
                                                                 ],
                                                               ),
@@ -594,7 +618,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                                 new Text('Submit'),
                                                                 onPressed: () {
                                                                   report(
-                                                                      reviewController
+                                                                      reportController
                                                                           .text
                                                                           .toString(),
                                                                       detailsController.text.toString(),
@@ -631,29 +655,14 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                 ],
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    );
+                          );
+                        },
+                      );
+                    }
+                  } else if (snapshot.connectionState == ConnectionState.none) {
+                    return Text('Error'); // error
                   } else {
-                    return Container(
-                      alignment: Alignment.center,
-                      child: EmptyWidget(
-                        image: null,
-                        packageImage: PackageImage.Image_1,
-                        title: 'Empty',
-                        subTitle: 'No  History available',
-                        titleTextStyle: TextStyle(
-                          fontSize: 22,
-                          color: Color(0xff9da9c7),
-                          fontWeight: FontWeight.w500,
-                        ),
-                        subtitleTextStyle: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xffabb8d6),
-                        ),
-                      ),
-                    );
+                    return Center(child: CircularProgressIndicator()); // loading
                   }
                 },
               )),

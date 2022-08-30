@@ -229,6 +229,7 @@ class Recruiter {
     this.city,
     this.zipCode,
     this.role,
+    this.profileRating,
     this.rating,
     this.review,
     this.gender,
@@ -245,41 +246,44 @@ class Recruiter {
   String city;
   String zipCode;
   String role;
+  int profileRating;
   int rating;
   dynamic review;
-  dynamic gender;
+  String gender;
 
   factory Recruiter.fromJson(Map<String, dynamic> json) => Recruiter(
-    id: json["id"] == null ? null : json["id"],
-    firstName: json["first_name"] == null ? null : json["first_name"],
-    lastName: json["last_name"] == null ? null : json["last_name"],
-    email: json["email"] == null ? null : json["email"],
-    phone: json["phone"] == null ? null : json["phone"],
-    image: json["image"] == null ? null : json["image"],
+    id: json["id"],
+    firstName: json["first_name"],
+    lastName: json["last_name"],
+    email: json["email"],
+    phone: json["phone"],
+    image: json["image"],
     typeOfDisability: json["type_of_disability"] == null ? null : json["type_of_disability"],
-    state: json["state"] == null ? null : json["state"],
-    city: json["city"] == null ? null : json["city"],
-    zipCode: json["zip_code"] == null ? null : json["zip_code"],
-    role: json["role"] == null ? null : json["role"],
+    state: json["state"],
+    city: json["city"],
+    zipCode: json["zip_code"],
+    role: json["role"],
+    profileRating: json["profile_rating"] == null ? null : json["profile_rating"],
     rating: json["rating"],
     review: json["review"],
-    gender: json["gender"],
+    gender: json["gender"] == null ? null : json["gender"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "first_name": firstName == null ? null : firstName,
-    "last_name": lastName == null ? null : lastName,
-    "email": email == null ? null : email,
-    "phone": phone == null ? null : phone,
-    "image": image == null ? null : image,
+    "id": id,
+    "first_name": firstName,
+    "last_name": lastName,
+    "email": email,
+    "phone": phone,
+    "image": image,
     "type_of_disability": typeOfDisability == null ? null : typeOfDisability,
-    "state": state == null ? null : state,
-    "city": city == null ? null : city,
-    "zip_code": zipCode == null ? null : zipCode,
-    "role": role == null ? null : role,
+    "state": state,
+    "city": city,
+    "zip_code": zipCode,
+    "role": role,
+    "profile_rating": profileRating == null ? null : profileRating,
     "rating": rating,
     "review": review,
-    "gender": gender,
+    "gender": gender == null ? null : gender,
   };
 }

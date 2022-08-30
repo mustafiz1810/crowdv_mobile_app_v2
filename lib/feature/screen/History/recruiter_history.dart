@@ -51,12 +51,13 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        // print(data);
+        print(data);
         Navigator.of(context).pop();
         showToast(context, data['message']);
       } else {
         var data = jsonDecode(response.body.toString());
-        showToast(context, data['message']);
+        print(data);
+        showToast(context, data['error']['errors']);
       }
     } catch (e) {
       showDialog(
@@ -95,7 +96,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
       } else {
         var data = jsonDecode(response.body.toString());
         print(data);
-        showToast(context, data['message']);
+        showToast(context, data['error']['errors']);
       }
     } catch (e) {
       showDialog(
@@ -133,7 +134,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
       } else {
         var data = jsonDecode(response.body.toString());
         print(data);
-        showToast(context, data['message']);
+        showToast(context, data['error']['errors']);
       }
     } catch (e) {
       showDialog(
@@ -159,7 +160,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
         Uri.parse(NetworkConstants.BASE_URL + 'opportunity/history'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
-    showToast(context, data['message']);
+    print(data);
     if (response.statusCode == 200) {
       return RecruiterHistoryModel.fromJson(data);
     } else {
@@ -182,31 +183,35 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                   child: FutureBuilder<RecruiterHistoryModel>(
                 future: getRHistoryApi(),
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: snapshot.data.data.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10, top: 10, right: 10),
-                          child: InkWell(
-                            onTap: (){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => OpportunityDetails(
-                                        role: snapshot
-                                            .data
-                                            .data[index]
-                                            .recruiter
-                                            .role,
-                                        id: snapshot
-                                            .data.data[index].id,
-                                        token: token)),
-                              );
-                            },
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.data.data.length == 0) {
+                      return Container(
+                        alignment: Alignment.center,
+                        child: EmptyWidget(
+                          image: null,
+                          packageImage: PackageImage.Image_3,
+                          title: 'Empty',
+                          subTitle: 'No history available',
+                          titleTextStyle: TextStyle(
+                            fontSize: 22,
+                            color: Color(0xff9da9c7),
+                            fontWeight: FontWeight.w500,
+                          ),
+                          subtitleTextStyle: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xffabb8d6),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: snapshot.data.data.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                left: 10, top: 10, right: 10),
                             child: Container(
                               width: MediaQuery.of(context).size.width,
                               height:  MediaQuery.of(context).size.width/1.7,
@@ -232,99 +237,122 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                       crossAxisAlignment:
                                       CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          snapshot.data.data[index].title,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                              fontSize: 16),
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          children: [
-                                            SizedBox(
-                                                height: 50,
-                                                child: Text("Review:  ")
-                                            ),
-                                            SizedBox(
-                                                width: 200,
-                                                height: 50,
-                                                child: Text(
-                                                    snapshot
-                                                        .data
-                                                        .data[index]
-                                                        .recruiter
-                                                        .review !=
-                                                        null
-                                                        ? snapshot
-                                                        .data
-                                                        .data[index]
-                                                        .recruiter
-                                                        .review
-                                                        : "none",
-                                                    style: TextStyle(
-                                                        fontSize: 14))
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.location_on_rounded,
-                                                  color: Colors.blueAccent,
-                                                  size: 20,
-                                                ),
-                                                Text(
-                                                  snapshot.data.data[index].city !=
-                                                      null
-                                                      ? snapshot
-                                                      .data.data[index].city
-                                                      : "",
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.blueAccent,
-                                                      fontWeight: FontWeight.bold),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                    snapshot
-                                                        .data
-                                                        .data[index]
-                                                        .recruiter
-                                                        .rating.toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 14)),
-                                                Icon(
-                                                  Icons.star,
-                                                  color: Colors.amber,
-                                                  size: 16,
-                                                )
-                                              ],
-                                            ),
+                                        InkWell(
+                                          onTap: (){
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => OpportunityDetails(
+                                                      role: snapshot
+                                                          .data
+                                                          .data[index]
+                                                          .recruiter
+                                                          .role,
+                                                      id: snapshot
+                                                          .data.data[index].id,
+                                                      token: token)),
+                                            );
+                                          },
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                snapshot.data.data[index].title,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                    fontSize: 16),
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  SizedBox(
+                                                      height: 50,
+                                                      child: Text("Review:  ")
+                                                  ),
+                                                  SizedBox(
+                                                      width: 200,
+                                                      height: 50,
+                                                      child: Text(
+                                                          snapshot
+                                                              .data
+                                                              .data[index]
+                                                              .recruiter
+                                                              .review !=
+                                                              null
+                                                              ? snapshot
+                                                              .data
+                                                              .data[index]
+                                                              .recruiter
+                                                              .review
+                                                              : "none",
+                                                          style: TextStyle(
+                                                              fontSize: 14))
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.location_on_rounded,
+                                                        color: Colors.blueAccent,
+                                                        size: 20,
+                                                      ),
+                                                      Text(
+                                                        snapshot.data.data[index].city !=
+                                                            null
+                                                            ? snapshot
+                                                            .data.data[index].city
+                                                            : "",
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            color: Colors.blueAccent,
+                                                            fontWeight: FontWeight.bold),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                          snapshot
+                                                              .data
+                                                              .data[index]
+                                                              .recruiter
+                                                              .rating.toString(),
+                                                          style: TextStyle(
+                                                              fontSize: 14)),
+                                                      Icon(
+                                                        Icons.star,
+                                                        color: Colors.amber,
+                                                        size: 16,
+                                                      )
+                                                    ],
+                                                  ),
 
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Divider(
-                                          height: 5,
-                                          color: Colors.grey.withOpacity(.5),
-                                          thickness: 1,
-                                        ),
-                                        SizedBox(
-                                          height: 15,
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Divider(
+                                                height: 5,
+                                                color: Colors.grey.withOpacity(.5),
+                                                thickness: 1,
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -412,7 +440,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                   child: Icon(
                                                     Icons.rate_review_rounded,
                                                     color: Colors.white,
-                                                    size: 24,
+                                                    size: 20,
                                                   ),
                                                   bgColor: Colors.teal,
                                                   onTap: () {
@@ -424,10 +452,6 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                               children: [
                                                                 Text(
                                                                     'Give a review to the user'),
-                                                                SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Icon(Icons.create),
                                                               ],
                                                             ),
                                                             content: TextFormField(
@@ -608,7 +632,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                                 new Text('Submit'),
                                                                 onPressed: () {
                                                                   report(
-                                                                      reviewController
+                                                                      reportController
                                                                           .text
                                                                           .toString(),
                                                                       detailsController.text.toString(),
@@ -645,29 +669,14 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                 ],
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    );
+                          );
+                        },
+                      );
+                    }
+                  } else if (snapshot.connectionState == ConnectionState.none) {
+                    return Text('Error'); // error
                   } else {
-                    return Container(
-                      alignment: Alignment.center,
-                      child: EmptyWidget(
-                        image: null,
-                        packageImage: PackageImage.Image_3,
-                        title: 'Empty',
-                        subTitle: 'No history available',
-                        titleTextStyle: TextStyle(
-                          fontSize: 22,
-                          color: Color(0xff9da9c7),
-                          fontWeight: FontWeight.w500,
-                        ),
-                        subtitleTextStyle: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xffabb8d6),
-                        ),
-                      ),
-                    );
+                    return Center(child: CircularProgressIndicator()); // loading
                   }
                 },
               )),

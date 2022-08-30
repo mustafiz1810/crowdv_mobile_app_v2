@@ -20,7 +20,7 @@ class HeaderWidget extends StatefulWidget {
 class _HeaderWidgetState extends State<HeaderWidget>
     with TickerProviderStateMixin {
   bool volunteer = true;
-  bool recruiter = false;
+  bool  recruiter = false;
   void rec() async {
     try {
       Response response = await post(

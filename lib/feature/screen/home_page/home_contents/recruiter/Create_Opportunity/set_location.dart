@@ -109,7 +109,7 @@ class _OpLocationState extends State<OpLocation> {
       } else {
         var data = jsonDecode(response.body.toString());
         print(data);
-        showToast(context, data['message'].toString());
+        showToast(context, data['errors'].toString());
       }
     } catch (e) {
       showDialog(
@@ -338,6 +338,7 @@ class _OpLocationState extends State<OpLocation> {
             Container(
               height: 50,
               child: TextFormField(
+                keyboardType: TextInputType.number,
                 controller: zipController,
                 decoration: ThemeHelper()
                     .textInputDecoration(

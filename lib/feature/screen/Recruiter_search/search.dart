@@ -127,49 +127,55 @@ class _SearchPageState extends State<SearchPage> {
                         FutureBuilder<CategoryModel>(
                           future: getCategoryApi(),
                           builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: GridView.builder(
-                                    gridDelegate:
-                                    const SliverGridDelegateWithMaxCrossAxisExtent(
-                                        maxCrossAxisExtent: 150,
-                                        childAspectRatio: 2 / 2,
-                                        crossAxisSpacing: 15,
-                                        mainAxisSpacing: 15),
-                                    itemCount: snapshot.data.data.length,
-                                    itemBuilder: (BuildContext ctx, index) {
-                                      return SearchCard(
-                                        title: snapshot.data.data[index].name,
-                                        svgSrc: snapshot.data.data[index].image,
-                                        press: () {
-                                          Get.to(() => Category(
-                                            token: token,
-                                            categoryId: snapshot
-                                                .data.data[index].id,
-                                          ));
-                                        },
-                                      );
-                                    }),
-                              );
+                            if (snapshot.connectionState == ConnectionState.done) {
+                              if (snapshot.data.data.length == 0) {
+                                return Container(
+                                  alignment: Alignment.center,
+                                  child: EmptyWidget(
+                                    image: null,
+                                    packageImage: PackageImage.Image_1,
+                                    title: 'Empty',
+                                    titleTextStyle: TextStyle(
+                                      fontSize: 22,
+                                      color: Color(0xff9da9c7),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    subtitleTextStyle: TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xffabb8d6),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: GridView.builder(
+                                      gridDelegate:
+                                      const SliverGridDelegateWithMaxCrossAxisExtent(
+                                          maxCrossAxisExtent: 150,
+                                          childAspectRatio: 2 / 2,
+                                          crossAxisSpacing: 15,
+                                          mainAxisSpacing: 15),
+                                      itemCount: snapshot.data.data.length,
+                                      itemBuilder: (BuildContext ctx, index) {
+                                        return SearchCard(
+                                          title: snapshot.data.data[index].name,
+                                          svgSrc: snapshot.data.data[index].image,
+                                          press: () {
+                                            Get.to(() => Category(
+                                              token: token,
+                                              categoryId: snapshot
+                                                  .data.data[index].id,
+                                            ));
+                                          },
+                                        );
+                                      }),
+                                );
+                              }
+                            } else if (snapshot.connectionState == ConnectionState.none) {
+                              return Text('Error'); // error
                             } else {
-                              return Container(
-                                alignment: Alignment.center,
-                                child: EmptyWidget(
-                                  image: null,
-                                  packageImage: PackageImage.Image_1,
-                                  title: 'Empty',
-                                  titleTextStyle: TextStyle(
-                                    fontSize: 22,
-                                    color: Color(0xff9da9c7),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  subtitleTextStyle: TextStyle(
-                                    fontSize: 14,
-                                    color: Color(0xffabb8d6),
-                                  ),
-                                ),
-                              );
+                              return Center(child: CircularProgressIndicator()); // loading
                             }
                           },
                         ),
@@ -212,7 +218,7 @@ class _SearchPageState extends State<SearchPage> {
                                         child: DropdownButton<String>(
                                           hint: Center(
                                             child: Text(
-                                              "Select Country",
+                                              "Select State",
                                               style: TextStyle(
                                                   fontSize: 18,
                                                   color: Colors.black,
@@ -394,6 +400,7 @@ class _SearchPageState extends State<SearchPage> {
                                 SizedBox(height: 20),
                                 Container(
                                   child: TextFormField(
+                                    keyboardType: TextInputType.number,
                                     decoration: ThemeHelper()
                                         .textInputDecoration(
                                         'Zip Code',
@@ -452,7 +459,7 @@ class _SearchPageState extends State<SearchPage> {
                                 child: TextFormField(
                                   controller: volunteerController,
                                   decoration: ThemeHelper().textInputDecoration(
-                                      'Search volunteer/recruiter'),
+                                      'Search volunteer'),
                                 ),
                                 decoration:
                                     ThemeHelper().inputBoxDecorationShaddow(),
