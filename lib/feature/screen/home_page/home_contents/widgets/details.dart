@@ -29,7 +29,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
         Uri.parse(NetworkConstants.BASE_URL + 'opportunity/view/${widget.id}'),
         headers: {"Authorization": "Bearer ${widget.token}"});
     var data = jsonDecode(response.body.toString());
-    print(data);
+    print(widget.id);
     eligibility = data['data']['eligibility'];
     if (response.statusCode == 200) {
       return OpportunityDetail.fromJson(data);
@@ -928,7 +928,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                             ),
                           )
                         : widget.role == 'volunteer' &&
-                                snapshot.data.data.status == "Pending"
+                                snapshot.data.data.applyStatus == "1"
                             ? SizedBox(
                                 height: 50,
                                 width: 240,

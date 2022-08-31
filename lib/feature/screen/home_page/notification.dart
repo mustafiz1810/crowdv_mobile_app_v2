@@ -113,7 +113,7 @@ class _NotificationPageState extends State<NotificationPage> {
                               ),
                               title: Row(
                                 children: [
-                                  Text(widget.data[index].data.volunteer,
+                                  Text(widget.data[index].data.volunteer != null?widget.data[index].data.volunteer:"",
                                       style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
@@ -121,7 +121,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                   SizedBox(
                                     width: 5,
                                   ),
-                                  Text(widget.data[index].data.status,
+                                  Text(widget.data[index].data.status != null?widget.data[index].data.status:"",
                                       style: TextStyle(
                                           fontSize: 14, color: Colors.black)),
                                 ],

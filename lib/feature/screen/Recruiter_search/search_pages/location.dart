@@ -23,7 +23,7 @@ class _HistoryState extends State<Location> {
   Future<LocationVolunteer> getCateVolunteerApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL +
-            'category-wise-volunteer-search?location=${widget.location}'),
+            'volunteer-search?location=${widget.location}'),
         headers: {"Authorization": "Bearer ${widget.token}"});
     var data = jsonDecode(response.body.toString());
     print(data);

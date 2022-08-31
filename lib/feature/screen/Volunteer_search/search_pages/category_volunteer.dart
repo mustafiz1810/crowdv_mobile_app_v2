@@ -25,7 +25,7 @@ class _HistoryState extends State<VolunteerCategory> {
   Future<CategorywiseTask> getCateTaskApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL +
-            'category-wise-task-search?category_id=${widget.categoryId}'),
+            'task-search?category_id=${widget.categoryId}'),
         headers: {"Authorization": "Bearer ${widget.token}"});
     var data = jsonDecode(response.body.toString());
     print(data);

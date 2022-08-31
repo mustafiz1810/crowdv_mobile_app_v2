@@ -21,7 +21,7 @@ class _HistoryState extends State<VolunteerLocation> {
   Future<LocationWiseTask> getLocTaskApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL +
-            'location-wise-task-search?state=${widget.state}&city=${widget.city}'),
+            'task-search?state=${widget.state}&city=${widget.city}'),
         headers: {"Authorization": "Bearer ${widget.token}"});
     var data = jsonDecode(response.body.toString());
     print(data);

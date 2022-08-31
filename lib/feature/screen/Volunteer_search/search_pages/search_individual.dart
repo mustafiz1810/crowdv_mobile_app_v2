@@ -22,7 +22,7 @@ class _HistoryState extends State<VolunteerSearch> {
   Future<IndividualWiseTask> getIndTaskApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL +
-            'location-wise-task-search?search=${widget.search}'),
+            'task-search?search=${widget.search}'),
         headers: {"Authorization": "Bearer ${widget.token}"});
     var data = jsonDecode(response.body.toString());
     print(data);
