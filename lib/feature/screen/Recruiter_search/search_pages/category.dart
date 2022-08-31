@@ -10,6 +10,8 @@ import 'package:get/route_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
+import '../../../../data/models/recruiter/pending_opportunities.dart';
+
 
 class Category extends StatefulWidget {
   final dynamic token,categoryId;
@@ -29,6 +31,18 @@ class _HistoryState extends State<Category> {
       return CategoryVolunteer.fromJson(data);
     } else {
       return CategoryVolunteer.fromJson(data);
+    }
+  }
+
+  Future<PendingOpportunity> getPendingApi() async {
+    final response = await http.get(
+        Uri.parse(NetworkConstants.BASE_URL + 'pending_opportunities'),
+        headers: {"Authorization": "Bearer ${widget.token}"});
+    var data = jsonDecode(response.body.toString());
+    if (response.statusCode == 200) {
+      return PendingOpportunity.fromJson(data);
+    } else {
+      return PendingOpportunity.fromJson(data);
     }
   }
   @override
@@ -77,10 +91,6 @@ class _HistoryState extends State<Category> {
                                   height: 200,
                                   margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                                   decoration: BoxDecoration(
-                                    // image: DecorationImage(
-                                    //   fit: BoxFit.cover,
-                                    //   image: AssetImage("assets/undraw_pilates_gpdb.png"),
-                                    // ),
                                     color: Colors.white,
                                     borderRadius:
                                     BorderRadius.all(Radius.circular(20)),
@@ -125,16 +135,46 @@ class _HistoryState extends State<Category> {
                                                 ),
                                               ],
                                             ),
-                                            IconBox(
-                                              child: Icon(
-                                                Icons.message_rounded,
-                                                color: Colors.white,
-                                                size: 20,
-                                              ),
-                                              onTap: (){
-                                                Get.to(() => ChatUi());
-                                              },
-                                              bgColor: primaryColor,
+                                            Row(
+                                              children: [
+                                                IconBox(
+                                                  child: Icon(
+                                                    Icons.message_rounded,
+                                                    color: Colors.white,
+                                                    size: 18,
+                                                  ),
+                                                  onTap: (){
+                                                    Get.to(() => ChatUi());
+                                                  },
+                                                  bgColor: Colors.blue,
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                IconBox(
+                                                  child: Icon(
+                                                    Icons.add,
+                                                    color: Colors.white,
+                                                    size: 18,
+                                                  ),
+                                                  onTap: (){
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext context) {
+                                                          return AlertDialog(
+                                                            title: Container(child: Padding(
+                                                              padding: const EdgeInsets.all(8.0),
+                                                              child: Text('Pick Opportunity',style: TextStyle(color: Colors.white),),
+                                                            ),color: primaryColor,),
+                                                            content: setupAlertDialogContainer(context),
+                                                          );
+                                                        });
+
+                                                  },
+                                                  bgColor: Colors.blue,
+                                                ),
+
+                                              ],
                                             ),
                                           ],
                                         ),
@@ -236,7 +276,8 @@ class _HistoryState extends State<Category> {
                             },
                           );
                         }
-                      } else if (snapshot.connectionState == ConnectionState.none) {
+                      }
+                      else if (snapshot.connectionState == ConnectionState.none) {
                         return Text('Error'); // error
                       } else {
                         return Center(child: CircularProgressIndicator()); // loading
@@ -246,6 +287,54 @@ class _HistoryState extends State<Category> {
             ],
           ),
         ),
+    );
+  }
+  Widget setupAlertDialogContainer(context) {
+    return Column(
+      children: [
+        Expanded(
+          child: FutureBuilder<PendingOpportunity>(
+            future: getPendingApi(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.data.data.length == 0) {
+                  return Center(child: Text("No Data"),);
+                } else {
+                  return Container(
+                    color: Colors.black12,
+                    height: 300.0, // Change as per your requirement
+                    width: 300.0, // Change as per your requirement
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          title: Card(child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(snapshot.data.data[index].title),
+                          ),),
+                        );
+                      },
+                    ),
+                  );
+                }
+              }
+              else if (snapshot.connectionState == ConnectionState.none) {
+                return Center(child: Text('Error')); // error
+              } else {
+                return Center(child: CircularProgressIndicator()); // loading
+              }
+            },
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: FlatButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },child: Text("Back"),),
+        )
+      ],
     );
   }
 }

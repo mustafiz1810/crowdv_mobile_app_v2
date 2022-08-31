@@ -71,6 +71,7 @@ dependencies:
   cached_network_image: any
   settings_ui: ^2.0.2
   carousel_pro: ^1.0.0
+  image_picker: ^0.8.5+3
 
 
 dev_dependencies:

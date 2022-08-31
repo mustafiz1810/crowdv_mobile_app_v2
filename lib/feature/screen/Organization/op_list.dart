@@ -1,17 +1,14 @@
 import 'dart:convert';
-import 'package:crowdv_mobile_app/data/models/organizaation/op_model.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
-import 'package:crowdv_mobile_app/widgets/http_request.dart';
-import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:sweetalert/sweetalert.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../../utils/view_utils/common_util.dart';
+import '../../../data/models/org_opp_model.dart';
+import '../../../utils/view_utils/common_util.dart';
 class OrgOpportunityList extends StatefulWidget {
   @override
   State<OrgOpportunityList> createState() => _OrgOpportunityListState();
@@ -240,33 +237,6 @@ class _OrgOpportunityListState extends State<OrgOpportunityList> {
                                                       },
                                                       child: Text(snapshot.data.data[index].links)
                                                   ),
-                                                  // Row(
-                                                  //   children: [
-                                                  //     SizedBox(
-                                                  //       height: 40,
-                                                  //       child: Text(
-                                                  //         'Link:  ',
-                                                  //         style: TextStyle(
-                                                  //             color: primaryColor,
-                                                  //             fontWeight:
-                                                  //             FontWeight.bold,
-                                                  //             fontSize: 18),
-                                                  //       ),
-                                                  //     ),
-                                                  //     SizedBox(
-                                                  //       width: 250,
-                                                  //       height: 60,
-                                                  //       child:Link(
-                                                  //         child: Text(snapshot.data.data[index].links, style: TextStyle(
-                                                  //           decoration: TextDecoration.underline, // add add underline in text
-                                                  //         ),),
-                                                  //         url: snapshot.data.data[index].links,
-                                                  //         onError: _showErrorSnackBar,
-                                                  //       ),
-                                                  //
-                                                  //     ),
-                                                  //   ],
-                                                  // ),
                                                 ],
                                               )),
 

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../Organization/home.dart';
 import '../../authentication/sign_in/sign_in.dart';
 
 class SplashView extends StatefulWidget {
@@ -50,7 +51,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     // print(role);
     token == null?
     Get.off(LoginPage())
-        :Get.off(HomeScreen(id: id,role: role,));
+        :role != "organization"?Get.off(HomeScreen(id: id,role: role,)):Get.off(OrganizationHome(id: id,role: role,));
   }
 
   @override

@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:crowdv_mobile_app/data/models/notification_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/search.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/certificate.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/organization/create_opportunity.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/organization/op_list.dart';
+import 'package:crowdv_mobile_app/feature/screen/Organization/create_opportunity.dart';
+import 'package:crowdv_mobile_app/feature/screen/Organization/op_list.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruiter/Create_Opportunity/create_op.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/service_location.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/set_category.dart';
@@ -49,7 +49,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     getCred();
     super.initState();
-    getAcApi();
 
     //Foreground State
     FirebaseMessaging.instance.getInitialMessage();
@@ -125,7 +124,6 @@ class _HomeScreenState extends State<HomeScreen> {
         Uri.parse(NetworkConstants.BASE_URL + 'notifications'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
-    print(data);
     if (response.statusCode == 200) {
       return NotificationModel.fromJson(data);
     } else {
@@ -233,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
         role: widget.role,
       ),
       resizeToAvoidBottomInset: false,
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: widget.role != "organization"?FloatingActionButton(
         backgroundColor: Colors.white,
         child: Icon(
           Icons.search,
@@ -244,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ? Get.to(() => VolunteerSearchPage())
               : Get.to(() => SearchPage());
         },
-      ),
+      ):Container(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       // extendBody: true,
       body: RefreshIndicator(

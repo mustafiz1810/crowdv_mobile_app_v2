@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
+import 'package:crowdv_mobile_app/feature/screen/Organization/home.dart';
 import 'package:crowdv_mobile_app/feature/screen/authentication/otp_config/volunteer/email_v.dart';
 import 'package:crowdv_mobile_app/feature/screen/authentication/sign_in/forget_password.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
@@ -27,11 +28,9 @@ class _LoginPageState extends State<LoginPage> {
   void signin(String email, password) async {
     try {
       Response response =
-          await post(Uri.parse(NetworkConstants.BASE_URL + 'login'),
-              headers: {
-                "Accept": "application/json"
-              },
-              body: {
+          await post(Uri.parse(NetworkConstants.BASE_URL + 'login'), headers: {
+        "Accept": "application/json"
+      }, body: {
         'email': email,
         'password': password,
       });
@@ -48,9 +47,14 @@ class _LoginPageState extends State<LoginPage> {
         showToast(context, data['message']);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-                builder: (context) => HomeScreen(
-                    id: data['result']['data']['id'],
-                    role: data['result']['data']['role'])),
+                builder: (context) =>
+                    data['result']['data']['role'] != "organization"
+                        ? HomeScreen(
+                            id: data['result']['data']['id'],
+                            role: data['result']['data']['role'])
+                        : OrganizationHome(
+                            id: data['result']['data']['id'],
+                            role: data['result']['data']['role'])),
             (Route<dynamic> route) => false);
       } else {
         setState(() {
@@ -87,23 +91,29 @@ class _LoginPageState extends State<LoginPage> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString("user", token);
   }
+
   void idRoute(int id) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setInt("id", id);
   }
+
   void roleRoute(String role) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString("role", role);
   }
+
   bool _obscured = false;
   final textFieldFocusNode = FocusNode();
   void _toggleObscured() {
     setState(() {
       _obscured = !_obscured;
-      if (textFieldFocusNode.hasPrimaryFocus) return; // If focus is on text field, dont unfocus
-      textFieldFocusNode.canRequestFocus = false;     // Prevents focus if tap on eye
+      if (textFieldFocusNode.hasPrimaryFocus)
+        return; // If focus is on text field, dont unfocus
+      textFieldFocusNode.canRequestFocus =
+          false; // Prevents focus if tap on eye
     });
   }
+
   bool isApiCallProcess = false;
   @override
   Widget build(BuildContext context) {
@@ -177,15 +187,36 @@ class _LoginPageState extends State<LoginPage> {
                                   decoration: InputDecoration(
                                     labelText: "Password",
                                     fillColor: Colors.white,
-                                    contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                                    labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                                    contentPadding:
+                                        EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                    labelStyle:
+                                        TextStyle(fontWeight: FontWeight.bold),
                                     filled: true,
-                                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
-                                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
-                                    errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.red, width: 2.0)),
-                                    focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.red, width: 2.0)), //Hides label on focus or if filled
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
+                                        borderSide:
+                                            BorderSide(color: Colors.black)),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
+                                        borderSide:
+                                            BorderSide(color: Colors.black)),
+                                    errorBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
+                                        borderSide: BorderSide(
+                                            color: Colors.red, width: 2.0)),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
+                                        borderSide: BorderSide(
+                                            color: Colors.red,
+                                            width:
+                                                2.0)), //Hides label on focus or if filled
                                     suffixIcon: Padding(
-                                      padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 0, 4, 0),
                                       child: GestureDetector(
                                         onTap: _toggleObscured,
                                         child: Icon(
@@ -198,7 +229,8 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   ),
                                 ),
-                                decoration: ThemeHelper().inputBoxDecorationShaddow(),
+                                decoration:
+                                    ThemeHelper().inputBoxDecorationShaddow(),
                               ),
                               SizedBox(height: 15.0),
                               Container(
