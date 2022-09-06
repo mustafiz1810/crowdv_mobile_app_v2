@@ -8,7 +8,8 @@ import '../../../../utils/constants.dart';
 import '../../../../utils/view_utils/colors.dart';
 
 class Settings extends StatefulWidget {
-  const Settings({Key key}) : super(key: key);
+  final dynamic appNotify, emailNotify, smsNotify;
+  Settings({this.appNotify, this.emailNotify, this.smsNotify});
 
   @override
   _SettingsState createState() => _SettingsState();
@@ -16,14 +17,16 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   bool checkedValue = false;
-  bool inApp = false;
-  bool inSms = false;
-  bool inMail = false;
-  var fcmToken;
+  bool inApp ;
+  bool inSms ;
+  bool inMail ;
   String token = "";
 
   @override
   void initState() {
+    inApp =widget.appNotify;
+    inSms = widget.smsNotify;
+    inMail = widget.emailNotify;
     super.initState();
     getCred();
   }
@@ -34,7 +37,8 @@ class _SettingsState extends State<Settings> {
       token = pref.getString("user");
     });
   }
-  void save(app,sms,email) async {
+
+  void save(app, sms, email) async {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'notification/channel-setting'),
@@ -74,6 +78,7 @@ class _SettingsState extends State<Settings> {
           });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,9 +101,10 @@ class _SettingsState extends State<Settings> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Notification',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                   TextButton(
-                      child:Text(
+                      child: Text(
                         "Save".toUpperCase(),
                         style: TextStyle(
                           fontSize: 16,
@@ -108,22 +114,29 @@ class _SettingsState extends State<Settings> {
                       ),
                       onPressed: () {
                         save(inApp, inSms, inMail);
-                      }
-                  )
+                      })
                 ],
               ),
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 5,
+              ),
               Container(
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(8))),
                 child: Column(
                   children: [
-                    FormField<bool>(
-                      builder: (state) {
-                        return ListTile(
-                          leading: Icon(Icons.phone_android_rounded),
-                          title: RichText(
+                    CheckboxListTile(
+                      title: Row(
+                        children: [
+                          Icon(
+                            Icons.phone_android_rounded,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(
+                            width: 33,
+                          ),
+                          RichText(
                             text: new TextSpan(
                               style: new TextStyle(
                                 fontWeight: FontWeight.w600,
@@ -136,23 +149,27 @@ class _SettingsState extends State<Settings> {
                               ],
                             ),
                           ),
-                          trailing: Checkbox(
-                              value: inApp,
-                              onChanged: (value) {
-                                setState(() {
-                                  inApp = value;
-                                  state.didChange(value);
-                                  print(inApp);
-                                });
-                              }),
-                        );
+                        ],
+                      ),
+                      value: inApp,
+                      onChanged: (newValue) {
+                        setState(() {
+                          inApp = newValue;
+                        });
+                        print(inApp);
                       },
                     ),
-                    FormField<bool>(
-                      builder: (state) {
-                        return ListTile(
-                          leading: Icon(Icons.sms_outlined),
-                          title: RichText(
+                    CheckboxListTile(
+                      title: Row(
+                        children: [
+                          Icon(
+                            Icons.sms_outlined,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(
+                            width: 33,
+                          ),
+                          RichText(
                             text: new TextSpan(
                               style: new TextStyle(
                                 fontWeight: FontWeight.w600,
@@ -165,23 +182,27 @@ class _SettingsState extends State<Settings> {
                               ],
                             ),
                           ),
-                          trailing: Checkbox(
-                              value: inSms,
-                              onChanged: (value) {
-                                setState(() {
-                                  inSms = value;
-                                  state.didChange(value);
-                                  print(inSms);
-                                });
-                              }),
-                        );
+                        ],
+                      ),
+                      value: inSms,
+                      onChanged: (newValue) {
+                        setState(() {
+                          inSms = newValue;
+                        });
+                        print(inSms);
                       },
                     ),
-                    FormField<bool>(
-                      builder: (state) {
-                        return ListTile(
-                          leading: Icon(Icons.mail_outline_rounded),
-                          title: RichText(
+                    CheckboxListTile(
+                      title: Row(
+                        children: [
+                          Icon(
+                            Icons.email_outlined,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(
+                            width: 33,
+                          ),
+                          RichText(
                             text: new TextSpan(
                               style: new TextStyle(
                                 fontWeight: FontWeight.w600,
@@ -194,16 +215,14 @@ class _SettingsState extends State<Settings> {
                               ],
                             ),
                           ),
-                          trailing: Checkbox(
-                              value: inMail,
-                              onChanged: (value) {
-                                setState(() {
-                                  inMail = value;
-                                  state.didChange(value);
-                                  print(inMail);
-                                });
-                              }),
-                        );
+                        ],
+                      ),
+                      value: inMail,
+                      onChanged: (newValue) {
+                        setState(() {
+                          inMail = newValue;
+                        });
+                        print(inMail);
                       },
                     ),
                   ],
@@ -211,6 +230,43 @@ class _SettingsState extends State<Settings> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class LabeledCheckbox extends StatelessWidget {
+  const LabeledCheckbox({
+    this.label,
+    this.padding,
+    this.value,
+    this.onChanged,
+  });
+
+  final String label;
+  final EdgeInsets padding;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        onChanged(!value);
+      },
+      child: Padding(
+        padding: padding,
+        child: Row(
+          children: <Widget>[
+            Expanded(child: Text(label)),
+            Checkbox(
+              value: value,
+              onChanged: (bool newValue) {
+                onChanged(newValue);
+              },
+            ),
+          ],
         ),
       ),
     );

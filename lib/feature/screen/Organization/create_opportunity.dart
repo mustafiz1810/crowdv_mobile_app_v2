@@ -1,17 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
+import 'package:path/path.dart';
+import 'package:async/async.dart';
+import 'package:http/http.dart' as http;
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
-import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/design_details.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
-import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:inkwell_splash/inkwell_splash.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../../utils/view_utils/common_util.dart';
 
 class OrgOpportunity extends StatefulWidget {
   const OrgOpportunity({Key key}) : super(key: key);
@@ -37,46 +39,89 @@ class _OrgOpportunityState extends State<OrgOpportunity> {
   }
 
   TextEditingController titleController = TextEditingController();
+  TextEditingController linkController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  void create(String title, link) async {
-    try {
-      Response response = await post(
-          Uri.parse(NetworkConstants.BASE_URL + 'organization/opportunity'),
-          headers: {
-            "Authorization": "Bearer $token",
-            "Accept": "application/json"
-          },
-          body: {
-            'title': title,
-            'link': link,
-          });
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
-        // print(data);
-        showToast(context, data['message']);
-        Navigator.pop(context);
-      } else {
-        var data = jsonDecode(response.body.toString());
-        showToast(context, data['errors'].toString());
-      }
-    } catch (e) {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Exception:"),
-              content: Text(e.toString()),
-              actions: [
-                TextButton(
-                  child: Text("Try Again"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            );
-          });
+  // void create(String title, link,description,File image) async {
+  //   try {
+  //     Response response = await post(
+  //         Uri.parse(NetworkConstants.BASE_URL + 'organization/opportunity'),
+  //         headers: {
+  //           "Authorization": "Bearer $token",
+  //           "Accept": "application/json"
+  //         },
+  //         body: {
+  //           'title': title,
+  //           'banner':Image.file(image),
+  //           'link': link,
+  //           'description':description
+  //         });
+  //     if (response.statusCode == 200) {
+  //       var data = jsonDecode(response.body.toString());
+  //       // print(data);
+  //       showToast(context, data['message']);
+  //       Navigator.pop(context);
+  //     } else {
+  //       var data = jsonDecode(response.body.toString());
+  //       showToast(context, data['errors'].toString());
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //     showDialog(
+  //         context: context,
+  //         builder: (BuildContext context) {
+  //           return AlertDialog(
+  //             title: Text("Exception:"),
+  //             content: Text(e.toString()),
+  //             actions: [
+  //               TextButton(
+  //                 child: Text("Try Again"),
+  //                 onPressed: () {
+  //                   Navigator.of(context).pop();
+  //                 },
+  //               )
+  //             ],
+  //           );
+  //         });
+  //   }
+  // }
+  upload(File imageFile, String title, link, description) async {
+    // open a bytestream
+    var stream =
+        new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+    // get file length
+    var length = await imageFile.length();
+    Map<String, String> headers = {
+      "Authorization": "Bearer $token",
+      "Accept": "application/json"
+    };
+    // string to uri
+    var uri = Uri.parse(
+        "https://system.getcrowdv.com/api/v1/organization/opportunity");
+    // create multipart request
+    var request = new http.MultipartRequest("POST", uri);
+    // multipart that takes file
+    var multipartFile = new http.MultipartFile('banner', stream, length,
+        filename: basename(imageFile.path));
+    // add file to multipart
+    request.files.add(multipartFile);
+    request.headers.addAll(headers);
+    //adding params
+    request.fields['title'] = title;
+    request.fields['link'] = link;
+    request.fields['description'] = description;
+    // send
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      // print(data);
+      showToast('Created');
+    } else {
+      showToast('Failed');
     }
+    print(response.statusCode);
+    // listen for response
+    response.stream.transform(utf8.decoder).listen((value) {
+      print(value);
+    });
   }
 
   File _image;
@@ -103,10 +148,20 @@ class _OrgOpportunityState extends State<OrgOpportunity> {
         padding: const EdgeInsets.all(10.0),
         child: InkWellSplash(
           onTap: () {
-            create(
+            print(_image.toString());
+            // create(
+            //   titleController.text.toString(),
+            //   linkController.text.toString(),
+            //   descriptionController.text.toString(),
+            //   _image,
+            // );
+            // button pressed
+            upload(
+              _image,
               titleController.text.toString(),
+              linkController.text.toString(),
               descriptionController.text.toString(),
-            ); // button pressed
+            );
           },
           child: Container(
             height: 48,
@@ -187,7 +242,7 @@ class _OrgOpportunityState extends State<OrgOpportunity> {
               Container(
                 child: TextFormField(
                   textInputAction: TextInputAction.done,
-                  controller: descriptionController,
+                  controller: linkController,
                   maxLines: 2,
                   decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
@@ -263,30 +318,27 @@ class _OrgOpportunityState extends State<OrgOpportunity> {
                       fontSize: 16,
                     ),
                   ),
-                  _image == null
-                      ? ElevatedButton.icon(
-                          onPressed: () {
-                            UploadImage();
-                          },
-                          style: ElevatedButton.styleFrom(
-                              elevation: 5,
-                              primary: Colors.grey,
-                              fixedSize: const Size(120, 40),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50))),
-                          label: const Text('Upload'),
-                          icon: const Icon(Icons.cloud_upload_outlined),
-                        )
-                      : Flexible(
-                          child: Container(
-                          color: Colors.grey,
-                          child: Text(_image.toString()),
-                        ))
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      UploadImage();
+                    },
+                    style: ElevatedButton.styleFrom(
+                        elevation: 5,
+                        primary: Colors.grey,
+                        fixedSize: const Size(120, 40),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50))),
+                    label: const Text('Upload'),
+                    icon: const Icon(Icons.cloud_upload_outlined),
+                  )
                 ],
               ),
               Container(
                 width: double.infinity,
-                child: _image == null?Text("no image"):Image.file(_image),
+                height: 200,
+                child: _image == null
+                    ? Center(child: Text("No image selected"))
+                    : Image.file(_image),
               )
             ],
           ),

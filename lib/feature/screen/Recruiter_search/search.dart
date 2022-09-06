@@ -1,21 +1,33 @@
 import 'dart:convert';
+import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/widgets/filter.dart';
+import 'package:crowdv_mobile_app/feature/screen/profile/common_profile.dart';
+import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
+import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:empty_widget/empty_widget.dart';
+import 'package:get/route_manager.dart';
 import 'package:http/http.dart' as http;
-import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
-import 'package:crowdv_mobile_app/common/theme_helper.dart';
-import 'package:crowdv_mobile_app/data/models/recruiter/category_model.dart';
-import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/search_pages/category.dart';
-import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/search_pages/location.dart';
-import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/search_pages/search_v.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
-import 'package:crowdv_mobile_app/widgets/search_grid.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../data/models/recruiter/Volunteer_Category.dart';
+import '../../../data/models/recruiter/pending_opportunities.dart';
+import '../../../widgets/http_request.dart';
+import '../../../widgets/icon_box.dart';
+import '../home_page/widgets/chat.dart';
 
 class SearchPage extends StatefulWidget {
+  final dynamic id;
+  final List<int> category;
+  final List<int> membership;
+  final List<String> gender;
+  final List<String> profession;
+   String state,city;
+
+  SearchPage({this.category, this.membership,this.gender,this.profession,this.state,this.city,this.id});
+
   @override
   State<StatefulWidget> createState() {
     return _SearchPageState();
@@ -24,8 +36,19 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   String token = "";
+  String role = "";
+  String country;
+  TextEditingController volunteerController = TextEditingController();
+
   @override
   void initState() {
+    print(widget.city);
+    print(widget.state);
+    // print(widget.category);
+    // print(widget.membership);
+    // print(widget.membership);
+    // print(widget.gender);
+
     getCred();
     super.initState();
   }
@@ -34,487 +57,464 @@ class _SearchPageState extends State<SearchPage> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       token = pref.getString("user");
+      role = pref.getString("role");
     });
   }
 
-  Future<CategoryModel> getCategoryApi() async {
-    final response = await http.get(
-        Uri.parse(NetworkConstants.BASE_URL + 'categories'),
-        headers: {"Authorization": "Bearer ${token}"});
-    var data = jsonDecode(response.body.toString());
-    if (response.statusCode == 200) {
-      return CategoryModel.fromJson(data);
-    } else {
-      return CategoryModel.fromJson(data);
+  void invite(int volunteerId, int taskId) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'send/invitations/$taskId'),
+          headers: {
+            "Authorization": "Bearer ${token}",
+            "Accept": "application/json"
+          },
+          body: {
+            'volunteer_id': volunteerId.toString()
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        Navigator.of(context).pop();
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        print(volunteerId.toString());
+        showToast(context, data['error']['errors']);
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
     }
   }
 
-  List<String> countries = [
-    'Alabama',
-    'Alaska',
-    'California',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Illinois',
-    'Kansas',
-    'Kentucky',
-    'Louisiana'
-  ];
-  List<String> AlabamaProvince = ['Birmingham', 'Montgomery'];
-  List<String> AlaskaProvince = [
-    'Anchorage',
-    'Juneau',
-  ];
-  List<String> CaliforniaProvince = ['Los Angeles', 'Sacramento'];
-  List<String> ConnecticutProvince = ['Bridgeport', 'Hartford'];
-  List<String> DelawareProvince = ['Dover', 'Wilmington'];
-  List<String> FloridaProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> IllinoisProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> KansasProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> KentuckyProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> LouisianaProvince = ['Anchorage', 'Juneau', 'California'];
-  List<String> provinces = [];
-  String selectedCountry;
-  String selectedProvince;
-  TextEditingController volunteerController = TextEditingController();
+  Future<CategoryVolunteer> getCateVolunteerApi() async {
+    final response = await http.get(
+        Uri.parse(NetworkConstants.BASE_URL +
+            'volunteer-search?state=${widget.state}&city=${widget.city}&category_id=${widget.category}&gender=${widget.gender}&membership_id=${widget.membership}&search=${volunteerController.text}&profession=${widget.profession}'),
+        headers: {"Authorization": "Bearer $token"});
+    var data = jsonDecode(response.body.toString());
+    print(data);
+    if (response.statusCode == 200) {
+      return CategoryVolunteer.fromJson(data);
+    } else {
+      return CategoryVolunteer.fromJson(data);
+    }
+  }
+
+  Future<PendingOpportunity> getPendingApi() async {
+    final response = await http.get(
+        Uri.parse(NetworkConstants.BASE_URL + 'pending_opportunities'),
+        headers: {"Authorization": "Bearer $token"});
+    var data = jsonDecode(response.body.toString());
+    if (response.statusCode == 200) {
+      return PendingOpportunity.fromJson(data);
+    } else {
+      return PendingOpportunity.fromJson(data);
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Search Page",
+          "Search",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         elevation: 0.5,
         iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: primaryColor,
-      ),
-      body: DefaultTabController(
-        length: 3,
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverToBoxAdapter(
-              child: TabBar(
-                tabs: [
-                  Tab(
-                      icon: Icon(Icons.category),
-                      child: const Text('Category')),
-                  Tab(
-                      icon: Icon(Icons.location_on_rounded),
-                      child: const Text('Location')),
-                  Tab(
-                      icon: Icon(Icons.person),
-                      child: const Text('Volunteer')),
-                ],
-                unselectedLabelColor: Colors.black38,
-                indicatorSize: TabBarIndicatorSize.tab,
-                indicator: BubbleTabIndicator(
-                  indicatorHeight: 70.0,
-                  indicatorColor: primaryColor,
-                  indicatorRadius: 5,
-                  tabBarIndicatorSize: TabBarIndicatorSize.tab,
-                  insets: EdgeInsets.all(2),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all( 15.0),
+            child: OutlinedButton(
+              onPressed: () async{
+                getRequest('/api/v1/search-filter', null, {
+                  'Content-Type': "application/json",
+                  "Authorization": "Bearer ${token}"
+                }).then((value) async {
+                  print(value["data"]);
+                  Get.to(() => RecruiterFilter(category: value["data"]["categories"],membership:value["data"]["memberships"]));
+                });
+
+              },
+              child: Text(
+                'Filter',
+                style: TextStyle(color: Colors.white),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(width: 1.0, color: Colors.white),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
                 ),
               ),
             ),
-            SliverFillRemaining(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        FutureBuilder<CategoryModel>(
-                          future: getCategoryApi(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.done) {
-                              if (snapshot.data.data.length == 0) {
-                                return Container(
-                                  alignment: Alignment.center,
-                                  child: EmptyWidget(
-                                    image: null,
-                                    packageImage: PackageImage.Image_1,
-                                    title: 'Empty',
-                                    titleTextStyle: TextStyle(
-                                      fontSize: 22,
-                                      color: Color(0xff9da9c7),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    subtitleTextStyle: TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xffabb8d6),
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                return Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: GridView.builder(
-                                      gridDelegate:
-                                      const SliverGridDelegateWithMaxCrossAxisExtent(
-                                          maxCrossAxisExtent: 150,
-                                          childAspectRatio: 2 / 2,
-                                          crossAxisSpacing: 15,
-                                          mainAxisSpacing: 15),
-                                      itemCount: snapshot.data.data.length,
-                                      itemBuilder: (BuildContext ctx, index) {
-                                        return SearchCard(
-                                          title: snapshot.data.data[index].name,
-                                          svgSrc: snapshot.data.data[index].image,
-                                          press: () {
-                                            Get.to(() => Category(
-                                              token: token,
-                                              categoryId: snapshot
-                                                  .data.data[index].id,
-                                            ));
-                                          },
-                                        );
-                                      }),
-                                );
-                              }
-                            } else if (snapshot.connectionState == ConnectionState.none) {
-                              return Text('Error'); // error
-                            } else {
-                              return Center(child: CircularProgressIndicator()); // loading
-                            }
-                          },
+          ),
+        ],
+      ),
+      bottomNavigationBar: CustomBottomNavigation(
+        id: widget.id,
+        role: role,
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
+            child: Container(
+              child: TextFormField(
+                controller: volunteerController,
+                onTap: () => print('TextField onTap'),
+                decoration: InputDecoration(
+                  suffixIcon: Container(
+                    margin: EdgeInsets.all(1),
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                    ),
+                    child: IntrinsicHeight(
+                      child: IconButton(
+                          icon: Icon(
+                            Icons.search,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              getCateVolunteerApi();
+                            });
+                          }),
+                    ),
+                  ),
+                  hintText: "Search",
+                  fillColor: Colors.black12,
+                  labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                  filled: true,
+                  contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      borderSide: BorderSide(color: Colors.white)),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      borderSide: BorderSide(color: Colors.white)),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder<CategoryVolunteer>(
+              future: getCateVolunteerApi(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.data.data.length == 0) {
+                    return Container(
+                      alignment: Alignment.center,
+                      child: EmptyWidget(
+                        image: null,
+                        packageImage: PackageImage.Image_1,
+                        title: 'Empty',
+                        titleTextStyle: TextStyle(
+                          fontSize: 22,
+                          color: Color(0xff9da9c7),
+                          fontWeight: FontWeight.w500,
                         ),
-                        Container(
-                          padding: EdgeInsets.all(18),
-                          child: SingleChildScrollView(
+                        subtitleTextStyle: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xffabb8d6),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: snapshot.data.data.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15, top: 10, right: 15),
+                          child: Container(
+                            width: 350,
+                            height: 200,
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: shadowColor.withOpacity(0.4),
+                                  spreadRadius: .1,
+                                  blurRadius: 2,
+                                  // offset: Offset(0, 1), // changes position of shadow
+                                ),
+                              ],
+                            ),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                FormField<String>(
-                                  builder: (FormFieldState<String> state) {
-                                    return InputDecorator(
-                                      decoration: InputDecoration(
-                                        labelText: "State",
-                                        hintText: "State",
-                                        fillColor: Colors.white,
-                                        labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                                        filled: true,
-                                        contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            borderSide: BorderSide(color: Colors.black)),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            borderSide: BorderSide(color: Colors.black)),
-                                        errorBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            borderSide:
-                                            BorderSide(color: Colors.red, width: 2.0)),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            borderSide:
-                                            BorderSide(color: Colors.red, width: 2.0)),
-                                      ),
-                                      isEmpty: selectedCountry == '',
-                                      child:  Center(
-                                        child: DropdownButton<String>(
-                                          hint: Center(
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20, top: 10, bottom: 5),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: (){
+                                              Get.to(()=>CommonProfile(id: snapshot.data.data[index].id,));
+                                            },
                                             child: Text(
-                                              "Select State",
+                                              snapshot.data.data[index]
+                                                      .firstName.toString() +
+                                                  " " +
+                                                  snapshot
+                                                      .data.data[index].lastName.toString(),
                                               style: TextStyle(
-                                                  fontSize: 18,
-                                                  color: Colors.black,
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .bold),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18),
                                             ),
                                           ),
-                                          underline: SizedBox(),
-                                          iconEnabledColor:
-                                          Colors.black,
-                                          value: selectedCountry,
-                                          isExpanded: true,
-                                          items: countries
-                                              .map((String value) {
-                                            return DropdownMenuItem<
-                                                String>(
-                                              value: value,
-                                              child: Text(value),
-                                            );
-                                          }).toList(),
-                                          selectedItemBuilder:
-                                              (BuildContext
-                                          context) =>
-                                              countries
-                                                  .map(
-                                                      (e) =>
-                                                      Center(
-                                                        child:
-                                                        Text(
-                                                          e,
-                                                          style: TextStyle(
-                                                              fontSize: 18,
-                                                              color: Colors.black,
-                                                              fontWeight: FontWeight.bold),
-                                                        ),
-                                                      ))
-                                                  .toList(),
-                                          onChanged: (country) {
-                                            if (country ==
-                                                'Alabama') {
-                                              provinces =
-                                                  AlabamaProvince;
-                                            } else if (country ==
-                                                'Alaska') {
-                                              provinces =
-                                                  AlaskaProvince;
-                                            } else if (country ==
-                                                'California') {
-                                              provinces =
-                                                  CaliforniaProvince;
-                                            } else if (country ==
-                                                'Connecticut') {
-                                              provinces =
-                                                  ConnecticutProvince;
-                                            } else if (country ==
-                                                'Delaware') {
-                                              provinces =
-                                                  DelawareProvince;
-                                            } else if (country ==
-                                                'Florida') {
-                                              provinces =
-                                                  FloridaProvince;
-                                            } else if (country ==
-                                                'Illinois') {
-                                              provinces =
-                                                  IllinoisProvince;
-                                            } else if (country ==
-                                                'Kansas') {
-                                              provinces =
-                                                  KansasProvince;
-                                            } else if (country ==
-                                                'Kentucky') {
-                                              provinces =
-                                                  KentuckyProvince;
-                                            } else if (country ==
-                                                'Louisiana') {
-                                              provinces =
-                                                  LouisianaProvince;
-                                            } else {
-                                              provinces = [];
-                                            }
-                                            setState(() {
-                                              selectedProvince = null;
-                                              selectedCountry =
-                                                  country;
-                                              print(selectedCountry
-                                                  .toString());
-                                            });
-                                          },
-                                        ),
+                                          snapshot.data.data[index].isOnline ==
+                                                  true
+                                              ? Icon(
+                                                  Icons
+                                                      .fiber_manual_record_rounded,
+                                                  size: 12,
+                                                  color: Colors.green,
+                                                )
+                                              : Icon(
+                                                  Icons
+                                                      .fiber_manual_record_rounded,
+                                                  size: 12,
+                                                  color: Colors.grey,
+                                                ),
+                                        ],
                                       ),
-                                    );
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                FormField<String>(
-                                  builder: (FormFieldState<String> state) {
-                                    return InputDecorator(
-                                      decoration: InputDecoration(
-                                        labelText: "City",
-                                        hintText: "City",
-                                        fillColor: Colors.white,
-                                        labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                                        filled: true,
-                                        contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            borderSide: BorderSide(color: Colors.black)),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            borderSide: BorderSide(color: Colors.black)),
-                                        errorBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            borderSide:
-                                            BorderSide(color: Colors.red, width: 2.0)),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            borderSide:
-                                            BorderSide(color: Colors.red, width: 2.0)),
-                                      ),
-                                      isEmpty: selectedProvince == '',
-                                      child:  Center(
-                                        child: DropdownButton<String>(
-                                          hint: Center(
-                                            child: Text(
-                                              'Select City',
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold),
+                                      Row(
+                                        children: [
+                                          IconBox(
+                                            child: Icon(
+                                              Icons.message_rounded,
+                                              color: Colors.white,
+                                              size: 18,
                                             ),
-                                          ),
-                                          underline: SizedBox(),
-                                          iconEnabledColor:
-                                          Colors.black,
-                                          value: selectedProvince,
-                                          isExpanded: true,
-                                          items: provinces
-                                              .map((String value) {
-                                            return DropdownMenuItem<
-                                                String>(
-                                              value: value,
-                                              child: Text(value),
-                                            );
-                                          }).toList(),
-                                          selectedItemBuilder:
-                                              (BuildContext
-                                          context) =>
-                                              provinces
-                                                  .map(
-                                                      (e) =>
-                                                      Center(
-                                                        child:
-                                                        Text(
-                                                          e,
-                                                          style: TextStyle(
-                                                              fontSize: 18,
-                                                              color: Colors.black,
-                                                              fontWeight: FontWeight.bold),
-                                                        ),
-                                                      ))
-                                                  .toList(),
-                                          onChanged: (province) {
-                                            setState(() {
-                                              selectedProvince =
-                                                  province;
-                                              print(selectedProvince
-                                                  .toString());
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                                SizedBox(height: 20),
-                                Container(
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    decoration: ThemeHelper()
-                                        .textInputDecoration(
-                                        'Zip Code',
-                                        'Enter your zip code'),
-                                  ),
-                                  decoration: ThemeHelper()
-                                      .inputBoxDecorationShaddow(),
-                                ),
-                                SizedBox(height: 50),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    SizedBox.fromSize(
-                                      size:
-                                          Size(70, 70), // button width and height
-                                      child: ClipOval(
-                                        child: Material(
-                                          color: primaryColor, // button color
-                                          child: InkWell(
-                                            splashColor:
-                                                secondaryColor, // splash color
                                             onTap: () {
-                                              Get.to(Location(token: token,location: selectedCountry,));
-                                            }, // button pressed
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                Icon(
-                                                  Icons.search,
-                                                  color: Colors.white,
-                                                ), // icon
-                                                Text(
-                                                  "Search",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ), // text
-                                              ],
-                                            ),
+                                              Get.to(() => ChatUi());
+                                            },
+                                            bgColor: Colors.blue,
                                           ),
-                                        ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          IconBox(
+                                            child: Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                              size: 18,
+                                            ),
+                                            onTap: () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return AlertDialog(
+                                                      title: Container(
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Text(
+                                                            'Pick Opportunity',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                        ),
+                                                        color: primaryColor,
+                                                      ),
+                                                      content:
+                                                          inviteAlertDialogContainer(
+                                                              context,
+                                                              snapshot
+                                                                  .data
+                                                                  .data[index]
+                                                                  .id),
+                                                    );
+                                                  });
+                                            },
+                                            bgColor: Colors.blue,
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
-                                )
+                                    ],
+                                  ),
+                                ),
+                                Divider(
+                                  thickness: 1,
+                                  height: 5,
+                                  color: primaryColor,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Email : ',
+                                            style: TextStyle(
+                                                color: primaryColor,
+                                                fontSize: 15),
+                                          ),
+                                          SizedBox(
+                                            height: 2,
+                                          ),
+                                          Text(
+                                            'Phone : ',
+                                            style: TextStyle(
+                                                color: primaryColor,
+                                                fontSize: 15),
+                                          ),
+                                          SizedBox(
+                                            height: 2,
+                                          ),
+                                          Text(
+                                            'Location: ',
+                                            style: TextStyle(
+                                                color: primaryColor,
+                                                fontSize: 15),
+                                          ),
+                                          SizedBox(
+                                            height: 2,
+                                          ),
+                                          Text(
+                                            'Rating: ',
+                                            style: TextStyle(
+                                                color: primaryColor,
+                                                fontSize: 15),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            snapshot.data.data[index].email,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(snapshot.data.data[index].phone.toString(),
+                                              style: TextStyle(fontSize: 14)),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                              snapshot.data.data[index].state.toString() +
+                                                  ", " +
+                                                  snapshot
+                                                      .data.data[index].city.toString(),
+                                              style: TextStyle(fontSize: 14)),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                              snapshot.data.data[index].rating
+                                                  .toString(),
+                                              style: TextStyle(fontSize: 14))
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                child: TextFormField(
-                                  controller: volunteerController,
-                                  decoration: ThemeHelper().textInputDecoration(
-                                      'Search volunteer'),
-                                ),
-                                decoration:
-                                    ThemeHelper().inputBoxDecorationShaddow(),
-                              ),
-                              SizedBox(
-                                height: 40,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  SizedBox.fromSize(
-                                    size:
-                                        Size(70, 70), // button width and height
-                                    child: ClipOval(
-                                      child: Material(
-                                        color: primaryColor, // button color
-                                        child: InkWell(
-                                          splashColor:
-                                              secondaryColor, // splash color
-                                          onTap: () {
-                                            Get.to(() => Search(token: token,search: volunteerController.text.toString(),));
-                                          }, // button pressed
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              Icon(
-                                                Icons.search,
-                                                color: Colors.white,
-                                              ), // icon
-                                              Text(
-                                                "Search",
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ), // text
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                        );
+                      },
+                    );
+                  }
+                } else if (snapshot.connectionState == ConnectionState.none) {
+                  return Text('Error'); // error
+                } else {
+                  return Center(child: CircularProgressIndicator()); // loading
+                }
+              },
             ),
-          ],
-        ),
+          )
+        ],
       ),
+    );
+  }
+
+
+  Widget inviteAlertDialogContainer(context, int id) {
+    return FutureBuilder<PendingOpportunity>(
+      future: getPendingApi(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data.data.length == 0) {
+            return Center(
+              child: Text("No Data"),
+            );
+          } else {
+            return Container(
+              height: 300.0, // Change as per your requirement
+              width: 300.0, // Change as per your requirement
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: snapshot.data.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                    child: ListTile(
+                      onTap: () {
+                        invite(id, snapshot.data.data[index].id);
+                      },
+                      tileColor: Colors.black12,
+                      leading: Icon(
+                        Icons.fiber_manual_record_rounded,
+                        color: Colors.black12,
+                      ),
+                      title: Text(
+                        snapshot.data.data[index].title,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          }
+        } else if (snapshot.connectionState == ConnectionState.none) {
+          return Center(child: Text('Error')); // error
+        } else {
+          return Center(child: CircularProgressIndicator()); // loading
+        }
+      },
     );
   }
 }

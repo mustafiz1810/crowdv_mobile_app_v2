@@ -46,7 +46,7 @@ class Datum {
   int id;
   String title;
   String links;
-  dynamic description;
+  String description;
   String banner;
   int status;
   Organization organization;
@@ -104,9 +104,9 @@ class Organization {
   dynamic building;
   dynamic streetAddress;
   String zipCode;
-  dynamic website;
-  dynamic facebook;
-  dynamic linkedin;
+  String website;
+  String facebook;
+  String linkedin;
   dynamic twitter;
   int status;
   dynamic deletedAt;

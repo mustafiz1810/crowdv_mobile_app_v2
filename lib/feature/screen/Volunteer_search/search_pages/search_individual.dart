@@ -85,8 +85,6 @@ class _HistoryState extends State<VolunteerSearch> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => OpportunityDetails(
-                                            status:
-                                            snapshot.data.data[index].status,
                                             role: widget.role,
                                             id: snapshot.data.data[index].id,
                                             token: widget.token)),

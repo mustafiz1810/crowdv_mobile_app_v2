@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'package:crowdv_mobile_app/data/models/notification_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/search.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/certificate.dart';
-import 'package:crowdv_mobile_app/feature/screen/Organization/create_opportunity.dart';
-import 'package:crowdv_mobile_app/feature/screen/Organization/op_list.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruiter/Create_Opportunity/create_op.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/service_location.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/set_category.dart';
@@ -49,7 +47,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     getCred();
     super.initState();
-
     //Foreground State
     FirebaseMessaging.instance.getInitialMessage();
     FirebaseMessaging.onMessage.listen((message) {
@@ -91,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   )),
         );
       }
+
     });
   }
 
@@ -131,7 +129,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
   final List users = [];
   @override
   Widget build(BuildContext context) {
@@ -154,6 +151,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 state: snapshot.data.data.state,
                 city: snapshot.data.data.city,
                 zip: snapshot.data.data.zipCode,
+                appNotify: snapshot.data.data.isDatabaseNotification,
+                emailNotify: snapshot.data.data.isEmailNotification,
+                smsNotify: snapshot.data.data.isSmsNotification,
               );
             } else {
               return Container();
@@ -228,21 +228,32 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       bottomNavigationBar: CustomBottomNavigation(
+        id:widget.id,
         role: widget.role,
       ),
       resizeToAvoidBottomInset: false,
-      floatingActionButton: widget.role != "organization"?FloatingActionButton(
+      floatingActionButton: widget.role == "volunteer"
+          ?FloatingActionButton(
         backgroundColor: Colors.white,
         child: Icon(
           Icons.search,
           color: Colors.black,
         ),
         onPressed: () {
-          widget.role == "volunteer"
-              ? Get.to(() => VolunteerSearchPage())
-              : Get.to(() => SearchPage());
+          Get.to(() => VolunteerSearchPage(id: widget.id,));
         },
-      ):Container(),
+      )
+          :FloatingActionButton(
+        backgroundColor: Colors.white,
+        child: Icon(
+          Icons.search,
+          color: Colors.black,
+        ),
+        onPressed: () {
+          Get.to(() => SearchPage(id: widget.id,));
+
+        },
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       // extendBody: true,
       body: RefreshIndicator(
@@ -265,8 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Align(
                   alignment: Alignment.topCenter,
-                  child: CarouselExample(
-                  ),
+                  child: CarouselExample(),
                 ),
               ):Container(),
               Expanded(
@@ -276,159 +286,132 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      widget.role == 'organization'
-                          ? Expanded(
-                              child: GridView.count(
-                                // scrollDirection: Axis.horizontal,
-                                crossAxisCount: 3,
-                                childAspectRatio: .90,
-                                crossAxisSpacing: 2.0,
-                                mainAxisSpacing: 2.0,
-                                children: <Widget>[
-                                  CategoryCard(
-                                    title: "Create Opportunity",
-                                    svgSrc: "assets/edit.svg",
-                                    press: () {
-                                      Get.to(OrgOpportunity());
-                                    },
-                                  ),
-                                  CategoryCard(
-                                    title: "My Opportunity",
-                                    svgSrc: "assets/ballot.svg",
-                                    press: () {
-                                      Get.to(OrgOpportunityList());
-                                    },
-                                  ),
-                                ],
-                              ),
-                            )
-                          : Expanded(
-                              child: widget.role == 'volunteer'
-                                  ? GridView.count(
-                                      // scrollDirection: Axis.horizontal,
-                                      crossAxisCount: 3,
-                                      childAspectRatio: .90,
-                                      crossAxisSpacing: 2.0,
-                                      mainAxisSpacing: 2.0,
-                                      children: <Widget>[
-                                        CategoryCard(
-                                          title: "Upcoming Opportunity",
-                                          svgSrc: "assets/bulb_svg.svg",
-                                          press: () {
-                                            Get.to(() => UpcomingOpportunity(
-                                                  role: widget.role,
-                                                ));
-                                          },
-                                        ),
-                                        CategoryCard(
-                                          title: "Organization Opportunity",
-                                          svgSrc: "assets/home-heart-line.svg",
-                                          press: () {
-                                            Get.to(() => OrganizationOpportunities());
-                                          },
-                                        ),
-                                        CategoryCard(
-                                          title: "My Opportunity",
-                                          svgSrc: "assets/list-check.svg",
-                                          press: () {
-                                            Get.to(VolunteerMyOpportunity(
-                                              role: widget.role,
-                                            ));
-                                          },
-                                        ),
-                                        CategoryCard(
-                                          title: "Set category",
-                                          svgSrc: "assets/microsoft-line.svg",
-                                          press: () async {
-                                            getRequestWithoutParam(
-                                                '/api/v1/get-category', {
-                                              "Authorization": "Bearer ${token}"
-                                            }).then((value) async {
-                                              print(value["data"]["category"]);
-                                              List<String> category = [];
-
-                                              for (Map map in value["data"]
-                                                  ["category"]) {
-                                                // where the widget.eligibility is came from previous widget which seems a list of map in your code
-                                                category.add(map["name"]);
-                                              }
-                                              print(category);
-                                              setState(() {});
-                                              Get.to(() => SetCategory(category));
-                                            });
-                                          },
-                                        ),
-                                        CategoryCard(
-                                          title: "Service Location",
-                                          svgSrc: "assets/home-location-alt.svg",
-                                          press: () async {
-                                            getRequestWithoutParam(
-                                                '/api/v1/get-category', {
-                                              "Authorization": "Bearer ${token}"
-                                            }).then((value) async {
-                                              print(
-                                                  value["data"]['service_state']);
-                                              Get.to(() => ServiceLocation(
-                                                    country: value['data']
-                                                        ['service_state'],
-                                                    city: value['data']
-                                                        ['service_city'],
-                                                    zip: value['data']
-                                                        ['service_zip_code'],
-                                                  ));
-                                            });
-                                          },
-                                        ),
-                                        CategoryCard(
-                                          title: "Training",
-                                          svgSrc: "assets/e-learning.svg",
-                                          press: () {
-                                            Get.to(() => TrainingList());
-                                          },
-                                        ),
-                                        // CategoryCard(
-                                        //   title: "Membership",
-                                        //   svgSrc: "assets/93.svg",
-                                        //   press: () {},
-                                        // ),
-                                        CategoryCard(
-                                          title: "Certificate",
-                                          svgSrc: "assets/diploma.svg",
-                                          press: () {
-                                            Get.to(() => Certificate());
-                                          },
-                                        ),
-                                      ],
-                                    )
-                                  : GridView.count(
-                                      // scrollDirection: Axis.horizontal,
-                                      crossAxisCount: 3,
-                                      childAspectRatio: .90,
-                                      crossAxisSpacing: 2.0,
-                                      mainAxisSpacing: 2.0,
-                                      children: <Widget>[
-                                        CategoryCard(
-                                          title: "Create Opportunity",
-                                          svgSrc: "assets/edit.svg",
-                                          press: () {
-                                            profileComplete == 100
-                                                ? Get.to(CreateOpportunity())
-                                                : showToast(
-                                                    "Please complete your profile");
-                                          },
-                                        ),
-                                        CategoryCard(
-                                          title: "My Opportunity",
-                                          svgSrc: "assets/ballot.svg",
-                                          press: () {
-                                            Get.to(MyOpportunity(
-                                              role: widget.role,
-                                            ));
-                                          },
-                                        ),
-                                      ],
-                                    ),
+                      Expanded(
+                        child: widget.role == 'volunteer'
+                            ? GridView.count(
+                          // scrollDirection: Axis.horizontal,
+                          crossAxisCount: 3,
+                          childAspectRatio: .90,
+                          crossAxisSpacing: 2.0,
+                          mainAxisSpacing: 2.0,
+                          children: <Widget>[
+                            CategoryCard(
+                              title: "Upcoming Opportunity",
+                              svgSrc: "assets/bulb_svg.svg",
+                              press: () {
+                                Get.to(() => UpcomingOpportunity(
+                                  role: widget.role,
+                                ));
+                              },
                             ),
+                            CategoryCard(
+                              title: "Organization Opportunity",
+                              svgSrc: "assets/home-heart-line.svg",
+                              press: () {
+                                Get.to(() => OrganizationOpportunities());
+                              },
+                            ),
+                            CategoryCard(
+                              title: "My Opportunity",
+                              svgSrc: "assets/list-check.svg",
+                              press: () {
+                                Get.to(VolunteerMyOpportunity(
+                                  role: widget.role,
+                                ));
+                              },
+                            ),
+                            CategoryCard(
+                              title: "Set category",
+                              svgSrc: "assets/microsoft-line.svg",
+                              press: () async {
+                                getRequestWithoutParam(
+                                    '/api/v1/get-category', {
+                                  "Authorization": "Bearer ${token}"
+                                }).then((value) async {
+                                  print(value["data"]["category"]);
+                                  List<String> category = [];
+
+                                  for (Map map in value["data"]
+                                  ["category"]) {
+                                    category.add(map["name"]);
+                                  }
+                                  print(category);
+                                  setState(() {});
+                                  Get.to(() => SetCategory(category));
+                                });
+                              },
+                            ),
+                            CategoryCard(
+                              title: "Service Location",
+                              svgSrc: "assets/home-location-alt.svg",
+                              press: () async {
+                                getRequestWithoutParam(
+                                    '/api/v1/get-category', {
+                                  "Authorization": "Bearer ${token}"
+                                }).then((value) async {
+                                  print(
+                                      value["data"]['service_state']);
+                                  Get.to(() => ServiceLocation(
+                                    country: value['data']
+                                    ['service_state'],
+                                    city: value['data']
+                                    ['service_city'],
+                                    zip: value['data']
+                                    ['service_zip_code'],
+                                  ));
+                                });
+                              },
+                            ),
+                            CategoryCard(
+                              title: "Training",
+                              svgSrc: "assets/e-learning.svg",
+                              press: () {
+                                Get.to(() => TrainingList());
+                              },
+                            ),
+                            // CategoryCard(
+                            //   title: "Membership",
+                            //   svgSrc: "assets/93.svg",
+                            //   press: () {},
+                            // ),
+                            CategoryCard(
+                              title: "Certificate",
+                              svgSrc: "assets/diploma.svg",
+                              press: () {
+                                Get.to(() => Certificate());
+                              },
+                            ),
+                          ],
+                        )
+                            : GridView.count(
+                          // scrollDirection: Axis.horizontal,
+                          crossAxisCount: 3,
+                          childAspectRatio: .90,
+                          crossAxisSpacing: 2.0,
+                          mainAxisSpacing: 2.0,
+                          children: <Widget>[
+                            CategoryCard(
+                              title: "Create Opportunity",
+                              svgSrc: "assets/edit.svg",
+                              press: () {
+                                profileComplete == 100
+                                    ? Get.to(CreateOpportunity())
+                                    : showToast(
+                                    "Please complete your profile");
+                              },
+                            ),
+                            CategoryCard(
+                              title: "My Opportunity",
+                              svgSrc: "assets/ballot.svg",
+                              press: () {
+                                Get.to(MyOpportunity(
+                                  role: widget.role,
+                                ));
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),

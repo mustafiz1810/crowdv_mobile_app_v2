@@ -7,8 +7,8 @@ import 'package:get/get.dart';
 
 
 class CustomBottomNavigation extends StatefulWidget {
-  final dynamic role;
-  CustomBottomNavigation({this.role});
+  final dynamic role,id;
+  CustomBottomNavigation({this.role,this.id});
   @override
   State<CustomBottomNavigation> createState() => _CustomBottomNavigationState();
 }
@@ -39,7 +39,13 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
       onTap: (index) {
         switch (index) {
           case 0:
-            return Get.to(HomeScreen());
+            return Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) =>
+                        HomeScreen(
+                            id: widget.id,
+                            role: widget.role)),
+                    (Route<dynamic> route) => false);
           case 1:
             widget.role=='volunteer'?
              Get.to(VolunteerHistory()):Get.to(RecruiterHistory());

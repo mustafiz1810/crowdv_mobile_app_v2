@@ -72,6 +72,7 @@ dependencies:
   settings_ui: ^2.0.2
   carousel_pro: ^1.0.0
   image_picker: ^0.8.5+3
+  multi_image_picker: ^4.6.6+rc
 
 
 dev_dependencies:

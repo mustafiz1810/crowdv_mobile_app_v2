@@ -1,9 +1,6 @@
 import 'dart:convert';
-import 'package:crowdv_mobile_app/data/models/volunteer/upcoming_opportunity.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
-import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,13 +29,15 @@ class _OrganizationOpportunitiesState extends State<OrganizationOpportunities> {
       token = pref.getString("user");
     });
   }
-
+  List<dynamic> banner = [];
   Future<OrgModel> getOrgOpportunityApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL + 'organization/opportunity/list'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
     if (response.statusCode == 200) {
+
+      print(banner);
       return OrgModel.fromJson(data);
     } else {
       return OrgModel.fromJson(data);

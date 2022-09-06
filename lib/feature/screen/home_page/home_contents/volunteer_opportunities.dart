@@ -131,8 +131,6 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) => OpportunityDetails(
-                                                      status:
-                                                      snapshot.data.data[index].status,
                                                       role: widget.role,
                                                       id: snapshot.data.data[index].taskId,
                                                       token: token)),

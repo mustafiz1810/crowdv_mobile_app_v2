@@ -8,14 +8,18 @@ import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
+import '../../../profile/common_profile.dart';
+
 class OpportunityDetails extends StatefulWidget {
-  final dynamic status, role, id, token;
-  OpportunityDetails({this.status, this.role, this.id, this.token});
+  final dynamic  role, id, token;
+  OpportunityDetails({this.role, this.id, this.token});
   @override
   _OpportunityDetailsState createState() => _OpportunityDetailsState();
 }
@@ -87,14 +91,19 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                               SizedBox(
                                 height: 5,
                               ),
-                              Text(
-                                snapshot.data.data.recruiter.firstName +
-                                    " " +
-                                    snapshot.data.data.recruiter.lastName,
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
+                              InkWell(
+                                onTap: (){
+                                  Get.to(()=>CommonProfile(id: snapshot.data.data.recruiter.id,));
+                                },
+                                child: Text(
+                                  snapshot.data.data.recruiter.firstName +
+                                      " " +
+                                      snapshot.data.data.recruiter.lastName,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
                               ),
                               SizedBox(
                                 height: 5,
@@ -123,16 +132,35 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                             color: Colors.grey.withOpacity(.5),
                             thickness: 2,
                           ),
-                          Center(
-                            child: Container(
-                              height: 50,
-                              width: 50,
-                              child: IconBox(
-                                child: Image.network(snapshot
-                                    .data.data.category.icon),
-                                bgColor: Colors.white,
+                          Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    height: 30,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      color: primaryColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+
+                                    child: Center(child: Text(snapshot.data.data.taskType,style: TextStyle(color: Colors.white),)),
+                                  )
+                                ],
                               ),
-                            ),
+                              SizedBox(height: 10,),
+                              Container(
+                                height: 50,
+                                width: 50,
+                                child: IconBox(
+                                  child: Image.network(snapshot
+                                      .data.data.category.icon),
+                                  bgColor: Colors.white,
+                                ),
+                              ),
+                              Text(snapshot.data.data.category.name)
+                            ],
                           )
                         ],
                       ),
@@ -928,7 +956,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                             ),
                           )
                         : widget.role == 'volunteer' &&
-                                snapshot.data.data.applyStatus == "1"
+                                snapshot.data.data.applyStatus == 0
                             ? SizedBox(
                                 height: 50,
                                 width: 240,

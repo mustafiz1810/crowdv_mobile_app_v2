@@ -84,14 +84,13 @@ class _ProfilePageState extends State<ProfilePage> {
     array = widget.disability;
     // print(array);
     widget.selectedCountry == null
-        ? selectedCountry = "Alabama"
-        : selectedCountry = widget.selectedCountry;
+        ? selectedCountry = "Alabama":selectedCountry ;
     widget.selectedProvince == null
         ? selectedProvince = "Birmingham"
         : selectedProvince = widget.selectedProvince;
     widget.zip == null
         ? zipController.text = ""
-        : zipController.text = widget.zip;
+        : zipController.text =widget.zip;
   }
 
   void getCred() async {
@@ -106,6 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
         Uri.parse(NetworkConstants.BASE_URL + 'profile'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
+    print(data);
     if (response.statusCode == 200) {
       return ProfileModel.fromJson(data);
     } else {
@@ -680,7 +680,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       child: DropdownButton<String>(
                                                         hint: Center(
                                                           child: Text(
-                                                            "Select Country",
+                                                            snapshot.data.data.state != null?snapshot.data.data.state:"Select Country",
                                                             style: TextStyle(
                                                                 fontSize: 18,
                                                                 color: Colors.black,

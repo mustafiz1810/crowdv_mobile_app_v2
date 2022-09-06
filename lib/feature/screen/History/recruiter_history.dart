@@ -397,14 +397,14 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                           initialRating: snapshot
                                                               .data
                                                               .data[index]
-                                                              .recruiter
+                                                              .volunteer
                                                               .rating ==
                                                               null
                                                               ? 0
                                                               : snapshot
                                                               .data
                                                               .data[index]
-                                                              .recruiter
+                                                              .volunteer
                                                               .rating
                                                               .toDouble(),
                                                           minRating: 1,

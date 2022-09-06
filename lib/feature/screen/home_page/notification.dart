@@ -11,6 +11,7 @@ import 'package:inkwell_splash/inkwell_splash.dart';
 import '../../../data/models/notification_model.dart';
 import '../../../utils/constants.dart';
 import 'home_contents/volunteer_opportunities.dart';
+import 'home_contents/widgets/details.dart';
 
 class NotificationPage extends StatefulWidget {
   final dynamic data, token,role;
@@ -69,18 +70,14 @@ class _NotificationPageState extends State<NotificationPage> {
                             'Content-Type': "application/json",
                             "Authorization": "Bearer ${widget.token}"
                           }).then((value) async {
-                            widget.role == "recruiter"?Navigator.push(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => AppliedVolunteer(
-                                    id: widget
-                                        .data[index].data.opportunityId,
-                                    token: widget.token,
-                                  )),
-                            ):MaterialPageRoute(
-                                builder: (context) => VolunteerMyOpportunity(
-                                  role: widget.role,
-                                ));
+                                  builder: (context) => OpportunityDetails(
+                                      role: widget.role,
+                                      id: widget.data[index].data.opportunityId,
+                                      token: widget.token)),
+                            );
                             setState(() {});
                           });
                         },

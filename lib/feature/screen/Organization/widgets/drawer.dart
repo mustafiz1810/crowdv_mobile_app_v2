@@ -61,19 +61,23 @@ class _OrgDrawerState extends State<OrgDrawer> {
               color: Colors.white,
             ),
             currentAccountPicture: Container(
-              height: 100,
-              width: 100,
+              height: 60,
+              width: 60,
               decoration: BoxDecoration(
-                  color: Colors.black12,
-                borderRadius: BorderRadius.all(Radius.circular(100))
+                color: Colors.white,
+                shape: BoxShape.circle,
               ),
               child: CachedNetworkImage(
                 imageUrl: widget.icon,
                 imageBuilder:
                     (context, imageProvider) =>
                     Container(
+                      height: 60,
+                      width: 60,
                       decoration: BoxDecoration(
+                        shape: BoxShape.circle,
                         image: DecorationImage(
+                          fit: BoxFit.contain,
                           image: imageProvider,
                         ),
                       ),

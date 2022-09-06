@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final accountModel = accountModelFromJson(jsonString);
+//     final commonProfileModel = commonProfileModelFromJson(jsonString);
 
 import 'dart:convert';
 
-AccountModel accountModelFromJson(String str) => AccountModel.fromJson(json.decode(str));
+CommonProfileModel commonProfileModelFromJson(String str) => CommonProfileModel.fromJson(json.decode(str));
 
-String accountModelToJson(AccountModel data) => json.encode(data.toJson());
+String commonProfileModelToJson(CommonProfileModel data) => json.encode(data.toJson());
 
-class AccountModel {
-  AccountModel({
+class CommonProfileModel {
+  CommonProfileModel({
     this.success,
     this.message,
     this.data,
@@ -19,7 +19,7 @@ class AccountModel {
   String message;
   Data data;
 
-  factory AccountModel.fromJson(Map<String, dynamic> json) => AccountModel(
+  factory CommonProfileModel.fromJson(Map<String, dynamic> json) => CommonProfileModel(
     success: json["success"],
     message: json["message"],
     data: Data.fromJson(json["data"]),
@@ -54,9 +54,6 @@ class Data {
     this.serviceCity,
     this.serviceState,
     this.serviceZipCode,
-    this.isEmailNotification,
-    this.isDatabaseNotification,
-    this.isSmsNotification,
     this.workingHours,
     this.rating,
     this.opportunities,
@@ -73,7 +70,7 @@ class Data {
   String state;
   String city;
   String zipCode;
-  List<dynamic> typeOfDisability;
+  List<int> typeOfDisability;
   String profession;
   bool termsAndConditions;
   Membership membership;
@@ -81,12 +78,9 @@ class Data {
   DateTime dob;
   String image;
   String role;
-  dynamic serviceCity;
-  dynamic serviceState;
-  dynamic serviceZipCode;
-  bool isEmailNotification;
-  bool isDatabaseNotification;
-  bool isSmsNotification;
+  String serviceCity;
+  String serviceState;
+  String serviceZipCode;
   int workingHours;
   int rating;
   int opportunities;
@@ -103,7 +97,7 @@ class Data {
     state: json["state"],
     city: json["city"],
     zipCode: json["zip_code"],
-    typeOfDisability: List<dynamic>.from(json["type_of_disability"].map((x) => x)),
+    typeOfDisability: List<int>.from(json["type_of_disability"].map((x) => x)),
     profession: json["profession"],
     termsAndConditions: json["terms_and_conditions"],
     membership: Membership.fromJson(json["membership"]),
@@ -114,9 +108,6 @@ class Data {
     serviceCity: json["service_city"],
     serviceState: json["service_state"],
     serviceZipCode: json["service_zip_code"],
-    isEmailNotification: json["is_email_notification"],
-    isDatabaseNotification: json["is_database_notification"],
-    isSmsNotification: json["is_sms_notification"],
     workingHours: json["working_hours"],
     rating: json["rating"],
     opportunities: json["opportunities"],
@@ -145,9 +136,6 @@ class Data {
     "service_city": serviceCity,
     "service_state": serviceState,
     "service_zip_code": serviceZipCode,
-    "is_email_notification": isEmailNotification,
-    "is_database_notification": isDatabaseNotification,
-    "is_sms_notification": isSmsNotification,
     "working_hours": workingHours,
     "rating": rating,
     "opportunities": opportunities,

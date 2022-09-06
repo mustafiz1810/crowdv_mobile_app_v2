@@ -41,6 +41,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
         Uri.parse(NetworkConstants.BASE_URL + 'opportunity'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
+    print(data);
     if (response.statusCode == 200) {
       return MyOpportunityModel.fromJson(data);
     } else {

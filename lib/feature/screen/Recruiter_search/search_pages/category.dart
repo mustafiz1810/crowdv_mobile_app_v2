@@ -12,17 +12,21 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../data/models/recruiter/pending_opportunities.dart';
 
-class Category extends StatefulWidget {
-  final dynamic token, categoryId;
-  Category({this.token, this.categoryId});
+class SearchVolunteer extends StatefulWidget {
+  final List<int> category;
+  final List<int> membership;
+  final List<String> gender;
+  final List<String> profession;
+  final String state,city;
+
+  SearchVolunteer({this.category, this.membership,this.gender,this.profession,this.state,this.city});
   @override
-  _HistoryState createState() => _HistoryState();
+  _SearchVolunteerState createState() => _SearchVolunteerState();
 }
 
-class _HistoryState extends State<Category> {
+class _SearchVolunteerState extends State<SearchVolunteer> {
   String token = "";
   @override
   void initState() {
@@ -76,13 +80,13 @@ class _HistoryState extends State<Category> {
           });
     }
   }
-
   Future<CategoryVolunteer> getCateVolunteerApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL +
-            'volunteer-search?category_id=${widget.categoryId}'),
-        headers: {"Authorization": "Bearer ${widget.token}"});
+            'volunteer-search?category_id=${widget.category}&state=${widget.state}&city=${widget.city}&gender=${widget.gender}&membership_id=${widget.membership}&profession=${widget.profession}'),
+        headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
+    print(data);
     if (response.statusCode == 200) {
       return CategoryVolunteer.fromJson(data);
     } else {
@@ -93,7 +97,7 @@ class _HistoryState extends State<Category> {
   Future<PendingOpportunity> getPendingApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL + 'pending_opportunities'),
-        headers: {"Authorization": "Bearer ${widget.token}"});
+        headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
     if (response.statusCode == 200) {
       return PendingOpportunity.fromJson(data);
@@ -102,13 +106,12 @@ class _HistoryState extends State<Category> {
     }
   }
 
-  bool isSelected = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text('Category'),
+        title: Text('Search'),
       ),
       body: Center(
         child: Column(

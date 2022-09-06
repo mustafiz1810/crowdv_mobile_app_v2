@@ -180,28 +180,8 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
               FormField<String>(
                 builder: (FormFieldState<String> state) {
                   return InputDecorator(
-                    decoration: InputDecoration(
-                      labelText: "Profession",
-                      hintText: "Profession",
-                      fillColor: Colors.white,
-                      labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                      filled: true,
-                      contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(color: Colors.black)),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(color: Colors.black)),
-                      errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide:
-                              BorderSide(color: Colors.red, width: 2.0)),
-                      focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide:
-                              BorderSide(color: Colors.red, width: 2.0)),
-                    ),
+                    decoration: ThemeHelper()
+                        .textInputDecoration('Profession', ''),
                     isEmpty: _profession == '',
                     child: Center(
                       child: DropdownButton<String>(
@@ -287,7 +267,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                             child: Text(
                               "Select Gender",
                               style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),

@@ -26,7 +26,10 @@ class NavDrawer extends StatefulWidget {
       gender,
       state,
       city,
-      zip;
+      zip,
+      appNotify,
+  emailNotify,
+  smsNotify;
   NavDrawer(
       {@required this.id,
       this.role,
@@ -39,7 +42,10 @@ class NavDrawer extends StatefulWidget {
       this.gender,
       this.state,
       this.zip,
-      this.city});
+      this.city,
+      this.appNotify,
+      this.emailNotify,
+      this.smsNotify});
   @override
   _NavDrawerState createState() => _NavDrawerState();
 }
@@ -149,7 +155,7 @@ class _NavDrawerState extends State<NavDrawer> {
               leading: Icon(Icons.settings, color: Colors.black),
               title: new Text("Settings"),
               onTap: () {
-                Get.to(() => Settings());
+                Get.to(() => Settings(smsNotify: widget.smsNotify,emailNotify: widget.emailNotify,appNotify: widget.appNotify,));
               }),
           ListTile(
               leading: Icon(Icons.info_outline_rounded, color: Colors.black),
