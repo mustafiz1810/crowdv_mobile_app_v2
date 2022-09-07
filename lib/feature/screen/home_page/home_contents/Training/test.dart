@@ -3,6 +3,7 @@ import 'package:crowdv_mobile_app/data/models/volunteer/test_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/Exam/exam_main.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
+import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:empty_widget/empty_widget.dart';
@@ -11,8 +12,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Test extends StatefulWidget {
-  final trainingId;
-  const Test({this.trainingId});
+  final trainingId,userId;
+  const Test({this.trainingId,this.userId});
 
   @override
   _TestState createState() => _TestState();
@@ -20,6 +21,7 @@ class Test extends StatefulWidget {
 
 class _TestState extends State<Test> {
   String token = "";
+  String role = "";
   @override
   void initState() {
     getCred();
@@ -30,6 +32,7 @@ class _TestState extends State<Test> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       token = pref.getString("user");
+      role = pref.getString("role");
     });
   }
 
@@ -51,6 +54,10 @@ class _TestState extends State<Test> {
         appBar: AppBar(
           title: Text("Test"),
           backgroundColor: primaryColor,
+        ),
+        bottomNavigationBar: CustomBottomNavigation(
+          id:widget.userId,
+          role: role,
         ),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -244,10 +251,6 @@ class _TestState extends State<Test> {
                                                       child: Center(
                                                           child: Text('Take Test',
                                                               style: TextStyle(
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                                  fontSize: 16,
                                                                   color: Colors
                                                                       .white))),
                                                     ),

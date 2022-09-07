@@ -22,7 +22,8 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
   List<String> _selectedProfession = [];
   String selectedCountry;
   String selectedProvince;
-
+  double _lowValue = 0.0;
+  double _highValue = 100.0;
   void _showMultiCategory() async {
     final List<int> results = await showDialog(
       context: context,
@@ -107,14 +108,17 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
     }
   }
 
-  void _reset(){
+  void _reset() {
     setState(() {
       _selectedCategory.clear();
       _selectedMembership.clear();
       _selectedGender.clear();
       _selectedProfession.clear();
+      _lowValue = 0.0;
+      _highValue = 100.0;
     });
   }
+
   List<String> countries = [
     'Alabama',
     'Alaska',
@@ -133,7 +137,22 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
   List<String> ConnecticutProvince = ['Bridgeport', 'Hartford'];
   List<String> DelawareProvince = ['Dover', 'Wilmington'];
   List<String> FloridaProvince = ['Jacksonville', 'Tallahassee'];
-  List<String> IllinoisProvince = ['Addison', 'Algonquin', 'Alton','Arlington Heights','Aurora','Bartlett','Batavia','Belleville','Belvidere','Berwyn','Bloomington','Bolingbrook','Buffalo Grove','Chicago',];
+  List<String> IllinoisProvince = [
+    'Addison',
+    'Algonquin',
+    'Alton',
+    'Arlington Heights',
+    'Aurora',
+    'Bartlett',
+    'Batavia',
+    'Belleville',
+    'Belvidere',
+    'Berwyn',
+    'Bloomington',
+    'Bolingbrook',
+    'Buffalo Grove',
+    'Chicago',
+  ];
   List<String> KansasProvince = ['Topeka', 'Wichita'];
   List<String> KentuckyProvince = ['Frankfort', 'Louisville'];
   List<String> LouisianaProvince = ['Baton Rouge', 'New Orleans'];
@@ -155,19 +174,21 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
             padding: const EdgeInsets.all(15.0),
             child: OutlinedButton(
               onPressed: () {
-                print(selectedCountry);
-                print(selectedProvince);
-                print(_selectedCategory.toString());
-                print(_selectedMembership.toString());
-                print(_selectedGender.toString());
-                print(_selectedProfession.toString());
+                // print(selectedCountry);
+                // print(selectedProvince);
+                // print(_selectedCategory.toString());
+                // print(_selectedMembership.toString());
+                // print(_selectedGender.toString());
+                // print(_selectedProfession.toString());
                 Get.to(() => SearchPage(
                       state: selectedCountry,
                       city: selectedProvince,
-                      category: _selectedCategory,
-                      membership: _selectedMembership,
-                      gender: _selectedGender,
-                      profession: _selectedProfession,
+                      category: _selectedCategory.length ==0?null:_selectedCategory,
+                      membership: _selectedMembership.length ==0?null:_selectedMembership,
+                      gender: _selectedGender.length ==0?null:_selectedGender,
+                      profession: _selectedProfession.length ==0?null:_selectedProfession,
+                      min_age: _lowValue.toInt(),
+                      max_age: _highValue.toInt(),
                     ));
               },
               child: Text(
@@ -228,17 +249,18 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
                               child: Text(value),
                             );
                           }).toList(),
-                          selectedItemBuilder: (BuildContext context) => countries
-                              .map((e) => Center(
-                                    child: Text(
-                                      e,
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ))
-                              .toList(),
+                          selectedItemBuilder: (BuildContext context) =>
+                              countries
+                                  .map((e) => Center(
+                                        child: Text(
+                                          e,
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ))
+                                  .toList(),
                           onChanged: (country) {
                             if (country == 'Alabama') {
                               provinces = AlabamaProvince;
@@ -293,17 +315,18 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
                               child: Text(value),
                             );
                           }).toList(),
-                          selectedItemBuilder: (BuildContext context) => provinces
-                              .map((e) => Center(
-                                    child: Text(
-                                      e,
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ))
-                              .toList(),
+                          selectedItemBuilder: (BuildContext context) =>
+                              provinces
+                                  .map((e) => Center(
+                                        child: Text(
+                                          e,
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ))
+                                  .toList(),
                           onChanged: (province) {
                             setState(() {
                               selectedProvince = province;
@@ -535,6 +558,87 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
                   color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Age range: ",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            RangeSlider(
+                                min: 0.0,
+                                max: 100.0,
+                                divisions: 10,
+                                inactiveColor: Colors.grey,
+                                activeColor: primaryColor,
+                                labels: RangeLabels(_lowValue.toString(),
+                                    _highValue.toString()),
+                                values: RangeValues(_lowValue, _highValue),
+                                onChanged: (_range) {
+                                  setState(() {
+                                    _lowValue = _range.start;
+                                    _highValue = _range.end;
+                                  });
+                                })
+                          ],
+                        ),
+                        // display selected items
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Min age: ",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Text(
+                                    _lowValue.toString(),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Max age: ",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Text(
+                                    _highValue.toString(),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -544,9 +648,9 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
                               const Text(
                                 'Reset',
                                 style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    ),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                               SizedBox(
                                 width: 5,
@@ -562,7 +666,6 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
                       ],
                     ),
                   )),
-
               SizedBox(
                 height: 15,
               ),

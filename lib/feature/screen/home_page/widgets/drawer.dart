@@ -1,10 +1,8 @@
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/about_us.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/chat.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/faq.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/settings.dart';
 import 'package:crowdv_mobile_app/feature/screen/password/change_pass.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/profile.dart';
-import 'package:crowdv_mobile_app/widgets/get_prefs.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:flutter/material.dart';
 import 'package:crowdv_mobile_app/feature/screen/authentication/sign_in/sign_in.dart';
@@ -26,10 +24,7 @@ class NavDrawer extends StatefulWidget {
       gender,
       state,
       city,
-      zip,
-      appNotify,
-  emailNotify,
-  smsNotify;
+      zip;
   NavDrawer(
       {@required this.id,
       this.role,
@@ -42,10 +37,7 @@ class NavDrawer extends StatefulWidget {
       this.gender,
       this.state,
       this.zip,
-      this.city,
-      this.appNotify,
-      this.emailNotify,
-      this.smsNotify});
+      this.city,});
   @override
   _NavDrawerState createState() => _NavDrawerState();
 }
@@ -154,9 +146,22 @@ class _NavDrawerState extends State<NavDrawer> {
           ListTile(
               leading: Icon(Icons.settings, color: Colors.black),
               title: new Text("Settings"),
-              onTap: () {
-                Get.to(() => Settings(smsNotify: widget.smsNotify,emailNotify: widget.emailNotify,appNotify: widget.appNotify,));
-              }),
+              onTap: () async {
+                getRequest('/api/v1/profile', null, {
+                  'Content-Type': "application/json",
+                  "Authorization": "Bearer ${token}"
+                }).then((value) async {
+                  print(value['data']['is_email_notification']);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Settings(
+                          smsNotify:value['data']['is_sms_notification'],
+                          emailNotify: value['data']['is_email_notification'],
+                          appNotify: value['data']['is_database_notification'],)),
+                  );
+                });
+              },),
           ListTile(
               leading: Icon(Icons.info_outline_rounded, color: Colors.black),
               title: Text("About"),

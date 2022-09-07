@@ -82,7 +82,6 @@ class _MyOpportunityState extends State<MyOpportunity> {
                           image: null,
                           packageImage: PackageImage.Image_3,
                           title: 'No Opportunity',
-                          subTitle: 'No  Opportunity available',
                           titleTextStyle: TextStyle(
                             fontSize: 22,
                             color: Color(0xff9da9c7),
@@ -251,7 +250,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                           SweetAlert.show(
                                                               context,
                                                               subtitle:
-                                                                  "Do you want to delete this opportunity?",
+                                                                  "Are you sure?",
                                                               style:
                                                                   SweetAlertStyle
                                                                       .confirm,
@@ -321,7 +320,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                     .data.data[index].id);
                                                 SweetAlert.show(context,
                                                     subtitle:
-                                                        "Do you want to Copy this opportunity?",
+                                                        "Are you sure?",
                                                     style:
                                                         SweetAlertStyle.success,
                                                     showCancelButton: true,

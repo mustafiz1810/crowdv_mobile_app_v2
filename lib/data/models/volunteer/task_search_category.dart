@@ -63,16 +63,16 @@ class Datum {
   String state;
   String city;
   String zipCode;
-  TaskType taskType;
-  DateTime date;
+  String taskType;
+  String date;
   String datumStartTime;
   DateTime startTime;
   String datumEndTime;
   DateTime endTime;
   int workingHours;
-  dynamic benefits;
+  String benefits;
   bool isPublic;
-  Status status;
+  String status;
   int applyStatus;
   Category category;
   List<Eligibility> eligibility;
@@ -86,8 +86,8 @@ class Datum {
     state: json["state"],
     city: json["city"],
     zipCode: json["zip_code"],
-    taskType: taskTypeValues.map[json["task_type"]],
-    date: DateTime.parse(json["date"]),
+    taskType: json["task_type"],
+    date: json["date"],
     datumStartTime: json["start_time"],
     startTime: DateTime.parse(json["startTime"]),
     datumEndTime: json["end_time"],
@@ -95,7 +95,7 @@ class Datum {
     workingHours: json["working_hours"],
     benefits: json["benefits"],
     isPublic: json["is_public"],
-    status: statusValues.map[json["status"]],
+    status: json["status"],
     applyStatus: json["apply_status"],
     category: Category.fromJson(json["category"]),
     eligibility: List<Eligibility>.from(json["eligibility"].map((x) => Eligibility.fromJson(x))),
@@ -110,8 +110,8 @@ class Datum {
     "state": state,
     "city": city,
     "zip_code": zipCode,
-    "task_type": taskTypeValues.reverse[taskType],
-    "date": "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
+    "task_type": taskType,
+    "date": date,
     "start_time": datumStartTime,
     "startTime": startTime.toIso8601String(),
     "end_time": datumEndTime,
@@ -119,7 +119,7 @@ class Datum {
     "working_hours": workingHours,
     "benefits": benefits,
     "is_public": isPublic,
-    "status": statusValues.reverse[status],
+    "status": status,
     "apply_status": applyStatus,
     "category": category.toJson(),
     "eligibility": List<dynamic>.from(eligibility.map((x) => x.toJson())),
@@ -137,38 +137,24 @@ class Category {
   });
 
   int id;
-  Name name;
-  Slug slug;
+  String name;
+  String slug;
   String icon;
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
     id: json["id"],
-    name: nameValues.map[json["name"]],
-    slug: slugValues.map[json["slug"]],
+    name: json["name"],
+    slug: json["slug"],
     icon: json["icon"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "name": nameValues.reverse[name],
-    "slug": slugValues.reverse[slug],
+    "name": name,
+    "slug": slug,
     "icon": icon,
   };
 }
-
-enum Name { FOOD_PREPARING, OTHER }
-
-final nameValues = EnumValues({
-  "Food preparing": Name.FOOD_PREPARING,
-  "Other": Name.OTHER
-});
-
-enum Slug { FOOD_PREPARING, OTHER }
-
-final slugValues = EnumValues({
-  "food-preparing": Slug.FOOD_PREPARING,
-  "other": Slug.OTHER
-});
 
 class Eligibility {
   Eligibility({
@@ -259,15 +245,15 @@ class Recruiter {
   String email;
   String phone;
   String image;
-  String typeOfDisability;
-  String state;
-  String city;
-  String zipCode;
-  Role role;
+  dynamic typeOfDisability;
+  dynamic state;
+  dynamic city;
+  dynamic zipCode;
+  String role;
   int profileRating;
   int rating;
-  String review;
-  String gender;
+  dynamic review;
+  dynamic gender;
 
   factory Recruiter.fromJson(Map<String, dynamic> json) => Recruiter(
     id: json["id"] == null ? null : json["id"],
@@ -276,15 +262,15 @@ class Recruiter {
     email: json["email"] == null ? null : json["email"],
     phone: json["phone"] == null ? null : json["phone"],
     image: json["image"] == null ? null : json["image"],
-    typeOfDisability: json["type_of_disability"] == null ? null : json["type_of_disability"],
-    state: json["state"] == null ? null : json["state"],
-    city: json["city"] == null ? null : json["city"],
-    zipCode: json["zip_code"] == null ? null : json["zip_code"],
-    role: json["role"] == null ? null : roleValues.map[json["role"]],
+    typeOfDisability: json["type_of_disability"],
+    state: json["state"],
+    city: json["city"],
+    zipCode: json["zip_code"],
+    role: json["role"] == null ? null : json["role"],
     profileRating: json["profile_rating"] == null ? null : json["profile_rating"],
     rating: json["rating"],
-    review: json["review"] == null ? null : json["review"],
-    gender: json["gender"] == null ? null : json["gender"],
+    review: json["review"],
+    gender: json["gender"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -294,49 +280,14 @@ class Recruiter {
     "email": email == null ? null : email,
     "phone": phone == null ? null : phone,
     "image": image == null ? null : image,
-    "type_of_disability": typeOfDisability == null ? null : typeOfDisability,
-    "state": state == null ? null : state,
-    "city": city == null ? null : city,
-    "zip_code": zipCode == null ? null : zipCode,
-    "role": role == null ? null : roleValues.reverse[role],
+    "type_of_disability": typeOfDisability,
+    "state": state,
+    "city": city,
+    "zip_code": zipCode,
+    "role": role == null ? null : role,
     "profile_rating": profileRating == null ? null : profileRating,
     "rating": rating,
-    "review": review == null ? null : review,
-    "gender": gender == null ? null : gender,
+    "review": review,
+    "gender": gender,
   };
-}
-
-enum Role { VOLUNTEER, RECRUITER }
-
-final roleValues = EnumValues({
-  "recruiter": Role.RECRUITER,
-  "volunteer": Role.VOLUNTEER
-});
-
-enum Status { PENDING, COMPLETED }
-
-final statusValues = EnumValues({
-  "Completed": Status.COMPLETED,
-  "Pending": Status.PENDING
-});
-
-enum TaskType { OFFLINE, BOTH }
-
-final taskTypeValues = EnumValues({
-  "Both": TaskType.BOTH,
-  "Offline": TaskType.OFFLINE
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    if (reverseMap == null) {
-      reverseMap = map.map((k, v) => new MapEntry(v, k));
-    }
-    return reverseMap;
-  }
 }

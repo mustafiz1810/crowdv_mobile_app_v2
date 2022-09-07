@@ -2,19 +2,24 @@ import 'dart:convert';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/data/models/volunteer/history_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
+import 'package:crowdv_mobile_app/feature/screen/profile/common_profile.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
+import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class VolunteerHistory extends StatefulWidget {
+  final dynamic id;
+  VolunteerHistory({this.id});
   @override
   _VolunteerHistoryState createState() => _VolunteerHistoryState();
 }
@@ -24,6 +29,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
   TextEditingController reportController = TextEditingController();
   TextEditingController detailsController = TextEditingController();
   String token = "";
+  String role = "";
 
   @override
   void initState() {
@@ -35,6 +41,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       token = pref.getString("user");
+      role = pref.getString("role");
     });
   }
 
@@ -76,7 +83,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
     }
   }
 
-  void report(String report,details, int id) async {
+  void report(String report, details, int id) async {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'volunteer/report/$id'),
@@ -174,6 +181,10 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
           backgroundColor: primaryColor,
           title: Text('History'),
         ),
+        bottomNavigationBar: CustomBottomNavigation(
+          id:widget.id,
+          role: role,
+        ),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -212,12 +223,12 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                             padding: const EdgeInsets.all(5),
                             child: Container(
                               width: MediaQuery.of(context).size.width,
-                              height:  MediaQuery.of(context).size.width/1.7,
+                              height: MediaQuery.of(context).size.width / 1.7,
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(20)),
+                                    BorderRadius.all(Radius.circular(20)),
                                 boxShadow: [
                                   BoxShadow(
                                     color: shadowColor.withOpacity(0.4),
@@ -233,27 +244,28 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                     padding: const EdgeInsets.all(23.0),
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         InkWell(
-                                          onTap: (){
+                                          onTap: () {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (context) => OpportunityDetails(
-                                                      role: snapshot
-                                                          .data
-                                                          .data[index]
-                                                          .volunteer
-                                                          .role,
-                                                      id: snapshot
-                                                          .data.data[index].id,
-                                                      token: token)),
+                                                  builder: (context) =>
+                                                      OpportunityDetails(
+                                                          role: snapshot
+                                                              .data
+                                                              .data[index]
+                                                              .volunteer
+                                                              .role,
+                                                          id: snapshot.data
+                                                              .data[index].id,
+                                                          token: token)),
                                             );
                                           },
                                           child: Column(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 snapshot.data.data[index].title,
@@ -269,52 +281,63 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                 children: [
                                                   SizedBox(
                                                       height: 50,
-                                                      child: Text("Review:  ")
-                                                  ),
+                                                      child: Text("Review:  ")),
                                                   SizedBox(
                                                       width: 200,
                                                       height: 50,
                                                       child: Text(
                                                           snapshot
-                                                              .data
-                                                              .data[index]
-                                                              .volunteer
-                                                              .review !=
-                                                              null
+                                                                      .data
+                                                                      .data[
+                                                                          index]
+                                                                      .volunteer
+                                                                      .review !=
+                                                                  null
                                                               ? snapshot
-                                                              .data
-                                                              .data[index]
-                                                              .volunteer
-                                                              .review
+                                                                  .data
+                                                                  .data[index]
+                                                                  .volunteer
+                                                                  .review
                                                               : "none",
                                                           style: TextStyle(
-                                                              fontSize: 14))
-                                                  ),
+                                                              fontSize: 14))),
                                                 ],
                                               ),
                                               SizedBox(
                                                 height: 10,
                                               ),
                                               Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   Row(
                                                     children: [
                                                       Icon(
-                                                        Icons.location_on_rounded,
-                                                        color: Colors.blueAccent,
+                                                        Icons
+                                                            .location_on_rounded,
+                                                        color:
+                                                            Colors.blueAccent,
                                                         size: 20,
                                                       ),
                                                       Text(
-                                                        snapshot.data.data[index].city !=
-                                                            null
+                                                        snapshot
+                                                                    .data
+                                                                    .data[index]
+                                                                    .city !=
+                                                                null
                                                             ? snapshot
-                                                            .data.data[index].city
+                                                                .data
+                                                                .data[index]
+                                                                .city
                                                             : "",
                                                         style: TextStyle(
                                                             fontSize: 15,
-                                                            color: Colors.blueAccent,
-                                                            fontWeight: FontWeight.bold),
+                                                            color: Colors
+                                                                .blueAccent,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                       ),
                                                     ],
                                                   ),
@@ -325,7 +348,8 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                               .data
                                                               .data[index]
                                                               .volunteer
-                                                              .rating.toString(),
+                                                              .rating
+                                                              .toString(),
                                                           style: TextStyle(
                                                               fontSize: 14)),
                                                       Icon(
@@ -335,7 +359,6 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                       )
                                                     ],
                                                   ),
-
                                                 ],
                                               ),
                                               SizedBox(
@@ -343,7 +366,8 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                               ),
                                               Divider(
                                                 height: 5,
-                                                color: Colors.grey.withOpacity(.5),
+                                                color:
+                                                    Colors.grey.withOpacity(.5),
                                                 thickness: 1,
                                               ),
                                               SizedBox(
@@ -353,18 +377,35 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                           ),
                                         ),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Row(
                                               children: [
                                                 Column(
                                                   children: [
-                                                    CircleAvatar(
-                                                      backgroundImage: NetworkImage(
-                                                          snapshot.data.data[index]
-                                                              .recruiter.image),
-                                                      radius: 20,
-                                                    ),
+                                                    InkWell(
+                                                        child: CircleAvatar(
+                                                          backgroundImage:
+                                                              NetworkImage(
+                                                                  snapshot
+                                                                      .data
+                                                                      .data[
+                                                                          index]
+                                                                      .recruiter
+                                                                      .image),
+                                                          radius: 20,
+                                                        ),
+                                                        onTap: () {
+                                                          Get.to(() =>
+                                                              CommonProfile(
+                                                                id: snapshot
+                                                                    .data
+                                                                    .data[index]
+                                                                    .recruiter
+                                                                    .id,
+                                                              ));
+                                                        }),
                                                   ],
                                                 ),
                                                 SizedBox(
@@ -372,58 +413,74 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                 ),
                                                 Column(
                                                   crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                                      CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                      snapshot.data.data[index]
-                                                          .recruiter.firstName +
-                                                          " " +
-                                                          snapshot.data.data[index]
-                                                              .recruiter.lastName,
-                                                      maxLines: 1,
-                                                      overflow: TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                        fontSize: 14,),
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(width: 5,),
+                                                        Text(
+                                                          snapshot
+                                                                  .data
+                                                                  .data[index]
+                                                                  .recruiter
+                                                                  .firstName +
+                                                              " " +
+                                                              snapshot
+                                                                  .data
+                                                                  .data[index]
+                                                                  .recruiter
+                                                                  .lastName,
+                                                          maxLines: 1,
+                                                          overflow:
+                                                              TextOverflow.ellipsis,
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                     SizedBox(
                                                       height: 5,
                                                     ),
-                                                    Row(
-                                                      children: [
-                                                        RatingBar.builder(
-                                                          itemSize: 20,
-                                                          initialRating: snapshot
-                                                              .data
-                                                              .data[index]
-                                                              .recruiter
-                                                              .rating ==
-                                                              null
-                                                              ? 0
-                                                              : snapshot
-                                                              .data
-                                                              .data[index]
-                                                              .recruiter
-                                                              .rating
-                                                              .toDouble(),
-                                                          minRating: 1,
-                                                          direction: Axis.horizontal,
-                                                          itemCount: 5,
-                                                          itemPadding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 4.0),
-                                                          itemBuilder: (context, _) =>
-                                                              Icon(
-                                                                Icons.star,
-                                                                color: Colors.amber,
-                                                              ),
-                                                          onRatingUpdate: (rating) {
-                                                            rate(
-                                                                rating.toInt(),
-                                                                snapshot.data
-                                                                    .data[index].id);
-                                                          },
-                                                        ),
-                                                      ],
+                                                    RatingBar.builder(
+                                                      itemSize: 25,
+                                                      initialRating: snapshot
+                                                          .data
+                                                          .data[
+                                                      index]
+                                                          .recruiter
+                                                          .rating ==
+                                                          null
+                                                          ? 0
+                                                          : snapshot
+                                                          .data
+                                                          .data[index]
+                                                          .recruiter
+                                                          .rating
+                                                          .toDouble(),
+                                                      minRating: 1,
+                                                      direction:
+                                                      Axis.horizontal,
+                                                      itemCount: 5,
+                                                      itemPadding: EdgeInsets
+                                                          .symmetric(
+                                                          horizontal:
+                                                          4.0),
+                                                      itemBuilder:
+                                                          (context, _) =>
+                                                          Icon(
+                                                            Icons.star,
+                                                            color: Colors.amber,
+                                                          ),
+                                                      onRatingUpdate:
+                                                          (rating) {
+                                                        rate(
+                                                            rating.toInt(),
+                                                            snapshot
+                                                                .data
+                                                                .data[index]
+                                                                .id);
+                                                      },
                                                     ),
                                                     SizedBox(
                                                       height: 5,
@@ -448,66 +505,67 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                           return AlertDialog(
                                                             title: Row(
                                                               children: [
-                                                                Text('Give a review to the user'),
+                                                                Text(
+                                                                    'Give a review to the user'),
                                                               ],
                                                             ),
-                                                            content: TextFormField(
+                                                            content:
+                                                                TextFormField(
                                                               textInputAction:
-                                                              TextInputAction.done,
+                                                                  TextInputAction
+                                                                      .done,
                                                               controller:
-                                                              reviewController,
+                                                                  reviewController,
                                                               maxLines: 4,
                                                               maxLength: 100,
                                                               decoration:
-                                                              InputDecoration(
-                                                                  focusedBorder:
-                                                                  OutlineInputBorder(
-                                                                    borderSide: BorderSide(
+                                                                  InputDecoration(
+                                                                      focusedBorder:
+                                                                          OutlineInputBorder(
+                                                                        borderSide:
+                                                                            BorderSide(color: Colors.white),
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10.0),
+                                                                      ),
+                                                                      enabledBorder:
+                                                                          UnderlineInputBorder(
+                                                                        borderSide:
+                                                                            BorderSide(color: Colors.white),
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10.0),
+                                                                      ),
+                                                                      filled:
+                                                                          true,
+                                                                      hintStyle:
+                                                                          TextStyle(
                                                                         color: Colors
-                                                                            .white),
-                                                                    borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                        10.0),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                  UnderlineInputBorder(
-                                                                    borderSide: BorderSide(
-                                                                        color: Colors
-                                                                            .white),
-                                                                    borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                        10.0),
-                                                                  ),
-                                                                  filled: true,
-                                                                  hintStyle:
-                                                                  TextStyle(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontSize: 16,
-                                                                  ),
-                                                                  hintText: snapshot
-                                                                      .data
-                                                                      .data[index]
-                                                                      .recruiter
-                                                                      .review,
-                                                                  fillColor: Colors
-                                                                      .grey
-                                                                      .shade200),
+                                                                            .black,
+                                                                        fontSize:
+                                                                            16,
+                                                                      ),
+                                                                      hintText: snapshot
+                                                                          .data
+                                                                          .data[
+                                                                              index]
+                                                                          .recruiter
+                                                                          .review,
+                                                                      fillColor: Colors
+                                                                          .grey
+                                                                          .shade200),
                                                             ),
                                                             actions: <Widget>[
                                                               FlatButton(
-                                                                child:
-                                                                new Text('Cancel'),
+                                                                child: new Text(
+                                                                    'Cancel'),
                                                                 onPressed: () {
-                                                                  Navigator.of(context)
+                                                                  Navigator.of(
+                                                                          context)
                                                                       .pop();
                                                                 },
                                                               ),
                                                               FlatButton(
-                                                                child:
-                                                                new Text('Submit'),
+                                                                child: new Text(
+                                                                    'Submit'),
                                                                 onPressed: () {
                                                                   review(
                                                                       reviewController
@@ -515,7 +573,8 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                                           .toString(),
                                                                       snapshot
                                                                           .data
-                                                                          .data[index]
+                                                                          .data[
+                                                                              index]
                                                                           .id);
                                                                 },
                                                               )
@@ -533,7 +592,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                     color: Colors.white,
                                                     size: 20,
                                                   ),
-                                                  onTap: (){
+                                                  onTap: () {
                                                     return showDialog(
                                                         context: context,
                                                         builder: (context) {
@@ -545,7 +604,12 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                                 SizedBox(
                                                                   width: 10,
                                                                 ),
-                                                                Icon(Icons.warning_rounded,color: Colors.red,),
+                                                                Icon(
+                                                                  Icons
+                                                                      .warning_rounded,
+                                                                  color: Colors
+                                                                      .red,
+                                                                ),
                                                               ],
                                                             ),
                                                             content: Container(
@@ -554,50 +618,50 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                                 children: [
                                                                   TextFormField(
                                                                     textInputAction:
-                                                                    TextInputAction.done,
+                                                                        TextInputAction
+                                                                            .done,
                                                                     controller:
-                                                                    reportController,
-                                                                    decoration: ThemeHelper().textInputDecoration(
-                                                                        'Remark'),
+                                                                        reportController,
+                                                                    decoration:
+                                                                        ThemeHelper()
+                                                                            .textInputDecoration('Remark'),
                                                                   ),
                                                                   SizedBox(
                                                                     height: 10,
                                                                   ),
                                                                   TextFormField(
                                                                     textInputAction:
-                                                                    TextInputAction.done,
+                                                                        TextInputAction
+                                                                            .done,
                                                                     controller:
-                                                                    detailsController,
+                                                                        detailsController,
                                                                     maxLines: 3,
-                                                                    maxLength: 100,
+                                                                    maxLength:
+                                                                        100,
                                                                     decoration:
-                                                                    InputDecoration(
+                                                                        InputDecoration(
                                                                       focusedBorder:
-                                                                      OutlineInputBorder(
-                                                                        borderSide: BorderSide(
-                                                                            color: Colors
-                                                                                .white),
+                                                                          OutlineInputBorder(
+                                                                        borderSide:
+                                                                            BorderSide(color: Colors.white),
                                                                         borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(
-                                                                            10.0),
+                                                                            BorderRadius.circular(10.0),
                                                                       ),
                                                                       enabledBorder:
-                                                                      UnderlineInputBorder(
-                                                                        borderSide: BorderSide(
-                                                                            color: Colors
-                                                                                .white),
+                                                                          UnderlineInputBorder(
+                                                                        borderSide:
+                                                                            BorderSide(color: Colors.white),
                                                                         borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(
-                                                                            10.0),
+                                                                            BorderRadius.circular(10.0),
                                                                       ),
-                                                                      filled: true,
+                                                                      filled:
+                                                                          true,
                                                                       hintStyle:
-                                                                      TextStyle(
+                                                                          TextStyle(
                                                                         color: Colors
                                                                             .black,
-                                                                        fontSize: 16,
+                                                                        fontSize:
+                                                                            16,
                                                                       ),
                                                                     ),
                                                                   ),
@@ -606,25 +670,29 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                             ),
                                                             actions: <Widget>[
                                                               FlatButton(
-                                                                child:
-                                                                new Text('Cancel'),
+                                                                child: new Text(
+                                                                    'Cancel'),
                                                                 onPressed: () {
-                                                                  Navigator.of(context)
+                                                                  Navigator.of(
+                                                                          context)
                                                                       .pop();
                                                                 },
                                                               ),
                                                               FlatButton(
-                                                                child:
-                                                                new Text('Submit'),
+                                                                child: new Text(
+                                                                    'Submit'),
                                                                 onPressed: () {
                                                                   report(
                                                                       reportController
                                                                           .text
                                                                           .toString(),
-                                                                      detailsController.text.toString(),
+                                                                      detailsController
+                                                                          .text
+                                                                          .toString(),
                                                                       snapshot
                                                                           .data
-                                                                          .data[index]
+                                                                          .data[
+                                                                              index]
                                                                           .id);
                                                                 },
                                                               )
@@ -648,7 +716,10 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                         height: 50,
                                         width: 50,
                                         child: IconBox(
-                                          child: Icon(Icons.check,color: Colors.green,),
+                                          child: Icon(
+                                            Icons.check,
+                                            color: Colors.green,
+                                          ),
                                           bgColor: Colors.white,
                                         ),
                                       ))
@@ -662,7 +733,8 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                   } else if (snapshot.connectionState == ConnectionState.none) {
                     return Text('Error'); // error
                   } else {
-                    return Center(child: CircularProgressIndicator()); // loading
+                    return Center(
+                        child: CircularProgressIndicator()); // loading
                   }
                 },
               )),

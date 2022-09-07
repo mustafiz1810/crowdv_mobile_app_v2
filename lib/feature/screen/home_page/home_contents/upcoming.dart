@@ -88,7 +88,6 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                           image: null,
                           packageImage: PackageImage.Image_3,
                           title: 'No Opportunity',
-                          subTitle: 'No  Opportunity available',
                           titleTextStyle: TextStyle(
                             fontSize: 22,
                             color: Color(0xff9da9c7),
@@ -124,7 +123,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height / 3.3,
+                                height: MediaQuery.of(context).size.height / 3.7,
                                 margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
@@ -134,7 +133,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                     BoxShadow(
                                       color: shadowColor.withOpacity(0.6),
                                       spreadRadius: -1,
-                                      blurRadius: 4,
+                                      blurRadius: 3,
                                       // offset: Offset(0, 1), // changes position of shadow
                                     ),
                                   ],
@@ -202,53 +201,47 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                             mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                              Row(
                                                 children: [
-                                                  Row(
-                                                    children: [
-                                                      Icon(
-                                                        Icons
-                                                            .watch_later_outlined,
-                                                        color: Colors.black,
-                                                        size: 15,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                      Text(
-                                                        snapshot.data.data[index]
-                                                            .startTime,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                      Text(
-                                                        "-",
-                                                      ),
-                                                      SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                      Text(
-                                                        snapshot.data.data[index]
-                                                            .endTime,
-                                                      ),
-                                                    ],
+                                                  Icon(
+                                                    Icons.calendar_today,
+                                                    size: 15,
                                                   ),
-                                                  Row(
-                                                    children: [
-                                                      Icon(
-                                                        Icons.calendar_today,
-                                                        size: 15,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                      Text(snapshot
-                                                          .data.data[index].date),
-                                                    ],
-                                                  )
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Text(snapshot
+                                                      .data.data[index].date),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons
+                                                        .watch_later_outlined,
+                                                    color: Colors.black,
+                                                    size: 15,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Text(
+                                                    snapshot.data.data[index]
+                                                        .startTime,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Text(
+                                                    "-",
+                                                  ),
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Text(
+                                                    snapshot.data.data[index]
+                                                        .endTime,
+                                                  ),
                                                 ],
                                               ),
                                               // Container(

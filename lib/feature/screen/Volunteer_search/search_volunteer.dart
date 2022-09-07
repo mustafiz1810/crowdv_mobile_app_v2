@@ -17,11 +17,12 @@ import '../../../widgets/icon_box.dart';
 
 class VolunteerSearchPage extends StatefulWidget {
   final dynamic id;
-  final List<int> category ;
+  final List<int> category;
   final List<String> taskType;
   final String state, city;
 
-  VolunteerSearchPage({this.category, this.taskType, this.state, this.city,this.id});
+  VolunteerSearchPage(
+      {this.category, this.taskType, this.state, this.city, this.id});
 
   @override
   State<StatefulWidget> createState() {
@@ -190,8 +191,8 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                     itemCount: snapshot.data.data.length,
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding:const EdgeInsets.only(
-                            left: 15, top: 10, right: 15),
+                        padding:
+                            const EdgeInsets.only(left: 15, top: 10, right: 15),
                         child: InkWell(
                           onTap: () {
                             print(
@@ -259,7 +260,8 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                             size: 20,
                                           ),
                                           Text(
-                                            snapshot.data.data[index].city.toString(),
+                                            snapshot.data.data[index].city
+                                                .toString(),
                                             style: TextStyle(
                                                 fontSize: 15,
                                                 color: Colors.blueAccent,
@@ -324,11 +326,53 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                                   SizedBox(
                                                     width: 5,
                                                   ),
-                                                  Text(snapshot.data.data[index].date.toString()),
+                                                  Text(snapshot
+                                                      .data.data[index].date
+                                                      .toString()),
                                                 ],
                                               )
                                             ],
                                           ),
+                                          Container(
+                                            height: 30,
+                                            width: 70,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(18),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: shadowColor
+                                                      .withOpacity(0.6),
+                                                  spreadRadius: -1,
+                                                  blurRadius: 2,
+                                                  // offset: Offset(0, 1), // changes position of shadow
+                                                ),
+                                              ],
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  snapshot.data.data[index]
+                                                      .taskType,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                      color: Colors.blue,
+                                                      fontSize: 10),
+                                                ),
+                                                SizedBox(
+                                                  width: 1,
+                                                ),
+                                                Icon(
+                                                  Icons.work_outline_rounded,
+                                                  color: Colors.blue,
+                                                  size: 14,
+                                                ),
+                                              ],
+                                            ),
+                                          )
                                         ],
                                       )
                                     ],

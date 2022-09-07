@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../data/models/faq_model.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/view_utils/colors.dart';
-
+import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/custom_expansion_tile.dart' as custom;
 class Faq extends StatefulWidget {
   const Faq({Key key}) : super(key: key);
 
@@ -39,7 +39,6 @@ class _FaqState extends State<Faq> {
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
     if (response.statusCode == 200) {
-      print(data);
       return FaqModel.fromJson(data);
     } else {
       return FaqModel.fromJson(data);
@@ -116,87 +115,70 @@ class _FaqState extends State<Faq> {
                               ListView.builder(
                                 scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
-                                itemCount: snapshot.data.data.volunteer.length,
+                                itemCount: snapshot.data.data.recruiter.length,
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                      decoration: BoxDecoration(
-                                          color:Colors.white,
-                                          borderRadius: BorderRadius.all(Radius.circular(8))
-                                      ),
-                                      width: 100,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width:MediaQuery.of(context).size.width,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xFF01A1B7),
-                                                borderRadius: BorderRadius.only(topLeft:Radius.circular(8),topRight:Radius.circular(8) )
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(10.0),
-                                              child: Text(snapshot.data.data.volunteer[index].question,
-                                                style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 14),
+                                        decoration: BoxDecoration(
+                                            color:Colors.white,
+                                            borderRadius: BorderRadius.all(Radius.circular(8))
+                                        ),
+                                        width: 100,
+                                        child:custom.ExpansionTile(
+                                          headerBackgroundColor: Color(0xFF01A1B7),
+                                          iconColor: Colors.white,
+                                          title: Text(snapshot.data.data.recruiter[index].question,
+                                            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 14),
+                                          ),
+                                          children: <Widget>[
+                                            ListTile(
+                                              title:  Padding(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: Text(
+                                                  snapshot.data.data.recruiter[index].answer,
+                                                  style: TextStyle(color:Color(0xFF003049),fontWeight: FontWeight.bold,fontSize: 14),
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: Text(
-                                              snapshot.data.data.volunteer[index].answer,
-                                              style: TextStyle(color:Color(0xFF003049),fontWeight: FontWeight.bold,fontSize: 14),
-                                            ),
-                                          ),
-
-                                        ],
-                                      ),
+                                            )
+                                          ],
+                                        )
                                     ),
                                   );
+
                                 },
                               ),
                               ListView.builder(
                                 scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
-                                itemCount:snapshot.data.data.recruiter.length,
+                                itemCount:snapshot.data.data.volunteer.length,
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                      decoration: BoxDecoration(
-                                          color:Colors.white,
-                                          borderRadius: BorderRadius.all(Radius.circular(8))
-                                      ),
-                                      width: 100,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width:MediaQuery.of(context).size.width,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xFF01A1B7),
-                                                borderRadius: BorderRadius.only(topLeft:Radius.circular(8),topRight:Radius.circular(8) )
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(10.0),
-                                              child: Text(
-                                                snapshot.data.data.recruiter[index].question,
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 14),
+                                        decoration: BoxDecoration(
+                                            color:Colors.white,
+                                            borderRadius: BorderRadius.all(Radius.circular(8))
+                                        ),
+                                        width: 100,
+                                        child:custom.ExpansionTile(
+                                          headerBackgroundColor: Color(0xFF01A1B7),
+                                          iconColor: Colors.white,
+                                          title: Text(snapshot.data.data.volunteer[index].question,
+                                            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 14),
+                                          ),
+                                          children: <Widget>[
+                                            ListTile(
+                                              title:  Padding(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: Text(
+                                                  snapshot.data.data.volunteer[index].answer,
+                                                  style: TextStyle(color:Color(0xFF003049),fontWeight: FontWeight.bold,fontSize: 14),
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: Text(
-                                              snapshot.data.data.recruiter[index].answer,
-                                              style: TextStyle(color:Color(0xFF003049),fontWeight: FontWeight.bold,fontSize: 14),
-                                            ),
-                                          ),
-
-                                        ],
-                                      ),
+                                            )
+                                          ],
+                                        )
                                     ),
                                   );
                                 },

@@ -38,7 +38,7 @@ class _SettingsState extends State<Settings> {
     });
   }
 
-  void save(app, sms, email) async {
+  void save( app, sms, email) async {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'notification/channel-setting'),
@@ -47,7 +47,7 @@ class _SettingsState extends State<Settings> {
             "Accept": "application/json"
           },
           body: {
-            'is_app_notification': app.toString(),
+            'is_database_notification': app.toString(),
             'is_sms_notification': sms.toString(),
             'is_email_notification': email.toString(),
           });

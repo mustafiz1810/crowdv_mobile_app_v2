@@ -286,8 +286,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                         SizedBox(
                                                           width: 5,
                                                         ),
-                                                        Text(DateFormat.yMMMd()
-                                                            .format(snapshot.data.data.date)),
+                                                        Text(snapshot.data.data.date.toString()),
                                                       ],
                                                     )
                                                   ],

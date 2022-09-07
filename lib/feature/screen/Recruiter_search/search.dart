@@ -24,9 +24,11 @@ class SearchPage extends StatefulWidget {
   final List<int> membership;
   final List<String> gender;
   final List<String> profession;
+  final int min_age;
+  final int max_age;
    String state,city;
 
-  SearchPage({this.category, this.membership,this.gender,this.profession,this.state,this.city,this.id});
+  SearchPage({this.category, this.membership,this.min_age,this.max_age,this.gender,this.profession,this.state,this.city,this.id});
 
   @override
   State<StatefulWidget> createState() {
@@ -37,16 +39,17 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   String token = "";
   String role = "";
-  String country;
   TextEditingController volunteerController = TextEditingController();
 
   @override
   void initState() {
-    print(widget.city);
-    print(widget.state);
+    // print(widget.city);
+    // print(widget.state);
+    // print(widget.min_age);
+    // print(widget.max_age);
     // print(widget.category);
     // print(widget.membership);
-    // print(widget.membership);
+    // print(widget.profession);
     // print(widget.gender);
 
     getCred();
@@ -103,7 +106,7 @@ class _SearchPageState extends State<SearchPage> {
   Future<CategoryVolunteer> getCateVolunteerApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL +
-            'volunteer-search?state=${widget.state}&city=${widget.city}&category_id=${widget.category}&gender=${widget.gender}&membership_id=${widget.membership}&search=${volunteerController.text}&profession=${widget.profession}'),
+            'volunteer-search?state=${widget.state}&city=${widget.city}&category_id=${widget.category}&gender=${widget.gender}&membership_id=${widget.membership}&search=${volunteerController.text}&profession=${widget.profession}&min_age=${widget.min_age}&max_age=${widget.max_age}'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
     print(data);
@@ -323,43 +326,61 @@ class _SearchPageState extends State<SearchPage> {
                                           SizedBox(
                                             width: 5,
                                           ),
-                                          IconBox(
-                                            child: Icon(
-                                              Icons.add,
-                                              color: Colors.white,
-                                              size: 18,
-                                            ),
-                                            onTap: () {
-                                              showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return AlertDialog(
-                                                      title: Container(
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Text(
-                                                            'Pick Opportunity',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white),
+                                          Container(
+                                            width: 80,
+                                            height: 28,
+                                            child: OutlinedButton(
+                                              onPressed: (){
+                                                showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: Container(
+                                                          child: Padding(
+                                                            padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                            child: Text(
+                                                              'Pick Opportunity',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
                                                           ),
+                                                          color: primaryColor,
                                                         ),
-                                                        color: primaryColor,
-                                                      ),
-                                                      content:
-                                                          inviteAlertDialogContainer(
-                                                              context,
-                                                              snapshot
-                                                                  .data
-                                                                  .data[index]
-                                                                  .id),
-                                                    );
-                                                  });
-                                            },
-                                            bgColor: Colors.blue,
+                                                        content:
+                                                        inviteAlertDialogContainer(
+                                                            context,
+                                                            snapshot
+                                                                .data
+                                                                .data[index]
+                                                                .id),
+                                                      );
+                                                    });
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    'Invite',
+                                                    style: TextStyle(color: Colors.blue,fontSize: 12),
+                                                  ),
+                                                  SizedBox(width: 1,),
+                                                  Icon(
+                                                    Icons.add,
+                                                    color: Colors.blue,
+                                                    size: 16,
+                                                  ),
+                                                ],
+                                              ),
+                                              style: OutlinedButton.styleFrom(
+                                                side: BorderSide( color: Colors.blue),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(18.0),
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),

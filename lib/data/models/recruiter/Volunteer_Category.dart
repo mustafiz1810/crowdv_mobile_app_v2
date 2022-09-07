@@ -54,6 +54,9 @@ class Datum {
     this.serviceCity,
     this.serviceState,
     this.serviceZipCode,
+    this.isEmailNotification,
+    this.isDatabaseNotification,
+    this.isSmsNotification,
     this.workingHours,
     this.rating,
     this.opportunities,
@@ -70,8 +73,8 @@ class Datum {
   String state;
   String city;
   String zipCode;
-  List<int> typeOfDisability;
-  String profession;
+  List<dynamic> typeOfDisability;
+  dynamic profession;
   bool termsAndConditions;
   Membership membership;
   String gender;
@@ -81,6 +84,9 @@ class Datum {
   String serviceCity;
   String serviceState;
   String serviceZipCode;
+  bool isEmailNotification;
+  bool isDatabaseNotification;
+  bool isSmsNotification;
   int workingHours;
   int rating;
   int opportunities;
@@ -97,7 +103,7 @@ class Datum {
     state: json["state"],
     city: json["city"],
     zipCode: json["zip_code"],
-    typeOfDisability: List<int>.from(json["type_of_disability"].map((x) => x)),
+    typeOfDisability: List<dynamic>.from(json["type_of_disability"].map((x) => x)),
     profession: json["profession"],
     termsAndConditions: json["terms_and_conditions"],
     membership: Membership.fromJson(json["membership"]),
@@ -108,6 +114,9 @@ class Datum {
     serviceCity: json["service_city"],
     serviceState: json["service_state"],
     serviceZipCode: json["service_zip_code"],
+    isEmailNotification: json["is_email_notification"],
+    isDatabaseNotification: json["is_database_notification"],
+    isSmsNotification: json["is_sms_notification"],
     workingHours: json["working_hours"],
     rating: json["rating"],
     opportunities: json["opportunities"],
@@ -136,6 +145,9 @@ class Datum {
     "service_city": serviceCity,
     "service_state": serviceState,
     "service_zip_code": serviceZipCode,
+    "is_email_notification": isEmailNotification,
+    "is_database_notification": isDatabaseNotification,
+    "is_sms_notification": isSmsNotification,
     "working_hours": workingHours,
     "rating": rating,
     "opportunities": opportunities,

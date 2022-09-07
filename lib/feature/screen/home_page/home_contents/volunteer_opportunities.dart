@@ -80,7 +80,6 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                           image: null,
                           packageImage: PackageImage.Image_3,
                           title: 'No Opportunity',
-                          subTitle: 'No  Opportunity available',
                           titleTextStyle: TextStyle(
                             fontSize: 22,
                             color: Color(0xff9da9c7),
@@ -213,38 +212,77 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                 ),
                                                 SizedBox(width: 5,),
                                                 IconBox(
+                                                  onTap: () {
+                                                    SweetAlert.show(
+                                                        context,
+                                                        subtitle:
+                                                        "Are you sure?",
+                                                        style:
+                                                        SweetAlertStyle
+                                                            .confirm,
+                                                        showCancelButton:
+                                                        true,
+                                                        onPress: (bool
+                                                        isConfirm) {
+                                                          if (isConfirm) {
+                                                            //Return false to keep dialog
+                                                            if (isConfirm) {
+                                                              // SweetAlert.show(context,
+                                                              //     subtitle:
+                                                              //         "Deleting...",
+                                                              //     style:
+                                                              //         SweetAlertStyle
+                                                              //             .loading);
+                                                              new Future
+                                                                  .delayed(
+                                                                  new Duration(
+                                                                      seconds:
+                                                                      1),
+                                                                      () {
+                                                                        getRequestWithoutParam(
+                                                                            '/api/v1/volunteer-request-for-task-complete/${snapshot.data.data[index].taskId}',
+                                                                            {
+                                                                              'Content-Type':
+                                                                              "application/json",
+                                                                              "Authorization":
+                                                                              "Bearer ${token}"
+                                                                            }).then(
+                                                                                (value) async {
+                                                                              SweetAlert.show(
+                                                                                  context,
+                                                                                  title:
+                                                                                  "Your Task is completed",
+                                                                                  subtitle:
+                                                                                  "Please go to History ",
+                                                                                  style:
+                                                                                  SweetAlertStyle
+                                                                                      .success,
+                                                                                  onPress: (bool
+                                                                                  isConfirm) {
+                                                                                    if (isConfirm) {
+                                                                                      // return false to keep dialog
+                                                                                    }
+                                                                                    return null;
+                                                                                  });
+                                                                              setState(() {});
+                                                                            });
+                                                                  });
+                                                            } else {
+                                                              SweetAlert.show(
+                                                                  context,
+                                                                  subtitle:
+                                                                  "Canceled!",
+                                                                  style: SweetAlertStyle
+                                                                      .error);
+                                                            }
+                                                            return false;
+                                                          }
+                                                          return null;
+                                                        });
+                                                  },
                                                   child: Icon(Icons.check_circle,color: Colors.green),
                                                   bgColor: Colors.white,
                                                   borderColor: Colors.black12,
-                                                  onTap: (){
-                                                    getRequestWithoutParam(
-                                                        '/api/v1/volunteer-request-for-task-complete/${snapshot.data.data[index].taskId}',
-                                                        {
-                                                          'Content-Type':
-                                                          "application/json",
-                                                          "Authorization":
-                                                          "Bearer ${token}"
-                                                        }).then(
-                                                            (value) async {
-                                                          SweetAlert.show(
-                                                              context,
-                                                              title:
-                                                              "Your Task is completed",
-                                                              subtitle:
-                                                              "Please go to History ",
-                                                              style:
-                                                              SweetAlertStyle
-                                                                  .success,
-                                                              onPress: (bool
-                                                              isConfirm) {
-                                                                if (isConfirm) {
-                                                                  // return false to keep dialog
-                                                                }
-                                                                return null;
-                                                              });
-                                                          setState(() {});
-                                                        });
-                                                  },
                                                 ),
                                               ],
                                             ):Container(),

@@ -48,7 +48,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                     (Route<dynamic> route) => false);
           case 1:
             widget.role=='volunteer'?
-             Get.to(VolunteerHistory()):Get.to(RecruiterHistory());
+             Get.to(VolunteerHistory(id: widget.id,)):Get.to(RecruiterHistory(id: widget.id,));
         }
       },
       selectedLabelStyle: TextStyle(

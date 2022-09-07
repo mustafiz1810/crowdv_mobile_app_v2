@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/data/models/recruiter/recruiter_history_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
+import 'package:crowdv_mobile_app/feature/screen/profile/common_profile.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
+import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:empty_widget/empty_widget.dart';
@@ -15,6 +17,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class RecruiterHistory extends StatefulWidget {
+  final id;
+  RecruiterHistory({this.id});
   @override
   _RecruiterHistoryState createState() => _RecruiterHistoryState();
 }
@@ -24,6 +28,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
   TextEditingController reportController = TextEditingController();
   TextEditingController detailsController = TextEditingController();
   String token = "";
+  String role = "";
 
   @override
   void initState() {
@@ -35,6 +40,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       token = pref.getString("user");
+      role = pref.getString("role");
     });
   }
 
@@ -175,6 +181,10 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
           backgroundColor: primaryColor,
           title: Text('History'),
         ),
+        bottomNavigationBar: CustomBottomNavigation(
+          id:widget.id,
+          role: role,
+        ),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -308,11 +318,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                         size: 20,
                                                       ),
                                                       Text(
-                                                        snapshot.data.data[index].city !=
-                                                            null
-                                                            ? snapshot
-                                                            .data.data[index].city
-                                                            : "",
+                                                        snapshot.data.data[index].city.toString(),
                                                         style: TextStyle(
                                                             fontSize: 15,
                                                             color: Colors.blueAccent,
@@ -361,11 +367,14 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                               children: [
                                                 Column(
                                                   children: [
-                                                    CircleAvatar(
-                                                      backgroundImage: NetworkImage(
-                                                          snapshot.data.data[index]
-                                                              .volunteer.image),
-                                                      radius: 20,
+                                                    InkWell(
+                                                      child: CircleAvatar(
+                                                        backgroundImage: NetworkImage(
+                                                            snapshot.data.data[index]
+                                                                .volunteer.image),
+                                                        radius: 20,
+                                                      ),
+                                                      onTap: (){Get.to(()=>CommonProfile(id: snapshot.data.data[index].volunteer.id,));}
                                                     ),
                                                   ],
                                                 ),
@@ -376,56 +385,57 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                   crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                      snapshot.data.data[index]
-                                                          .volunteer.firstName +
-                                                          " " +
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(width: 5,),
+                                                        Text(
                                                           snapshot.data.data[index]
-                                                              .volunteer.lastName,
-                                                      maxLines: 1,
-                                                      overflow: TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                        fontSize: 14,),
+                                                              .volunteer.firstName +
+                                                              " " +
+                                                              snapshot.data.data[index]
+                                                                  .volunteer.lastName,
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          style: TextStyle(
+                                                            fontSize: 14,),
+                                                        ),
+                                                      ],
                                                     ),
                                                     SizedBox(
                                                       height: 5,
                                                     ),
-                                                    Row(
-                                                      children: [
-                                                        RatingBar.builder(
-                                                          itemSize: 20,
-                                                          initialRating: snapshot
-                                                              .data
-                                                              .data[index]
-                                                              .volunteer
-                                                              .rating ==
-                                                              null
-                                                              ? 0
-                                                              : snapshot
-                                                              .data
-                                                              .data[index]
-                                                              .volunteer
-                                                              .rating
-                                                              .toDouble(),
-                                                          minRating: 1,
-                                                          direction: Axis.horizontal,
-                                                          itemCount: 5,
-                                                          itemPadding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 4.0),
-                                                          itemBuilder: (context, _) =>
-                                                              Icon(
-                                                                Icons.star,
-                                                                color: Colors.amber,
-                                                              ),
-                                                          onRatingUpdate: (rating) {
-                                                            rate(
-                                                                rating.toInt(),
-                                                                snapshot.data
-                                                                    .data[index].id);
-                                                          },
-                                                        ),
-                                                      ],
+                                                    RatingBar.builder(
+                                                      itemSize: 25,
+                                                      initialRating: snapshot
+                                                          .data
+                                                          .data[index]
+                                                          .volunteer
+                                                          .rating ==
+                                                          null
+                                                          ? 0
+                                                          : snapshot
+                                                          .data
+                                                          .data[index]
+                                                          .volunteer
+                                                          .rating
+                                                          .toDouble(),
+                                                      minRating: 1,
+                                                      direction: Axis.horizontal,
+                                                      itemCount: 5,
+                                                      itemPadding:
+                                                      EdgeInsets.symmetric(
+                                                          horizontal: 4.0),
+                                                      itemBuilder: (context, _) =>
+                                                          Icon(
+                                                            Icons.star,
+                                                            color: Colors.amber,
+                                                          ),
+                                                      onRatingUpdate: (rating) {
+                                                        rate(
+                                                            rating.toInt(),
+                                                            snapshot.data
+                                                                .data[index].id);
+                                                      },
                                                     ),
                                                     SizedBox(
                                                       height: 5,

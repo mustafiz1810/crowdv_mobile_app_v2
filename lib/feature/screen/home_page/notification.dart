@@ -1,21 +1,16 @@
-import 'dart:convert';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/applied_volunteer.dart';
+import 'package:crowdv_mobile_app/feature/screen/profile/common_profile.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
-import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:inkwell_splash/inkwell_splash.dart';
 import '../../../data/models/notification_model.dart';
-import '../../../utils/constants.dart';
-import 'home_contents/volunteer_opportunities.dart';
 import 'home_contents/widgets/details.dart';
 
 class NotificationPage extends StatefulWidget {
-  final dynamic data, token,role;
-  NotificationPage({this.data, this.token,this.role});
+  final dynamic id,data, token,role;
+  NotificationPage({this.id,this.data, this.token,this.role});
 
   @override
   _NotificationPageState createState() => _NotificationPageState();
@@ -70,13 +65,17 @@ class _NotificationPageState extends State<NotificationPage> {
                             'Content-Type': "application/json",
                             "Authorization": "Bearer ${widget.token}"
                           }).then((value) async {
-                            Navigator.push(
+                            widget.data[index].data.opportunityId != null ?Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => OpportunityDetails(
                                       role: widget.role,
                                       id: widget.data[index].data.opportunityId,
                                       token: widget.token)),
+                            ):Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CommonProfile(id: widget.id,)),
                             );
                             setState(() {});
                           });

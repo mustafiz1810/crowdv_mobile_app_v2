@@ -50,6 +50,7 @@ class Datum {
     this.benefits,
     this.isPublic,
     this.status,
+    this.applyStatus,
     this.category,
     this.eligibility,
     this.volunteer,
@@ -63,7 +64,7 @@ class Datum {
   String city;
   String zipCode;
   String taskType;
-  DateTime date;
+  String date;
   String datumStartTime;
   DateTime startTime;
   String datumEndTime;
@@ -72,6 +73,7 @@ class Datum {
   dynamic benefits;
   bool isPublic;
   String status;
+  int applyStatus;
   Category category;
   List<Eligibility> eligibility;
   Recruiter volunteer;
@@ -85,7 +87,7 @@ class Datum {
     city: json["city"],
     zipCode: json["zip_code"],
     taskType: json["task_type"],
-    date: DateTime.parse(json["date"]),
+    date: json["date"],
     datumStartTime: json["start_time"],
     startTime: DateTime.parse(json["startTime"]),
     datumEndTime: json["end_time"],
@@ -94,6 +96,7 @@ class Datum {
     benefits: json["benefits"],
     isPublic: json["is_public"],
     status: json["status"],
+    applyStatus: json["apply_status"],
     category: Category.fromJson(json["category"]),
     eligibility: List<Eligibility>.from(json["eligibility"].map((x) => Eligibility.fromJson(x))),
     volunteer: Recruiter.fromJson(json["volunteer"]),
@@ -108,7 +111,7 @@ class Datum {
     "city": city,
     "zip_code": zipCode,
     "task_type": taskType,
-    "date": "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
+    "date": date,
     "start_time": datumStartTime,
     "startTime": startTime.toIso8601String(),
     "end_time": datumEndTime,
@@ -117,6 +120,7 @@ class Datum {
     "benefits": benefits,
     "is_public": isPublic,
     "status": status,
+    "apply_status": applyStatus,
     "category": category.toJson(),
     "eligibility": List<dynamic>.from(eligibility.map((x) => x.toJson())),
     "volunteer": volunteer.toJson(),
@@ -226,6 +230,7 @@ class Recruiter {
     this.city,
     this.zipCode,
     this.role,
+    this.profileRating,
     this.rating,
     this.review,
   });
@@ -237,13 +242,14 @@ class Recruiter {
   String phone;
   String image;
   String gender;
-  String typeOfDisability;
+  dynamic typeOfDisability;
   String state;
   String city;
   String zipCode;
   String role;
+  int profileRating;
   int rating;
-  dynamic review;
+  String review;
 
   factory Recruiter.fromJson(Map<String, dynamic> json) => Recruiter(
     id: json["id"],
@@ -253,13 +259,14 @@ class Recruiter {
     phone: json["phone"],
     image: json["image"],
     gender: json["gender"],
-    typeOfDisability: json["type_of_disability"] == null ? null : json["type_of_disability"],
+    typeOfDisability: json["type_of_disability"],
     state: json["state"],
     city: json["city"],
     zipCode: json["zip_code"],
     role: json["role"],
+    profileRating: json["profile_rating"] == null ? null : json["profile_rating"],
     rating: json["rating"],
-    review: json["review"],
+    review: json["review"] == null ? null : json["review"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -270,12 +277,13 @@ class Recruiter {
     "phone": phone,
     "image": image,
     "gender": gender,
-    "type_of_disability": typeOfDisability == null ? null : typeOfDisability,
+    "type_of_disability": typeOfDisability,
     "state": state,
     "city": city,
     "zip_code": zipCode,
     "role": role,
+    "profile_rating": profileRating == null ? null : profileRating,
     "rating": rating,
-    "review": review,
+    "review": review == null ? null : review,
   };
 }

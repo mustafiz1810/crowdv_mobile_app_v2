@@ -5,6 +5,7 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Trainin
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/widget/videos_screen.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
+import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +16,15 @@ import 'package:http/http.dart' as http;
 
 // import 'package:random_color/random_color.dart';
 class TrainingVideo extends StatefulWidget {
-  final id;
-  TrainingVideo({this.id});
+  final id,userId;
+  TrainingVideo({this.id,this.userId});
   @override
   State<TrainingVideo> createState() => _TrainingVideoState();
 }
 
 class _TrainingVideoState extends State<TrainingVideo> {
   String token = "";
+  String role = "";
   // RandomColor _randomColor = RandomColor();
   @override
   void initState() {
@@ -34,6 +36,7 @@ class _TrainingVideoState extends State<TrainingVideo> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       token = pref.getString("user");
+      role = pref.getString("role");
     });
   }
 
@@ -103,30 +106,9 @@ class _TrainingVideoState extends State<TrainingVideo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SizedBox(
-          height: 50,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: primaryColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30)),
-            ),
-            // onPressed: isDisabled == true
-            //     ? null
-            //     :
-            //     () {
-            //   Get.to(() => Test());
-            // },
-            onPressed: () {
-              Get.to(() => Test(
-                    trainingId: widget.id,
-                  ));
-            },
-            child: Text("Take the test"),
-          ),
-        ),
+      bottomNavigationBar: CustomBottomNavigation(
+        id:widget.userId,
+        role: role,
       ),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
@@ -232,6 +214,27 @@ class _TrainingVideoState extends State<TrainingVideo> {
 
               },
             )),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: SizedBox(
+                width: 250,
+                height: 40,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: primaryColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                  ),
+                  onPressed: () {
+                    Get.to(() => Test(
+                      userId:widget.userId,
+                      trainingId: widget.id,
+                    ));
+                  },
+                  child: Text("Take the test"),
+                ),
+              ),
+            )
           ],
         ),
       ),

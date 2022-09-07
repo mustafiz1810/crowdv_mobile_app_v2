@@ -9,6 +9,7 @@ import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:http/http.dart' as http;
+import 'package:sweetalert/sweetalert.dart';
 import '../../../../../widgets/show_toast.dart';
 
 class AppliedVolunteer extends StatefulWidget {
@@ -210,24 +211,6 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
                                             ),
                                           )),
                                       Positioned(
-                                          left: 20,
-                                          top: 139,
-                                          child: Row(
-                                            children: [
-                                              IconBox(
-                                                  child: Icon(
-                                                    Icons.message,
-                                                    color: Colors.white,
-                                                    size: 18,
-                                                  ),
-                                                  bgColor: primaryColor,
-                                                  onTap: () {
-                                                    Get.to(() => ChatUi());
-                                                  }
-                                              ),
-                                            ],
-                                          )),
-                                      Positioned(
                                           right: 18,
                                           top: 139.5,
                                           child: Row(
@@ -245,18 +228,58 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
                                                 child: Center(
                                                   child:  InkWell(
                                                     onTap: () {
-                                                      getRequestWithoutParam(
-                                                          '/api/v1/opportunity/reject/${snapshot.data.data.applyVolunteer[index].id}',
-                                                          {
-                                                            'Content-Type':
-                                                            "application/json",
-                                                            "Authorization":
-                                                            "Bearer ${widget.token}"
-                                                          }).then((value) async {
-                                                        setState(() {});
-                                                        showToast(context,
-                                                            'Volunteer Rejected');
-                                                      });
+                                                      SweetAlert.show(
+                                                          context,
+                                                          subtitle:
+                                                          "Are you sure?",
+                                                          style:
+                                                          SweetAlertStyle
+                                                              .confirm,
+                                                          showCancelButton:
+                                                          true,
+                                                          onPress: (bool
+                                                          isConfirm) {
+                                                            if (isConfirm) {
+                                                              //Return false to keep dialog
+                                                              if (isConfirm) {
+                                                                // SweetAlert.show(context,
+                                                                //     subtitle:
+                                                                //         "Deleting...",
+                                                                //     style:
+                                                                //         SweetAlertStyle
+                                                                //             .loading);
+                                                                new Future
+                                                                    .delayed(
+                                                                    new Duration(
+                                                                        seconds:
+                                                                        1),
+                                                                        () {
+                                                                          getRequestWithoutParam(
+                                                                              '/api/v1/opportunity/reject/${snapshot.data.data.applyVolunteer[index].id}',
+                                                                              {
+                                                                                'Content-Type':
+                                                                                "application/json",
+                                                                                "Authorization":
+                                                                                "Bearer ${widget.token}"
+                                                                              }).then((value) async {
+                                                                            setState(() {});
+                                                                            showToast(context,
+                                                                                'Volunteer Rejected');
+                                                                          });
+                                                                    });
+                                                              } else {
+                                                                SweetAlert.show(
+                                                                    context,
+                                                                    subtitle:
+                                                                    "Canceled!",
+                                                                    style: SweetAlertStyle
+                                                                        .error);
+                                                              }
+                                                              return false;
+                                                            }
+                                                            return null;
+                                                          });
+
                                                     },
                                                     child: Text(
                                                         'Reject',
@@ -283,18 +306,57 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
                                                 child: Center(
                                                   child:  InkWell(
                                                     onTap: () {
-                                                      getRequestWithoutParam(
-                                                          '/api/v1/opportunity/hired/${snapshot.data.data.applyVolunteer[index].id}',
-                                                          {
-                                                            'Content-Type':
-                                                            "application/json",
-                                                            "Authorization":
-                                                            "Bearer ${widget.token}"
-                                                          }).then((value) async {
-                                                        Navigator.pop(context);
-                                                        showToast(context,
-                                                            'Volunteer Hired');
-                                                      });
+                                                      SweetAlert.show(
+                                                          context,
+                                                          subtitle:
+                                                          "Are you sure?",
+                                                          style:
+                                                          SweetAlertStyle
+                                                              .confirm,
+                                                          showCancelButton:
+                                                          true,
+                                                          onPress: (bool
+                                                          isConfirm) {
+                                                            if (isConfirm) {
+                                                              //Return false to keep dialog
+                                                              if (isConfirm) {
+                                                                // SweetAlert.show(context,
+                                                                //     subtitle:
+                                                                //         "Deleting...",
+                                                                //     style:
+                                                                //         SweetAlertStyle
+                                                                //             .loading);
+                                                                new Future
+                                                                    .delayed(
+                                                                    new Duration(
+                                                                        seconds:
+                                                                        1),
+                                                                        () {
+                                                                          getRequestWithoutParam(
+                                                                              '/api/v1/opportunity/hired/${snapshot.data.data.applyVolunteer[index].id}',
+                                                                              {
+                                                                                'Content-Type':
+                                                                                "application/json",
+                                                                                "Authorization":
+                                                                                "Bearer ${widget.token}"
+                                                                              }).then((value) async {
+                                                                            Navigator.pop(context);
+                                                                            showToast(context,
+                                                                                'Volunteer Hired');
+                                                                          });
+                                                                    });
+                                                              } else {
+                                                                SweetAlert.show(
+                                                                    context,
+                                                                    subtitle:
+                                                                    "Canceled!",
+                                                                    style: SweetAlertStyle
+                                                                        .error);
+                                                              }
+                                                              return false;
+                                                            }
+                                                            return null;
+                                                          });
                                                     },
                                                     child: Text(
                                                         'Hire',

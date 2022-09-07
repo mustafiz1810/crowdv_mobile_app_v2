@@ -3,6 +3,7 @@ import 'package:crowdv_mobile_app/data/models/volunteer/training_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/training_video_list.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
+import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +12,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class TrainingList extends StatefulWidget {
+  final dynamic id;
+  TrainingList({this.id});
   @override
   State<TrainingList> createState() => _TrainingListState();
 }
 
 class _TrainingListState extends State<TrainingList> {
   String token = "";
+  String role = "";
 
   @override
   void initState() {
@@ -28,6 +32,7 @@ class _TrainingListState extends State<TrainingList> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       token = pref.getString("user");
+      role = pref.getString("role");
     });
   }
 
@@ -54,6 +59,10 @@ class _TrainingListState extends State<TrainingList> {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: primaryColor,
+      ),
+      bottomNavigationBar: CustomBottomNavigation(
+        id:widget.id,
+        role: role,
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -210,6 +219,7 @@ class _TrainingListState extends State<TrainingList> {
                                                 child: InkWell(
                                                   onTap: () {
                                                     Get.to(() => TrainingVideo(
+                                                      userId: widget.id,
                                                         id: snapshot
                                                             .data
                                                             .data[index]
@@ -219,10 +229,6 @@ class _TrainingListState extends State<TrainingList> {
                                                     child: Center(
                                                         child: Text('Watch Video',
                                                             style: TextStyle(
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .bold,
-                                                                fontSize: 16,
                                                                 color: Colors
                                                                     .white))),
                                                   ),
