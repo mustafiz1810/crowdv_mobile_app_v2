@@ -28,6 +28,7 @@ class _VideoScreenState extends State<VideoScreen> {
     var betterPlayerConfiguration = BetterPlayerConfiguration(
       controlsConfiguration: BetterPlayerControlsConfiguration(
         enableSkips: false,
+        enableProgressBarDrag: false,
       ),
       aspectRatio: 16 / 9,
       fit: BoxFit.contain,

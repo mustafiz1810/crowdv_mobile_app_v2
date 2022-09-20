@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/data/models/recruiter/category_model.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruiter/Create_Opportunity/check_box.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruiter/update_opportunity/eligiblity_update.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/design_details.dart';
@@ -9,7 +8,6 @@ import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:inkwell_splash/inkwell_splash.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class OpportunityUpdate extends StatefulWidget {
@@ -26,6 +24,7 @@ class OpportunityUpdate extends StatefulWidget {
       etimem,
       slug,
       eligibility,
+  country,
   city,
   state,
   zip;
@@ -43,6 +42,7 @@ class OpportunityUpdate extends StatefulWidget {
       this.etimem,
       this.slug,
       this.eligibility,
+        this.country,
       this.city,
       this.state,
       this.zip});
@@ -73,8 +73,6 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
     for(Map map in widget.eligibility){
       eligibility.add(map['id']);
     }
-    setState((){});
-    print(eligibility);
     titleController.text = widget.title.toString();
     descriptionController.text = widget.description.toString();
     _typevalue = widget.type.toString();
@@ -478,6 +476,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                     etime:
                     '${_time.hour}:${_time.minute.toString().padLeft(2, '0')}',
                     eligibility:eligibility,
+                    country:widget.country,
                     city:widget.city,
                     state:widget.state,
                     zip: widget.zip,

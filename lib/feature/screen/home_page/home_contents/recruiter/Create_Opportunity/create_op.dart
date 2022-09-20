@@ -121,7 +121,8 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                     child: Container(
                       width: 365,
                       height: 50,
-                      padding: EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 2, horizontal: 15),
                       child: Center(
                         child: tileName != null
                             ? Text(
@@ -131,13 +132,20 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                                     color: primaryColor,
                                     fontWeight: FontWeight.bold),
                               )
-                            : Text(
-                                "Select Category",
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: primaryColor,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                            : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(width: 5,),
+                                Text(
+                                    "Select Category",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: primaryColor,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                Icon(Icons.arrow_drop_down,color: primaryColor,)
+                              ],
+                            ),
                       ),
                       decoration: BoxDecoration(
                         boxShadow: [
@@ -176,15 +184,17 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                                                 color: Colors.black,
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600)),
-                                        selected: snapshot.data.data[index].id ==
-                                            _selectedIndex,
+                                        selected:
+                                            snapshot.data.data[index].id ==
+                                                _selectedIndex,
                                         onTap: () {
                                           setState(() {
                                             _selectedIndex =
                                                 snapshot.data.data[index].id;
                                             tileName =
                                                 snapshot.data.data[index].name;
-                                            slug = snapshot.data.data[index].slug;
+                                            slug =
+                                                snapshot.data.data[index].slug;
                                             isVisible = false;
                                             print(_selectedIndex.toString());
                                           });
@@ -228,8 +238,8 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                               fontWeight: FontWeight.w600),
                           iconEnabledColor: primaryColor,
                           isExpanded: true,
-                          items:
-                              _type.map<DropdownMenuItem<String>>((String value) {
+                          items: _type
+                              .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(value),
@@ -307,7 +317,6 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                         }
                         return null;
                       },
-
                     ),
                   ),
                   SizedBox(
@@ -427,18 +436,18 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                       if (time.hour <= _time.hour &&
                           _formKey.currentState.validate()) {
                         Get.to(() => CheckBox(
-                          token: token,
-                          slug: slug.toString(),
-                          title: titleController.text,
-                          category: _selectedIndex.toString(),
-                          type: _typevalue.toString(),
-                          description: descriptionController.text,
-                          date: dateTime.toString(),
-                          time:
-                          '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
-                          etime:
-                          '${_time.hour}:${_time.minute.toString().padLeft(2, '0')}',
-                        ));
+                              token: token,
+                              slug: slug.toString(),
+                              title: titleController.text,
+                              category: _selectedIndex.toString(),
+                              type: _typevalue.toString(),
+                              description: descriptionController.text,
+                              date: dateTime.toString(),
+                              time:
+                                  '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
+                              etime:
+                                  '${_time.hour}:${_time.minute.toString().padLeft(2, '0')}',
+                            ));
                       } else
                         (showToast("End time must be greater than start time"));
                     },

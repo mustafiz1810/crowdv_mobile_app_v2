@@ -12,8 +12,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Test extends StatefulWidget {
-  final trainingId,userId;
-  const Test({this.trainingId,this.userId});
+  final trainingId;
+  const Test({this.trainingId});
 
   @override
   _TestState createState() => _TestState();
@@ -21,7 +21,6 @@ class Test extends StatefulWidget {
 
 class _TestState extends State<Test> {
   String token = "";
-  String role = "";
   @override
   void initState() {
     getCred();
@@ -32,7 +31,6 @@ class _TestState extends State<Test> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       token = pref.getString("user");
-      role = pref.getString("role");
     });
   }
 
@@ -55,10 +53,7 @@ class _TestState extends State<Test> {
           title: Text("Test"),
           backgroundColor: primaryColor,
         ),
-        bottomNavigationBar: CustomBottomNavigation(
-          id:widget.userId,
-          role: role,
-        ),
+        bottomNavigationBar: CustomBottomNavigation(),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(

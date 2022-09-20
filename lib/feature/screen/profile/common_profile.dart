@@ -1,14 +1,7 @@
 import 'dart:convert';
-import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/data/models/common_profile_model.dart';
-import 'package:crowdv_mobile_app/data/models/profile_model.dart';
-import 'package:crowdv_mobile_app/feature/screen/profile/profile_update_basic.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
-import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
-import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -103,14 +96,41 @@ class _CommonProfileState extends State<CommonProfile> {
                         SizedBox(
                           height: 5,
                         ),
-                        Text(
-                          snapshot.data.data.firstName +
-                              " " +
-                              snapshot.data.data.lastName,
-                          style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  snapshot.data.data
+                                      .firstName
+                                      .toString() +
+                                      " " +
+                                      snapshot
+                                          .data.data.lastName
+                                          .toString(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22,
+                                      color: Colors.black),
+                                ),
+                                snapshot.data.data.isOnline ==
+                                    true
+                                    ? Icon(
+                                  Icons
+                                      .fiber_manual_record_rounded,
+                                  size: 12,
+                                  color: Colors.green,
+                                )
+                                    : Icon(
+                                  Icons
+                                      .fiber_manual_record_rounded,
+                                  size: 12,
+                                  color: Colors.grey,
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -120,9 +140,7 @@ class _CommonProfileState extends State<CommonProfile> {
                               size: 13,
                             ),
                             Text(
-                              snapshot.data.data.state != null
-                                  ? snapshot.data.data.state
-                                  : "",
+                              snapshot.data.data.state.name.toString(),
                               style:
                                   TextStyle(fontSize: 14, color: Colors.black),
                             ),
@@ -236,21 +254,6 @@ class _CommonProfileState extends State<CommonProfile> {
                                           snapshot.data.data.lastName,
                                     ),
                                   ),
-                                  ListTile(
-                                    leading: Icon(Icons.email_outlined),
-                                    title: Text("Email:"),
-                                    subtitle: Text(snapshot.data.data.email),
-                                  ),
-                                  ListTile(
-                                    leading: Icon(Icons.phone_android_rounded),
-                                    title: Text("Phone:"),
-                                    subtitle: Text(snapshot.data.data.phone),
-                                  ),
-                                  ListTile(
-                                      leading: Icon(Icons.date_range_rounded),
-                                      title: Text("Date of Birth:"),
-                                      subtitle: Text(DateFormat.yMMMd()
-                                          .format(snapshot.data.data.dob))),
                                   ListTile(
                                       leading: Icon(Icons.work_outline_rounded),
                                       title: Text("Profession:"),

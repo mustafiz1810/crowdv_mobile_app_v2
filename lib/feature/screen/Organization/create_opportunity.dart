@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
-import 'package:path/path.dart';
+import 'package:crowdv_mobile_app/utils/constants.dart';
+import 'package:path/path.dart' as Path ;
 import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
@@ -12,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:inkwell_splash/inkwell_splash.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../../utils/view_utils/common_util.dart';
 
 class OrgOpportunity extends StatefulWidget {
@@ -95,13 +95,12 @@ class _OrgOpportunityState extends State<OrgOpportunity> {
       "Accept": "application/json"
     };
     // string to uri
-    var uri = Uri.parse(
-        "https://system.getcrowdv.com/api/v1/organization/opportunity");
+    var uri = Uri.parse(NetworkConstants.BASE_URL + 'organization/opportunity');
     // create multipart request
     var request = new http.MultipartRequest("POST", uri);
     // multipart that takes file
     var multipartFile = new http.MultipartFile('banner', stream, length,
-        filename: basename(imageFile.path));
+        filename: Path.basename(imageFile.path));
     // add file to multipart
     request.files.add(multipartFile);
     request.headers.addAll(headers);
@@ -112,6 +111,7 @@ class _OrgOpportunityState extends State<OrgOpportunity> {
     // send
     var response = await request.send();
     if (response.statusCode == 200) {
+      Navigator.pop(context);
       // print(data);
       showToast('Created');
     } else {

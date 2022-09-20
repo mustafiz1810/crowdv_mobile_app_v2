@@ -4,13 +4,12 @@ import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ServiceLocation extends StatefulWidget {
-  final country,city,zip;
-  ServiceLocation({this.country,this.city,this.zip});
+  final country,state,city,zip;
+  ServiceLocation({this.country,this.state,this.city,this.zip});
 
   @override
   _ServiceLocationState createState() => _ServiceLocationState();
@@ -21,11 +20,17 @@ class _ServiceLocationState extends State<ServiceLocation> {
 
   @override
   void initState() {
-    widget.country != null?selectedCountry=widget.country:selectedCountry="Alabama";
-    // widget.city != null ? selectedProvince=widget.city:selectedProvince="Birmingham";
-    widget.zip != null ? zipController.text=widget.zip:zipController.text="";
+    widget.country == null?countryvalue =widget.country:countryvalue = widget.country.toString();
+    widget.state == null?statevalue =widget.state:statevalue = widget.state.toString();
+    widget.city == null?cityvalue =widget.city:cityvalue = widget.city.toString();
+    widget.zip != null
+        ? zipController.text = widget.zip
+        : zipController.text = "";
     super.initState();
     getCred();
+    getCountry();
+    widget.state != null?getState(widget.country):"";
+    widget.city != null?getCity(widget.state):"";
   }
 
   void getCred() async {
@@ -35,36 +40,8 @@ class _ServiceLocationState extends State<ServiceLocation> {
     });
   }
 
-  List<String> countries = [
-    'Alabama',
-    'Alaska',
-    'California',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Illinois',
-    'Kansas',
-    'Kentucky',
-    'Louisiana'
-  ];
-  List<String> AlabamaProvince = ['Birmingham', 'Montgomery'];
-  List<String> AlaskaProvince = [
-    'Anchorage',
-    'Juneau',
-  ];
-  List<String> CaliforniaProvince = ['Los Angeles', 'Sacramento'];
-  List<String> ConnecticutProvince = ['Bridgeport', 'Hartford'];
-  List<String> DelawareProvince = ['Dover', 'Wilmington'];
-  List<String> FloridaProvince = ['Jacksonville', 'Tallahassee'];
-  List<String> IllinoisProvince = ['Addison', 'Algonquin', 'Alton','Arlington Heights','Aurora','Bartlett','Batavia','Belleville','Belvidere','Berwyn','Bloomington','Bolingbrook','Buffalo Grove','Chicago',];
-  List<String> KansasProvince = ['Topeka', 'Wichita'];
-  List<String> KentuckyProvince = ['Frankfort', 'Louisville'];
-  List<String> LouisianaProvince = ['Baton Rouge', 'New Orleans'];
-  List<String> provinces = [];
-  String selectedCountry;
-  String selectedProvince;
   TextEditingController zipController = TextEditingController();
-  void set(String state, city, zip_code) async {
+  void set(String country,state, city, zip_code) async {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'set-location'),
@@ -73,15 +50,18 @@ class _ServiceLocationState extends State<ServiceLocation> {
             "Accept": "application/json"
           },
           body: {
-            'service_state': state,
-            'service_city': city,
+            'service_country_id': country,
+            'service_state_id': state,
+            'service_city_id': city,
             'service_zip_code': zip_code,
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
+        print(data);
         showToast(context, data['message']);
       } else {
         var data = jsonDecode(response.body.toString());
+        print(data);
         showToast(context, data['message'].toString());
       }
     } catch (e) {
@@ -104,6 +84,48 @@ class _ServiceLocationState extends State<ServiceLocation> {
     }
   }
 
+  List countries = [];
+  Future getCountry() async {
+    var baseUrl = NetworkConstants.BASE_URL + 'countries';
+
+    Response response = await get(Uri.parse(baseUrl));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonData = json.decode(response.body);
+      setState(() {
+        countries = jsonData['data'];
+      });
+    }
+  }
+  List states = [];
+  Future getState(countryId) async {
+    var baseUrl = NetworkConstants.BASE_URL + 'get-state-by-country/$countryId';
+
+    Response response = await get(Uri.parse(baseUrl));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonData = json.decode(response.body);
+      setState(() {
+        states = jsonData['data'];
+      });
+    }
+  }
+  List city = [];
+  Future getCity(stateId) async {
+    var baseUrl = NetworkConstants.BASE_URL + 'get-city-by-state/$stateId';
+
+    Response response = await get(Uri.parse(baseUrl));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonData = json.decode(response.body);
+      setState(() {
+        city = jsonData['data'];
+      });
+    }
+  }
+  var countryvalue;
+  var statevalue;
+  var cityvalue;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,220 +149,271 @@ class _ServiceLocationState extends State<ServiceLocation> {
           child: Column(
             children: [
               SizedBox(
-                height: 20,
+                height: 23,
               ),
               FormField<String>(
-                builder: (FormFieldState<String> state) {
+                builder: (FormFieldState<String>
+                state) {
                   return InputDecorator(
                     decoration: InputDecoration(
-                      labelText: "State",
-                      hintText: "State",
+                      hintText: "Country",
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                      labelStyle: TextStyle(
+                          fontWeight:
+                          FontWeight.bold),
                       filled: true,
-                      contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(color: Colors.black)),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(color: Colors.black)),
-                      errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
+                      contentPadding:
+                      EdgeInsets.fromLTRB(
+                          20, 10, 20, 10),
+                      focusedBorder:
+                      OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius
+                              .circular(
+                              12.0),
+                          borderSide: BorderSide(
+                              color: Colors
+                                  .black)),
+                      enabledBorder:
+                      OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius
+                              .circular(
+                              12.0),
+                          borderSide: BorderSide(
+                              color: Colors
+                                  .black)),
+                      errorBorder:
+                      OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius
+                              .circular(
+                              12.0),
                           borderSide:
-                          BorderSide(color: Colors.red, width: 2.0)),
-                      focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
+                          BorderSide(
+                              color: Colors
+                                  .red,
+                              width:
+                              2.0)),
+                      focusedErrorBorder:
+                      OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius
+                              .circular(
+                              12.0),
                           borderSide:
-                          BorderSide(color: Colors.red, width: 2.0)),
+                          BorderSide(
+                              color: Colors
+                                  .red,
+                              width:
+                              2.0)),
                     ),
-                    isEmpty: selectedCountry == '',
-                    child:  Center(
-                      child: DropdownButton<String>(
-                        hint: Center(
-                          child: Text(
-                            "Select Country",
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                fontWeight:
-                                FontWeight
-                                    .bold),
-                          ),
-                        ),
+                    child: Center(
+                      child: DropdownButton(
+                        hint: Text('Country',style:TextStyle(fontWeight: FontWeight.bold)),
                         underline: SizedBox(),
                         iconEnabledColor:
                         Colors.black,
-                        value: selectedCountry,
                         isExpanded: true,
-                        items: countries
-                            .map((String value) {
-                          return DropdownMenuItem<
-                              String>(
-                            value: value,
-                            child: Text(value),
+                        items: countries.map((item) {
+                          return DropdownMenuItem(
+                            value: item['id'].toString(),
+                            child: Text(item['name'].toString()),
                           );
                         }).toList(),
-                        selectedItemBuilder:
-                            (BuildContext
-                        context) =>
-                            countries
-                                .map(
-                                    (e) =>
-                                    Center(
-                                      child:
-                                      Text(
-                                        e,
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ))
-                                .toList(),
-                        onChanged: (country) {
-                          if (country ==
-                              'Alabama') {
-                            provinces =
-                                AlabamaProvince;
-                          } else if (country ==
-                              'Alaska') {
-                            provinces =
-                                AlaskaProvince;
-                          } else if (country ==
-                              'California') {
-                            provinces =
-                                CaliforniaProvince;
-                          } else if (country ==
-                              'Connecticut') {
-                            provinces =
-                                ConnecticutProvince;
-                          } else if (country ==
-                              'Delaware') {
-                            provinces =
-                                DelawareProvince;
-                          } else if (country ==
-                              'Florida') {
-                            provinces =
-                                FloridaProvince;
-                          } else if (country ==
-                              'Illinois') {
-                            provinces =
-                                IllinoisProvince;
-                          } else if (country ==
-                              'Kansas') {
-                            provinces =
-                                KansasProvince;
-                          } else if (country ==
-                              'Kentucky') {
-                            provinces =
-                                KentuckyProvince;
-                          } else if (country ==
-                              'Louisiana') {
-                            provinces =
-                                LouisianaProvince;
-                          } else {
-                            provinces = [];
-                          }
+                        onChanged: (newVal) {
                           setState(() {
-                            selectedProvince = null;
-                            selectedCountry =
-                                country;
-                            print(selectedCountry
-                                .toString());
+                            states.clear();
+                            statevalue = null;
+                            city.clear();
+                            cityvalue = null;
+                            countryvalue = newVal;
+                            getState(newVal);
                           });
+                          print(countryvalue);
                         },
+                        value: countryvalue,
                       ),
                     ),
                   );
                 },
               ),
               SizedBox(
-                height: 20,
+                height: 23,
               ),
               FormField<String>(
-                builder: (FormFieldState<String> state) {
+                builder: (FormFieldState<String>
+                state) {
                   return InputDecorator(
                     decoration: InputDecoration(
-                      labelText: "City",
-                      hintText: "City",
+                      hintText: "State",
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                      labelStyle: TextStyle(
+                          fontWeight:
+                          FontWeight.bold),
                       filled: true,
-                      contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(color: Colors.black)),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(color: Colors.black)),
-                      errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
+                      contentPadding:
+                      EdgeInsets.fromLTRB(
+                          20, 10, 20, 10),
+                      focusedBorder:
+                      OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius
+                              .circular(
+                              12.0),
+                          borderSide: BorderSide(
+                              color: Colors
+                                  .black)),
+                      enabledBorder:
+                      OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius
+                              .circular(
+                              12.0),
+                          borderSide: BorderSide(
+                              color: Colors
+                                  .black)),
+                      errorBorder:
+                      OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius
+                              .circular(
+                              12.0),
                           borderSide:
-                          BorderSide(color: Colors.red, width: 2.0)),
-                      focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
+                          BorderSide(
+                              color: Colors
+                                  .red,
+                              width:
+                              2.0)),
+                      focusedErrorBorder:
+                      OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius
+                              .circular(
+                              12.0),
                           borderSide:
-                          BorderSide(color: Colors.red, width: 2.0)),
+                          BorderSide(
+                              color: Colors
+                                  .red,
+                              width:
+                              2.0)),
                     ),
-                    isEmpty: selectedProvince == '',
-                    child:  Center(
-                      child: DropdownButton<String>(
-                        hint: Center(
-                          child: Text(
-                            widget.city != null?widget.city:"Select City",
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                fontWeight:
-                                FontWeight
-                                    .bold),
-                          ),
-                        ),
+                    child: Center(
+                      child: DropdownButton(
+                        hint: Text('State',style:TextStyle(fontWeight: FontWeight.bold)),
                         underline: SizedBox(),
                         iconEnabledColor:
                         Colors.black,
-                        value: selectedProvince,
                         isExpanded: true,
-                        items: provinces
-                            .map((String value) {
-                          return DropdownMenuItem<
-                              String>(
-                            value: value,
-                            child: Text(value),
+                        items: states.map((item) {
+                          return DropdownMenuItem(
+                            value: item['id'].toString(),
+                            child: Text(item['name'].toString()),
                           );
                         }).toList(),
-                        selectedItemBuilder:
-                            (BuildContext
-                        context) =>
-                            provinces
-                                .map(
-                                    (e) =>
-                                    Center(
-                                      child:
-                                      Text(
-                                        e,
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ))
-                                .toList(),
-                        onChanged: (province) {
+                        onChanged: (newVal) {
                           setState(() {
-                            selectedProvince =
-                                province;
-                            print(selectedProvince
-                                .toString());
+                            city.clear();
+                            cityvalue = null;
+                            statevalue = newVal;
+                            getCity(newVal);
                           });
+                          print(statevalue);
                         },
+                        value: statevalue,
                       ),
                     ),
                   );
                 },
               ),
-              SizedBox(height: 20),
+              SizedBox(
+                height: 23,
+              ),
+              FormField<String>(
+                builder: (FormFieldState<String>
+                state) {
+                  return InputDecorator(
+                    decoration: InputDecoration(
+                      hintText: "City",
+                      fillColor: Colors.white,
+                      labelStyle: TextStyle(
+                          fontWeight:
+                          FontWeight.bold),
+                      filled: true,
+                      contentPadding:
+                      EdgeInsets.fromLTRB(
+                          20, 10, 20, 10),
+                      focusedBorder:
+                      OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius
+                              .circular(
+                              12.0),
+                          borderSide: BorderSide(
+                              color: Colors
+                                  .black)),
+                      enabledBorder:
+                      OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius
+                              .circular(
+                              12.0),
+                          borderSide: BorderSide(
+                              color: Colors
+                                  .black)),
+                      errorBorder:
+                      OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius
+                              .circular(
+                              12.0),
+                          borderSide:
+                          BorderSide(
+                              color: Colors
+                                  .red,
+                              width:
+                              2.0)),
+                      focusedErrorBorder:
+                      OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius
+                              .circular(
+                              12.0),
+                          borderSide:
+                          BorderSide(
+                              color: Colors
+                                  .red,
+                              width:
+                              2.0)),
+                    ),
+                    child: Center(
+                      child: DropdownButton(
+                        hint: Text('City',style:TextStyle(fontWeight: FontWeight.bold)),
+                        underline: SizedBox(),
+                        iconEnabledColor:
+                        Colors.black,
+                        isExpanded: true,
+                        items: city.map((item) {
+                          return DropdownMenuItem(
+                            value: item['id'].toString(),
+                            child: Text(item['name'].toString()),
+                          );
+                        }).toList(),
+                        onChanged: (newVal) {
+                          setState(() {
+                            cityvalue = newVal;
+                          });
+                          print(cityvalue);
+                        },
+                        value: cityvalue,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              SizedBox(
+                height: 23,
+              ),
               Container(
                 child: TextFormField(
                   keyboardType: TextInputType.number,
@@ -365,16 +438,10 @@ class _ServiceLocationState extends State<ServiceLocation> {
                       child: InkWell(
                         splashColor: secondaryColor, // splash color
                         onTap: () {
-                          // setState(() {
-                          //   print(selectedCountry.toString() +
-                          //       "  " +
-                          //       selectedProvince.toString() +
-                          //       "  " +
-                          //       zipController.text.toString());
-                          // });
                           set(
-                              selectedCountry.toString(),
-                              selectedProvince.toString(),
+                            countryvalue.toString(),
+                              statevalue.toString(),
+                              cityvalue.toString(),
                               zipController.text.toString());
                         }, // button pressed
                         child: Row(

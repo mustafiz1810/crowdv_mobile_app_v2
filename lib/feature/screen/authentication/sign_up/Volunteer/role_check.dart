@@ -4,6 +4,7 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/header_widget.dart';
+import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/progres_hud.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -24,7 +25,7 @@ class _RoleCheckState extends State<RoleCheck> {
   List<String> _item = ["volunteer", "recruiter"];
   int selectedIndex = 0;
   String selectedValue = "";
-  void role() async {
+  void role(List<dynamic> banner) async {
     try {
       Response response = await post(Uri.parse(
           NetworkConstants.BASE_URL + 'role/${widget.id}/$_dropdown'),
@@ -37,6 +38,7 @@ class _RoleCheckState extends State<RoleCheck> {
         pageRoute(data['data']['token'].toString());
         idRoute(data['data']['id']);
         roleRoute(data['data']['role']);
+        bannerRoute(banner);
         setState(() {
           isApiCallProcess = false;
         });
@@ -45,9 +47,10 @@ class _RoleCheckState extends State<RoleCheck> {
           context,
           MaterialPageRoute(
               builder: (context) => HomeScreen( id: data['data']['id'],
-                  role: data['data']['role'])),
+                  role: data['data']['role'],banner: banner,),),
         );
-      } else {
+      }
+      else {
         var data = jsonDecode(response.body.toString());
         showToast(context, data['message']);
         setState(() {
@@ -88,6 +91,10 @@ class _RoleCheckState extends State<RoleCheck> {
   void roleRoute(String role) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString("role", role);
+  }
+  void bannerRoute(List<String> banner) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setStringList("banner", banner);
   }
   bool isApiCallProcess = false;
   @override
@@ -235,13 +242,20 @@ class _RoleCheckState extends State<RoleCheck> {
                                 ),
                               ),
                             ),
-                            onPressed: () {
-                              setState(() {
-                                isApiCallProcess = true;
-                                print(widget.id.toString() +
-                                    _dropdown.toString());
+                            onPressed: () async{
+                              getRequest('/api/v1/organization/opportunity/banner-list', null, {
+                                'Content-Type': "application/json",
+                              }).then((value) async {
+                                List<String> banner = [];
+                                for(Map map in value["data"]){
+                                  banner.add(map["banner"]);
+                                }
+                                setState(() {
+                                  isApiCallProcess = true;
+                                });
+                                role(banner);
+
                               });
-                              role();
                             },
                           ),
                         ),

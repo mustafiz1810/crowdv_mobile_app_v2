@@ -166,7 +166,7 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                         ),
                         SizedBox(height: 30.0),
                         Container(
-                          child:TextFormField(
+                          child: TextField(
                             controller: passwordController,
                             keyboardType: TextInputType.visiblePassword,
                             obscureText: _obscured,
@@ -175,34 +175,50 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                             decoration: InputDecoration(
                               labelText: "Password",
                               fillColor: Colors.white,
-                              contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                              labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                              contentPadding:
+                              EdgeInsets.fromLTRB(20, 20, 20, 20),
+                              labelStyle:
+                              TextStyle(fontWeight: FontWeight.bold),
                               filled: true,
-                              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
-                              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
-                              errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.red, width: 2.0)),
-                              focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.red, width: 2.0)), //Hides label on focus or if filled
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(12.0),
+                                  borderSide:
+                                  BorderSide(color: Colors.black)),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(12.0),
+                                  borderSide:
+                                  BorderSide(color: Colors.black)),
+                              errorBorder: OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(12.0),
+                                  borderSide: BorderSide(
+                                      color: Colors.red, width: 2.0)),
+                              focusedErrorBorder: OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(12.0),
+                                  borderSide: BorderSide(
+                                      color: Colors.red,
+                                      width:
+                                      2.0)), //Hides label on focus or if filled
                               suffixIcon: Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+                                padding:
+                                const EdgeInsets.fromLTRB(0, 0, 4, 0),
                                 child: GestureDetector(
                                   onTap: _toggleObscured,
                                   child: Icon(
                                     _obscured
-                                        ? Icons.visibility_rounded
-                                        : Icons.visibility_off_rounded,
+                                        ? Icons.visibility_off_rounded
+                                        : Icons.visibility_rounded,
                                     size: 24,
                                   ),
                                 ),
                               ),
                             ),
-                            validator: (val) {
-                              if (val.isEmpty) {
-                                return "Please enter your password";
-                              }
-                              return null;
-                            },
                           ),
-                          decoration: ThemeHelper().inputBoxDecorationShaddow(),
+                          decoration:
+                          ThemeHelper().inputBoxDecorationShaddow(),
                         ),
                         SizedBox(height: 15.0),
                         FormField<bool>(
@@ -241,6 +257,13 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                                 ),
                               ],
                             );
+                          },
+                          validator: (value) {
+                            if (!checkedValue) {
+                              return 'You need allow notification';
+                            } else {
+                              return null;
+                            }
                           },
                         ),
                         FormField<bool>(

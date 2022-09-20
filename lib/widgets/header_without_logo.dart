@@ -1,18 +1,15 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
-import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
-import 'package:crowdv_mobile_app/widgets/get_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'show_toast.dart';
 
 class HeaderWidget extends StatefulWidget {
-  final dynamic id, role;
-  HeaderWidget({this.id, this.role});
+  final dynamic id, role,banner;
+  HeaderWidget({this.id, this.role,this.banner});
   @override
   _HeaderWidgetState createState() => _HeaderWidgetState();
 }
@@ -27,10 +24,11 @@ class _HeaderWidgetState extends State<HeaderWidget>
           Uri.parse(NetworkConstants.BASE_URL + 'role/${widget.id}/volunteer'));
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
+        roleRoute(data['data']['role']);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) =>
-                    HomeScreen(id: widget.id, role: data['data']['role'])),
+                    HomeScreen(id: widget.id, role: data['data']['role'],banner: widget.banner,)),
             (Route<dynamic> route) => false);
         showToast(context, data['message']);
       } else {
@@ -56,17 +54,17 @@ class _HeaderWidgetState extends State<HeaderWidget>
           });
     }
   }
-
   void vol() async {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'role/${widget.id}/recruiter'));
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
+        roleRoute(data['data']['role']);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) =>
-                    HomeScreen(id: widget.id, role: data['data']['role'])),
+                    HomeScreen(id: widget.id, role: data['data']['role'],banner: widget.banner,)),
             (Route<dynamic> route) => false);
         showToast(context, data['message']);
       } else {
@@ -92,7 +90,10 @@ class _HeaderWidgetState extends State<HeaderWidget>
           });
     }
   }
-
+  void roleRoute(String role) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString("role", role);
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -122,7 +123,9 @@ class _HeaderWidgetState extends State<HeaderWidget>
                               onChanged: (val) {
                                 volunteer = val;
                               },
-                              onTap: () {
+                              onTap: () async{
+                                SharedPreferences pref = await SharedPreferences.getInstance();
+                                await pref.remove("role");
                                 vol();
                               },
                               animationDuration: Duration(seconds: 1),
@@ -138,7 +141,9 @@ class _HeaderWidgetState extends State<HeaderWidget>
                               onChanged: (val) {
                                 recruiter = val;
                               },
-                              onTap: () {
+                              onTap: () async{
+                                SharedPreferences pref = await SharedPreferences.getInstance();
+                                await pref.remove("role");
                                 rec();
                               },
                               animationDuration: Duration(milliseconds: 1),

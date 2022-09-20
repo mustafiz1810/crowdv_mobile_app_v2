@@ -16,13 +16,12 @@ import '../../../widgets/http_request.dart';
 import '../../../widgets/icon_box.dart';
 
 class VolunteerSearchPage extends StatefulWidget {
-  final dynamic id;
   final List<int> category;
   final List<String> taskType;
-  final String state, city;
+  final String country,state, city;
 
   VolunteerSearchPage(
-      {this.category, this.taskType, this.state, this.city, this.id});
+      {this.category, this.taskType,this.country, this.state, this.city});
 
   @override
   State<StatefulWidget> createState() {
@@ -33,14 +32,13 @@ class VolunteerSearchPage extends StatefulWidget {
 class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
   String token = "";
   String role = "";
-  String country = "";
   TextEditingController recruiterController = TextEditingController();
 
   @override
   void initState() {
     print(widget.city);
     print(widget.state);
-    print(widget.category);
+    print(widget.country);
     print(widget.taskType);
     print(recruiterController.text.toString());
 
@@ -59,7 +57,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
   Future<CategorywiseTask> getCateTaskApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL +
-            'task-search?state=${widget.state}&city=${widget.city}&category_id=${widget.category}&task_type=${widget.taskType}&search=${recruiterController.text.toString()}'),
+            'task-search?state_id=${widget.state}&city_id=${widget.city}&country_id=${widget.country}&category_id=${widget.category}&task_type=${widget.taskType}&search=${recruiterController.text.toString()}&date=null'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
     print(data);
@@ -109,10 +107,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
           ),
         ],
       ),
-      bottomNavigationBar: CustomBottomNavigation(
-        id: widget.id,
-        role: role,
-      ),
+      bottomNavigationBar: CustomBottomNavigation(),
       body: Column(
         children: [
           Padding(
@@ -172,7 +167,6 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                       image: null,
                       packageImage: PackageImage.Image_3,
                       title: 'No Opportunity',
-                      subTitle: 'No  Opportunity available',
                       titleTextStyle: TextStyle(
                         fontSize: 22,
                         color: Color(0xff9da9c7),
@@ -232,12 +226,16 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        snapshot.data.data[index].title,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                            fontSize: 16),
+                                      SizedBox(
+                                        width:260,
+                                        child: Text(
+                                          snapshot.data.data[index].title,
+                                          style: TextStyle(
+                                              overflow: TextOverflow.ellipsis,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                              fontSize: 16),
+                                        ),
                                       ),
                                       SizedBox(
                                         height: 5,
@@ -260,8 +258,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                             size: 20,
                                           ),
                                           Text(
-                                            snapshot.data.data[index].city
-                                                .toString(),
+                                            snapshot.data.data[index].state.name,
                                             style: TextStyle(
                                                 fontSize: 15,
                                                 color: Colors.blueAccent,
@@ -327,8 +324,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                                     width: 5,
                                                   ),
                                                   Text(snapshot
-                                                      .data.data[index].date
-                                                      .toString()),
+                                                      .data.data[index].dateFormat.toString()),
                                                 ],
                                               )
                                             ],

@@ -11,13 +11,13 @@ class ProfileUpdate extends StatefulWidget {
   final dynamic token, fname, lname, email, phone, dob, prof, gender;
   ProfileUpdate(
       {@required this.token,
-      this.fname,
-      this.lname,
-      this.email,
-      this.phone,
-      this.dob,
-      this.prof,
-      this.gender});
+        this.fname,
+        this.lname,
+        this.email,
+        this.phone,
+        this.dob,
+        this.prof,
+        this.gender});
   @override
   _ProfileUpdateState createState() => _ProfileUpdateState();
 }
@@ -180,8 +180,28 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
               FormField<String>(
                 builder: (FormFieldState<String> state) {
                   return InputDecorator(
-                    decoration: ThemeHelper()
-                        .textInputDecoration('Profession', ''),
+                    decoration: InputDecoration(
+                      labelText: "Profession",
+                      hintText: "Profession",
+                      fillColor: Colors.white,
+                      labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                      filled: true,
+                      contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide(color: Colors.black)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide(color: Colors.black)),
+                      errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide:
+                          BorderSide(color: Colors.red, width: 2.0)),
+                      focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide:
+                          BorderSide(color: Colors.red, width: 2.0)),
+                    ),
                     isEmpty: _profession == '',
                     child: Center(
                       child: DropdownButton<String>(
@@ -211,14 +231,14 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                           }).toList(),
                           selectedItemBuilder: (BuildContext context) => _items
                               .map((e) => Center(
-                                    child: Text(
-                                      e,
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ))
+                            child: Text(
+                              e,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ))
                               .toList(),
                           underline: Container(),
                           onChanged: (String value) {
@@ -252,11 +272,11 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                       errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                           borderSide:
-                              BorderSide(color: Colors.red, width: 2.0)),
+                          BorderSide(color: Colors.red, width: 2.0)),
                       focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                           borderSide:
-                              BorderSide(color: Colors.red, width: 2.0)),
+                          BorderSide(color: Colors.red, width: 2.0)),
                     ),
                     isEmpty: _gender == '',
                     child: Center(
@@ -287,14 +307,14 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                           }).toList(),
                           selectedItemBuilder: (BuildContext context) => _item
                               .map((value) => Center(
-                                    child: Text(
-                                      value,
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ))
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ))
                               .toList(),
                           underline: Container(),
                           onChanged: (String value) {
@@ -327,7 +347,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                         final date = await pickDate();
                         if (date == null) return;
                         final startDate =
-                            DateTime(date.year, date.month, date.day);
+                        DateTime(date.year, date.month, date.day);
                         setState(() {
                           dateTime = startDate;
                         });
@@ -384,9 +404,9 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
   }
 
   Future<DateTime> pickDate() => showDatePicker(
-        context: context,
-        initialDate: dateTime,
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now(),
-      );
+    context: context,
+    initialDate: dateTime,
+    firstDate: DateTime(1900),
+    lastDate: DateTime.now(),
+  );
 }

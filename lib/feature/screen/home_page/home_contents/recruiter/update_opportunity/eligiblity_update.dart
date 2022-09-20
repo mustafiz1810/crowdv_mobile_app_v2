@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class EligibilityUpdate extends StatefulWidget {
-  final dynamic token,id ,title, category, type, description, date, time, etime, slug,eligibility,city,state,zip;
+  final dynamic token,id ,title, category, type, description, date, time, etime, slug,eligibility,country,city,state,zip;
   EligibilityUpdate(
       {@required this.token,
         this.id,
@@ -25,6 +25,7 @@ class EligibilityUpdate extends StatefulWidget {
         this.etime,
         this.slug,
       this.eligibility,
+        this.country,
       this.city,this.state,this.zip});
   @override
   _EligibilityUpdateState createState() => _EligibilityUpdateState();
@@ -89,6 +90,7 @@ class _EligibilityUpdateState extends State<EligibilityUpdate> {
                 date: widget.date,
                 time: widget.time,
                 etime: widget.etime,
+                country:widget.country,
                 city:widget.city,
                 state:widget.state,
                 zip: widget.zip,

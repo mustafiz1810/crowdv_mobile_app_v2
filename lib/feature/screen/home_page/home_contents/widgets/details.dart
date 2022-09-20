@@ -170,7 +170,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: DefaultTabController(
-                        length: 3,
+                        length: 2,
                         child: CustomScrollView(
                           slivers: <Widget>[
                             SliverToBoxAdapter(
@@ -178,7 +178,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                 tabs: [
                                   Tab(child: const Text('Details')),
                                   Tab(child: const Text('Location')),
-                                  Tab(child: const Text('Contact')),
+                                  // Tab(child: const Text('Contact')),
                                 ],
                                 unselectedLabelColor: Colors.black,
                                 indicatorSize: TabBarIndicatorSize.tab,
@@ -286,7 +286,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                         SizedBox(
                                                           width: 5,
                                                         ),
-                                                        Text(snapshot.data.data.date.toString()),
+                                                        Text(snapshot.data.data.dateFormat.toString()),
                                                       ],
                                                     )
                                                   ],
@@ -508,7 +508,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  snapshot.data.data.state,
+                                                  snapshot.data.data.state.name.toString(),
                                                   textAlign: TextAlign.left,
                                                 ),
                                               ],
@@ -544,7 +544,7 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  snapshot.data.data.city,
+                                                  snapshot.data.data.city.name.toString(),
                                                   textAlign: TextAlign.left,
                                                 ),
                                               ],
@@ -596,305 +596,305 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                         ),
                                       ],
                                     )),
-                                    widget.role == 'volunteer'
-                                        ? Container(
-                                            child: Column(
-                                            children: [
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                12))),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      15.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        'Name',
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                        style: GoogleFonts.lato(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18,
-                                                          letterSpacing: 0.27,
-                                                          color:
-                                                              DesignCourseAppTheme
-                                                                  .nearlyBlack,
-                                                        ),
-                                                      ),
-                                                      Text(snapshot
-                                                              .data
-                                                              .data
-                                                              .recruiter
-                                                              .firstName +
-                                                          " " +
-                                                          snapshot
-                                                              .data
-                                                              .data
-                                                              .recruiter
-                                                              .lastName),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                12))),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      15.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        'Email',
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                        style: GoogleFonts.lato(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18,
-                                                          letterSpacing: 0.27,
-                                                          color:
-                                                              DesignCourseAppTheme
-                                                                  .nearlyBlack,
-                                                        ),
-                                                      ),
-                                                      Text(snapshot.data.data
-                                                          .recruiter.email),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                12))),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      15.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        'Phone',
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                        style: GoogleFonts.lato(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18,
-                                                          letterSpacing: 0.27,
-                                                          color:
-                                                              DesignCourseAppTheme
-                                                                  .nearlyBlack,
-                                                        ),
-                                                      ),
-                                                      Text(snapshot.data.data
-                                                          .recruiter.phone),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ))
-                                        : snapshot.data.data.status == 'Pending'
-                                            ? Container(
-                                                child: Center(
-                                                    child: Text(
-                                                  "No Volunteer Hired",
-                                                  style: TextStyle(
-                                                      color: Colors.red),
-                                                )),
-                                              )
-                                            : Container(
-                                                child: Column(
-                                                children: [
-                                                  Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    12))),
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              15.0),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            'Name',
-                                                            textAlign:
-                                                                TextAlign.left,
-                                                            style: GoogleFonts
-                                                                .lato(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 18,
-                                                              letterSpacing:
-                                                                  0.27,
-                                                              color: DesignCourseAppTheme
-                                                                  .nearlyBlack,
-                                                            ),
-                                                          ),
-                                                          Text(snapshot
-                                                                  .data
-                                                                  .data
-                                                                  .volunteer
-                                                                  .firstName +
-                                                              " " +
-                                                              snapshot
-                                                                  .data
-                                                                  .data
-                                                                  .volunteer
-                                                                  .lastName),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    12))),
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              15.0),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            'Email',
-                                                            textAlign:
-                                                                TextAlign.left,
-                                                            style: GoogleFonts
-                                                                .lato(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 18,
-                                                              letterSpacing:
-                                                                  0.27,
-                                                              color: DesignCourseAppTheme
-                                                                  .nearlyBlack,
-                                                            ),
-                                                          ),
-                                                          Text(snapshot
-                                                              .data
-                                                              .data
-                                                              .volunteer
-                                                              .email),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    12))),
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              15.0),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            'Phone',
-                                                            textAlign:
-                                                                TextAlign.left,
-                                                            style: GoogleFonts
-                                                                .lato(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 18,
-                                                              letterSpacing:
-                                                                  0.27,
-                                                              color: DesignCourseAppTheme
-                                                                  .nearlyBlack,
-                                                            ),
-                                                          ),
-                                                          Text(snapshot
-                                                              .data
-                                                              .data
-                                                              .volunteer
-                                                              .phone),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                ],
-                                              )),
+                                    // widget.role == 'volunteer'
+                                    //     ? Container(
+                                    //         child: Column(
+                                    //         children: [
+                                    //           Container(
+                                    //             width: MediaQuery.of(context)
+                                    //                 .size
+                                    //                 .width,
+                                    //             decoration: BoxDecoration(
+                                    //                 color: Colors.white,
+                                    //                 borderRadius:
+                                    //                     BorderRadius.all(
+                                    //                         Radius.circular(
+                                    //                             12))),
+                                    //             child: Padding(
+                                    //               padding: const EdgeInsets.all(
+                                    //                   15.0),
+                                    //               child: Row(
+                                    //                 mainAxisAlignment:
+                                    //                     MainAxisAlignment
+                                    //                         .spaceBetween,
+                                    //                 children: [
+                                    //                   Text(
+                                    //                     'Name',
+                                    //                     textAlign:
+                                    //                         TextAlign.left,
+                                    //                     style: GoogleFonts.lato(
+                                    //                       fontWeight:
+                                    //                           FontWeight.bold,
+                                    //                       fontSize: 18,
+                                    //                       letterSpacing: 0.27,
+                                    //                       color:
+                                    //                           DesignCourseAppTheme
+                                    //                               .nearlyBlack,
+                                    //                     ),
+                                    //                   ),
+                                    //                   Text(snapshot
+                                    //                           .data
+                                    //                           .data
+                                    //                           .recruiter
+                                    //                           .firstName +
+                                    //                       " " +
+                                    //                       snapshot
+                                    //                           .data
+                                    //                           .data
+                                    //                           .recruiter
+                                    //                           .lastName),
+                                    //                 ],
+                                    //               ),
+                                    //             ),
+                                    //           ),
+                                    //           SizedBox(
+                                    //             height: 10,
+                                    //           ),
+                                    //           Container(
+                                    //             width: MediaQuery.of(context)
+                                    //                 .size
+                                    //                 .width,
+                                    //             decoration: BoxDecoration(
+                                    //                 color: Colors.white,
+                                    //                 borderRadius:
+                                    //                     BorderRadius.all(
+                                    //                         Radius.circular(
+                                    //                             12))),
+                                    //             child: Padding(
+                                    //               padding: const EdgeInsets.all(
+                                    //                   15.0),
+                                    //               child: Row(
+                                    //                 mainAxisAlignment:
+                                    //                     MainAxisAlignment
+                                    //                         .spaceBetween,
+                                    //                 children: [
+                                    //                   Text(
+                                    //                     'Profession',
+                                    //                     textAlign:
+                                    //                         TextAlign.left,
+                                    //                     style: GoogleFonts.lato(
+                                    //                       fontWeight:
+                                    //                           FontWeight.bold,
+                                    //                       fontSize: 18,
+                                    //                       letterSpacing: 0.27,
+                                    //                       color:
+                                    //                           DesignCourseAppTheme
+                                    //                               .nearlyBlack,
+                                    //                     ),
+                                    //                   ),
+                                    //                   Text(snapshot.data.data
+                                    //                       .recruiter.),
+                                    //                 ],
+                                    //               ),
+                                    //             ),
+                                    //           ),
+                                    //           SizedBox(
+                                    //             height: 10,
+                                    //           ),
+                                    //           Container(
+                                    //             width: MediaQuery.of(context)
+                                    //                 .size
+                                    //                 .width,
+                                    //             decoration: BoxDecoration(
+                                    //                 color: Colors.white,
+                                    //                 borderRadius:
+                                    //                     BorderRadius.all(
+                                    //                         Radius.circular(
+                                    //                             12))),
+                                    //             child: Padding(
+                                    //               padding: const EdgeInsets.all(
+                                    //                   15.0),
+                                    //               child: Row(
+                                    //                 mainAxisAlignment:
+                                    //                     MainAxisAlignment
+                                    //                         .spaceBetween,
+                                    //                 children: [
+                                    //                   Text(
+                                    //                     'Phone',
+                                    //                     textAlign:
+                                    //                         TextAlign.left,
+                                    //                     style: GoogleFonts.lato(
+                                    //                       fontWeight:
+                                    //                           FontWeight.bold,
+                                    //                       fontSize: 18,
+                                    //                       letterSpacing: 0.27,
+                                    //                       color:
+                                    //                           DesignCourseAppTheme
+                                    //                               .nearlyBlack,
+                                    //                     ),
+                                    //                   ),
+                                    //                   Text(snapshot.data.data
+                                    //                       .recruiter.phone),
+                                    //                 ],
+                                    //               ),
+                                    //             ),
+                                    //           ),
+                                    //         ],
+                                    //       ))
+                                    //     : snapshot.data.data.status == 'Pending'
+                                    //         ? Container(
+                                    //             child: Center(
+                                    //                 child: Text(
+                                    //               "No Volunteer Hired",
+                                    //               style: TextStyle(
+                                    //                   color: Colors.red),
+                                    //             )),
+                                    //           )
+                                    //         : Container(
+                                    //             child: Column(
+                                    //             children: [
+                                    //               Container(
+                                    //                 width:
+                                    //                     MediaQuery.of(context)
+                                    //                         .size
+                                    //                         .width,
+                                    //                 decoration: BoxDecoration(
+                                    //                     color: Colors.white,
+                                    //                     borderRadius:
+                                    //                         BorderRadius.all(
+                                    //                             Radius.circular(
+                                    //                                 12))),
+                                    //                 child: Padding(
+                                    //                   padding:
+                                    //                       const EdgeInsets.all(
+                                    //                           15.0),
+                                    //                   child: Row(
+                                    //                     mainAxisAlignment:
+                                    //                         MainAxisAlignment
+                                    //                             .spaceBetween,
+                                    //                     children: [
+                                    //                       Text(
+                                    //                         'Name',
+                                    //                         textAlign:
+                                    //                             TextAlign.left,
+                                    //                         style: GoogleFonts
+                                    //                             .lato(
+                                    //                           fontWeight:
+                                    //                               FontWeight
+                                    //                                   .bold,
+                                    //                           fontSize: 18,
+                                    //                           letterSpacing:
+                                    //                               0.27,
+                                    //                           color: DesignCourseAppTheme
+                                    //                               .nearlyBlack,
+                                    //                         ),
+                                    //                       ),
+                                    //                       Text(snapshot
+                                    //                               .data
+                                    //                               .data
+                                    //                               .volunteer
+                                    //                               .firstName +
+                                    //                           " " +
+                                    //                           snapshot
+                                    //                               .data
+                                    //                               .data
+                                    //                               .volunteer
+                                    //                               .lastName),
+                                    //                     ],
+                                    //                   ),
+                                    //                 ),
+                                    //               ),
+                                    //               SizedBox(
+                                    //                 height: 10,
+                                    //               ),
+                                    //               Container(
+                                    //                 width:
+                                    //                     MediaQuery.of(context)
+                                    //                         .size
+                                    //                         .width,
+                                    //                 decoration: BoxDecoration(
+                                    //                     color: Colors.white,
+                                    //                     borderRadius:
+                                    //                         BorderRadius.all(
+                                    //                             Radius.circular(
+                                    //                                 12))),
+                                    //                 child: Padding(
+                                    //                   padding:
+                                    //                       const EdgeInsets.all(
+                                    //                           15.0),
+                                    //                   child: Row(
+                                    //                     mainAxisAlignment:
+                                    //                         MainAxisAlignment
+                                    //                             .spaceBetween,
+                                    //                     children: [
+                                    //                       Text(
+                                    //                         'Email',
+                                    //                         textAlign:
+                                    //                             TextAlign.left,
+                                    //                         style: GoogleFonts
+                                    //                             .lato(
+                                    //                           fontWeight:
+                                    //                               FontWeight
+                                    //                                   .bold,
+                                    //                           fontSize: 18,
+                                    //                           letterSpacing:
+                                    //                               0.27,
+                                    //                           color: DesignCourseAppTheme
+                                    //                               .nearlyBlack,
+                                    //                         ),
+                                    //                       ),
+                                    //                       Text(snapshot
+                                    //                           .data
+                                    //                           .data
+                                    //                           .volunteer
+                                    //                           .email),
+                                    //                     ],
+                                    //                   ),
+                                    //                 ),
+                                    //               ),
+                                    //               SizedBox(
+                                    //                 height: 10,
+                                    //               ),
+                                    //               Container(
+                                    //                 width:
+                                    //                     MediaQuery.of(context)
+                                    //                         .size
+                                    //                         .width,
+                                    //                 decoration: BoxDecoration(
+                                    //                     color: Colors.white,
+                                    //                     borderRadius:
+                                    //                         BorderRadius.all(
+                                    //                             Radius.circular(
+                                    //                                 12))),
+                                    //                 child: Padding(
+                                    //                   padding:
+                                    //                       const EdgeInsets.all(
+                                    //                           15.0),
+                                    //                   child: Row(
+                                    //                     mainAxisAlignment:
+                                    //                         MainAxisAlignment
+                                    //                             .spaceBetween,
+                                    //                     children: [
+                                    //                       Text(
+                                    //                         'Phone',
+                                    //                         textAlign:
+                                    //                             TextAlign.left,
+                                    //                         style: GoogleFonts
+                                    //                             .lato(
+                                    //                           fontWeight:
+                                    //                               FontWeight
+                                    //                                   .bold,
+                                    //                           fontSize: 18,
+                                    //                           letterSpacing:
+                                    //                               0.27,
+                                    //                           color: DesignCourseAppTheme
+                                    //                               .nearlyBlack,
+                                    //                         ),
+                                    //                       ),
+                                    //                       Text(snapshot
+                                    //                           .data
+                                    //                           .data
+                                    //                           .volunteer
+                                    //                           .phone),
+                                    //                     ],
+                                    //                   ),
+                                    //                 ),
+                                    //               ),
+                                    //               SizedBox(
+                                    //                 height: 10,
+                                    //               ),
+                                    //             ],
+                                    //           )),
                                   ],
                                 ),
                               ),
@@ -941,8 +941,9 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                             slug: snapshot
                                                 .data.data.category.slug,
                                             eligibility: eligibility,
-                                            city: snapshot.data.data.city,
-                                            state: snapshot.data.data.state,
+                                            country:snapshot.data.data.country.id,
+                                            city: snapshot.data.data.city.id,
+                                            state: snapshot.data.data.state.id,
                                             zip: snapshot.data.data.zipCode,
                                           )),
                                 ).then((value) => setState(() {}));

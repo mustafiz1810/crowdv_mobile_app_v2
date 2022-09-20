@@ -17,8 +17,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class RecruiterHistory extends StatefulWidget {
-  final id;
-  RecruiterHistory({this.id});
   @override
   _RecruiterHistoryState createState() => _RecruiterHistoryState();
 }
@@ -181,10 +179,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
           backgroundColor: primaryColor,
           title: Text('History'),
         ),
-        bottomNavigationBar: CustomBottomNavigation(
-          id:widget.id,
-          role: role,
-        ),
+        bottomNavigationBar: CustomBottomNavigation(),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -318,7 +313,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                         size: 20,
                                                       ),
                                                       Text(
-                                                        snapshot.data.data[index].city.toString(),
+                                                        snapshot.data.data[index].city.name.toString(),
                                                         style: TextStyle(
                                                             fontSize: 15,
                                                             color: Colors.blueAccent,
@@ -500,11 +495,6 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                                         .black,
                                                                     fontSize: 16,
                                                                   ),
-                                                                  hintText: snapshot
-                                                                      .data
-                                                                      .data[index]
-                                                                      .recruiter
-                                                                      .review,
                                                                   fillColor: Colors
                                                                       .grey
                                                                       .shade200),
@@ -522,14 +512,14 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                                 child:
                                                                 new Text('Submit'),
                                                                 onPressed: () {
-                                                                  review(
+                                                                  reviewController.text.toString() != ''?review(
                                                                       reviewController
                                                                           .text
                                                                           .toString(),
                                                                       snapshot
                                                                           .data
                                                                           .data[index]
-                                                                          .id);
+                                                                          .id):showToast(context, "write something");
                                                                 },
                                                               )
                                                             ],
@@ -612,15 +602,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                                               .black,
                                                                           fontSize: 16,
                                                                         ),
-                                                                        hintText: snapshot
-                                                                            .data
-                                                                            .data[index]
-                                                                            .recruiter
-                                                                            .review == null?"Details":snapshot
-                                                                            .data
-                                                                            .data[index]
-                                                                            .recruiter
-                                                                            .review,
+
                                                                         fillColor: Colors
                                                                             .grey
                                                                             .shade200),
@@ -641,7 +623,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                                 child:
                                                                 new Text('Submit'),
                                                                 onPressed: () {
-                                                                  report(
+                                                                  reportController.text != ''?report(
                                                                       reportController
                                                                           .text
                                                                           .toString(),
@@ -649,7 +631,8 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                                       snapshot
                                                                           .data
                                                                           .data[index]
-                                                                          .id);
+                                                                          .id):showToast(context, "write something");
+
                                                                 },
                                                               )
                                                             ],

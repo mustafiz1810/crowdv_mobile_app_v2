@@ -146,12 +146,16 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                         crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            snapshot.data.data[index].title,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
-                                                fontSize: 16),
+                                          SizedBox(
+                                            width:260,
+                                            child: Text(
+                                              snapshot.data.data[index].title,
+                                              style: TextStyle(
+                                                  overflow: TextOverflow.ellipsis,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                  fontSize: 16),
+                                            ),
                                           ),
                                           SizedBox(
                                             height: 5,

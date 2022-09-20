@@ -6,6 +6,7 @@ import 'package:crowdv_mobile_app/feature/screen/authentication/sign_in/forget_p
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/widgets/header_widget.dart';
+import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/progres_hud.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  void signin(String email, password) async {
+  void signin(String email, password,List<String> banner) async {
     try {
       Response response =
           await post(Uri.parse(NetworkConstants.BASE_URL + 'login'), headers: {
@@ -36,10 +37,10 @@ class _LoginPageState extends State<LoginPage> {
       });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data);
         pageRoute(data['result']['token'].toString());
         idRoute(data['result']['data']['id']);
         roleRoute(data['result']['data']['role']);
+        bannerRoute(banner);
         // print('created');
         setState(() {
           isApiCallProcess = false;
@@ -51,7 +52,8 @@ class _LoginPageState extends State<LoginPage> {
                     data['result']['data']['role'] != "organization"
                         ? HomeScreen(
                             id: data['result']['data']['id'],
-                            role: data['result']['data']['role'])
+                            role: data['result']['data']['role'],
+                            banner: banner,)
                         : OrganizationHome(
                             id: data['result']['data']['id'],
                             role: data['result']['data']['role'])),
@@ -100,6 +102,10 @@ class _LoginPageState extends State<LoginPage> {
   void roleRoute(String role) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString("role", role);
+  }
+  void bannerRoute(List<String> banner) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setStringList("banner", banner);
   }
 
   bool _obscured = false;
@@ -188,7 +194,7 @@ class _LoginPageState extends State<LoginPage> {
                                     labelText: "Password",
                                     fillColor: Colors.white,
                                     contentPadding:
-                                        EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                        EdgeInsets.fromLTRB(20, 20, 20, 20),
                                     labelStyle:
                                         TextStyle(fontWeight: FontWeight.bold),
                                     filled: true,
@@ -269,16 +275,26 @@ class _LoginPageState extends State<LoginPage> {
                                           color: Colors.white),
                                     ),
                                   ),
-                                  onPressed: () {
-                                    if (_formKey.currentState.validate()) {
-                                      setState(() {
-                                        isApiCallProcess = true;
-                                      });
-                                      signin(
-                                        emailController.text.toString(),
-                                        passwordController.text.toString(),
-                                      );
-                                    }
+                                  onPressed: () async{
+                                    getRequest('/api/v1/organization/opportunity/banner-list', null, {
+                                      'Content-Type': "application/json",
+                                    }).then((value) async {
+                                       List<String> banner = [];
+                                      for(Map map in value["data"]){
+                                        banner.add(map["banner"]);
+                                      }
+                                      if (_formKey.currentState.validate()) {
+                                        setState(() {
+                                          isApiCallProcess = true;
+                                        });
+                                        signin(
+                                          emailController.text.toString(),
+                                          passwordController.text.toString(),
+                                          banner
+                                        );
+                                      }
+
+                                    });
                                   },
                                 ),
                               ),

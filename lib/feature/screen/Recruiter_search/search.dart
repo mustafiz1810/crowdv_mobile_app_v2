@@ -19,16 +19,24 @@ import '../../../widgets/icon_box.dart';
 import '../home_page/widgets/chat.dart';
 
 class SearchPage extends StatefulWidget {
-  final dynamic id;
   final List<int> category;
   final List<int> membership;
   final List<String> gender;
   final List<String> profession;
   final int min_age;
   final int max_age;
-   String state,city;
+  String country,state, city;
 
-  SearchPage({this.category, this.membership,this.min_age,this.max_age,this.gender,this.profession,this.state,this.city,this.id});
+  SearchPage(
+      {this.category,
+      this.membership,
+      this.min_age,
+      this.max_age,
+      this.gender,
+      this.profession,
+        this.country,
+      this.state,
+      this.city,});
 
   @override
   State<StatefulWidget> createState() {
@@ -43,14 +51,15 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void initState() {
+    // print(widget.country);
     // print(widget.city);
     // print(widget.state);
     // print(widget.min_age);
     // print(widget.max_age);
-    // print(widget.category);
-    // print(widget.membership);
-    // print(widget.profession);
-    // print(widget.gender);
+    print(widget.category);
+    print(widget.membership);
+    print(widget.profession);
+    print(widget.gender);
 
     getCred();
     super.initState();
@@ -106,10 +115,9 @@ class _SearchPageState extends State<SearchPage> {
   Future<CategoryVolunteer> getCateVolunteerApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL +
-            'volunteer-search?state=${widget.state}&city=${widget.city}&category_id=${widget.category}&gender=${widget.gender}&membership_id=${widget.membership}&search=${volunteerController.text}&profession=${widget.profession}&min_age=${widget.min_age}&max_age=${widget.max_age}'),
+            'volunteer-search?state_id=${widget.state}&city_id=${widget.city}&country_id=${widget.country}&category_id=${widget.category}&gender=${widget.gender}&membership_id=${widget.membership}&search=${volunteerController.text}&profession=${widget.profession}&min_age=${widget.min_age}&max_age=${widget.max_age}'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
-    print(data);
     if (response.statusCode == 200) {
       return CategoryVolunteer.fromJson(data);
     } else {
@@ -129,8 +137,6 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,17 +150,18 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: primaryColor,
         actions: [
           Padding(
-            padding: const EdgeInsets.all( 15.0),
+            padding: const EdgeInsets.all(15.0),
             child: OutlinedButton(
-              onPressed: () async{
+              onPressed: () async {
                 getRequest('/api/v1/search-filter', null, {
                   'Content-Type': "application/json",
                   "Authorization": "Bearer ${token}"
                 }).then((value) async {
                   print(value["data"]);
-                  Get.to(() => RecruiterFilter(category: value["data"]["categories"],membership:value["data"]["memberships"]));
+                  Get.to(() => RecruiterFilter(
+                      category: value["data"]["categories"],
+                      membership: value["data"]["memberships"]));
                 });
-
               },
               child: Text(
                 'Filter',
@@ -170,10 +177,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ],
       ),
-      bottomNavigationBar: CustomBottomNavigation(
-        id: widget.id,
-        role: role,
-      ),
+      bottomNavigationBar: CustomBottomNavigation(),
       body: Column(
         children: [
           Padding(
@@ -280,15 +284,20 @@ class _SearchPageState extends State<SearchPage> {
                                       Row(
                                         children: [
                                           InkWell(
-                                            onTap: (){
-                                              Get.to(()=>CommonProfile(id: snapshot.data.data[index].id,));
+                                            onTap: () {
+                                              Get.to(() => CommonProfile(
+                                                    id: snapshot
+                                                        .data.data[index].id,
+                                                  ));
                                             },
                                             child: Text(
                                               snapshot.data.data[index]
-                                                      .firstName.toString() +
+                                                      .firstName
+                                                      .toString() +
                                                   " " +
                                                   snapshot
-                                                      .data.data[index].lastName.toString(),
+                                                      .data.data[index].lastName
+                                                      .toString(),
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 18),
@@ -330,7 +339,7 @@ class _SearchPageState extends State<SearchPage> {
                                             width: 80,
                                             height: 28,
                                             child: OutlinedButton(
-                                              onPressed: (){
+                                              onPressed: () {
                                                 showDialog(
                                                     context: context,
                                                     builder:
@@ -339,8 +348,8 @@ class _SearchPageState extends State<SearchPage> {
                                                         title: Container(
                                                           child: Padding(
                                                             padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
+                                                                const EdgeInsets
+                                                                    .all(8.0),
                                                             child: Text(
                                                               'Pick Opportunity',
                                                               style: TextStyle(
@@ -351,12 +360,12 @@ class _SearchPageState extends State<SearchPage> {
                                                           color: primaryColor,
                                                         ),
                                                         content:
-                                                        inviteAlertDialogContainer(
-                                                            context,
-                                                            snapshot
-                                                                .data
-                                                                .data[index]
-                                                                .id),
+                                                            inviteAlertDialogContainer(
+                                                                context,
+                                                                snapshot
+                                                                    .data
+                                                                    .data[index]
+                                                                    .id),
                                                       );
                                                     });
                                               },
@@ -364,9 +373,13 @@ class _SearchPageState extends State<SearchPage> {
                                                 children: [
                                                   Text(
                                                     'Invite',
-                                                    style: TextStyle(color: Colors.blue,fontSize: 12),
+                                                    style: TextStyle(
+                                                        color: Colors.blue,
+                                                        fontSize: 12),
                                                   ),
-                                                  SizedBox(width: 1,),
+                                                  SizedBox(
+                                                    width: 1,
+                                                  ),
                                                   Icon(
                                                     Icons.add,
                                                     color: Colors.blue,
@@ -375,9 +388,12 @@ class _SearchPageState extends State<SearchPage> {
                                                 ],
                                               ),
                                               style: OutlinedButton.styleFrom(
-                                                side: BorderSide( color: Colors.blue),
+                                                side: BorderSide(
+                                                    color: Colors.blue),
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(18.0),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          18.0),
                                                 ),
                                               ),
                                             ),
@@ -403,7 +419,7 @@ class _SearchPageState extends State<SearchPage> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Email : ',
+                                            'Profession : ',
                                             style: TextStyle(
                                                 color: primaryColor,
                                                 fontSize: 15),
@@ -412,7 +428,7 @@ class _SearchPageState extends State<SearchPage> {
                                             height: 2,
                                           ),
                                           Text(
-                                            'Phone : ',
+                                            'Gender : ',
                                             style: TextStyle(
                                                 color: primaryColor,
                                                 fontSize: 15),
@@ -442,7 +458,7 @@ class _SearchPageState extends State<SearchPage> {
                                             CrossAxisAlignment.end,
                                         children: [
                                           Text(
-                                            snapshot.data.data[index].email,
+                                            snapshot.data.data[index].profession,
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 14),
@@ -450,16 +466,18 @@ class _SearchPageState extends State<SearchPage> {
                                           SizedBox(
                                             height: 5,
                                           ),
-                                          Text(snapshot.data.data[index].phone.toString(),
+                                          Text(
+                                              snapshot.data.data[index].gender
+                                                  .toString(),
                                               style: TextStyle(fontSize: 14)),
                                           SizedBox(
                                             height: 5,
                                           ),
                                           Text(
-                                              snapshot.data.data[index].state.toString() +
+                                              snapshot.data.data[index].serviceState.name.toString() +
                                                   ", " +
-                                                  snapshot
-                                                      .data.data[index].city.toString(),
+                                                  snapshot.data.data[index].serviceCity.name
+                                                      .toString(),
                                               style: TextStyle(fontSize: 14)),
                                           SizedBox(
                                             height: 5,
@@ -492,7 +510,6 @@ class _SearchPageState extends State<SearchPage> {
       ),
     );
   }
-
 
   Widget inviteAlertDialogContainer(context, int id) {
     return FutureBuilder<PendingOpportunity>(

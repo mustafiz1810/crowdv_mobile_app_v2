@@ -37,10 +37,12 @@ class Datum {
     this.id,
     this.title,
     this.details,
+    this.country,
     this.state,
     this.city,
     this.zipCode,
     this.taskType,
+    this.dateFormat,
     this.date,
     this.datumStartTime,
     this.startTime,
@@ -60,11 +62,13 @@ class Datum {
   int id;
   String title;
   String details;
-  String state;
-  String city;
+  City country;
+  City state;
+  City city;
   String zipCode;
   String taskType;
-  String date;
+  String dateFormat;
+  DateTime date;
   String datumStartTime;
   DateTime startTime;
   String datumEndTime;
@@ -83,11 +87,13 @@ class Datum {
     id: json["id"],
     title: json["title"],
     details: json["details"],
-    state: json["state"],
-    city: json["city"],
+    country: City.fromJson(json["country"]),
+    state: City.fromJson(json["state"]),
+    city: City.fromJson(json["city"]),
     zipCode: json["zip_code"],
     taskType: json["task_type"],
-    date: json["date"],
+    dateFormat: json["date_format"],
+    date: DateTime.parse(json["date"]),
     datumStartTime: json["start_time"],
     startTime: DateTime.parse(json["startTime"]),
     datumEndTime: json["end_time"],
@@ -107,11 +113,13 @@ class Datum {
     "id": id,
     "title": title,
     "details": details,
-    "state": state,
-    "city": city,
+    "country": country.toJson(),
+    "state": state.toJson(),
+    "city": city.toJson(),
     "zip_code": zipCode,
     "task_type": taskType,
-    "date": date,
+    "date_format": dateFormat,
+    "date": date.toIso8601String(),
     "start_time": datumStartTime,
     "startTime": startTime.toIso8601String(),
     "end_time": datumEndTime,
@@ -149,6 +157,26 @@ class Category {
     "id": id,
     "name": name,
     "slug": slug,
+  };
+}
+
+class City {
+  City({
+    this.id,
+    this.name,
+  });
+
+  int id;
+  String name;
+
+  factory City.fromJson(Map<String, dynamic> json) => City(
+    id: json["id"],
+    name: json["name"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
   };
 }
 
@@ -226,6 +254,7 @@ class Recruiter {
     this.image,
     this.gender,
     this.typeOfDisability,
+    this.country,
     this.state,
     this.city,
     this.zipCode,
@@ -242,14 +271,15 @@ class Recruiter {
   String phone;
   String image;
   String gender;
-  dynamic typeOfDisability;
+  String typeOfDisability;
+  String country;
   String state;
   String city;
   String zipCode;
   String role;
   int profileRating;
   int rating;
-  String review;
+  dynamic review;
 
   factory Recruiter.fromJson(Map<String, dynamic> json) => Recruiter(
     id: json["id"],
@@ -259,14 +289,15 @@ class Recruiter {
     phone: json["phone"],
     image: json["image"],
     gender: json["gender"],
-    typeOfDisability: json["type_of_disability"],
+    typeOfDisability: json["type_of_disability"] == null ? null : json["type_of_disability"],
+    country: json["country"],
     state: json["state"],
     city: json["city"],
     zipCode: json["zip_code"],
     role: json["role"],
     profileRating: json["profile_rating"] == null ? null : json["profile_rating"],
     rating: json["rating"],
-    review: json["review"] == null ? null : json["review"],
+    review: json["review"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -277,13 +308,14 @@ class Recruiter {
     "phone": phone,
     "image": image,
     "gender": gender,
-    "type_of_disability": typeOfDisability,
+    "type_of_disability": typeOfDisability == null ? null : typeOfDisability,
+    "country": country,
     "state": state,
     "city": city,
     "zip_code": zipCode,
     "role": role,
     "profile_rating": profileRating == null ? null : profileRating,
     "rating": rating,
-    "review": review == null ? null : review,
+    "review": review,
   };
 }

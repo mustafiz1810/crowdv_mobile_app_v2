@@ -77,7 +77,6 @@ class _OrganizationOpportunitiesState extends State<OrganizationOpportunities> {
                               image: null,
                               packageImage: PackageImage.Image_3,
                               title: 'No Opportunity',
-                              subTitle: 'No  Opportunity available',
                               titleTextStyle: TextStyle(
                                 fontSize: 22,
                                 color: Color(0xff9da9c7),

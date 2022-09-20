@@ -16,8 +16,8 @@ import 'package:http/http.dart' as http;
 
 // import 'package:random_color/random_color.dart';
 class TrainingVideo extends StatefulWidget {
-  final id,userId;
-  TrainingVideo({this.id,this.userId});
+  final id;
+  TrainingVideo({this.id});
   @override
   State<TrainingVideo> createState() => _TrainingVideoState();
 }
@@ -106,10 +106,7 @@ class _TrainingVideoState extends State<TrainingVideo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: CustomBottomNavigation(
-        id:widget.userId,
-        role: role,
-      ),
+      bottomNavigationBar: CustomBottomNavigation(),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         // collapsedHeight: 150,
@@ -227,7 +224,6 @@ class _TrainingVideoState extends State<TrainingVideo> {
                   ),
                   onPressed: () {
                     Get.to(() => Test(
-                      userId:widget.userId,
                       trainingId: widget.id,
                     ));
                   },

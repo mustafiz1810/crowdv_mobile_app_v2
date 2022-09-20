@@ -18,8 +18,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class VolunteerHistory extends StatefulWidget {
-  final dynamic id;
-  VolunteerHistory({this.id});
   @override
   _VolunteerHistoryState createState() => _VolunteerHistoryState();
 }
@@ -181,10 +179,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
           backgroundColor: primaryColor,
           title: Text('History'),
         ),
-        bottomNavigationBar: CustomBottomNavigation(
-          id:widget.id,
-          role: role,
-        ),
+        bottomNavigationBar: CustomBottomNavigation(),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -324,13 +319,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                         snapshot
                                                                     .data
                                                                     .data[index]
-                                                                    .city !=
-                                                                null
-                                                            ? snapshot
-                                                                .data
-                                                                .data[index]
-                                                                .city
-                                                            : "",
+                                                                    .city.name.toString(),
                                                         style: TextStyle(
                                                             fontSize: 15,
                                                             color: Colors
@@ -543,15 +532,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                                         fontSize:
                                                                             16,
                                                                       ),
-                                                                      hintText: snapshot
-                                                                          .data
-                                                                          .data[
-                                                                              index]
-                                                                          .recruiter
-                                                                          .review,
-                                                                      fillColor: Colors
-                                                                          .grey
-                                                                          .shade200),
+                                                                      ),
                                                             ),
                                                             actions: <Widget>[
                                                               FlatButton(
@@ -567,7 +548,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                                 child: new Text(
                                                                     'Submit'),
                                                                 onPressed: () {
-                                                                  review(
+                                                                  reviewController.text != ''?review(
                                                                       reviewController
                                                                           .text
                                                                           .toString(),
@@ -575,7 +556,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                                           .data
                                                                           .data[
                                                                               index]
-                                                                          .id);
+                                                                          .id):showToast(context, "write something");
                                                                 },
                                                               )
                                                             ],
@@ -682,7 +663,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                                 child: new Text(
                                                                     'Submit'),
                                                                 onPressed: () {
-                                                                  report(
+                                                                  reportController.text != ''? report(
                                                                       reportController
                                                                           .text
                                                                           .toString(),
@@ -692,8 +673,8 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                                       snapshot
                                                                           .data
                                                                           .data[
-                                                                              index]
-                                                                          .id);
+                                                                      index]
+                                                                          .id):showToast(context, "write something");
                                                                 },
                                                               )
                                                             ],

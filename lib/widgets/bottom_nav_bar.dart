@@ -4,28 +4,33 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class CustomBottomNavigation extends StatefulWidget {
-  final dynamic role,id;
-  CustomBottomNavigation({this.role,this.id});
   @override
   State<CustomBottomNavigation> createState() => _CustomBottomNavigationState();
 }
 
 class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
-  // var user;
+  String token,role;
+  int id;
+  List<String> banner;
+  @override
+  void initState() {
+    getCred();
+    super.initState();
+  }
+  void getCred() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      token = pref.getString("user");
+      role = pref.getString("role");
+      id = pref.getInt("id");
+      banner = pref.getStringList("banner");
 
-  // @override
-  // void initState() {
-  //   getUser().then((value) {
-  //     setState(() {
-  //       user = value;
-  //     });
-  //   });
-  //   super.initState();
-  // }
-
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
@@ -43,12 +48,13 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                 MaterialPageRoute(
                     builder: (context) =>
                         HomeScreen(
-                            id: widget.id,
-                            role: widget.role)),
+                            id: id,
+                            role: role,
+                        banner: banner,)),
                     (Route<dynamic> route) => false);
           case 1:
-            widget.role=='volunteer'?
-             Get.to(VolunteerHistory(id: widget.id,)):Get.to(RecruiterHistory(id: widget.id,));
+            role=='volunteer'?
+             Get.to(VolunteerHistory()):Get.to(RecruiterHistory());
         }
       },
       selectedLabelStyle: TextStyle(

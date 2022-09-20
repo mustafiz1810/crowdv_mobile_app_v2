@@ -143,12 +143,16 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                snapshot.data.data[index].title,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black,
-                                                    fontSize: 16),
+                                              SizedBox(
+                                                width:260,
+                                                child: Text(
+                                                  snapshot.data.data[index].title,
+                                                  style: TextStyle(
+                                                      overflow: TextOverflow.ellipsis,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.black,
+                                                      fontSize: 16),
+                                                ),
                                               ),
                                               SizedBox(
                                                 height: 5,
@@ -173,11 +177,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                   ),
                                                   Text(
                                                     snapshot.data.data[index]
-                                                                .city !=
-                                                            null
-                                                        ? snapshot.data
-                                                            .data[index].city
-                                                        : "",
+                                                                .city.name.toString(),
                                                     style: TextStyle(
                                                         fontSize: 15,
                                                         color:
@@ -322,7 +322,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                     subtitle:
                                                         "Are you sure?",
                                                     style:
-                                                        SweetAlertStyle.success,
+                                                        SweetAlertStyle.confirm,
                                                     showCancelButton: true,
                                                     onPress: (bool isConfirm) {
                                                   if (isConfirm) {

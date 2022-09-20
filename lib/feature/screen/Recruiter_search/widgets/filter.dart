@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/widgets/multi_select_dynamic.dart';
 import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/widgets/multi_select_static.dart';
+import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:http/http.dart';
 import '../../../../utils/view_utils/colors.dart';
 import '../search.dart';
 
@@ -16,14 +19,58 @@ class RecruiterFilter extends StatefulWidget {
 }
 
 class _RecruiterFilterState extends State<RecruiterFilter> {
+  @override
+  void initState() {
+    super.initState();
+    getCountry();
+  }
+  var countryvalue;
+  var statevalue;
+  var cityvalue;
   List<int> _selectedCategory = [];
   List<int> _selectedMembership = [];
   List<String> _selectedGender = [];
   List<String> _selectedProfession = [];
-  String selectedCountry;
-  String selectedProvince;
-  double _lowValue = 0.0;
-  double _highValue = 100.0;
+  RangeValues _currentRangeValues = const RangeValues(0, 100);
+  List countries = [];
+  Future getCountry() async {
+    var baseUrl = NetworkConstants.BASE_URL + 'countries';
+
+    Response response = await get(Uri.parse(baseUrl));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonData = json.decode(response.body);
+      setState(() {
+        countries = jsonData['data'];
+      });
+    }
+  }
+  List states = [];
+  Future getState(countryId) async {
+    var baseUrl = NetworkConstants.BASE_URL + 'get-state-by-country/$countryId';
+
+    Response response = await get(Uri.parse(baseUrl));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonData = json.decode(response.body);
+      setState(() {
+        states = jsonData['data'];
+      });
+    }
+  }
+  List city = [];
+  Future getCity(stateId) async {
+    var baseUrl = NetworkConstants.BASE_URL + 'get-city-by-state/$stateId';
+
+    Response response = await get(Uri.parse(baseUrl));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonData = json.decode(response.body);
+      setState(() {
+        city = jsonData['data'];
+      });
+    }
+  }
   void _showMultiCategory() async {
     final List<int> results = await showDialog(
       context: context,
@@ -114,50 +161,10 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
       _selectedMembership.clear();
       _selectedGender.clear();
       _selectedProfession.clear();
-      _lowValue = 0.0;
-      _highValue = 100.0;
     });
   }
-
-  List<String> countries = [
-    'Alabama',
-    'Alaska',
-    'California',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Illinois',
-    'Kansas',
-    'Kentucky',
-    'Louisiana'
-  ];
-  List<String> AlabamaProvince = ['Birmingham', 'Montgomery'];
-  List<String> AlaskaProvince = ['Anchorage', 'Juneau'];
-  List<String> CaliforniaProvince = ['Los Angeles', 'Sacramento'];
-  List<String> ConnecticutProvince = ['Bridgeport', 'Hartford'];
-  List<String> DelawareProvince = ['Dover', 'Wilmington'];
-  List<String> FloridaProvince = ['Jacksonville', 'Tallahassee'];
-  List<String> IllinoisProvince = [
-    'Addison',
-    'Algonquin',
-    'Alton',
-    'Arlington Heights',
-    'Aurora',
-    'Bartlett',
-    'Batavia',
-    'Belleville',
-    'Belvidere',
-    'Berwyn',
-    'Bloomington',
-    'Bolingbrook',
-    'Buffalo Grove',
-    'Chicago',
-  ];
-  List<String> KansasProvince = ['Topeka', 'Wichita'];
-  List<String> KentuckyProvince = ['Frankfort', 'Louisville'];
-  List<String> LouisianaProvince = ['Baton Rouge', 'New Orleans'];
-  List<String> provinces = [];
-
+  bool isStateVisible = false;
+  bool isCityVisible = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -181,14 +188,22 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
                 // print(_selectedGender.toString());
                 // print(_selectedProfession.toString());
                 Get.to(() => SearchPage(
-                      state: selectedCountry,
-                      city: selectedProvince,
-                      category: _selectedCategory.length ==0?null:_selectedCategory,
-                      membership: _selectedMembership.length ==0?null:_selectedMembership,
-                      gender: _selectedGender.length ==0?null:_selectedGender,
-                      profession: _selectedProfession.length ==0?null:_selectedProfession,
-                      min_age: _lowValue.toInt(),
-                      max_age: _highValue.toInt(),
+                  country: countryvalue.toString(),
+                      state: statevalue.toString(),
+                      city: cityvalue.toString(),
+                      category: _selectedCategory.length == 0
+                          ? null
+                          : _selectedCategory,
+                      membership: _selectedMembership.length == 0
+                          ? null
+                          : _selectedMembership,
+                      gender:
+                          _selectedGender.length == 0 ? null : _selectedGender,
+                      profession: _selectedProfession.length == 0
+                          ? null
+                          : _selectedProfession,
+                      min_age: _currentRangeValues.start.round().toInt(),
+                      max_age: _currentRangeValues.end.round().toInt(),
                     ));
               },
               child: Text(
@@ -229,110 +244,205 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
                             ),
                           ],
                         ),
-                        DropdownButton<String>(
-                          hint: Center(
-                            child: Text(
-                              "Select State",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          underline: SizedBox(),
-                          iconEnabledColor: Colors.black,
-                          value: selectedCountry,
-                          isExpanded: true,
-                          items: countries.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        FormField<String>(
+                          builder: (FormFieldState<String> state) {
+                            return InputDecorator(
+                              decoration: InputDecoration(
+                                hintText: "Country",
+                                fillColor: Colors.white,
+                                labelStyle:
+                                TextStyle(fontWeight: FontWeight.bold),
+                                filled: true,
+                                contentPadding:
+                                EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    borderSide:
+                                    BorderSide(color: Colors.black)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    borderSide:
+                                    BorderSide(color: Colors.black)),
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    borderSide: BorderSide(
+                                        color: Colors.red, width: 2.0)),
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    borderSide: BorderSide(
+                                        color: Colors.red, width: 2.0)),
+                              ),
+                              child: Center(
+                                child: DropdownButton(
+                                  hint: Text('Country',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  underline: SizedBox(),
+                                  iconEnabledColor: Colors.black,
+                                  isExpanded: true,
+                                  items: countries.map((item) {
+                                    return DropdownMenuItem(
+                                      value: item['id'].toString(),
+                                      child: Text(item['name'].toString()),
+                                    );
+                                  }).toList(),
+                                  onChanged: (newVal) {
+                                    setState(() {
+                                      states.clear();
+                                      statevalue = null;
+                                      city.clear();
+                                      cityvalue = null;
+                                      countryvalue = newVal;
+                                      getState(newVal);
+                                      isStateVisible = true;
+                                    });
+                                    print(countryvalue);
+                                  },
+                                  value: countryvalue,
+                                ),
+                              ),
                             );
-                          }).toList(),
-                          selectedItemBuilder: (BuildContext context) =>
-                              countries
-                                  .map((e) => Center(
-                                        child: Text(
-                                          e,
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ))
-                                  .toList(),
-                          onChanged: (country) {
-                            if (country == 'Alabama') {
-                              provinces = AlabamaProvince;
-                            } else if (country == 'Alaska') {
-                              provinces = AlaskaProvince;
-                            } else if (country == 'California') {
-                              provinces = CaliforniaProvince;
-                            } else if (country == 'Connecticut') {
-                              provinces = ConnecticutProvince;
-                            } else if (country == 'Delaware') {
-                              provinces = DelawareProvince;
-                            } else if (country == 'Florida') {
-                              provinces = FloridaProvince;
-                            } else if (country == 'Illinois') {
-                              provinces = IllinoisProvince;
-                            } else if (country == 'Kansas') {
-                              provinces = KansasProvince;
-                            } else if (country == 'Kentucky') {
-                              provinces = KentuckyProvince;
-                            } else if (country == 'Louisiana') {
-                              provinces = LouisianaProvince;
-                            } else {
-                              provinces = [];
-                            }
-                            setState(() {
-                              selectedProvince = null;
-                              selectedCountry = country;
-                              print(selectedCountry.toString());
-                            });
                           },
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
-                        DropdownButton<String>(
-                          hint: Center(
-                            child: Text(
-                              "Select City",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
+                        Visibility(
+                          visible: isStateVisible,
+                          child:  FormField<String>(
+                            builder: (FormFieldState<String> state) {
+                              return InputDecorator(
+                                decoration: InputDecoration(
+                                  hintText: "Division/Province/State",
+                                  fillColor: Colors.white,
+                                  labelStyle: TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                  filled: true,
+                                  contentPadding:
+                                  EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(12.0),
+                                      borderSide:
+                                      BorderSide(color: Colors.black)),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(12.0),
+                                      borderSide:
+                                      BorderSide(color: Colors.black)),
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(12.0),
+                                      borderSide: BorderSide(
+                                          color: Colors.red, width: 2.0)),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(12.0),
+                                      borderSide: BorderSide(
+                                          color: Colors.red, width: 2.0)),
+                                ),
+                                child: Center(
+                                  child: DropdownButton(
+                                    hint: Text("Division/Province/State",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    underline: SizedBox(),
+                                    iconEnabledColor: Colors.black,
+                                    isExpanded: true,
+                                    items: states.map((item) {
+                                      return DropdownMenuItem(
+                                        value: item['id'].toString(),
+                                        child:
+                                        Text(item['name'].toString()),
+                                      );
+                                    }).toList(),
+                                    onChanged: (newVal) {
+                                      setState(() {
+                                        city.clear();
+                                        cityvalue = null;
+                                        statevalue = newVal;
+                                        getCity(newVal);
+                                        isCityVisible = true;
+                                      });
+                                      print(statevalue);
+                                    },
+                                    value: statevalue,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                          underline: SizedBox(),
-                          iconEnabledColor: Colors.black,
-                          value: selectedProvince,
-                          isExpanded: true,
-                          items: provinces.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          selectedItemBuilder: (BuildContext context) =>
-                              provinces
-                                  .map((e) => Center(
-                                        child: Text(
-                                          e,
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ))
-                                  .toList(),
-                          onChanged: (province) {
-                            setState(() {
-                              selectedProvince = province;
-                              print(selectedProvince.toString());
-                            });
-                          },
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Visibility(
+                          visible: isCityVisible,
+                          child: FormField<String>(
+                            builder: (FormFieldState<String> state) {
+                              return InputDecorator(
+                                decoration: InputDecoration(
+                                  hintText: "City",
+                                  fillColor: Colors.white,
+                                  labelStyle: TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                  filled: true,
+                                  contentPadding:
+                                  EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(12.0),
+                                      borderSide:
+                                      BorderSide(color: Colors.black)),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(12.0),
+                                      borderSide:
+                                      BorderSide(color: Colors.black)),
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(12.0),
+                                      borderSide: BorderSide(
+                                          color: Colors.red, width: 2.0)),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(12.0),
+                                      borderSide: BorderSide(
+                                          color: Colors.red, width: 2.0)),
+                                ),
+                                child: Center(
+                                  child: DropdownButton(
+                                    hint: Text('City',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    underline: SizedBox(),
+                                    iconEnabledColor: Colors.black,
+                                    isExpanded: true,
+                                    items: city.map((item) {
+                                      return DropdownMenuItem(
+                                        value: item['id'].toString(),
+                                        child:
+                                        Text(item['name'].toString()),
+                                      );
+                                    }).toList(),
+                                    onChanged: (newVal) {
+                                      setState(() {
+                                        cityvalue = newVal;
+                                      });
+                                      print(cityvalue);
+                                    },
+                                    value: cityvalue,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
                         ),
                       ],
                     ),
@@ -569,20 +679,20 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                             RangeSlider(
-                                min: 0.0,
-                                max: 100.0,
-                                divisions: 10,
-                                inactiveColor: Colors.grey,
-                                activeColor: primaryColor,
-                                labels: RangeLabels(_lowValue.toString(),
-                                    _highValue.toString()),
-                                values: RangeValues(_lowValue, _highValue),
-                                onChanged: (_range) {
-                                  setState(() {
-                                    _lowValue = _range.start;
-                                    _highValue = _range.end;
-                                  });
-                                })
+                              values: _currentRangeValues,
+                              min: 0,
+                              max: 100,
+                              divisions: 10,
+                              labels: RangeLabels(
+                                _currentRangeValues.start.round().toString(),
+                                _currentRangeValues.end.round().toString(),
+                              ),
+                              onChanged: (RangeValues values) {
+                                setState(() {
+                                  _currentRangeValues = values;
+                                });
+                              },
+                            ),
                           ],
                         ),
                         // display selected items
@@ -600,7 +710,9 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
                                         fontWeight: FontWeight.w600),
                                   ),
                                   Text(
-                                    _lowValue.toString(),
+                                    _currentRangeValues.start
+                                        .round()
+                                        .toString(),
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600),
@@ -619,7 +731,7 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
                                         fontWeight: FontWeight.w600),
                                   ),
                                   Text(
-                                    _highValue.toString(),
+                                    _currentRangeValues.end.round().toString(),
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600),

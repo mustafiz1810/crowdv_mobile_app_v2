@@ -20,6 +20,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
   Animation<double> animation;
   String token, role;
   int id;
+  List<String> banner;
   @override
   void initState() {
     getCred();
@@ -36,6 +37,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
       token = pref.getString("user");
       id = pref.getInt("id");
       role = pref.getString("role");
+      banner = pref.getStringList("banner");
     });
   }
    onReady() {
@@ -51,7 +53,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     // print(role);
     token == null?
     Get.off(LoginPage())
-        :role != "organization"?Get.off(HomeScreen(id: id,role: role,)):Get.off(OrganizationHome(id: id,role: role,));
+        :role != "organization"?Get.off(HomeScreen(id: id,role: role,banner: banner,)):Get.off(OrganizationHome(id: id,role: role,));
   }
 
   @override

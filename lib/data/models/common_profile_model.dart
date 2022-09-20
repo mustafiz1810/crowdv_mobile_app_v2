@@ -40,6 +40,7 @@ class Data {
     this.lastName,
     this.email,
     this.phone,
+    this.country,
     this.state,
     this.city,
     this.zipCode,
@@ -51,9 +52,13 @@ class Data {
     this.dob,
     this.image,
     this.role,
-    this.serviceCity,
+    this.serviceCountry,
     this.serviceState,
+    this.serviceCity,
     this.serviceZipCode,
+    this.isEmailNotification,
+    this.isDatabaseNotification,
+    this.isSmsNotification,
     this.workingHours,
     this.rating,
     this.opportunities,
@@ -67,10 +72,11 @@ class Data {
   String lastName;
   String email;
   String phone;
-  String state;
-  String city;
+  City country;
+  City state;
+  City city;
   String zipCode;
-  List<int> typeOfDisability;
+  List<dynamic> typeOfDisability;
   String profession;
   bool termsAndConditions;
   Membership membership;
@@ -78,9 +84,13 @@ class Data {
   DateTime dob;
   String image;
   String role;
-  String serviceCity;
-  String serviceState;
-  String serviceZipCode;
+  City serviceCountry;
+  City serviceState;
+  City serviceCity;
+  dynamic serviceZipCode;
+  bool isEmailNotification;
+  bool isDatabaseNotification;
+  bool isSmsNotification;
   int workingHours;
   int rating;
   int opportunities;
@@ -94,10 +104,11 @@ class Data {
     lastName: json["last_name"],
     email: json["email"],
     phone: json["phone"],
-    state: json["state"],
-    city: json["city"],
+    country: City.fromJson(json["country"]),
+    state: City.fromJson(json["state"]),
+    city: City.fromJson(json["city"]),
     zipCode: json["zip_code"],
-    typeOfDisability: List<int>.from(json["type_of_disability"].map((x) => x)),
+    typeOfDisability: List<dynamic>.from(json["type_of_disability"].map((x) => x)),
     profession: json["profession"],
     termsAndConditions: json["terms_and_conditions"],
     membership: Membership.fromJson(json["membership"]),
@@ -105,9 +116,13 @@ class Data {
     dob: DateTime.parse(json["dob"]),
     image: json["image"],
     role: json["role"],
-    serviceCity: json["service_city"],
-    serviceState: json["service_state"],
+    serviceCountry: City.fromJson(json["service_country"]),
+    serviceState: City.fromJson(json["service_state"]),
+    serviceCity: City.fromJson(json["service_city"]),
     serviceZipCode: json["service_zip_code"],
+    isEmailNotification: json["is_email_notification"],
+    isDatabaseNotification: json["is_database_notification"],
+    isSmsNotification: json["is_sms_notification"],
     workingHours: json["working_hours"],
     rating: json["rating"],
     opportunities: json["opportunities"],
@@ -122,8 +137,9 @@ class Data {
     "last_name": lastName,
     "email": email,
     "phone": phone,
-    "state": state,
-    "city": city,
+    "country": country.toJson(),
+    "state": state.toJson(),
+    "city": city.toJson(),
     "zip_code": zipCode,
     "type_of_disability": List<dynamic>.from(typeOfDisability.map((x) => x)),
     "profession": profession,
@@ -133,14 +149,38 @@ class Data {
     "dob": "${dob.year.toString().padLeft(4, '0')}-${dob.month.toString().padLeft(2, '0')}-${dob.day.toString().padLeft(2, '0')}",
     "image": image,
     "role": role,
-    "service_city": serviceCity,
-    "service_state": serviceState,
+    "service_country": serviceCountry.toJson(),
+    "service_state": serviceState.toJson(),
+    "service_city": serviceCity.toJson(),
     "service_zip_code": serviceZipCode,
+    "is_email_notification": isEmailNotification,
+    "is_database_notification": isDatabaseNotification,
+    "is_sms_notification": isSmsNotification,
     "working_hours": workingHours,
     "rating": rating,
     "opportunities": opportunities,
     "is_complete": isComplete,
     "is_online": isOnline,
+  };
+}
+
+class City {
+  City({
+    this.id,
+    this.name,
+  });
+
+  int id;
+  String name;
+
+  factory City.fromJson(Map<String, dynamic> json) => City(
+    id: json["id"] == null ? null : json["id"],
+    name: json["name"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id == null ? null : id,
+    "name": name,
   };
 }
 

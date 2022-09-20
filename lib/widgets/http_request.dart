@@ -5,14 +5,13 @@ import 'package:flutter_html/html_parser.dart';
 import 'package:http/http.dart' as http;
 
 Future getRequest(path, qparam, headers) async {
-  final response = await http.get(Uri.https('system.getcrowdv.com', path, qparam),
-      headers: headers);
+  final response = await http
+      .get(Uri.https('system.getcrowdv.com', path, qparam), headers: headers);
 
   // debugPrint(response.body);
 
   if (response.statusCode == 200) {
     var data = json.decode(response.body);
-    print(data["message"]);
     return data;
   } else {
     var data = json.decode(response.body);
@@ -73,8 +72,10 @@ Future putRequest(path, headers, qparam, body) async {
   print(qparam.runtimeType);
   print(body.runtimeType);
 
-  final response = await http.put(Uri.https('system.getcrowdv.com', path, qparam),
-      headers: headers, body: body);
+  final response = await http.put(
+      Uri.https('system.getcrowdv.com', path, qparam),
+      headers: headers,
+      body: body);
 
   if (response.statusCode == 200) {
     var data = json.decode(response.body);

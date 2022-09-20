@@ -11,7 +11,7 @@ class ThemeHelper{
       fillColor: Colors.white,
       labelStyle: TextStyle(fontWeight: FontWeight.bold),
       filled: true,
-      contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+      contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 20),
       focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
       enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
       errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.red, width: 2.0)),

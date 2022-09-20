@@ -37,6 +37,7 @@ class Datum {
     this.id,
     this.title,
     this.details,
+    this.country,
     this.state,
     this.city,
     this.zipCode,
@@ -60,8 +61,9 @@ class Datum {
   int id;
   String title;
   String details;
-  String state;
-  String city;
+  City country;
+  City state;
+  City city;
   String zipCode;
   String taskType;
   String date;
@@ -70,7 +72,7 @@ class Datum {
   String datumEndTime;
   DateTime endTime;
   int workingHours;
-  dynamic benefits;
+  String benefits;
   bool isPublic;
   String status;
   int applyStatus;
@@ -83,8 +85,9 @@ class Datum {
     id: json["id"],
     title: json["title"],
     details: json["details"],
-    state: json["state"],
-    city: json["city"],
+    country: City.fromJson(json["country"]),
+    state: City.fromJson(json["state"]),
+    city: City.fromJson(json["city"]),
     zipCode: json["zip_code"],
     taskType: json["task_type"],
     date: json["date"],
@@ -93,7 +96,7 @@ class Datum {
     datumEndTime: json["end_time"],
     endTime: DateTime.parse(json["endTime"]),
     workingHours: json["working_hours"],
-    benefits: json["benefits"],
+    benefits: json["benefits"] == null ? null : json["benefits"],
     isPublic: json["is_public"],
     status: json["status"],
     applyStatus: json["apply_status"],
@@ -107,8 +110,9 @@ class Datum {
     "id": id,
     "title": title,
     "details": details,
-    "state": state,
-    "city": city,
+    "country": country.toJson(),
+    "state": state.toJson(),
+    "city": city.toJson(),
     "zip_code": zipCode,
     "task_type": taskType,
     "date": date,
@@ -117,7 +121,7 @@ class Datum {
     "end_time": datumEndTime,
     "endTime": endTime.toIso8601String(),
     "working_hours": workingHours,
-    "benefits": benefits,
+    "benefits": benefits == null ? null : benefits,
     "is_public": isPublic,
     "status": status,
     "apply_status": applyStatus,
@@ -153,6 +157,26 @@ class Category {
     "name": name,
     "slug": slug,
     "icon": icon,
+  };
+}
+
+class City {
+  City({
+    this.id,
+    this.name,
+  });
+
+  int id;
+  String name;
+
+  factory City.fromJson(Map<String, dynamic> json) => City(
+    id: json["id"],
+    name: json["name"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
   };
 }
 
@@ -229,6 +253,7 @@ class Recruiter {
     this.phone,
     this.image,
     this.typeOfDisability,
+    this.country,
     this.state,
     this.city,
     this.zipCode,
@@ -245,7 +270,8 @@ class Recruiter {
   String email;
   String phone;
   String image;
-  dynamic typeOfDisability;
+  String typeOfDisability;
+  String country;
   String state;
   String city;
   String zipCode;
@@ -253,7 +279,7 @@ class Recruiter {
   int profileRating;
   int rating;
   dynamic review;
-  dynamic gender;
+  String gender;
 
   factory Recruiter.fromJson(Map<String, dynamic> json) => Recruiter(
     id: json["id"] == null ? null : json["id"],
@@ -262,7 +288,8 @@ class Recruiter {
     email: json["email"] == null ? null : json["email"],
     phone: json["phone"] == null ? null : json["phone"],
     image: json["image"] == null ? null : json["image"],
-    typeOfDisability: json["type_of_disability"],
+    typeOfDisability: json["type_of_disability"] == null ? null : json["type_of_disability"],
+    country: json["country"] == null ? null : json["country"],
     state: json["state"] == null ? null : json["state"],
     city: json["city"] == null ? null : json["city"],
     zipCode: json["zip_code"] == null ? null : json["zip_code"],
@@ -270,7 +297,7 @@ class Recruiter {
     profileRating: json["profile_rating"] == null ? null : json["profile_rating"],
     rating: json["rating"],
     review: json["review"],
-    gender: json["gender"],
+    gender: json["gender"] == null ? null : json["gender"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -280,7 +307,8 @@ class Recruiter {
     "email": email == null ? null : email,
     "phone": phone == null ? null : phone,
     "image": image == null ? null : image,
-    "type_of_disability": typeOfDisability,
+    "type_of_disability": typeOfDisability == null ? null : typeOfDisability,
+    "country": country == null ? null : country,
     "state": state == null ? null : state,
     "city": city == null ? null : city,
     "zip_code": zipCode == null ? null : zipCode,
@@ -288,6 +316,6 @@ class Recruiter {
     "profile_rating": profileRating == null ? null : profileRating,
     "rating": rating,
     "review": review,
-    "gender": gender,
+    "gender": gender == null ? null : gender,
   };
 }

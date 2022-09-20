@@ -12,15 +12,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class TrainingList extends StatefulWidget {
-  final dynamic id;
-  TrainingList({this.id});
   @override
   State<TrainingList> createState() => _TrainingListState();
 }
 
 class _TrainingListState extends State<TrainingList> {
-  String token = "";
-  String role = "";
+  String token,role;
+
+  List<String> banner;
 
   @override
   void initState() {
@@ -33,6 +32,8 @@ class _TrainingListState extends State<TrainingList> {
     setState(() {
       token = pref.getString("user");
       role = pref.getString("role");
+      banner = pref.getStringList("banner");
+
     });
   }
 
@@ -60,10 +61,7 @@ class _TrainingListState extends State<TrainingList> {
         ),
         backgroundColor: primaryColor,
       ),
-      bottomNavigationBar: CustomBottomNavigation(
-        id:widget.id,
-        role: role,
-      ),
+      bottomNavigationBar: CustomBottomNavigation(),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -219,7 +217,6 @@ class _TrainingListState extends State<TrainingList> {
                                                 child: InkWell(
                                                   onTap: () {
                                                     Get.to(() => TrainingVideo(
-                                                      userId: widget.id,
                                                         id: snapshot
                                                             .data
                                                             .data[index]

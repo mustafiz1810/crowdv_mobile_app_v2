@@ -6,7 +6,7 @@ import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:inkwell_splash/inkwell_splash.dart';
 import '../../../data/models/notification_model.dart';
-import 'home_contents/widgets/details.dart';
+import 'home_contents/widgets/applied_volunteer.dart';
 
 class NotificationPage extends StatefulWidget {
   final dynamic id,data, token,role;
@@ -68,10 +68,11 @@ class _NotificationPageState extends State<NotificationPage> {
                             widget.data[index].data.opportunityId != null ?Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => OpportunityDetails(
-                                      role: widget.role,
-                                      id: widget.data[index].data.opportunityId,
-                                      token: widget.token)),
+                                  builder: (context) =>  AppliedVolunteer(
+                                    token:
+                                    widget.token,
+                                    id: widget.data[index].data.opportunityId,
+                                  )),
                             ):Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -86,7 +87,7 @@ class _NotificationPageState extends State<NotificationPage> {
                             height: 90,
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: Color(0xFFe5e5e5),
+                              color: widget.data[index].readAt == null?Color(0xFFe5e5e5):Colors.white,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.4),
@@ -126,7 +127,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                 height: 10,
                                 width: 10,
                                 decoration: BoxDecoration(
-                                    color: Color(0xFF1d4e89),
+                                    color: widget.data[index].readAt == null?Color(0xFF1d4e89):Colors.white,
                                     borderRadius:
                                     BorderRadius.all(Radius.circular(100))),
                               ),

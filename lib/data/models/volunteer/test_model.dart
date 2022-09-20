@@ -83,7 +83,7 @@ class Test {
   int totalScore;
   int passingMark;
   int status;
-  UserTest userTest;
+  dynamic userTest;
 
   factory Test.fromJson(Map<String, dynamic> json) => Test(
     id: json["id"],
@@ -93,7 +93,7 @@ class Test {
     totalScore: json["total_score"],
     passingMark: json["passing_mark"],
     status: json["status"],
-    userTest: UserTest.fromJson(json["userTest"]),
+    userTest: json["userTest"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -104,50 +104,6 @@ class Test {
     "total_score": totalScore,
     "passing_mark": passingMark,
     "status": status,
-    "userTest": userTest.toJson(),
-  };
-}
-
-class UserTest {
-  UserTest({
-    this.id,
-    this.userId,
-    this.testId,
-    this.totalScore,
-    this.status,
-    this.result,
-    this.createdAt,
-    this.updatedAt,
-  });
-
-  int id;
-  int userId;
-  int testId;
-  int totalScore;
-  String status;
-  String result;
-  dynamic createdAt;
-  dynamic updatedAt;
-
-  factory UserTest.fromJson(Map<String, dynamic> json) => UserTest(
-    id: json["id"],
-    userId: json["user_id"],
-    testId: json["test_id"],
-    totalScore: json["total_score"],
-    status: json["status"],
-    result: json["result"],
-    createdAt: json["created_at"],
-    updatedAt: json["updated_at"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "user_id": userId,
-    "test_id": testId,
-    "total_score": totalScore,
-    "status": status,
-    "result": result,
-    "created_at": createdAt,
-    "updated_at": updatedAt,
+    "userTest": userTest,
   };
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:crowdv_mobile_app/data/models/notification_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/search.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/certificate.dart';
@@ -9,7 +10,6 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/upcomin
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/volunteer_opportunities.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/applied_volunteer.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/notification.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/cslider.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/drawer.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
@@ -31,7 +31,8 @@ import 'home_contents/recruiter/my_opportunities.dart';
 
 class HomeScreen extends StatefulWidget {
   final dynamic id, role;
-  HomeScreen({this.id, this.role});
+  final List<String> banner;
+  HomeScreen({this.id, this.role, this.banner});
   @override
   _HomeScreenState createState() => new _HomeScreenState();
 }
@@ -128,8 +129,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,12 +147,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 disability: snapshot.data.data.typeOfDisability,
                 prof: snapshot.data.data.profession,
                 gender: snapshot.data.data.gender,
-                state: snapshot.data.data.state,
-                city: snapshot.data.data.city,
+                country: snapshot.data.data.country.id,
+                state: snapshot.data.data.state.id,
+                city: snapshot.data.data.city.id,
                 zip: snapshot.data.data.zipCode,
               );
             } else {
-              return Container();
+              return Container(child: Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),);
             }
           }),
       appBar: AppBar(
@@ -189,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => NotificationPage(
-                                        id:widget.id,
+                                            id: widget.id,
                                             data: snapshot.data.data.list,
                                             token: token,
                                             role: widget.role,
@@ -233,10 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      bottomNavigationBar: CustomBottomNavigation(
-        id: widget.id,
-        role: widget.role,
-      ),
+      bottomNavigationBar: CustomBottomNavigation(),
       resizeToAvoidBottomInset: false,
       floatingActionButton: widget.role == "volunteer"
           ? FloatingActionButton(
@@ -246,9 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.black,
               ),
               onPressed: () {
-                Get.to(() => VolunteerSearchPage(
-                      id: widget.id,
-                    ));
+                Get.to(() => VolunteerSearchPage());
               },
             )
           : FloatingActionButton(
@@ -257,10 +256,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Icons.search,
                 color: Colors.black,
               ),
-              onPressed: () {
-                Get.to(() => SearchPage(
-                      id: widget.id,
-                    ));
+              onPressed: ()  {
+                Get.to(() => SearchPage());
               },
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -274,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Container(
                 height: 90,
-                child: HeaderWidget(role: widget.role, id: widget.id),
+                child: HeaderWidget(role: widget.role, id: widget.id,banner: widget.banner,),
               ),
               Divider(
                 height: 20,
@@ -284,9 +281,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Align(
-                          alignment: Alignment.topCenter,
-                          child: CarouselExample()),
-                    )
+                        alignment: Alignment.topCenter,
+                        child: SizedBox(
+                          height: 150.0,
+                          width: double.infinity,
+                          child: Carousel(
+                            dotSpacing: 15.0,
+                            dotSize: 4.0,
+                            dotIncreasedColor: Colors.white,
+                            dotBgColor: Colors.transparent,
+                            indicatorBgPadding: 10.0,
+                            dotPosition: DotPosition.bottomCenter,
+                            images: widget.banner
+                                .map((item) => Container(
+                                      child: Image.network(
+                                        item,
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ))
+                                .toList(),
+                            autoplayDuration: const Duration(seconds: 4),
+                          ),
+                        ),
+                      ))
                   : Container(),
               Expanded(
                 child: Padding(
@@ -337,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           '/api/v1/get-category', {
                                         "Authorization": "Bearer ${token}"
                                       }).then((value) async {
-                                        print(value["data"]["category"]);
+                                        print(value);
                                         List<String> category = [];
 
                                         for (Map map in value["data"]
@@ -358,12 +375,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                           '/api/v1/get-category', {
                                         "Authorization": "Bearer ${token}"
                                       }).then((value) async {
-                                        print(value["data"]['service_state']);
+                                        print(value);
                                         Get.to(() => ServiceLocation(
-                                              country: value['data']
-                                                  ['service_state'],
+                                          country: value['data']
+                                          ['service_country']['id'],
+                                              state: value['data']
+                                                  ['service_state']['id'],
                                               city: value['data']
-                                                  ['service_city'],
+                                                  ['service_city']['id'],
                                               zip: value['data']
                                                   ['service_zip_code'],
                                             ));
@@ -374,7 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     title: "Training",
                                     svgSrc: "assets/e-learning.svg",
                                     press: () {
-                                      Get.to(() => TrainingList(id: widget.id));
+                                      Get.to(() => TrainingList());
                                     },
                                   ),
                                   // CategoryCard(

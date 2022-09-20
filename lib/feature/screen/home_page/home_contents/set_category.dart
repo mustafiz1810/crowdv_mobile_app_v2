@@ -135,6 +135,7 @@ class _SetCategoryState extends State<SetCategory> {
                                           'Content-Type': "application/json",
                                           "Authorization": "Bearer $token"
                                         }).then((value) async {
+                                          print(value);
                                       showToast(context, 'remove');
                                     });
                                     tempArray
@@ -146,6 +147,7 @@ class _SetCategoryState extends State<SetCategory> {
                                           'Content-Type': "application/json",
                                           "Authorization": "Bearer $token"
                                         }).then((value) async {
+                                          print(value);
                                       showToast(context, 'Added');
                                     });
                                     tempArray

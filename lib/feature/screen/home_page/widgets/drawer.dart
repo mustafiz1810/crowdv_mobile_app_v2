@@ -22,6 +22,7 @@ class NavDrawer extends StatefulWidget {
       disability,
       prof,
       gender,
+  country,
       state,
       city,
       zip;
@@ -35,6 +36,7 @@ class NavDrawer extends StatefulWidget {
       this.disability,
       this.prof,
       this.gender,
+        this.country,
       this.state,
       this.zip,
       this.city,});
@@ -93,6 +95,7 @@ class _NavDrawerState extends State<NavDrawer> {
                 'Content-Type': "application/json",
                 "Authorization": "Bearer ${token}"
               }).then((value) async {
+                print(widget.disability);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -102,8 +105,9 @@ class _NavDrawerState extends State<NavDrawer> {
                             disability: widget.disability,
                             chosenValue: widget.prof,
                             dropdown: widget.gender,
-                            selectedCountry: widget.state,
-                            selectedProvince: widget.city,
+                            country: widget.country,
+                            state: widget.state,
+                            city: widget.city,
                             zip: widget.zip,
                           )),
                 );
