@@ -54,6 +54,7 @@ class _PhoneOtpPageState extends State<PhoneOtp> {
         ));
       } else {
         var data = jsonDecode(response.body.toString());
+        print(data);
         showToast(context, data['message']);
       }
     } catch (e) {

@@ -41,49 +41,7 @@ class _OrgOpportunityState extends State<OrgOpportunity> {
   TextEditingController titleController = TextEditingController();
   TextEditingController linkController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  // void create(String title, link,description,File image) async {
-  //   try {
-  //     Response response = await post(
-  //         Uri.parse(NetworkConstants.BASE_URL + 'organization/opportunity'),
-  //         headers: {
-  //           "Authorization": "Bearer $token",
-  //           "Accept": "application/json"
-  //         },
-  //         body: {
-  //           'title': title,
-  //           'banner':Image.file(image),
-  //           'link': link,
-  //           'description':description
-  //         });
-  //     if (response.statusCode == 200) {
-  //       var data = jsonDecode(response.body.toString());
-  //       // print(data);
-  //       showToast(context, data['message']);
-  //       Navigator.pop(context);
-  //     } else {
-  //       var data = jsonDecode(response.body.toString());
-  //       showToast(context, data['errors'].toString());
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //     showDialog(
-  //         context: context,
-  //         builder: (BuildContext context) {
-  //           return AlertDialog(
-  //             title: Text("Exception:"),
-  //             content: Text(e.toString()),
-  //             actions: [
-  //               TextButton(
-  //                 child: Text("Try Again"),
-  //                 onPressed: () {
-  //                   Navigator.of(context).pop();
-  //                 },
-  //               )
-  //             ],
-  //           );
-  //         });
-  //   }
-  // }
+  final _formKey = GlobalKey<FormState>();
   upload(File imageFile, String title, link, description) async {
     // open a bytestream
     var stream =
@@ -148,20 +106,14 @@ class _OrgOpportunityState extends State<OrgOpportunity> {
         padding: const EdgeInsets.all(10.0),
         child: InkWellSplash(
           onTap: () {
-            print(_image.toString());
-            // create(
-            //   titleController.text.toString(),
-            //   linkController.text.toString(),
-            //   descriptionController.text.toString(),
-            //   _image,
-            // );
-            // button pressed
-            upload(
-              _image,
-              titleController.text.toString(),
-              linkController.text.toString(),
-              descriptionController.text.toString(),
-            );
+            if (_formKey.currentState.validate()) {
+              upload(
+                _image,
+                titleController.text.toString(),
+                linkController.text.toString(),
+                descriptionController.text.toString(),
+              );
+            }
           },
           child: Container(
             height: 48,
@@ -195,152 +147,166 @@ class _OrgOpportunityState extends State<OrgOpportunity> {
       body: Container(
         padding: EdgeInsets.all(20),
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    "Provide details of your opportunity: ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              //--------------------------------here is title
-              Container(
-                child: TextFormField(
-                  controller: titleController,
-                  decoration: ThemeHelper()
-                      .textInputDecoration('Title', 'Enter your title'),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "Provide details of your opportunity: ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    )
+                  ],
                 ),
-                decoration: ThemeHelper().inputBoxDecorationShaddow(),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Row(
-                children: [
-                  Text(
-                    "Link: ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              //--------------------------------here is link
-              Container(
-                child: TextFormField(
-                  textInputAction: TextInputAction.done,
-                  controller: linkController,
-                  maxLines: 2,
-                  decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      filled: true,
-                      hintStyle: TextStyle(
-                          color: Colors.grey.shade400,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700),
-                      hintText: "https://link",
-                      fillColor: Colors.grey.shade200),
+                SizedBox(
+                  height: 5,
                 ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Row(
-                children: [
-                  Text(
-                    "Description: ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              //--------------------------------here is discription
-              Container(
-                child: TextFormField(
-                  textInputAction: TextInputAction.done,
-                  controller: descriptionController,
-                  maxLines: 5,
-                  maxLength: 200,
-                  decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey.shade200),
-                  validator: (val) {
-                    if (val.isEmpty) {
-                      return "Description can't be empty";
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Banner ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+                //--------------------------------here is title
+                Container(
+                  child: TextFormField(
+                    controller: titleController,
+                    decoration: ThemeHelper()
+                        .textInputDecoration('Title', 'Enter your title'),
                   ),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      UploadImage();
+                  decoration: ThemeHelper().inputBoxDecorationShaddow(),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "Link: ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                //--------------------------------here is link
+                Container(
+                  child: TextFormField(
+                      textInputAction: TextInputAction.done,
+                      controller: linkController,
+                      maxLines: 2,
+                      decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          filled: true,
+                          hintStyle: TextStyle(
+                              color: Colors.grey.shade400,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700),
+                          hintText: "https://link",
+                          fillColor: Colors.grey.shade200),
+                    validator: (val) {
+                      if (val.isEmpty) {
+                        return "Url can't be empty";
+                      } else if (!RegExp(
+                          r'(http|https)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?')
+                          .hasMatch(val)) {
+                        return "Enter a valid url address";
+                      } else {
+                        return null;
+                      }
                     },
-                    style: ElevatedButton.styleFrom(
-                        elevation: 5,
-                        primary: Colors.grey,
-                        fixedSize: const Size(120, 40),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50))),
-                    label: const Text('Upload'),
-                    icon: const Icon(Icons.cloud_upload_outlined),
-                  )
-                ],
-              ),
-              Container(
-                width: double.infinity,
-                height: 200,
-                child: _image == null
-                    ? Center(child: Text("No image selected"))
-                    : Image.file(_image),
-              )
-            ],
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "Description: ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                //--------------------------------here is discription
+                Container(
+                  child: TextFormField(
+                    textInputAction: TextInputAction.done,
+                    controller: descriptionController,
+                    maxLines: 5,
+                    maxLength: 200,
+                    decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey.shade200),
+                    validator: (val) {
+                      if (val.isEmpty) {
+                        return "Description can't be empty";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Banner ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        UploadImage();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          elevation: 5,
+                          primary: Colors.grey,
+                          fixedSize: const Size(120, 40),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50))),
+                      label: const Text('Upload'),
+                      icon: const Icon(Icons.cloud_upload_outlined),
+                    )
+                  ],
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 200,
+                  child: _image == null
+                      ? Center(child: Text("No image selected"))
+                      : Image.file(_image),
+                )
+              ],
+            ),
           ),
         ),
       ),

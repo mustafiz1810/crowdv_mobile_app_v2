@@ -69,7 +69,7 @@ class TermsCondition extends StatelessWidget {
                   ),
                   Text(snapshot.data.data.termsAndConditions,
                     style: TextStyle(fontSize: 18),
-                    textAlign: TextAlign.justify,
+                    textAlign: TextAlign.left,
                     // new
                   ),
                 ],

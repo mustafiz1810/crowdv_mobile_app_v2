@@ -7,12 +7,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
+import 'package:numberpicker/numberpicker.dart';
 import '../../../../utils/view_utils/colors.dart';
 
 class VolunteerFilter extends StatefulWidget {
   final List<dynamic> category;
-
-  VolunteerFilter({this.category});
+  final List<dynamic> membership;
+  VolunteerFilter({this.category,this.membership});
 
   @override
   _VolunteerFilterState createState() => _VolunteerFilterState();
@@ -25,12 +26,17 @@ class _VolunteerFilterState extends State<VolunteerFilter> {
     super.initState();
     getCountry();
   }
-
+  int minAge = 18;
+  int maxAge = 65;
   var countryvalue;
   var statevalue;
   var cityvalue;
   List<int> _selectedCategory = [];
   List<String> _selectedType = [];
+  List<int> _selectedMembership = [];
+  List<String> _selectedGender = [];
+  List<String> _selectedProfession = [];
+  RangeValues _currentRangeValues = const RangeValues(0, 100);
   String selectedCountry;
   String selectedProvince;
   List countries = [];
@@ -80,7 +86,7 @@ class _VolunteerFilterState extends State<VolunteerFilter> {
       context: context,
       builder: (BuildContext context) {
         return MultiSelect(
-            items: widget.category, selectedItem: _selectedCategory);
+            items: widget.category, selectedItem: _selectedCategory,title: "Category",);
       },
     );
 
@@ -92,7 +98,7 @@ class _VolunteerFilterState extends State<VolunteerFilter> {
     }
   }
 
-  void _showMultiProfession() async {
+  void _showMultiType() async {
     // a list of selectable items
     // these items can be hard-coded or dynamically fetched from a database/API
     final List<String> _itemsType = [
@@ -104,14 +110,81 @@ class _VolunteerFilterState extends State<VolunteerFilter> {
       context: context,
       builder: (BuildContext context) {
         return MultiSelectStatic(
-            items: _itemsType, selectedItem: _selectedType);
+            items: _itemsType, selectedItem: _selectedType,title: "Task Type",);
+      },
+    );
+
+
+    // Update UI
+    if (results != null) {
+      setState(() {
+        _selectedType = results;
+      });
+    }
+  }
+  void _showMultiMembership() async {
+    final List<int> results = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MultiSelect(
+            items: widget.membership, selectedItem: _selectedMembership,title: "Membership",);
       },
     );
 
     // Update UI
     if (results != null) {
       setState(() {
-        _selectedType = results;
+        _selectedMembership = results;
+      });
+    }
+  }
+
+  void _showMultiGender() async {
+    // a list of selectable items
+    // these items can be hard-coded or dynamically fetched from a database/API
+    final List<String> _items = [
+      'Male',
+      'Female',
+      'Other',
+    ];
+
+    final List<String> results = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MultiSelectStatic(items: _items, selectedItem: _selectedGender,title: "Gender",);
+      },
+    );
+
+    // Update UI
+    if (results != null) {
+      setState(() {
+        _selectedGender = results;
+      });
+    }
+  }
+
+  void _showMultiProfession() async {
+    // a list of selectable items
+    // these items can be hard-coded or dynamically fetched from a database/API
+    final List<String> _itemsProf = [
+      'Business',
+      'Service',
+      'Student',
+      'Self-Employed',
+    ];
+
+    final List<String> results = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MultiSelectStatic(
+            items: _itemsProf, selectedItem: _selectedProfession,title: "Profession",);
+      },
+    );
+
+    // Update UI
+    if (results != null) {
+      setState(() {
+        _selectedProfession = results;
       });
     }
   }
@@ -150,7 +223,19 @@ class _VolunteerFilterState extends State<VolunteerFilter> {
                       state: statevalue.toString(),
                       city: cityvalue.toString(),
                       category: _selectedCategory,
-                      taskType: _selectedType,
+                      taskType: _selectedType.length == 0
+                          ? null
+                          : _selectedType,
+                  membership: _selectedMembership.length == 0
+                      ? null
+                      : _selectedMembership,
+                  gender:
+                  _selectedGender.length == 0 ? null : _selectedGender,
+                  profession: _selectedProfession.length == 0
+                      ? null
+                      : _selectedProfession,
+                  min_age: minAge>maxAge?maxAge:minAge,
+                  max_age: maxAge,
                     ));
               },
               child: Text(
@@ -475,7 +560,7 @@ class _VolunteerFilterState extends State<VolunteerFilter> {
                                   )
                                 ],
                               ),
-                              onPressed: _showMultiProfession,
+                              onPressed: _showMultiType,
                             ),
                           ],
                         ),
@@ -527,6 +612,280 @@ class _VolunteerFilterState extends State<VolunteerFilter> {
               //         ],
               //       ),
               //     )),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Membership: ",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            TextButton(
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    'Select Membership',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    size: 16,
+                                    color: Colors.grey,
+                                  )
+                                ],
+                              ),
+                              onPressed: _showMultiMembership,
+                            ),
+                          ],
+                        ),
+                        // display selected items
+                        // Wrap(
+                        //   children: _selectedItems
+                        //       .map((e) => Chip(
+                        //     label: Text(e.toString()),
+                        //   ))
+                        //       .toList(),
+                        // ),
+                      ],
+                    ),
+                  )),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Gender: ",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            TextButton(
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    'Select Gender',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    size: 16,
+                                    color: Colors.grey,
+                                  )
+                                ],
+                              ),
+                              onPressed: _showMultiGender,
+                            ),
+                          ],
+                        ),
+                        // display selected items
+                        Wrap(
+                          children: _selectedGender
+                              .map((e) => Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Chip(
+                              label: Text(e.toString()),
+                            ),
+                          ))
+                              .toList(),
+                        ),
+                      ],
+                    ),
+                  )),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Profession: ",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            TextButton(
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    'Select Profession',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    size: 16,
+                                    color: Colors.grey,
+                                  )
+                                ],
+                              ),
+                              onPressed: _showMultiProfession,
+                            ),
+                          ],
+                        ),
+                        // display selected items
+                        Wrap(
+                          children: _selectedProfession
+                              .map((e) => Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Chip(
+                              label: Text(e),
+                            ),
+                          ))
+                              .toList(),
+                        ),
+                      ],
+                    ),
+                  )),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Age range: ",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            Container(
+                              decoration:BoxDecoration(
+                                color: Color(0xFFf4f4f6),
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(20.0) //                 <--- border radius here
+                                ),
+                              ),
+                              child: NumberPicker(
+                                value: minAge>maxAge?maxAge:minAge,
+                                minValue: 18,
+                                maxValue: maxAge,
+                                onChanged: (value) {
+                                  setState(() => minAge = value);
+                                } ,
+                              ),
+                            ),
+                            Container(
+                              decoration:BoxDecoration(
+                                color: Color(0xFFf4f4f6),
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(20.0) //                 <--- border radius here
+                                ),
+                              ),
+                              child: NumberPicker(
+                                value: maxAge,
+                                minValue: 18,
+                                maxValue: 65,
+                                onChanged: (value) => setState(() => maxAge = value),
+                              ),
+                            ),
+
+                            // RangeSlider(
+                            //   values: _currentRangeValues,
+                            //   min: 0,
+                            //   max: 100,
+                            //   divisions: 10,
+                            //   labels: RangeLabels(
+                            //     _currentRangeValues.start.round().toString(),
+                            //     _currentRangeValues.end.round().toString(),
+                            //   ),
+                            //   onChanged: (RangeValues values) {
+                            //     setState(() {
+                            //       _currentRangeValues = values;
+                            //     });
+                            //   },
+                            // ),
+                          ],
+                        ),
+                        // display selected items
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Min age: ",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Text(
+                                    minAge>maxAge?maxAge.toString():minAge.toString(),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Max age: ",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Text(
+                                    maxAge.toString(),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )),
               SizedBox(
                 height: 15,
               ),

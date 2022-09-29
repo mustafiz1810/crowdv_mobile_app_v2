@@ -246,7 +246,7 @@ class _ServiceLocationState extends State<ServiceLocation> {
                 state) {
                   return InputDecorator(
                     decoration: InputDecoration(
-                      hintText: "State",
+                      hintText: "Division/Province/State",
                       fillColor: Colors.white,
                       labelStyle: TextStyle(
                           fontWeight:
@@ -300,7 +300,9 @@ class _ServiceLocationState extends State<ServiceLocation> {
                     ),
                     child: Center(
                       child: DropdownButton(
-                        hint: Text('State',style:TextStyle(fontWeight: FontWeight.bold)),
+                        hint: Text("Division/Province/State",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold)),
                         underline: SizedBox(),
                         iconEnabledColor:
                         Colors.black,

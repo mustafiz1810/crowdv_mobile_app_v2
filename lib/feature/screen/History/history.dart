@@ -6,6 +6,7 @@ import 'package:crowdv_mobile_app/feature/screen/profile/common_profile.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
+import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:empty_widget/empty_widget.dart';
@@ -164,7 +165,6 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
         Uri.parse(NetworkConstants.BASE_URL + 'volunteer/task/history'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
-    print(data);
     if (response.statusCode == 200) {
       return VolunteerHistoryModel.fromJson(data);
     } else {
@@ -330,24 +330,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                       ),
                                                     ],
                                                   ),
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                          snapshot
-                                                              .data
-                                                              .data[index]
-                                                              .volunteer
-                                                              .rating
-                                                              .toString(),
-                                                          style: TextStyle(
-                                                              fontSize: 14)),
-                                                      Icon(
-                                                        Icons.star,
-                                                        color: Colors.amber,
-                                                        size: 16,
-                                                      )
-                                                    ],
-                                                  ),
+
                                                 ],
                                               ),
                                               SizedBox(
@@ -487,81 +470,88 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                     size: 20,
                                                   ),
                                                   bgColor: Colors.teal,
-                                                  onTap: () {
-                                                    return showDialog(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return AlertDialog(
-                                                            title: Row(
-                                                              children: [
-                                                                Text(
-                                                                    'Give a review to the user'),
-                                                              ],
-                                                            ),
-                                                            content:
-                                                                TextFormField(
-                                                              textInputAction:
-                                                                  TextInputAction
-                                                                      .done,
-                                                              controller:
-                                                                  reviewController,
-                                                              maxLines: 4,
-                                                              maxLength: 100,
-                                                              decoration:
-                                                                  InputDecoration(
-                                                                      focusedBorder:
-                                                                          OutlineInputBorder(
-                                                                        borderSide:
-                                                                            BorderSide(color: Colors.white),
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10.0),
-                                                                      ),
-                                                                      enabledBorder:
-                                                                          UnderlineInputBorder(
-                                                                        borderSide:
-                                                                            BorderSide(color: Colors.white),
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10.0),
-                                                                      ),
-                                                                      filled:
-                                                                          true,
-                                                                      hintStyle:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        fontSize:
-                                                                            16,
-                                                                      ),
-                                                                      ),
-                                                            ),
-                                                            actions: <Widget>[
-                                                              FlatButton(
-                                                                child: new Text(
-                                                                    'Cancel'),
-                                                                onPressed: () {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                },
+                                                  onTap: () async {
+                                                    getRequest('/api/v1/get-review-report/${snapshot.data.data[index].id}', null, {
+                                                      'Content-Type': "application/json",
+                                                      "Authorization": "Bearer ${token}"
+                                                    }).then((value) async {
+                                                      print(value);
+                                                        reviewController.text = value["data"]["review"];
+                                                      return showDialog(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return AlertDialog(
+                                                              title: Row(
+                                                                children: [
+                                                                  Text(
+                                                                      'Give a review to the user'),
+                                                                ],
                                                               ),
-                                                              FlatButton(
-                                                                child: new Text(
-                                                                    'Submit'),
-                                                                onPressed: () {
-                                                                  reviewController.text != ''?review(
-                                                                      reviewController
-                                                                          .text
-                                                                          .toString(),
-                                                                      snapshot
-                                                                          .data
-                                                                          .data[
-                                                                              index]
-                                                                          .id):showToast(context, "write something");
-                                                                },
-                                                              )
-                                                            ],
-                                                          );
-                                                        });
+                                                              content:
+                                                              TextFormField(
+                                                                textInputAction:
+                                                                TextInputAction
+                                                                    .done,
+                                                                controller:
+                                                                reviewController,
+                                                                maxLines: 4,
+                                                                maxLength: 100,
+                                                                decoration:
+                                                                InputDecoration(
+                                                                  focusedBorder:
+                                                                  OutlineInputBorder(
+                                                                    borderSide:
+                                                                    BorderSide(color: Colors.white),
+                                                                    borderRadius:
+                                                                    BorderRadius.circular(10.0),
+                                                                  ),
+                                                                  enabledBorder:
+                                                                  UnderlineInputBorder(
+                                                                    borderSide:
+                                                                    BorderSide(color: Colors.white),
+                                                                    borderRadius:
+                                                                    BorderRadius.circular(10.0),
+                                                                  ),
+                                                                  filled:
+                                                                  true,
+                                                                  hintStyle:
+                                                                  TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                    16,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              actions: <Widget>[
+                                                                FlatButton(
+                                                                  child: new Text(
+                                                                      'Cancel'),
+                                                                  onPressed: () {
+                                                                    Navigator.of(
+                                                                        context)
+                                                                        .pop();
+                                                                  },
+                                                                ),
+                                                                FlatButton(
+                                                                  child: new Text(
+                                                                      'Submit'),
+                                                                  onPressed: () {
+                                                                    reviewController.text != ''?review(
+                                                                        reviewController
+                                                                            .text
+                                                                            .toString(),
+                                                                        snapshot
+                                                                            .data
+                                                                            .data[
+                                                                        index]
+                                                                            .id):showToast(context, "write something");
+                                                                  },
+                                                                )
+                                                              ],
+                                                            );
+                                                          });
+                                                    });
                                                   },
                                                 ),
                                                 SizedBox(
@@ -573,113 +563,121 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                     color: Colors.white,
                                                     size: 20,
                                                   ),
-                                                  onTap: () {
-                                                    return showDialog(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return AlertDialog(
-                                                            title: Row(
-                                                              children: [
-                                                                Text(
-                                                                    'Report to admin'),
-                                                                SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Icon(
-                                                                  Icons
-                                                                      .warning_rounded,
-                                                                  color: Colors
-                                                                      .red,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            content: Container(
-                                                              height: 200,
-                                                              child: Column(
+                                                  onTap: () async {
+                                                    getRequest('/api/v1/get-review-report/${snapshot.data.data[index].id}', null, {
+                                                      'Content-Type': "application/json",
+                                                      "Authorization": "Bearer ${token}"
+                                                    }).then((value) async {
+                                                      print(value);
+                                                      reportController.text = value["data"]["report"] != null?value["data"]["report"]["remarks"]:"";
+                                                      detailsController.text = value["data"]["report"] != null?value["data"]["report"]["details"]:"";
+                                                      return showDialog(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return AlertDialog(
+                                                              title: Row(
                                                                 children: [
-                                                                  TextFormField(
-                                                                    textInputAction:
-                                                                        TextInputAction
-                                                                            .done,
-                                                                    controller:
-                                                                        reportController,
-                                                                    decoration:
-                                                                        ThemeHelper()
-                                                                            .textInputDecoration('Remark'),
-                                                                  ),
+                                                                  Text(
+                                                                      'Report to admin'),
                                                                   SizedBox(
-                                                                    height: 10,
+                                                                    width: 10,
                                                                   ),
-                                                                  TextFormField(
-                                                                    textInputAction:
-                                                                        TextInputAction
-                                                                            .done,
-                                                                    controller:
-                                                                        detailsController,
-                                                                    maxLines: 3,
-                                                                    maxLength:
-                                                                        100,
-                                                                    decoration:
-                                                                        InputDecoration(
-                                                                      focusedBorder:
-                                                                          OutlineInputBorder(
-                                                                        borderSide:
-                                                                            BorderSide(color: Colors.white),
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10.0),
-                                                                      ),
-                                                                      enabledBorder:
-                                                                          UnderlineInputBorder(
-                                                                        borderSide:
-                                                                            BorderSide(color: Colors.white),
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10.0),
-                                                                      ),
-                                                                      filled:
-                                                                          true,
-                                                                      hintStyle:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        fontSize:
-                                                                            16,
-                                                                      ),
-                                                                    ),
+                                                                  Icon(
+                                                                    Icons
+                                                                        .warning_rounded,
+                                                                    color: Colors
+                                                                        .red,
                                                                   ),
                                                                 ],
                                                               ),
-                                                            ),
-                                                            actions: <Widget>[
-                                                              FlatButton(
-                                                                child: new Text(
-                                                                    'Cancel'),
-                                                                onPressed: () {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                },
+                                                              content: Container(
+                                                                height: 200,
+                                                                child: Column(
+                                                                  children: [
+                                                                    TextFormField(
+                                                                      textInputAction:
+                                                                      TextInputAction
+                                                                          .done,
+                                                                      controller:
+                                                                      reportController,
+                                                                      decoration:
+                                                                      ThemeHelper()
+                                                                          .textInputDecoration('Remark'),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height: 10,
+                                                                    ),
+                                                                    TextFormField(
+                                                                      textInputAction:
+                                                                      TextInputAction
+                                                                          .done,
+                                                                      controller:
+                                                                      detailsController,
+                                                                      maxLines: 3,
+                                                                      maxLength:
+                                                                      100,
+                                                                      decoration:
+                                                                      InputDecoration(
+                                                                        focusedBorder:
+                                                                        OutlineInputBorder(
+                                                                          borderSide:
+                                                                          BorderSide(color: Colors.white),
+                                                                          borderRadius:
+                                                                          BorderRadius.circular(10.0),
+                                                                        ),
+                                                                        enabledBorder:
+                                                                        UnderlineInputBorder(
+                                                                          borderSide:
+                                                                          BorderSide(color: Colors.white),
+                                                                          borderRadius:
+                                                                          BorderRadius.circular(10.0),
+                                                                        ),
+                                                                        filled:
+                                                                        true,
+                                                                        hintStyle:
+                                                                        TextStyle(
+                                                                          color: Colors
+                                                                              .black,
+                                                                          fontSize:
+                                                                          16,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
                                                               ),
-                                                              FlatButton(
-                                                                child: new Text(
-                                                                    'Submit'),
-                                                                onPressed: () {
-                                                                  reportController.text != ''? report(
-                                                                      reportController
-                                                                          .text
-                                                                          .toString(),
-                                                                      detailsController
-                                                                          .text
-                                                                          .toString(),
-                                                                      snapshot
-                                                                          .data
-                                                                          .data[
-                                                                      index]
-                                                                          .id):showToast(context, "write something");
-                                                                },
-                                                              )
-                                                            ],
-                                                          );
-                                                        });
+                                                              actions: <Widget>[
+                                                                FlatButton(
+                                                                  child: new Text(
+                                                                      'Cancel'),
+                                                                  onPressed: () {
+                                                                    Navigator.of(
+                                                                        context)
+                                                                        .pop();
+                                                                  },
+                                                                ),
+                                                                FlatButton(
+                                                                  child: new Text(
+                                                                      'Submit'),
+                                                                  onPressed: () {
+                                                                    reportController.text != ''? report(
+                                                                        reportController
+                                                                            .text
+                                                                            .toString(),
+                                                                        detailsController
+                                                                            .text
+                                                                            .toString(),
+                                                                        snapshot
+                                                                            .data
+                                                                            .data[
+                                                                        index]
+                                                                            .id):showToast(context, "write something");
+                                                                  },
+                                                                )
+                                                              ],
+                                                            );
+                                                          });
+                                                    });
                                                   },
                                                   bgColor: Colors.redAccent,
                                                 ),
@@ -697,9 +695,24 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                         height: 50,
                                         width: 50,
                                         child: IconBox(
-                                          child: Icon(
-                                            Icons.check,
-                                            color: Colors.green,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                  snapshot
+                                                      .data
+                                                      .data[index]
+                                                      .volunteer
+                                                      .rating
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 14)),
+                                              Icon(
+                                                Icons.star,
+                                                color: Colors.amber,
+                                                size: 16,
+                                              )
+                                            ],
                                           ),
                                           bgColor: Colors.white,
                                         ),

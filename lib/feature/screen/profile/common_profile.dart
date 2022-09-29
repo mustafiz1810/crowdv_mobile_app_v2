@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:crowdv_mobile_app/data/models/common_profile_model.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -102,32 +103,25 @@ class _CommonProfileState extends State<CommonProfile> {
                             Row(
                               children: [
                                 Text(
-                                  snapshot.data.data
-                                      .firstName
-                                      .toString() +
+                                  snapshot.data.data.firstName.toString() +
                                       " " +
-                                      snapshot
-                                          .data.data.lastName
-                                          .toString(),
+                                      snapshot.data.data.lastName.toString(),
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 22,
                                       color: Colors.black),
                                 ),
-                                snapshot.data.data.isOnline ==
-                                    true
+                                snapshot.data.data.isOnline == true
                                     ? Icon(
-                                  Icons
-                                      .fiber_manual_record_rounded,
-                                  size: 12,
-                                  color: Colors.green,
-                                )
+                                        Icons.fiber_manual_record_rounded,
+                                        size: 12,
+                                        color: Colors.green,
+                                      )
                                     : Icon(
-                                  Icons
-                                      .fiber_manual_record_rounded,
-                                  size: 12,
-                                  color: Colors.grey,
-                                ),
+                                        Icons.fiber_manual_record_rounded,
+                                        size: 12,
+                                        color: Colors.grey,
+                                      ),
                               ],
                             ),
                           ],
@@ -214,65 +208,215 @@ class _CommonProfileState extends State<CommonProfile> {
                     height: 10,
                     color: Colors.black,
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
                   Expanded(
-                    child: SingleChildScrollView(
-                      child: Container(
-                        padding: EdgeInsets.only(left: 5, right: 5),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "User Information",
-                                      style: TextStyle(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 16,
-                                      ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              ...ListTile.divideTiles(
-                                color: Colors.grey,
-                                tiles: [
-                                  ListTile(
-                                    leading: Icon(Icons.person_outline_rounded),
-                                    title: Text("Name:"),
-                                    subtitle: Text(
-                                      snapshot.data.data.firstName.toString() +
-                                          " " +
-                                          snapshot.data.data.lastName,
-                                    ),
-                                  ),
-                                  ListTile(
-                                      leading: Icon(Icons.work_outline_rounded),
-                                      title: Text("Profession:"),
-                                      subtitle: Text(
-                                          snapshot.data.data.profession != null
-                                              ? snapshot.data.data.profession
-                                              : "")),
-                                  ListTile(
-                                      leading: Icon(Icons.male),
-                                      title: Text("Gender:"),
-                                      subtitle: Text(
-                                          snapshot.data.data.gender != null
-                                              ? snapshot.data.data.gender
-                                              : "")),
-                                ],
-                              ),
-                            ],
+                    child: DefaultTabController(
+                      length: 2,
+                      child: CustomScrollView(
+                        slivers: <Widget>[
+                          SliverToBoxAdapter(
+                            child: TabBar(
+                              tabs: [
+                                Tab(child: const Text('Basic Info')),
+                                Tab(child: const Text('Review')),
+                              ],
+                              indicatorSize: TabBarIndicatorSize.label,
+                              indicatorColor: Colors.teal,
+                              labelColor: Colors.black,
+                              unselectedLabelColor: Colors.black38,
+                            ),
                           ),
-                        ),
+                          SliverFillRemaining(
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: TabBarView(
+                                    children: [
+                                      Container(
+                                        padding:
+                                            EdgeInsets.only(left: 5, right: 5),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            children: <Widget>[
+                                              ...ListTile.divideTiles(
+                                                color: Colors.grey,
+                                                tiles: [
+                                                  ListTile(
+                                                    leading: Icon(Icons
+                                                        .person_outline_rounded),
+                                                    title: Text("Name:"),
+                                                    subtitle: Text(
+                                                      snapshot.data.data
+                                                              .firstName
+                                                              .toString() +
+                                                          " " +
+                                                          snapshot.data.data
+                                                              .lastName,
+                                                    ),
+                                                  ),
+                                                  ListTile(
+                                                      leading: Icon(Icons
+                                                          .work_outline_rounded),
+                                                      title:
+                                                          Text("Profession:"),
+                                                      subtitle: Text(snapshot
+                                                                  .data
+                                                                  .data
+                                                                  .profession !=
+                                                              null
+                                                          ? snapshot.data.data
+                                                              .profession
+                                                          : "")),
+                                                  ListTile(
+                                                      leading: Icon(Icons.male),
+                                                      title: Text("Gender:"),
+                                                      subtitle: Text(snapshot
+                                                                  .data
+                                                                  .data
+                                                                  .gender !=
+                                                              null
+                                                          ? snapshot
+                                                              .data.data.gender
+                                                          : "")),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                            left: 15, right: 15, top: 10),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  snapshot.data.data.rating
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 30,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(
+                                                  width: 30,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    RatingBar.builder(
+                                                      itemSize: 25,
+                                                      initialRating: snapshot
+                                                                  .data
+                                                                  .data
+                                                                  .rating ==
+                                                              null
+                                                          ? 0
+                                                          : snapshot
+                                                              .data.data.rating
+                                                              .toDouble(),
+                                                      minRating: 1,
+                                                      direction:
+                                                          Axis.horizontal,
+                                                      itemCount: 5,
+                                                      ignoreGestures: true,
+                                                      tapOnlyMode: true,
+                                                      itemPadding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 4.0),
+                                                      itemBuilder:
+                                                          (context, _) => Icon(
+                                                        Icons.star,
+                                                        color: Colors.amber,
+                                                      ),
+                                                      onRatingUpdate:
+                                                          (rating) {},
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Text(
+                                                      "   From ${snapshot.data.data.reviews.length.toString()} people",
+                                                      style: TextStyle(
+                                                          color: Colors.grey),
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Expanded(
+                                              child: ListView.builder(
+                                                scrollDirection: Axis.vertical,
+                                                shrinkWrap: true,
+                                                itemCount: snapshot
+                                                    .data.data.reviews.length,
+                                                itemBuilder: (context, index) {
+                                                  return Padding(
+                                                    padding: const EdgeInsets.all(5.0),
+                                                    child: Container(
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              color: Colors.grey
+                                                                  .withOpacity(
+                                                                      0.5),
+                                                              spreadRadius: -1,
+                                                              blurRadius: 3,
+                                                              offset: Offset(-1,
+                                                                  0), // changes position of shadow
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        child: ListTile(
+                                                          leading: CircleAvatar(
+                                                            backgroundImage:
+                                                                NetworkImage(
+                                                                    snapshot
+                                                                        .data
+                                                                        .data
+                                                                        .reviews[
+                                                                            index]
+                                                                        .reviewFrom
+                                                                        .image),
+                                                            radius: 20,
+                                                          ),
+                                                          title: Text(snapshot
+                                                              .data
+                                                              .data
+                                                              .reviews[index]
+                                                              .reviewFrom
+                                                              .firstName),
+                                                          subtitle: Text(snapshot
+                                                              .data
+                                                              .data
+                                                              .reviews[index]
+                                                              .remark),
+                                                        )),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

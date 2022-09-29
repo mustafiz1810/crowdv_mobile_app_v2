@@ -1,28 +1,61 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
+import 'package:crowdv_mobile_app/widgets/message_textfield.dart';
+import 'package:crowdv_mobile_app/widgets/single_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChatUi extends StatefulWidget {
-  const ChatUi({Key key}) : super(key: key);
+  final String uid, friendName,friendImage;
+  final String friendId ;
+  final bool isOnline;
+  ChatUi({
+    this.uid,
+    this.friendId,
+    this.friendName,
+    this.friendImage,
+    this.isOnline,
+});
 
   @override
   _ChatUiState createState() => _ChatUiState();
 }
 
 class _ChatUiState extends State<ChatUi> {
+ bool inRoom = false;
+  @override
+  void initState() {
+    print(widget.uid);
+    setState(() {
+      inRoom = true;
+    });
+    FirebaseFirestore.instance.collection('Users').doc(widget.friendId).collection('messages').doc(widget.uid).set({
+      'is_read':true,
+    });
+    super.initState();
+  }
+
   final List<String> entries = <String>['How are you?', 'Hello', 'Hi'];
   final List<int> colorCodes = <int>[600, 500, 100];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            FirebaseFirestore.instance.collection('Users').doc(widget.friendId).collection('messages').doc(widget.uid).set({
+              'is_read':true,
+            });
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             CircleAvatar(
-              child: Image(
-                image: AssetImage("assets/avater.png"),
-              ),
+              backgroundImage: NetworkImage(widget.friendImage),
+              backgroundColor: Colors.white,
             ),
             SizedBox(width: 15),
             Column(
@@ -30,7 +63,7 @@ class _ChatUiState extends State<ChatUi> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "Mustafizur Rahman",
+                  widget.friendName,
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,
@@ -38,10 +71,10 @@ class _ChatUiState extends State<ChatUi> {
                   overflow: TextOverflow.clip,
                 ),
                 Text(
-                  "Online",
+                  widget.isOnline == true?"Online":"Offline",
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.green,
+                    color: widget.isOnline == true?Colors.green:Colors.grey,
                   ),
                 )
               ],
@@ -55,143 +88,39 @@ class _ChatUiState extends State<ChatUi> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Expanded(
-            child: ListView.builder(
-                reverse: true,
-                padding: const EdgeInsets.all(8),
-                itemCount: entries.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Row(
-                          children: <Widget>[
-                            CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: Image(
-                                image: AssetImage("assets/avater.png"),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  "Person1",
-                                  style: Theme.of(context).textTheme.caption,
-                                ),
-                                Container(
-                                  constraints: BoxConstraints(
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width *
-                                              .6),
-                                  padding: const EdgeInsets.all(15.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black12,
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(25),
-                                      bottomLeft: Radius.circular(25),
-                                      bottomRight: Radius.circular(25),
-                                    ),
-                                  ),
-                                  child: Text("${entries[index]}",
-                                      style: TextStyle(color: Colors.black)),
-                                ),
-                              ],
-                            ),
-                            SizedBox(width: 15),
-                            Text("08:30 AM",
-                                style: TextStyle(color: Colors.grey)),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Text("08:30 AM",
-                                style: TextStyle(color: Colors.grey)),
-                            SizedBox(width: 15),
-                            Container(
-                              constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * .6),
-                              padding: const EdgeInsets.all(15.0),
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(25),
-                                  bottomRight: Radius.circular(25),
-                                  bottomLeft: Radius.circular(25),
-                                ),
-                              ),
-                              child: Text("${entries[index]}",
-                                  style: TextStyle(color: Colors.white)),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+          Expanded(child: Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25)
+                )
+            ),
+            child: StreamBuilder(
+                stream: FirebaseFirestore.instance.collection("Users").doc(widget.uid).collection('messages').doc(widget.friendId).collection('chats').orderBy("date",descending: true).snapshots(),
+                builder: (context,AsyncSnapshot snapshot){
+                  if(snapshot.hasData){
+                    if(snapshot.data.docs.length < 1){
+                      return Center(
+                        child: Text("Say Hi"),
+                      );
+                    }
+                    return ListView.builder(
+                        itemCount: snapshot.data.docs.length,
+                        reverse: true,
+                        physics: BouncingScrollPhysics(),
+                        itemBuilder: (context,index){
+                          bool isMe = snapshot.data.docs[index]['senderId'] == widget.uid;
+                          return SingleMessage(time:DateTime.fromMicrosecondsSinceEpoch(snapshot.data.docs[index]['date'].microsecondsSinceEpoch),message: snapshot.data.docs[index]['message'], isMe: isMe);
+                        });
+                  }
+                  return Center(
+                      child: CircularProgressIndicator()
                   );
                 }),
-          ),
-          Container(
-            margin: EdgeInsets.all(15.0),
-            height: 61,
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(35.0),
-                      boxShadow: [
-                        BoxShadow(
-                            offset: Offset(0, 3),
-                            blurRadius: 5,
-                            color: Colors.grey)
-                      ],
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        IconButton(icon: Icon(Icons.face), onPressed: () {}),
-                        Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                                hintText: "Type Something...",
-                                border: InputBorder.none),
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.photo_camera),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.attach_file),
-                          onPressed: () {},
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(width: 15),
-                Container(
-                  padding: const EdgeInsets.all(15.0),
-                  decoration: BoxDecoration(
-                      color: primaryColor, shape: BoxShape.circle),
-                  child: InkWell(
-                    child: Icon(
-                      Icons.send,
-                      color: Colors.white,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
+          )),
+          MessageTextField(widget.uid, widget.friendId,inRoom),
         ],
       ),
     );

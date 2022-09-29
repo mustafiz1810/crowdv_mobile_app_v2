@@ -47,38 +47,38 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
                       email: data['data']['email'],
                     )),
           );
-        }
-        else if (data['data']['is_phone_verified'] == 0){
+        } else if (data['data']['is_phone_verified'] == 0) {
           Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => PhoneVerify(
-                  email: data['data']['email'],
-                )),
+                      email: data['data']['email'],
+                    )),
           );
-        }
-        else if(data['data']['first_name'] ==null ){
+        } else if (data['data']['first_name'] == null) {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => VolunteerSignUp(email: data['data']['email'].toString(),phone:  data['data']['phone'].toString(),),
+                builder: (context) => VolunteerSignUp(
+                  email: data['data']['email'].toString(),
+                  phone: data['data']['phone'].toString(),
+                ),
               ));
-        }
-        else if(data['data']['first_name'] !=null && data['data']['role'] ==null){
+        } else if (data['data']['first_name'] != null &&
+            data['data']['role'] == null) {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    RoleCheck(id: data['data']['id'],)),
+                builder: (context) => RoleCheck(
+                      id: data['data']['id'],
+                    )),
           );
-        }else{
+        } else {
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) =>LoginPage()),
+            MaterialPageRoute(builder: (context) => LoginPage()),
           );
         }
-
       } else {
         var data = jsonDecode(response.body.toString());
         showToast(context, data['message']);
@@ -182,27 +182,29 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
                           children: <Widget>[
                             Container(
                               child: TextFormField(
-                                textCapitalization: TextCapitalization.sentences,
-                                controller: emailEditingController,
-                                decoration: ThemeHelper().textInputDecoration(
-                                    "Email", "Enter your email"),
-                                validator: (val) {
-                                  if (val.isEmpty) {
-                                    return "Email can't be empty";
-                                  } else if (!RegExp(
-                                          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
-                                      .hasMatch(val)) {
-                                    return "Enter a valid email address";
-                                  } else {
-                                    return null;
-                                  }
-                                },
-    onChanged: (value) {
-    emailEditingController.value = TextEditingValue(
-    text: value.toLowerCase(),
-    selection: emailEditingController.selection
-    );}
-                              ),
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
+                                  controller: emailEditingController,
+                                  decoration: ThemeHelper().textInputDecoration(
+                                      "Email", "Enter your email"),
+                                  validator: (val) {
+                                    if (val.isEmpty) {
+                                      return "Email can't be empty";
+                                    } else if (!RegExp(
+                                            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
+                                        .hasMatch(val)) {
+                                      return "Enter a valid email address";
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  onChanged: (value) {
+                                    emailEditingController.value =
+                                        TextEditingValue(
+                                            text: value.toLowerCase(),
+                                            selection: emailEditingController
+                                                .selection);
+                                  }),
                               decoration:
                                   ThemeHelper().inputBoxDecorationShaddow(),
                             ),

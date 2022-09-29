@@ -15,7 +15,6 @@ class CustomBottomNavigation extends StatefulWidget {
 class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
   String token,role;
   int id;
-  List<String> banner;
   @override
   void initState() {
     getCred();
@@ -27,7 +26,6 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
       token = pref.getString("user");
       role = pref.getString("role");
       id = pref.getInt("id");
-      banner = pref.getStringList("banner");
 
     });
   }
@@ -49,8 +47,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                     builder: (context) =>
                         HomeScreen(
                             id: id,
-                            role: role,
-                        banner: banner,)),
+                            role: role,)),
                     (Route<dynamic> route) => false);
           case 1:
             role=='volunteer'?

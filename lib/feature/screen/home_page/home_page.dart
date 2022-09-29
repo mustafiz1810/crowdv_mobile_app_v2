@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:crowdv_mobile_app/data/models/notification_model.dart';
+import 'package:crowdv_mobile_app/data/models/volunteer/banner_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/search.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/certificate.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruiter/Create_Opportunity/create_op.dart';
@@ -31,8 +32,7 @@ import 'home_contents/recruiter/my_opportunities.dart';
 
 class HomeScreen extends StatefulWidget {
   final dynamic id, role;
-  final List<String> banner;
-  HomeScreen({this.id, this.role, this.banner});
+  HomeScreen({this.id, this.role});
   @override
   _HomeScreenState createState() => new _HomeScreenState();
 }
@@ -41,7 +41,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool navbarScrolled = false;
   String token;
-  int count;
   var profileComplete;
   @override
   void initState() {
@@ -117,11 +116,24 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<BannerModel> getBanner() async {
+    final response = await http.get(
+        Uri.parse(NetworkConstants.BASE_URL + 'organizational/opportunity'),
+        headers: {"Authorization": "Bearer $token"});
+    var data = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return BannerModel.fromJson(data);
+    } else {
+      return BannerModel.fromJson(data);
+    }
+  }
+
   Future<NotificationModel> getNotifyApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL + 'notifications'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
+    print(data);
     if (response.statusCode == 200) {
       return NotificationModel.fromJson(data);
     } else {
@@ -129,6 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  int _currentIndex = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,11 +166,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 zip: snapshot.data.data.zipCode,
               );
             } else {
-              return Container(child: Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
+              return Container(
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
                 ),
-              ),);
+              );
             }
           }),
       appBar: AppBar(
@@ -256,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Icons.search,
                 color: Colors.black,
               ),
-              onPressed: ()  {
+              onPressed: () {
                 Get.to(() => SearchPage());
               },
             ),
@@ -271,44 +286,104 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Container(
                 height: 90,
-                child: HeaderWidget(role: widget.role, id: widget.id,banner: widget.banner,),
+                child: HeaderWidget(
+                  role: widget.role,
+                  id: widget.id,
+                ),
               ),
               Divider(
                 height: 20,
                 color: Colors.black,
               ),
               widget.role == "volunteer"
-                  ? Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: SizedBox(
-                          height: 150.0,
-                          width: double.infinity,
-                          child: Carousel(
-                            dotSpacing: 15.0,
-                            dotSize: 4.0,
-                            dotIncreasedColor: Colors.white,
-                            dotBgColor: Colors.transparent,
-                            indicatorBgPadding: 10.0,
-                            dotPosition: DotPosition.bottomCenter,
-                            images: widget.banner
-                                .map((item) => Container(
-                                      child: Image.network(
-                                        item,
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ))
-                                .toList(),
-                            autoplayDuration: const Duration(seconds: 4),
-                          ),
-                        ),
-                      ))
+                  ? FutureBuilder<BannerModel>(
+                      future: getBanner(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: SizedBox(
+                                  height: 180.0,
+                                  width: double.infinity,
+                                  child: Carousel(
+                                    dotSpacing: 15.0,
+                                    dotSize: 4.0,
+                                    dotIncreasedColor: Colors.blueAccent,
+                                    dotBgColor: Colors.transparent,
+                                    indicatorBgPadding: 10.0,
+                                    dotPosition: DotPosition.bottomCenter,
+                                    onImageChange: (index, reason) {
+                                      _currentIndex = index;
+                                      print(_currentIndex);
+                                    },
+                                    images: snapshot.data.data.banner
+                                        .map((item) => Container(
+                                              child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(5.0)),
+                                                  child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: <Widget>[
+                                                        SizedBox(
+                                                          height:140,
+                                                          width: double.infinity,
+                                                          child: Image.network(
+                                                            item,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    vertical:
+                                                                        5.0,
+                                                                    horizontal:
+                                                                        20.0),
+                                                            child: Text(
+                                                              snapshot
+                                                                  .data
+                                                                  .data
+                                                                  .title[
+                                                                      _currentIndex]
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 16.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ))
+                                                      ])),
+                                            ))
+                                        .toList(),
+                                    autoplayDuration:
+                                        const Duration(seconds: 5),
+                                  ),
+                                ),
+                              ));
+                        } else {
+                          return Container(
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
+                          );
+                        }
+                      })
                   : Container(),
               Expanded(
                 child: Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -377,8 +452,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       }).then((value) async {
                                         print(value);
                                         Get.to(() => ServiceLocation(
-                                          country: value['data']
-                                          ['service_country']['id'],
+                                              country: value['data']
+                                                  ['service_country']['id'],
                                               state: value['data']
                                                   ['service_state']['id'],
                                               city: value['data']

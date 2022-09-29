@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class MultiSelect extends StatefulWidget {
   final List<dynamic> items;
   final dynamic selectedItem;
-  const MultiSelect({Key key, this.items,this.selectedItem}) : super(key: key);
+  final dynamic title;
+  const MultiSelect({Key key, this.items,this.selectedItem,this.title}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _MultiSelectState();
@@ -45,7 +46,7 @@ class _MultiSelectState extends State<MultiSelect> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Select Topics'),
+      title:  Text('Select '+widget.title.toString()),
       content: SingleChildScrollView(
         child: ListBody(
           children: widget.items

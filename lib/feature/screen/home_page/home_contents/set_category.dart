@@ -88,9 +88,9 @@ class _SetCategoryState extends State<SetCategory> {
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withOpacity(0.4),
-                                blurRadius: 5,
-                                spreadRadius: 0.5,
-                                offset: Offset(1, 1),
+                                blurRadius: 1,
+                                spreadRadius: 0.2,
+                                offset: Offset(0, 1),
                               ),
                             ],
                             borderRadius: BorderRadius.all(Radius.circular(20)),

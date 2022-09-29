@@ -8,8 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'show_toast.dart';
 
 class HeaderWidget extends StatefulWidget {
-  final dynamic id, role,banner;
-  HeaderWidget({this.id, this.role,this.banner});
+  final dynamic id, role;
+  HeaderWidget({this.id, this.role});
   @override
   _HeaderWidgetState createState() => _HeaderWidgetState();
 }
@@ -24,11 +24,12 @@ class _HeaderWidgetState extends State<HeaderWidget>
           Uri.parse(NetworkConstants.BASE_URL + 'role/${widget.id}/volunteer'));
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
+        print(data);
         roleRoute(data['data']['role']);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) =>
-                    HomeScreen(id: widget.id, role: data['data']['role'],banner: widget.banner,)),
+                    HomeScreen(id: widget.id, role: data['data']['role'])),
             (Route<dynamic> route) => false);
         showToast(context, data['message']);
       } else {
@@ -61,10 +62,11 @@ class _HeaderWidgetState extends State<HeaderWidget>
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         roleRoute(data['data']['role']);
+        print(data);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) =>
-                    HomeScreen(id: widget.id, role: data['data']['role'],banner: widget.banner,)),
+                    HomeScreen(id: widget.id, role: data['data']['role'])),
             (Route<dynamic> route) => false);
         showToast(context, data['message']);
       } else {

@@ -47,7 +47,8 @@ class _PhoneVerifyPageState extends State<PhoneVerify> {
         );
       } else {
         var data = jsonDecode(response.body.toString());
-        showToast(context, data['message']);
+        print(data);
+        showToast(context, data['error']);
         setState(() {
           isApiCallProcess = false;
         });

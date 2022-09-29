@@ -8,6 +8,7 @@ import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/widgets/header_widget.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/progres_hud.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
@@ -24,9 +25,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  final _auth = FirebaseAuth.instance;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  void signin(String email, password,List<String> banner) async {
+  void signin(String email, password) async {
     try {
       Response response =
           await post(Uri.parse(NetworkConstants.BASE_URL + 'login'), headers: {
@@ -37,27 +39,41 @@ class _LoginPageState extends State<LoginPage> {
       });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        pageRoute(data['result']['token'].toString());
-        idRoute(data['result']['data']['id']);
-        roleRoute(data['result']['data']['role']);
-        bannerRoute(banner);
-        // print('created');
-        setState(() {
-          isApiCallProcess = false;
-        });
-        showToast(context, data['message']);
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (context) =>
-                    data['result']['data']['role'] != "organization"
-                        ? HomeScreen(
-                            id: data['result']['data']['id'],
-                            role: data['result']['data']['role'],
-                            banner: banner,)
-                        : OrganizationHome(
-                            id: data['result']['data']['id'],
-                            role: data['result']['data']['role'])),
-            (Route<dynamic> route) => false);
+        if(data['result']['data']['role'] != "organization")
+        {
+          final newUser = await _auth.signInWithEmailAndPassword(email: email.trim(), password: password);
+          if (newUser != null) {
+            pageRoute(data['result']['token'].toString());
+            idRoute(data['result']['data']['id']);
+            uidRoute(data['result']['data']['uid']);
+            roleRoute(data['result']['data']['role']);
+            setState(() {
+              isApiCallProcess = false;
+            });
+            showToast(context, data['message']);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => HomeScreen(
+                      id: data['result']['data']['id'],
+                      role: data['result']['data']['role'],)),
+                    (Route<dynamic> route) => false);
+          }
+        }
+        else{
+          pageRoute(data['result']['token'].toString());
+          idRoute(data['result']['data']['id']);
+          roleRoute(data['result']['data']['role']);
+          setState(() {
+            isApiCallProcess = false;
+          });
+          showToast(context, data['message']);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) => OrganizationHome(
+                      id: data['result']['data']['id'],
+                      role: data['result']['data']['role'])),
+                  (Route<dynamic> route) => false);
+        }
       } else {
         setState(() {
           isApiCallProcess = false;
@@ -97,6 +113,10 @@ class _LoginPageState extends State<LoginPage> {
   void idRoute(int id) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setInt("id", id);
+  }
+  void uidRoute(String uid) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString("uid", uid);
   }
 
   void roleRoute(String role) async {
@@ -290,7 +310,6 @@ class _LoginPageState extends State<LoginPage> {
                                         signin(
                                           emailController.text.toString(),
                                           passwordController.text.toString(),
-                                          banner
                                         );
                                       }
 

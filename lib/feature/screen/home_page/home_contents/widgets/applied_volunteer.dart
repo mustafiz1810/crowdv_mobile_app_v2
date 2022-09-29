@@ -62,7 +62,7 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
                     future: getApplyApi(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
-                        if (snapshot.data.data.applyVolunteer.length == 0) {
+                        if (snapshot.data.data.applyVolunteer.length == 0 )    {
                           return Container(
                             alignment: Alignment.center,
                             child: EmptyWidget(

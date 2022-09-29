@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
+import 'package:numberpicker/numberpicker.dart';
 import '../../../../utils/view_utils/colors.dart';
 import '../search.dart';
 
@@ -31,7 +32,9 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
   List<int> _selectedMembership = [];
   List<String> _selectedGender = [];
   List<String> _selectedProfession = [];
-  RangeValues _currentRangeValues = const RangeValues(0, 100);
+
+  int minAge = 18;
+  int maxAge = 65;
   List countries = [];
   Future getCountry() async {
     var baseUrl = NetworkConstants.BASE_URL + 'countries';
@@ -76,7 +79,7 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
       context: context,
       builder: (BuildContext context) {
         return MultiSelect(
-            items: widget.category, selectedItem: _selectedCategory);
+            items: widget.category, selectedItem: _selectedCategory,title: "Category",);
       },
     );
 
@@ -93,7 +96,7 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
       context: context,
       builder: (BuildContext context) {
         return MultiSelect(
-            items: widget.membership, selectedItem: _selectedMembership);
+            items: widget.membership, selectedItem: _selectedMembership,title: "Membership",);
       },
     );
 
@@ -117,7 +120,7 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
     final List<String> results = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return MultiSelectStatic(items: _items, selectedItem: _selectedGender);
+        return MultiSelectStatic(items: _items, selectedItem: _selectedGender,title: "Gender",);
       },
     );
 
@@ -143,7 +146,7 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
       context: context,
       builder: (BuildContext context) {
         return MultiSelectStatic(
-            items: _itemsProf, selectedItem: _selectedProfession);
+            items: _itemsProf, selectedItem: _selectedProfession,title: "Profession",);
       },
     );
 
@@ -202,8 +205,8 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
                       profession: _selectedProfession.length == 0
                           ? null
                           : _selectedProfession,
-                      min_age: _currentRangeValues.start.round().toInt(),
-                      max_age: _currentRangeValues.end.round().toInt(),
+                      min_age: minAge>maxAge?maxAge:minAge,
+                      max_age: maxAge,
                     ));
               },
               child: Text(
@@ -678,21 +681,52 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
-                            RangeSlider(
-                              values: _currentRangeValues,
-                              min: 0,
-                              max: 100,
-                              divisions: 10,
-                              labels: RangeLabels(
-                                _currentRangeValues.start.round().toString(),
-                                _currentRangeValues.end.round().toString(),
+                            Container(
+                              decoration:BoxDecoration(
+                                color: Color(0xFFf4f4f6),
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(20.0) //                 <--- border radius here
+                                ),
                               ),
-                              onChanged: (RangeValues values) {
-                                setState(() {
-                                  _currentRangeValues = values;
-                                });
-                              },
+                              child: NumberPicker(
+                                value: minAge>maxAge?maxAge:minAge,
+                                minValue: 18,
+                                maxValue: maxAge,
+                                onChanged: (value) {
+                                  setState(() => minAge = value);
+                                } ,
+                              ),
                             ),
+                            Container(
+                              decoration:BoxDecoration(
+                                color: Color(0xFFf4f4f6),
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(20.0) //                 <--- border radius here
+                                ),
+                              ),
+                              child: NumberPicker(
+                                value: maxAge,
+                                minValue: 18,
+                                maxValue: 65,
+                                onChanged: (value) => setState(() => maxAge = value),
+                              ),
+                            ),
+
+                            // RangeSlider(
+                            //   values: _currentRangeValues,
+                            //   min: 0,
+                            //   max: 100,
+                            //   divisions: 10,
+                            //   labels: RangeLabels(
+                            //     _currentRangeValues.start.round().toString(),
+                            //     _currentRangeValues.end.round().toString(),
+                            //   ),
+                            //   onChanged: (RangeValues values) {
+                            //     setState(() {
+                            //       _currentRangeValues = values;
+                            //     });
+                            //   },
+                            // ),
                           ],
                         ),
                         // display selected items
@@ -710,9 +744,7 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
                                         fontWeight: FontWeight.w600),
                                   ),
                                   Text(
-                                    _currentRangeValues.start
-                                        .round()
-                                        .toString(),
+                                    minAge>maxAge?maxAge.toString():minAge.toString(),
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600),
@@ -731,7 +763,7 @@ class _RecruiterFilterState extends State<RecruiterFilter> {
                                         fontWeight: FontWeight.w600),
                                   ),
                                   Text(
-                                    _currentRangeValues.end.round().toString(),
+                                    maxAge.toString(),
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600),

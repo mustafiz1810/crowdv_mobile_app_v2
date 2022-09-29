@@ -15,8 +15,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/models/recruiter/Volunteer_Category.dart';
 import '../../../data/models/recruiter/pending_opportunities.dart';
 import '../../../widgets/http_request.dart';
-import '../../../widgets/icon_box.dart';
-import '../home_page/widgets/chat.dart';
 
 class SearchPage extends StatefulWidget {
   final List<int> category;
@@ -25,7 +23,7 @@ class SearchPage extends StatefulWidget {
   final List<String> profession;
   final int min_age;
   final int max_age;
-  String country,state, city;
+ final String country,state, city;
 
   SearchPage(
       {this.category,
@@ -48,14 +46,10 @@ class _SearchPageState extends State<SearchPage> {
   String token = "";
   String role = "";
   TextEditingController volunteerController = TextEditingController();
-
   @override
   void initState() {
-    // print(widget.country);
-    // print(widget.city);
-    // print(widget.state);
-    // print(widget.min_age);
-    // print(widget.max_age);
+    print(widget.min_age);
+    print(widget.max_age);
     print(widget.category);
     print(widget.membership);
     print(widget.profession);
@@ -73,7 +67,7 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
-  void invite(int volunteerId, int taskId) async {
+  void invite(int volunteerId, int taskId,setState) async {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'send/invitations/$taskId'),
@@ -86,10 +80,11 @@ class _SearchPageState extends State<SearchPage> {
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        Navigator.of(context).pop();
+        setState(() {});
         showToast(context, data['message']);
       } else {
         var data = jsonDecode(response.body.toString());
+        setState(() {});
         print(volunteerId.toString());
         showToast(context, data['error']['errors']);
       }
@@ -125,11 +120,12 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 
-  Future<PendingOpportunity> getPendingApi() async {
+  Future<PendingOpportunity> getPendingApi(int volunteerId) async {
     final response = await http.get(
-        Uri.parse(NetworkConstants.BASE_URL + 'pending_opportunities'),
+        Uri.parse(NetworkConstants.BASE_URL + 'pending_opportunities/$volunteerId'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
+    print(data);
     if (response.statusCode == 200) {
       return PendingOpportunity.fromJson(data);
     } else {
@@ -319,55 +315,104 @@ class _SearchPageState extends State<SearchPage> {
                                                 ),
                                         ],
                                       ),
-                                      Row(
-                                        children: [
-                                          IconBox(
-                                            child: Icon(
-                                              Icons.message_rounded,
-                                              color: Colors.white,
-                                              size: 18,
-                                            ),
-                                            onTap: () {
-                                              Get.to(() => ChatUi());
-                                            },
-                                            bgColor: Colors.blue,
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Container(
+                                      Container(
                                             width: 80,
                                             height: 28,
                                             child: OutlinedButton(
                                               onPressed: () {
-                                                showDialog(
+                                                showModalBottomSheet(
                                                     context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title: Container(
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Text(
-                                                              'Pick Opportunity',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white),
-                                                            ),
-                                                          ),
-                                                          color: primaryColor,
-                                                        ),
-                                                        content:
-                                                            inviteAlertDialogContainer(
-                                                                context,
-                                                                snapshot
-                                                                    .data
-                                                                    .data[index]
-                                                                    .id),
-                                                      );
+                                                    builder: (context) {
+                                                      return StatefulBuilder(
+                                                          builder: (BuildContext context, StateSetter setState /*You can rename this!*/) {
+                                                            return Container(
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.all(12.0),
+                                                                child: Column(
+                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                  children: [
+                                                                    Text(
+                                                                      'Pick Opportunity',
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .black),
+                                                                    ),
+                                                                    Divider(
+                                                                      height: 15,
+                                                                      thickness: 2,
+                                                                    ),
+                                                                    inviteAlertDialogContainer(
+                                                                        context,
+                                                                        snapshot
+                                                                            .data
+                                                                            .data[index]
+                                                                            .id,setState,),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            );
+                                                          });
                                                     });
+                                                // showModalBottomSheet(
+                                                //     context: context,
+                                                //     builder: (context) {
+                                                //       return Column(
+                                                //         mainAxisSize: MainAxisSize.min,
+                                                //         children: <Widget>[
+                                                //           ListTile(
+                                                //             leading: new Icon(Icons.photo),
+                                                //             title: new Text('Photo'),
+                                                //             onTap: () {
+                                                //             },
+                                                //             tileColor: Colors.teal,
+                                                //             selectedTileColor: Colors.yellow,
+                                                //           ),
+                                                //           CheckboxListTile(
+                                                //             title: const Text('GeeksforGeeks'),
+                                                //             subtitle: const Text('A computer science portal for geeks.'),
+                                                //             secondary: const Icon(Icons.code),
+                                                //             autofocus: false,
+                                                //             activeColor: Colors.green,
+                                                //             checkColor: Colors.white,
+                                                //             selected: _value,
+                                                //             value: _value,
+                                                //             onChanged: (bool value) {
+                                                //               setState(() {
+                                                //                 _value = value;
+                                                //               });
+                                                //             },
+                                                //           ),
+                                                //         ],
+                                                //       );
+                                                //     });
+                                                // showDialog(
+                                                //     context: context,
+                                                //     builder:
+                                                //         (BuildContext context) {
+                                                //       return AlertDialog(
+                                                //         title: Container(
+                                                //           child: Padding(
+                                                //             padding:
+                                                //                 const EdgeInsets
+                                                //                     .all(8.0),
+                                                //             child: Text(
+                                                //               'Pick Opportunity',
+                                                //               style: TextStyle(
+                                                //                   color: Colors
+                                                //                       .white),
+                                                //             ),
+                                                //           ),
+                                                //           color: primaryColor,
+                                                //         ),
+                                                //         content:
+                                                //             inviteAlertDialogContainer(
+                                                //                 context,
+                                                //                 snapshot
+                                                //                     .data
+                                                //                     .data[index]
+                                                //                     .id),
+                                                //       );
+                                                //     });
                                               },
                                               child: Row(
                                                 children: [
@@ -398,8 +443,6 @@ class _SearchPageState extends State<SearchPage> {
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -458,7 +501,7 @@ class _SearchPageState extends State<SearchPage> {
                                             CrossAxisAlignment.end,
                                         children: [
                                           Text(
-                                            snapshot.data.data[index].profession,
+                                            snapshot.data.data[index].profession.toString(),
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 14),
@@ -511,9 +554,9 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget inviteAlertDialogContainer(context, int id) {
+  Widget inviteAlertDialogContainer(context, int id, setState) {
     return FutureBuilder<PendingOpportunity>(
-      future: getPendingApi(),
+      future: getPendingApi(id),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data.data.length == 0) {
@@ -522,24 +565,72 @@ class _SearchPageState extends State<SearchPage> {
             );
           } else {
             return Container(
-              height: 300.0, // Change as per your requirement
-              width: 300.0, // Change as per your requirement
+              height: 350, // Change as per your requirement
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: snapshot.data.data.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                    child: ListTile(
-                      onTap: () {
-                        invite(id, snapshot.data.data[index].id);
-                      },
-                      tileColor: Colors.black12,
-                      leading: Icon(
-                        Icons.fiber_manual_record_rounded,
-                        color: Colors.black12,
+                  return Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 1,
+                            spreadRadius: 0.2,
+                            offset: Offset(0, 1),
+                          ),
+                        ],
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
                       ),
-                      title: Text(
-                        snapshot.data.data[index].title,
+                      child:  ListTile(
+                        title: Text(snapshot.data.data[index].title,
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black)),
+                        subtitle:  Text(snapshot.data.data[index].date),
+                        trailing: InkWell(
+                          onTap: () {
+                            invite(id, snapshot.data.data[index].id,setState);
+                          },
+                          child: snapshot.data.data[index].isApplied == false?Container(
+                            width: 80,
+                            height: 35,
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                            decoration: BoxDecoration(
+                              color:  primaryColor,
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: Center(
+                                child: Text(
+                                    'Invite',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: Colors.white))),
+                          ):
+                          Container(
+                            width: 80,
+                            height: 35,
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                            decoration: BoxDecoration(
+                              color:  Colors.grey,
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: Center(
+                                child: Text(
+                                    'Invited',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: Colors.white))),
+                          ),
+                        ),
                       ),
                     ),
                   );
@@ -550,7 +641,7 @@ class _SearchPageState extends State<SearchPage> {
         } else if (snapshot.connectionState == ConnectionState.none) {
           return Center(child: Text('Error')); // error
         } else {
-          return Center(child: CircularProgressIndicator()); // loading
+          return Center(child: CircularProgressIndicator(),); // loading
         }
       },
     );

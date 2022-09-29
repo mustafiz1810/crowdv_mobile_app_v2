@@ -66,6 +66,7 @@ dependencies:
   firebase_database: ^9.0.11
   cloud_firestore: ^3.1.12
   firebase_messaging: ^11.2.13
+  firebase_storage: ^10.3.8
   device_info_plus: ^3.2.3
   cached_network_image: any
   settings_ui: ^2.0.2
@@ -73,6 +74,10 @@ dependencies:
   image_picker: ^0.8.5+3
   multi_image_picker: ^4.6.6+rc
   country_state_city_picker: ^1.2.8
+  badges: ^2.0.3
+  google_maps_flutter: ^2.2.0
+  numberpicker: ^2.1.1
+  rounded_loading_button: ^2.1.0
 
 
 dev_dependencies:

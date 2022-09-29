@@ -74,7 +74,7 @@ class ListElement {
   String notifiableType;
   int notifiableId;
   ListData data;
-  dynamic readAt;
+  String readAt;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -84,7 +84,7 @@ class ListElement {
         notifiableType: json["notifiable_type"],
         notifiableId: json["notifiable_id"],
         data: ListData.fromJson(json["data"]),
-        readAt: json["read_at"],
+        readAt: json["read_at"] ,
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
       );
@@ -107,18 +107,21 @@ class ListData {
     this.title,
     this.status,
     this.volunteer,
+    this.volunteerId,
   });
 
   int opportunityId;
   String title;
   String status;
   String volunteer;
+  int volunteerId;
 
   factory ListData.fromJson(Map<String, dynamic> json) => ListData(
         opportunityId: json["opportunity_id"],
         title: json["title"],
         status: json["status"],
         volunteer: json["volunteer"],
+        volunteerId: json["volunteer_id"] == null ? null : json["volunteer_id"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -126,5 +129,6 @@ class ListData {
         "title": title,
         "status": status,
         "volunteer": volunteer,
+        "volunteer_id": volunteerId == null ? null : volunteerId,
       };
 }

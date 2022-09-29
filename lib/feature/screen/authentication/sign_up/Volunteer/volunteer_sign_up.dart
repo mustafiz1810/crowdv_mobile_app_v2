@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
 import '../../../../../widgets/show_toast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class VolunteerSignUp extends StatefulWidget {
   final dynamic email,phone;
@@ -21,14 +23,26 @@ class VolunteerSignUp extends StatefulWidget {
   }
 }
 class _VolunteerSignUpState extends State<VolunteerSignUp> {
-
   final _formKey = GlobalKey<FormState>();
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+  User loggedInUser;
   TextEditingController fnameController = TextEditingController();
   TextEditingController lnameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool checkedValue = false;
   bool checkboxValue = false;
   var fcmToken;
+  void getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser;
+      if (user != null) {
+        loggedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
   void signup(String fname, lname, email, phone, password,fcmToken, check) async {
     try {
       Response response =
@@ -47,6 +61,23 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
       });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
+        final newUser = await _auth.createUserWithEmailAndPassword(
+            email: email.trim(), password: password);
+        if (newUser != null) {
+          getCurrentUser();
+          _firestore.collection('Users').doc(newUser.user.uid).set({
+            'id': newUser.user.uid,
+            'name': fname,
+            'email': email,
+            'phone': phone,
+            'photoUrl': "",
+            'timeCreation': DateTime.now(),
+            'chatWith': "",
+            'Token': "",
+          }).whenComplete((){
+            print('Document Added');
+          });
+        }
         print(data);
         showToast(context, data['message']);
         setState(() {
@@ -56,7 +87,7 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-          RoleCheck(id: data['data']['id'],)),
+          RoleCheck(id: data['data']['id'],token:data['data']['token'],uid: newUser.user.uid,email:widget.email,password:passwordController.text.toString())),
         );
       } else {
         var data = jsonDecode(response.body.toString());
@@ -166,7 +197,7 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                         ),
                         SizedBox(height: 30.0),
                         Container(
-                          child: TextField(
+                          child: TextFormField(
                             controller: passwordController,
                             keyboardType: TextInputType.visiblePassword,
                             obscureText: _obscured,
@@ -216,6 +247,12 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                                 ),
                               ),
                             ),
+                            validator: (val) {
+                              if (val.length < 6) {
+                                return "Password must be 6 digit";
+                              }
+                              return null;
+                            },
                           ),
                           decoration:
                           ThemeHelper().inputBoxDecorationShaddow(),
@@ -254,6 +291,17 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                                       ),
                                     ),
                                   ],
+                                ),
+                                Container(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Text(
+                                    state.errorText ?? '',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: Theme.of(context).errorColor,
+                                      fontSize: 12,
+                                    ),
+                                  ),
                                 ),
                               ],
                             );

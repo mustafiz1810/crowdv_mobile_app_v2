@@ -18,10 +18,19 @@ import '../../../widgets/icon_box.dart';
 class VolunteerSearchPage extends StatefulWidget {
   final List<int> category;
   final List<String> taskType;
+  final List<int> membership;
+  final List<String> gender;
+  final List<String> profession;
+  final int min_age;
+  final int max_age;
   final String country,state, city;
 
   VolunteerSearchPage(
-      {this.category, this.taskType,this.country, this.state, this.city});
+      {this.category, this.taskType,this.country, this.state, this.city,this.membership,
+        this.min_age,
+        this.max_age,
+        this.gender,
+        this.profession,});
 
   @override
   State<StatefulWidget> createState() {
@@ -39,7 +48,13 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
     print(widget.city);
     print(widget.state);
     print(widget.country);
+    print(widget.category);
     print(widget.taskType);
+    print(widget.gender);
+    print(widget.profession);
+    print(widget.membership);
+    print(widget.min_age);
+    print(widget.max_age);
     print(recruiterController.text.toString());
 
     getCred();
@@ -57,7 +72,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
   Future<CategorywiseTask> getCateTaskApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL +
-            'task-search?state_id=${widget.state}&city_id=${widget.city}&country_id=${widget.country}&category_id=${widget.category}&task_type=${widget.taskType}&search=${recruiterController.text.toString()}&date=null'),
+            'task-search?state_id=${widget.state}&city_id=${widget.city}&category_id=${widget.category}&gender=${widget.gender}&membership_id=${widget.membership}&search=${recruiterController.text.toString()}&profession=${widget.profession}&country_id=${widget.country}&task_type=${widget.taskType}&min_age=${widget.min_age}&max_age=${widget.max_age}'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
     print(data);
@@ -90,7 +105,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                 }).then((value) async {
                   print(value["data"]);
                   Get.to(() =>
-                      VolunteerFilter(category: value["data"]["categories"]));
+                      VolunteerFilter(category: value["data"]["categories"],membership: value["data"]["memberships"]));
                 });
               },
               child: Text(

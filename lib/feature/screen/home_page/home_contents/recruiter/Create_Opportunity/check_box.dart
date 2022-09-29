@@ -31,6 +31,7 @@ class _CheckBoxState extends State<CheckBox> {
  Future myFuture;
  var index =0;
   var arr;
+  TextEditingController othersController = TextEditingController();
   void _answerQuestion(int id) {
     if(tempArray.contains(id)){
       tempArray.remove(id);
@@ -84,6 +85,7 @@ class _CheckBoxState extends State<CheckBox> {
             onTap: () {
               // getItems();
               Get.to(() => OpLocation(
+                eligibility:othersController.text.toString(),
                     answer: tempArray,
                     title: widget.title,
                     category: widget.category,
@@ -127,60 +129,83 @@ class _CheckBoxState extends State<CheckBox> {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Row(
-                  children: [
-                    Text(
-                      "Please select eligibility, ",
-                      style: TextStyle(
-                          color: primaryColor, fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-              ),
               Expanded(child: FutureBuilder<EligibilityModel>(
                 future: myFuture,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: snapshot.data.data.length,
-                      itemBuilder: (context, index) {
-                        return Column(children: <Widget>[
-                          Card(
-                              child: new CheckboxListTile(
-                                  activeColor: primaryColor,
-                                  dense: true,
-                                  //font change
-                                  title: new Text(
-                                    snapshot.data.data[index].title,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        letterSpacing: 0.5),
-                                  ),
-                                  value: snapshot.data.data[index].isChecked,
-                                  onChanged: (bool value) {
-                                    setState(() {
-                                      // if (tempArray.contains(
-                                      //     snapshot.data.data[index].id)) {
-                                      //   tempArray.remove(
-                                      //       snapshot.data.data[index].id);
-                                      //   snapshot.data.data[index].isChecked = value;
-                                      //   print(tempArray);
-                                      // } else {
-                                      //   snapshot.data.data[index].isChecked = value;
-                                      //   _answerQuestion(
-                                      //       snapshot.data.data[index].id);
-                                      // }
-                                      snapshot.data.data[index].isChecked = value;
-                                      _answerQuestion(snapshot.data.data[index].id);
-                                    });
-                                  })),
-                        ]);
-                      },
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: snapshot.data.data.length,
+                            itemBuilder: (context, index) {
+                              return Column(children: <Widget>[
+                                Card(child: new CheckboxListTile(
+                                        activeColor: primaryColor,
+                                        dense: true,
+                                        //font change
+                                        title: new Text(
+                                          snapshot.data.data[index].title,
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                              letterSpacing: 0.5),
+                                        ),
+                                        value: snapshot.data.data[index].isChecked,
+                                        onChanged: (bool value) {
+                                          setState(() {
+                                            // if (tempArray.contains(
+                                            //     snapshot.data.data[index].id)) {
+                                            //   tempArray.remove(
+                                            //       snapshot.data.data[index].id);
+                                            //   snapshot.data.data[index].isChecked = value;
+                                            //   print(tempArray);
+                                            // } else {
+                                            //   snapshot.data.data[index].isChecked = value;
+                                            //   _answerQuestion(
+                                            //       snapshot.data.data[index].id);
+                                            // }
+                                            snapshot.data.data[index].isChecked = value;
+                                            _answerQuestion(snapshot.data.data[index].id);
+                                          });
+                                        })),
+                              ]);
+                            },
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          //--------------------------------here is discription
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              child: TextFormField(
+                                textInputAction: TextInputAction.done,
+                                controller: othersController,
+                                maxLines: 3,
+                                maxLength: 100,
+                                decoration: InputDecoration(
+                                  hintText: "Type your eligibility",
+                                    hintStyle: TextStyle(
+                                      fontSize: 14
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.grey.shade200),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   } else {
                     return Center(child: CircularProgressIndicator());

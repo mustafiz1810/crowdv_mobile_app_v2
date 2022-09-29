@@ -17,6 +17,7 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +66,7 @@ class _NotificationPageState extends State<NotificationPage> {
                             'Content-Type': "application/json",
                             "Authorization": "Bearer ${widget.token}"
                           }).then((value) async {
-                            widget.data[index].data.opportunityId != null ?Navigator.push(
+                            widget.data[index].data.opportunityId != null && widget.data[index].data.status != "hired" ?Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>  AppliedVolunteer(
@@ -76,7 +77,7 @@ class _NotificationPageState extends State<NotificationPage> {
                             ):Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CommonProfile(id: widget.id,)),
+                                  builder: (context) => CommonProfile(id: widget.data[index].data.volunteerId,)),
                             );
                             setState(() {});
                           });
@@ -87,7 +88,7 @@ class _NotificationPageState extends State<NotificationPage> {
                             height: 90,
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: widget.data[index].readAt == null?Color(0xFFe5e5e5):Colors.white,
+                              color: widget.data[index].readAt.toString() == null?Color(0xFFe5e5e5):Colors.white,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.4),

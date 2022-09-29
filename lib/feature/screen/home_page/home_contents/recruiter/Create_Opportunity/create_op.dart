@@ -106,58 +106,85 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                     decoration: ThemeHelper().inputBoxDecorationShaddow(),
                   ),
                   SizedBox(
-                    height: 25,
+                    height:15,
                   ),
                   //--------------------------------here is category
-                  InkWellSplash(
-                    onTap: () {
-                      setState(() {
-                        if (isVisible == false) {
-                          isVisible = true;
-                        } else
-                          (isVisible = false);
-                      });
-                    },
-                    child: Container(
-                      width: 365,
-                      height: 50,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 2, horizontal: 15),
-                      child: Center(
-                        child: tileName != null
-                            ? Text(
-                                tileName,
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: primaryColor,
-                                    fontWeight: FontWeight.bold),
-                              )
-                            : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(width: 5,),
-                                Text(
-                                    "Select Category",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: primaryColor,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                Icon(Icons.arrow_drop_down,color: primaryColor,)
-                              ],
+                  FormField<bool>(
+                    builder: (state) {
+                      return Column(
+                        children: <Widget>[
+                          InkWellSplash(
+                            onTap: () {
+                              setState(() {
+                                if (isVisible == false) {
+                                  isVisible = true;
+                                } else
+                                  (isVisible = false);
+                              });
+                            },
+                            child: Container(
+                              width: 365,
+                              height: 50,
+                              padding:
+                              EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+                              child: Center(
+                                child: tileName != null
+                                    ? Text(
+                                  tileName,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: primaryColor,
+                                      fontWeight: FontWeight.bold),
+                                )
+                                    : Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(width: 5,),
+                                    Text(
+                                      "Select Category",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: primaryColor,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Icon(Icons.arrow_drop_down,color: primaryColor,)
+                                  ],
+                                ),
+                              ),
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black26,
+                                      offset: Offset(0, 2),
+                                      blurRadius: 2.0)
+                                ],
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
                             ),
-                      ),
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black26,
-                              offset: Offset(0, 2),
-                              blurRadius: 2.0)
+                          ),
+                          SizedBox(height: 10,),
+                          Container(
+                            alignment: Alignment.bottomCenter,
+                            child: Text(
+                              state.errorText ?? '',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: Theme.of(context).errorColor,
+                                fontSize: 12,
+                              ),
+                            ),
+                          )
                         ],
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
+                      );
+                    },
+                    validator: (value) {
+                      if (tileName == null) {
+                        return 'Category can not be empty';
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                   Visibility(
                     visible: isVisible,
@@ -213,69 +240,97 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                     ),
                   ),
                   SizedBox(
-                    height: 25,
+                    height: 5,
                   ),
                   //--------------------------------here is task type
-                  Container(
-                    width: 365,
-                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 15),
-                    child: Center(
-                      child: DropdownButton<String>(
-                          hint: Center(
-                            child: Text(
-                              "Select Type",
+                  FormField<bool>(
+                    builder: (state) {
+                      return Column(
+                        children: <Widget>[
+                        Container(
+                        width: 365,
+                        padding: EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+                        child: Center(
+                          child: DropdownButton<String>(
+                              hint: Center(
+                                child: Text(
+                                  "Select Type",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: primaryColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              value: _typevalue,
+                              // elevation: 5,
                               style: TextStyle(
-                                  fontSize: 18,
-                                  color: primaryColor,
-                                  fontWeight: FontWeight.bold),
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600),
+                              iconEnabledColor: primaryColor,
+                              isExpanded: true,
+                              items: _type
+                                  .map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              selectedItemBuilder: (BuildContext context) => _type
+                                  .map((e) => Center(
+                                child: Text(
+                                  e,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: primaryColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ))
+                                  .toList(),
+                              underline: Container(),
+                              onChanged: (String value) {
+                                setState(() {
+                                  _typevalue = value;
+                                });
+                              }),
+                        ),
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black26,
+                                offset: Offset(0, 2),
+                                blurRadius: 2.0)
+                          ],
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                          SizedBox(height: 10,),
+                          Container(
+                            alignment: Alignment.bottomCenter,
+                            child: Text(
+                              state.errorText ?? '',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: Theme.of(context).errorColor,
+                                fontSize: 12,
+                              ),
                             ),
-                          ),
-                          value: _typevalue,
-                          // elevation: 5,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
-                          iconEnabledColor: primaryColor,
-                          isExpanded: true,
-                          items: _type
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          selectedItemBuilder: (BuildContext context) => _type
-                              .map((e) => Center(
-                                    child: Text(
-                                      e,
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: primaryColor,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ))
-                              .toList(),
-                          underline: Container(),
-                          onChanged: (String value) {
-                            setState(() {
-                              _typevalue = value;
-                            });
-                          }),
-                    ),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black26,
-                            offset: Offset(0, 2),
-                            blurRadius: 2.0)
-                      ],
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
+                          )
+                        ],
+                      );
+                    },
+                    validator: (value) {
+                      if (_typevalue == null) {
+                        return 'Task type can not be empty';
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
+
                   SizedBox(
-                    height: 25,
+                    height: 5,
                   ),
                   Row(
                     children: [

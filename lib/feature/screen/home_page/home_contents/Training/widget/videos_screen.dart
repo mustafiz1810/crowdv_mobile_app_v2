@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:better_player/better_player.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/test.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
@@ -57,7 +56,7 @@ class _VideoScreenState extends State<VideoScreen> {
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(duration + "   /" + total);
+        print(data);
       } else {
         var data = jsonDecode(response.body.toString());
         showToast(context, data['message']);
@@ -152,7 +151,8 @@ class _VideoScreenState extends State<VideoScreen> {
                                 borderRadius: BorderRadius.circular(10)),
                           ),
                           onPressed: () async {
-                            getRequest('/api/v1/previous-video/${widget.id}', null, {
+                            getRequest(
+                                '/api/v1/previous-video/${widget.id}', null, {
                               'Content-Type': "application/json",
                               "Authorization": "Bearer ${widget.token}"
                             }).then((value) async {
@@ -183,7 +183,8 @@ class _VideoScreenState extends State<VideoScreen> {
                                 borderRadius: BorderRadius.circular(10)),
                           ),
                           onPressed: () async {
-                            getRequest('/api/v1/next-video/${widget.id}', null, {
+                            getRequest(
+                                '/api/v1/next-video/${widget.id}', null, {
                               'Content-Type': "application/json",
                               "Authorization": "Bearer ${widget.token}"
                             }).then((value) async {

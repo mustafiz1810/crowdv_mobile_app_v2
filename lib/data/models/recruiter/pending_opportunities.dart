@@ -37,6 +37,8 @@ class Datum {
     this.id,
     this.title,
     this.details,
+    this.country,
+    this.state,
     this.city,
     this.taskType,
     this.status,
@@ -46,11 +48,14 @@ class Datum {
     this.startTime,
     this.endTime,
     this.categoryIcon,
+    this.isApplied,
   });
 
   int id;
   String title;
   String details;
+  String country;
+  String state;
   String city;
   String taskType;
   String status;
@@ -60,11 +65,14 @@ class Datum {
   String startTime;
   String endTime;
   String categoryIcon;
+  bool isApplied;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
     title: json["title"],
     details: json["details"],
+    country: json["country"],
+    state: json["state"],
     city: json["city"],
     taskType: json["task_type"],
     status: json["status"],
@@ -74,12 +82,15 @@ class Datum {
     startTime: json["start_time"],
     endTime: json["end_time"],
     categoryIcon: json["category_icon"],
+    isApplied: json["is_applied"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "title": title,
     "details": details,
+    "country": country,
+    "state": state,
     "city": city,
     "task_type": taskType,
     "status": status,
@@ -89,5 +100,6 @@ class Datum {
     "start_time": startTime,
     "end_time": endTime,
     "category_icon": categoryIcon,
+    "is_applied": isApplied,
   };
 }

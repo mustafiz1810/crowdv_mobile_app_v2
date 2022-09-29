@@ -37,11 +37,13 @@ class Datum {
     this.id,
     this.title,
     this.details,
+    this.expiredAt,
     this.country,
     this.state,
     this.city,
     this.zipCode,
     this.taskType,
+    this.dateFormat,
     this.date,
     this.datumStartTime,
     this.startTime,
@@ -54,6 +56,7 @@ class Datum {
     this.applyStatus,
     this.category,
     this.eligibility,
+    this.otherEligibility,
     this.volunteer,
     this.recruiter,
   });
@@ -61,23 +64,26 @@ class Datum {
   int id;
   String title;
   String details;
+  String expiredAt;
   City country;
   City state;
   City city;
   String zipCode;
   String taskType;
-  String date;
+  String dateFormat;
+  DateTime date;
   String datumStartTime;
   DateTime startTime;
   String datumEndTime;
   DateTime endTime;
   int workingHours;
-  String benefits;
+  dynamic benefits;
   bool isPublic;
   String status;
   int applyStatus;
   Category category;
   List<Eligibility> eligibility;
+  dynamic otherEligibility;
   Recruiter volunteer;
   Recruiter recruiter;
 
@@ -85,23 +91,26 @@ class Datum {
     id: json["id"],
     title: json["title"],
     details: json["details"],
+    expiredAt: json["expired_at"],
     country: City.fromJson(json["country"]),
     state: City.fromJson(json["state"]),
     city: City.fromJson(json["city"]),
     zipCode: json["zip_code"],
     taskType: json["task_type"],
-    date: json["date"],
+    dateFormat: json["date_format"],
+    date: DateTime.parse(json["date"]),
     datumStartTime: json["start_time"],
     startTime: DateTime.parse(json["startTime"]),
     datumEndTime: json["end_time"],
     endTime: DateTime.parse(json["endTime"]),
     workingHours: json["working_hours"],
-    benefits: json["benefits"] == null ? null : json["benefits"],
+    benefits: json["benefits"],
     isPublic: json["is_public"],
     status: json["status"],
     applyStatus: json["apply_status"],
     category: Category.fromJson(json["category"]),
     eligibility: List<Eligibility>.from(json["eligibility"].map((x) => Eligibility.fromJson(x))),
+    otherEligibility: json["other_eligibility"],
     volunteer: Recruiter.fromJson(json["volunteer"]),
     recruiter: Recruiter.fromJson(json["recruiter"]),
   );
@@ -110,23 +119,26 @@ class Datum {
     "id": id,
     "title": title,
     "details": details,
+    "expired_at": expiredAt,
     "country": country.toJson(),
     "state": state.toJson(),
     "city": city.toJson(),
     "zip_code": zipCode,
     "task_type": taskType,
-    "date": date,
+    "date_format": dateFormat,
+    "date": date.toIso8601String(),
     "start_time": datumStartTime,
     "startTime": startTime.toIso8601String(),
     "end_time": datumEndTime,
     "endTime": endTime.toIso8601String(),
     "working_hours": workingHours,
-    "benefits": benefits == null ? null : benefits,
+    "benefits": benefits,
     "is_public": isPublic,
     "status": status,
     "apply_status": applyStatus,
     "category": category.toJson(),
     "eligibility": List<dynamic>.from(eligibility.map((x) => x.toJson())),
+    "other_eligibility": otherEligibility,
     "volunteer": volunteer.toJson(),
     "recruiter": recruiter.toJson(),
   };
@@ -250,6 +262,7 @@ class Recruiter {
     this.firstName,
     this.lastName,
     this.email,
+    this.gender,
     this.phone,
     this.image,
     this.typeOfDisability,
@@ -261,13 +274,15 @@ class Recruiter {
     this.profileRating,
     this.rating,
     this.review,
-    this.gender,
+    this.uid,
+    this.isOnline,
   });
 
   int id;
   String firstName;
   String lastName;
   String email;
+  String gender;
   String phone;
   String image;
   String typeOfDisability;
@@ -279,25 +294,28 @@ class Recruiter {
   int profileRating;
   int rating;
   dynamic review;
-  String gender;
+  String uid;
+  bool isOnline;
 
   factory Recruiter.fromJson(Map<String, dynamic> json) => Recruiter(
     id: json["id"] == null ? null : json["id"],
     firstName: json["first_name"] == null ? null : json["first_name"],
     lastName: json["last_name"] == null ? null : json["last_name"],
     email: json["email"] == null ? null : json["email"],
+    gender: json["gender"] == null ? null : json["gender"],
     phone: json["phone"] == null ? null : json["phone"],
     image: json["image"] == null ? null : json["image"],
     typeOfDisability: json["type_of_disability"] == null ? null : json["type_of_disability"],
-    country: json["country"] == null ? null : json["country"],
-    state: json["state"] == null ? null : json["state"],
-    city: json["city"] == null ? null : json["city"],
+    country: json["country"],
+    state: json["state"],
+    city: json["city"],
     zipCode: json["zip_code"] == null ? null : json["zip_code"],
     role: json["role"] == null ? null : json["role"],
-    profileRating: json["profile_rating"] == null ? null : json["profile_rating"],
+    profileRating: json["profile_rating"],
     rating: json["rating"],
     review: json["review"],
-    gender: json["gender"] == null ? null : json["gender"],
+    uid: json["uid"] == null ? null : json["uid"],
+    isOnline: json["is_online"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -305,17 +323,19 @@ class Recruiter {
     "first_name": firstName == null ? null : firstName,
     "last_name": lastName == null ? null : lastName,
     "email": email == null ? null : email,
+    "gender": gender == null ? null : gender,
     "phone": phone == null ? null : phone,
     "image": image == null ? null : image,
     "type_of_disability": typeOfDisability == null ? null : typeOfDisability,
-    "country": country == null ? null : country,
-    "state": state == null ? null : state,
-    "city": city == null ? null : city,
+    "country": country,
+    "state": state,
+    "city": city,
     "zip_code": zipCode == null ? null : zipCode,
     "role": role == null ? null : role,
-    "profile_rating": profileRating == null ? null : profileRating,
+    "profile_rating": profileRating,
     "rating": rating,
     "review": review,
-    "gender": gender == null ? null : gender,
+    "uid": uid == null ? null : uid,
+    "is_online": isOnline,
   };
 }

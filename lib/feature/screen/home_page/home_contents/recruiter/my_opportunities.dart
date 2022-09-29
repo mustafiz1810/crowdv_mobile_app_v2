@@ -1,14 +1,19 @@
 import 'dart:convert';
+import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crowdv_mobile_app/data/models/recruiter/my_opportunity.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/applied_volunteer.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/chat.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
+import 'package:custom_timer/custom_timer.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:sweetalert/sweetalert.dart';
@@ -21,8 +26,20 @@ class MyOpportunity extends StatefulWidget {
 }
 
 class _MyOpportunityState extends State<MyOpportunity> {
+  final CustomTimerController _controller = CustomTimerController();
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+  int daysBetween(DateTime from, DateTime to) {
+    from = DateTime(from.year, from.month, from.day);
+    to = DateTime(to.year, to.month, to.day);
+    return to.difference(from).inDays;
+  }
   String token = "";
-
+  String uid;
+  bool isRead;
   @override
   void initState() {
     getCred();
@@ -33,6 +50,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       token = pref.getString("user");
+      uid = pref.getString("uid");
     });
   }
 
@@ -120,6 +138,28 @@ class _MyOpportunityState extends State<MyOpportunity> {
                               ),
                               child: Stack(
                                 children: [
+                                  StreamBuilder(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('Users')
+                                          .doc(snapshot
+                                              .data.data[index].volunteer.uid)
+                                          .collection('messages')
+                                          .snapshots(),
+                                      builder:
+                                          (context, AsyncSnapshot snapshot) {
+                                        if (snapshot.hasData) {
+                                          return ListView.builder(
+                                              itemCount:
+                                                  snapshot.data.docs.length,
+                                              itemBuilder: (context, index) {
+                                                isRead = snapshot.data
+                                                    .docs[index]['is_read'];
+                                                print(isRead);
+                                                return Center();
+                                              });
+                                        }
+                                        return Center();
+                                      }),
                                   Padding(
                                     padding: const EdgeInsets.all(23.0),
                                     child: Column(
@@ -133,10 +173,31 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       OpportunityDetails(
+                                                        isRead: isRead,
                                                           role: widget.role,
                                                           id: snapshot.data
                                                               .data[index].id,
-                                                          token: token)),
+                                                          token: token,
+                                                          uid: uid, friendId: snapshot
+                                                          .data
+                                                          .data[index]
+                                                          .volunteer
+                                                          .uid,
+                                                          friendName: snapshot
+                                                              .data
+                                                              .data[index]
+                                                              .volunteer
+                                                              .firstName,
+                                                          friendImage: snapshot
+                                                              .data
+                                                              .data[index]
+                                                              .volunteer
+                                                              .image,
+                                                          isOnline: snapshot
+                                                              .data
+                                                              .data[index]
+                                                              .volunteer
+                                                              .isOnline)),
                                             ).then((value) => setState(() {}));
                                           },
                                           child: Column(
@@ -144,12 +205,15 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               SizedBox(
-                                                width:260,
+                                                width: 260,
                                                 child: Text(
-                                                  snapshot.data.data[index].title,
+                                                  snapshot
+                                                      .data.data[index].title,
                                                   style: TextStyle(
-                                                      overflow: TextOverflow.ellipsis,
-                                                      fontWeight: FontWeight.bold,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       color: Colors.black,
                                                       fontSize: 16),
                                                 ),
@@ -169,22 +233,48 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                 height: 25,
                                               ),
                                               Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  Icon(
-                                                    Icons.location_on_rounded,
-                                                    color: Colors.blueAccent,
-                                                    size: 20,
+                                                  Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.location_on_rounded,
+                                                        color: Colors.blueAccent,
+                                                        size: 20,
+                                                      ),
+                                                      Text(
+                                                        snapshot.data.data[index]
+                                                            .city.name
+                                                            .toString(),
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            color:
+                                                                Colors.blueAccent,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                    ],
                                                   ),
                                                   Text(
-                                                    snapshot.data.data[index]
-                                                                .city.name.toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        color:
-                                                            Colors.blueAccent,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
+                                                      snapshot.data.data[index].expiredAt,
+                                                      style: TextStyle(fontSize: 12.0)),
+                                                  // Column(
+                                                  //   children: [
+                                                  // Text(
+                                                  // "Expired in (D:H:M)",
+                                                  //     style: TextStyle(fontSize: 12.0)),
+                                                  //     CustomTimer(
+                                                  //         controller: _controller,
+                                                  //         from: Duration(days:daysBetween(DateTime.now(),DateTime(2023, 10, 12),)),
+                                                  //         to: Duration(),
+                                                  //         onBuildAction: CustomTimerAction.auto_start,
+                                                  //         builder: (remaining) {
+                                                  //           return Text(
+                                                  //               "${remaining.days+" "}:${" "+remaining.hours+" "}:${" "+remaining.minutes+" "}",
+                                                  //               style: TextStyle(fontSize: 12.0));
+                                                  //         }),
+                                                  //   ],
+                                                  // ),
                                                 ],
                                               ),
                                             ],
@@ -207,14 +297,27 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                           children: [
                                             snapshot.data.data[index].status ==
                                                     'Hired'
-                                                ? IconBox(
-                                                    child: Icon(
-                                                      Icons.message,
-                                                      color: Colors.white,
-                                                      size: 18,
-                                                    ),
-                                                    bgColor: primaryColor,
-                                                  )
+                                                ? Container(
+                                        width: 80,
+                                          height: 35,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                                snapshot
+                                                    .data.data[index].status
+                                                    .toUpperCase(),
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                    FontWeight.bold,
+                                                    fontSize: 14,
+                                                    color:
+                                                    Colors.deepOrange)),
+                                          ),
+                                        )
                                                 : Row(
                                                     children: [
                                                       IconBox(
@@ -319,8 +422,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                 print(snapshot
                                                     .data.data[index].id);
                                                 SweetAlert.show(context,
-                                                    subtitle:
-                                                        "Are you sure?",
+                                                    subtitle: "Are you sure?",
                                                     style:
                                                         SweetAlertStyle.confirm,
                                                     showCancelButton: true,
@@ -331,9 +433,8 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                       SweetAlert.show(context,
                                                           subtitle:
                                                               "Copying...",
-                                                          style:
-                                                              SweetAlertStyle
-                                                                  .loading);
+                                                          style: SweetAlertStyle
+                                                              .loading);
                                                       new Future.delayed(
                                                           new Duration(
                                                               seconds: 1), () {

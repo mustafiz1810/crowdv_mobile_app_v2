@@ -6,14 +6,15 @@ import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/header_widget.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/progres_hud.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../widgets/show_toast.dart';
-
 class RoleCheck extends StatefulWidget {
-  final dynamic id;
-  RoleCheck({@required this.id});
+  final dynamic id,token,email,password;
+  final String uid;
+  RoleCheck({@required this.id,this.token,this.uid,this.email,this.password});
   @override
   State<StatefulWidget> createState() {
     return _RoleCheckState();
@@ -25,20 +26,26 @@ class _RoleCheckState extends State<RoleCheck> {
   List<String> _item = ["volunteer", "recruiter"];
   int selectedIndex = 0;
   String selectedValue = "";
-  void role(List<dynamic> banner) async {
+  final _auth = FirebaseAuth.instance;
+  void role(String uid) async {
     try {
       Response response = await post(Uri.parse(
           NetworkConstants.BASE_URL + 'role/${widget.id}/$_dropdown'),
         headers: {
           "Accept": "application/json"
+        },
+        body: {
+          "uid" : uid
         },);
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data['data']['id']);
-        pageRoute(data['data']['token'].toString());
+        print(data);
+        final newUser = await _auth.signInWithEmailAndPassword(email: widget.email.trim(), password: widget.password);
+        if (newUser != null) {
+        uidRoute(widget.uid);
+        pageRoute(widget.token.toString());
         idRoute(data['data']['id']);
         roleRoute(data['data']['role']);
-        bannerRoute(banner);
         setState(() {
           isApiCallProcess = false;
         });
@@ -46,9 +53,10 @@ class _RoleCheckState extends State<RoleCheck> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => HomeScreen( id: data['data']['id'],
-                  role: data['data']['role'],banner: banner,),),
-        );
+              builder: (context) => HomeScreen(
+                id: data['data']['id'],
+                role: data['data']['role'],),),
+        );}
       }
       else {
         var data = jsonDecode(response.body.toString());
@@ -59,6 +67,7 @@ class _RoleCheckState extends State<RoleCheck> {
       }
     } catch (e) {
       setState(() {
+        print(e);
         isApiCallProcess = false;
       });
       showDialog(
@@ -87,6 +96,10 @@ class _RoleCheckState extends State<RoleCheck> {
   void idRoute(int id) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setInt("id", id);
+  }
+  void uidRoute(String uid) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString("uid", uid);
   }
   void roleRoute(String role) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -242,20 +255,9 @@ class _RoleCheckState extends State<RoleCheck> {
                                 ),
                               ),
                             ),
-                            onPressed: () async{
-                              getRequest('/api/v1/organization/opportunity/banner-list', null, {
-                                'Content-Type': "application/json",
-                              }).then((value) async {
-                                List<String> banner = [];
-                                for(Map map in value["data"]){
-                                  banner.add(map["banner"]);
-                                }
-                                setState(() {
-                                  isApiCallProcess = true;
-                                });
-                                role(banner);
+                            onPressed: (){
+                              role(widget.uid);
 
-                              });
                             },
                           ),
                         ),

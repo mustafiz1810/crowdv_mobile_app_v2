@@ -350,7 +350,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           Positioned(
-                              top: 76,
+                              top: 70,
                               child: CircleAvatar(
                                 backgroundColor: Colors.transparent,
                                 backgroundImage: NetworkImage(
@@ -811,7 +811,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     state) {
                                                   return InputDecorator(
                                                     decoration: InputDecoration(
-                                                      hintText: "State",
+                                                      hintText: "Division/Province/State",
                                                       fillColor: Colors.white,
                                                       labelStyle: TextStyle(
                                                           fontWeight:
@@ -865,6 +865,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     ),
                                                     child: Center(
                                                       child: DropdownButton(
+                                                        hint: Text("Division/Province/State",
+                                                            style: TextStyle(
+                                                                fontWeight: FontWeight.bold)),
                                                         underline: SizedBox(),
                                                         iconEnabledColor:
                                                             Colors.black,

@@ -78,79 +78,79 @@ class _OrgProfileState extends State<OrgProfile> {
           future: getOrgProfileApi(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Column(
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.fromLTRB(25, 10, 25, 10),
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 60,
-                          width: 60,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                          ),
-                          child: CachedNetworkImage(
-                            imageUrl: snapshot.data.data.logo,
-                            imageBuilder:
-                                (context, imageProvider) =>
-                                Container(
-                                  height: 60,
-                                  width: 60,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      fit: BoxFit.contain,
-                                      image: imageProvider,
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.fromLTRB(25, 10, 25, 10),
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl: snapshot.data.data.logo,
+                              imageBuilder:
+                                  (context, imageProvider) =>
+                                  Container(
+                                    height: 60,
+                                    width: 60,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        fit: BoxFit.contain,
+                                        image: imageProvider,
+                                      ),
                                     ),
                                   ),
-                                ),
-                            placeholder: (context, url) =>
-                                Icon(Icons.downloading_rounded,size: 40,),
-                            errorWidget: (context, url, error)
-                            => Icon(Icons.image_outlined,size: 40,),
+                              placeholder: (context, url) =>
+                                  Icon(Icons.downloading_rounded,size: 40,),
+                              errorWidget: (context, url, error)
+                              => Icon(Icons.image_outlined,size: 40,),
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          snapshot.data.data.name,
-                          style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.email_outlined,
-                              size: 13,
-                            ),
-                            SizedBox(width: 5,),
-                            Text(
-                              snapshot.data.data.email,
-                              style:
-                              TextStyle(fontSize: 14, color: Colors.black),
-                            ),
-                          ],
-                        ),
-                      ],
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            snapshot.data.data.name,
+                            style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.email_outlined,
+                                size: 13,
+                              ),
+                              SizedBox(width: 5,),
+                              Text(
+                                snapshot.data.data.email,
+                                style:
+                                TextStyle(fontSize: 14, color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Divider(
-                    height: 10,
-                    color: Colors.black,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  SingleChildScrollView(
-                    child: Padding(
+                    Divider(
+                      height: 10,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: <Widget>[
@@ -228,8 +228,8 @@ class _OrgProfileState extends State<OrgProfile> {
                         ],
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
             } else {
               return Center(child: CircularProgressIndicator());

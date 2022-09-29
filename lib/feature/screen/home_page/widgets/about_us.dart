@@ -389,7 +389,7 @@ class AboutUs extends StatelessWidget {
                         Text(
                           snapshot.data.data.aboutUs,
                           style: TextStyle(fontSize: 18),
-                          textAlign: TextAlign.justify,
+                          textAlign: TextAlign.left,
                           // new
                         ),
                       ],

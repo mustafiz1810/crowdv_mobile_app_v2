@@ -64,6 +64,8 @@ class Data {
     this.opportunities,
     this.isComplete,
     this.isOnline,
+    this.uid,
+    this.reviews,
   });
 
   int id;
@@ -96,6 +98,8 @@ class Data {
   int opportunities;
   int isComplete;
   bool isOnline;
+  String uid;
+  List<Review> reviews;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     id: json["id"],
@@ -128,6 +132,8 @@ class Data {
     opportunities: json["opportunities"],
     isComplete: json["is_complete"],
     isOnline: json["is_online"],
+    uid: json["uid"],
+    reviews: List<Review>.from(json["reviews"].map((x) => Review.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -161,6 +167,8 @@ class Data {
     "opportunities": opportunities,
     "is_complete": isComplete,
     "is_online": isOnline,
+    "uid": uid,
+    "reviews": List<dynamic>.from(reviews.map((x) => x.toJson())),
   };
 }
 
@@ -205,5 +213,125 @@ class Membership {
     "id": id,
     "name": name,
     "icon": icon,
+  };
+}
+
+class Review {
+  Review({
+    this.id,
+    this.reviewFrom,
+    this.reviewTo,
+    this.taskId,
+    this.remark,
+  });
+
+  int id;
+  ReviewFromClass reviewFrom;
+  ReviewFromClass reviewTo;
+  TaskId taskId;
+  String remark;
+
+  factory Review.fromJson(Map<String, dynamic> json) => Review(
+    id: json["id"],
+    reviewFrom: ReviewFromClass.fromJson(json["review_from"]),
+    reviewTo: ReviewFromClass.fromJson(json["review_to"]),
+    taskId: TaskId.fromJson(json["task_id"]),
+    remark: json["remark"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "review_from": reviewFrom.toJson(),
+    "review_to": reviewTo.toJson(),
+    "task_id": taskId.toJson(),
+    "remark": remark,
+  };
+}
+
+class ReviewFromClass {
+  ReviewFromClass({
+    this.id,
+    this.firstName,
+    this.image,
+    this.phone,
+    this.email,
+    this.gender,
+    this.role,
+  });
+
+  int id;
+  String firstName;
+  String image;
+  String phone;
+  String email;
+  String gender;
+  String role;
+
+  factory ReviewFromClass.fromJson(Map<String, dynamic> json) => ReviewFromClass(
+    id: json["id"],
+    firstName: json["first_name"],
+    image: json["image"],
+    phone: json["phone"],
+    email: json["email"],
+    gender: json["gender"],
+    role: json["role"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "first_name": firstName,
+    "image": image,
+    "phone": phone,
+    "email": email,
+    "gender": gender,
+    "role": role,
+  };
+}
+
+class TaskId {
+  TaskId({
+    this.id,
+    this.title,
+    this.details,
+    this.taskType,
+    this.date,
+    this.startTime,
+    this.endTime,
+    this.workingHours,
+    this.status,
+  });
+
+  int id;
+  String title;
+  String details;
+  String taskType;
+  DateTime date;
+  String startTime;
+  String endTime;
+  int workingHours;
+  String status;
+
+  factory TaskId.fromJson(Map<String, dynamic> json) => TaskId(
+    id: json["id"],
+    title: json["title"],
+    details: json["details"],
+    taskType: json["task_type"],
+    date: DateTime.parse(json["date"]),
+    startTime: json["start_time"],
+    endTime: json["end_time"],
+    workingHours: json["working_hours"],
+    status: json["status"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "title": title,
+    "details": details,
+    "task_type": taskType,
+    "date": "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
+    "start_time": startTime,
+    "end_time": endTime,
+    "working_hours": workingHours,
+    "status": status,
   };
 }

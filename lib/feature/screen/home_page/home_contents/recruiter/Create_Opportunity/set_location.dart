@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class OpLocation extends StatefulWidget {
   final List<int> answer;
   final dynamic title,
+  eligibility,
       category,
       type,
       description,
@@ -20,6 +21,7 @@ class OpLocation extends StatefulWidget {
   OpLocation(
       {@required
       this.answer,
+        this.eligibility,
       this.title,
       this.category,
       this.type,
@@ -93,20 +95,20 @@ class _OpLocationState extends State<OpLocation> {
   var cityvalue;
   TextEditingController zipController = TextEditingController();
   void create(title, category_id, date, start_time, end_time,country, state,
-      city, List<int> answer, details, task_type, zip_code) async {
+      city, List<int> answer,eligibility, details, task_type, zip_code) async {
     String body = json.encode({ 'title': title,
       'category_id': category_id,
       'date': date,
       'start_time': start_time,
       'end_time': end_time,
       'eligibility_id': answer ,
+      'other':eligibility,
       'details': details,
       'task_type': task_type,
       'country_id': country,
       'state_id': state,
       'city_id': city,
-      'zip_code': zip_code,
-      'is_public': 'true',});
+      'zip_code': zip_code,});
     print(body);
     try {
       Response response = await post(
@@ -125,7 +127,7 @@ class _OpLocationState extends State<OpLocation> {
       } else {
         var data = jsonDecode(response.body.toString());
         print(data);
-        showToast(context, data['errors'].toString());
+        showToast(context, data['error'].toString());
       }
     } catch (e) {
       showDialog(
@@ -432,6 +434,7 @@ class _OpLocationState extends State<OpLocation> {
                             statevalue.toString(),
                             cityvalue.toString(),
                             widget.answer,
+                            widget.eligibility,
                             widget.description,
                             widget.type,
                             zipController.text.toString());

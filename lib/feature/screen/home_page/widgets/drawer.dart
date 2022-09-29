@@ -4,6 +4,7 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/settings.dart
 import 'package:crowdv_mobile_app/feature/screen/password/change_pass.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/profile.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:crowdv_mobile_app/feature/screen/authentication/sign_in/sign_in.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -46,6 +47,7 @@ class NavDrawer extends StatefulWidget {
 
 class _NavDrawerState extends State<NavDrawer> {
   String token = "";
+  final _auth = FirebaseAuth.instance;
   @override
   void initState() {
     super.initState();
@@ -186,6 +188,7 @@ class _NavDrawerState extends State<NavDrawer> {
                     }).then((value) async {
                       final pref = await SharedPreferences.getInstance();
                       await pref.clear();
+                      _auth.signOut();
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => LoginPage()),
