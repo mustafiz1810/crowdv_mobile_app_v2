@@ -48,12 +48,9 @@ class _SearchPageState extends State<SearchPage> {
   TextEditingController volunteerController = TextEditingController();
   @override
   void initState() {
-    print(widget.min_age);
-    print(widget.max_age);
-    print(widget.category);
-    print(widget.membership);
-    print(widget.profession);
-    print(widget.gender);
+    print(widget.country);
+    print(widget.state);
+    print(widget.city);
 
     getCred();
     super.initState();
@@ -113,6 +110,7 @@ class _SearchPageState extends State<SearchPage> {
             'volunteer-search?state_id=${widget.state}&city_id=${widget.city}&country_id=${widget.country}&category_id=${widget.category}&gender=${widget.gender}&membership_id=${widget.membership}&search=${volunteerController.text}&profession=${widget.profession}&min_age=${widget.min_age}&max_age=${widget.max_age}'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
+    print(data);
     if (response.statusCode == 200) {
       return CategoryVolunteer.fromJson(data);
     } else {
@@ -353,66 +351,6 @@ class _SearchPageState extends State<SearchPage> {
                                                             );
                                                           });
                                                     });
-                                                // showModalBottomSheet(
-                                                //     context: context,
-                                                //     builder: (context) {
-                                                //       return Column(
-                                                //         mainAxisSize: MainAxisSize.min,
-                                                //         children: <Widget>[
-                                                //           ListTile(
-                                                //             leading: new Icon(Icons.photo),
-                                                //             title: new Text('Photo'),
-                                                //             onTap: () {
-                                                //             },
-                                                //             tileColor: Colors.teal,
-                                                //             selectedTileColor: Colors.yellow,
-                                                //           ),
-                                                //           CheckboxListTile(
-                                                //             title: const Text('GeeksforGeeks'),
-                                                //             subtitle: const Text('A computer science portal for geeks.'),
-                                                //             secondary: const Icon(Icons.code),
-                                                //             autofocus: false,
-                                                //             activeColor: Colors.green,
-                                                //             checkColor: Colors.white,
-                                                //             selected: _value,
-                                                //             value: _value,
-                                                //             onChanged: (bool value) {
-                                                //               setState(() {
-                                                //                 _value = value;
-                                                //               });
-                                                //             },
-                                                //           ),
-                                                //         ],
-                                                //       );
-                                                //     });
-                                                // showDialog(
-                                                //     context: context,
-                                                //     builder:
-                                                //         (BuildContext context) {
-                                                //       return AlertDialog(
-                                                //         title: Container(
-                                                //           child: Padding(
-                                                //             padding:
-                                                //                 const EdgeInsets
-                                                //                     .all(8.0),
-                                                //             child: Text(
-                                                //               'Pick Opportunity',
-                                                //               style: TextStyle(
-                                                //                   color: Colors
-                                                //                       .white),
-                                                //             ),
-                                                //           ),
-                                                //           color: primaryColor,
-                                                //         ),
-                                                //         content:
-                                                //             inviteAlertDialogContainer(
-                                                //                 context,
-                                                //                 snapshot
-                                                //                     .data
-                                                //                     .data[index]
-                                                //                     .id),
-                                                //       );
-                                                //     });
                                               },
                                               child: Row(
                                                 children: [
@@ -516,11 +454,12 @@ class _SearchPageState extends State<SearchPage> {
                                           SizedBox(
                                             height: 5,
                                           ),
-                                          Text(
+                                          snapshot.data.data[index].serviceState.id != null?Text(
                                               snapshot.data.data[index].serviceState.name.toString() +
                                                   ", " +
                                                   snapshot.data.data[index].serviceCity.name
                                                       .toString(),
+                                              style: TextStyle(fontSize: 14)):Text("Not Provided",
                                               style: TextStyle(fontSize: 14)),
                                           SizedBox(
                                             height: 5,

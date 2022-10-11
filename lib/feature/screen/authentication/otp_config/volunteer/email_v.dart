@@ -81,7 +81,8 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
         }
       } else {
         var data = jsonDecode(response.body.toString());
-        showToast(context, data['message']);
+        data['error'].length != 0?
+        showToast(context, data['error']['errors'].toString()):showToast(context, data['message']);
         setState(() {
           isApiCallProcess = false;
         });

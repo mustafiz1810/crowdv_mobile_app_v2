@@ -130,7 +130,7 @@ class AboutUs extends StatelessWidget {
                                                     }
                                                   },
                                                   child: SizedBox(
-                                                      width: 200,
+                                                      width: 170,
                                                       height: 20,
                                                       child: Text(snapshot.data
                                                           .data.webAddress))),

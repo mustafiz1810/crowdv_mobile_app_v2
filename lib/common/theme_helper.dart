@@ -7,11 +7,12 @@ class ThemeHelper{
   InputDecoration textInputDecoration([String lableText="", String hintText = ""]){
     return InputDecoration(
       labelText: lableText,
+      labelStyle: TextStyle(fontSize: 14),
       hintText: hintText,
+      hintStyle: TextStyle(fontSize: 14),
       fillColor: Colors.white,
-      labelStyle: TextStyle(fontWeight: FontWeight.bold),
       filled: true,
-      contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+      contentPadding: EdgeInsets.fromLTRB(15, 15, 15, 15),
       focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
       enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
       errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.red, width: 2.0)),

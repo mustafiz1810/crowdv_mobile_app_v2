@@ -1,27 +1,31 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
+import 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+
 class LocationUpdate extends StatefulWidget {
   final List<int> eligibility;
-  final dynamic token,id,title,
+  final dynamic token,
+      id,
+      title,
       category,
       type,
       description,
       date,
       time,
       etime,
-  country,
+      country,
       city,
       state,
-  zip;
+      other,
+      zip;
   LocationUpdate(
       {@required this.token,
-        this.id,
+      this.id,
       this.title,
       this.category,
       this.type,
@@ -30,9 +34,10 @@ class LocationUpdate extends StatefulWidget {
       this.time,
       this.etime,
       this.eligibility,
-        this.country,
+      this.country,
       this.city,
       this.state,
+      this.other,
       this.zip});
 
   @override
@@ -43,14 +48,15 @@ class _LocationUpdateState extends State<LocationUpdate> {
   @override
   void initState() {
     super.initState();
-    widget.country == null?countryvalue =widget.country:countryvalue = widget.country.toString();
-    widget.state == null?statevalue =widget.state:statevalue = widget.state.toString();
-    widget.city == null?cityvalue =widget.city:cityvalue = widget.city.toString();
-    zipController.text=widget.zip.toString();
+    zipController.text = widget.zip.toString();
+    print(widget.country);
+    print(widget.state);
+    print(widget.city);
     getCountry();
-    widget.state != null?getState(widget.country):"";
-    widget.city != null?getCity(widget.state):"";
+    widget.state != null ? getState(widget.country) : "";
+    widget.city != null ? getCity(widget.state) : "";
   }
+
   List countries = [];
   Future getCountry() async {
     var baseUrl = NetworkConstants.BASE_URL + 'countries';
@@ -64,6 +70,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
       });
     }
   }
+
   List states = [];
   Future getState(countryId) async {
     var baseUrl = NetworkConstants.BASE_URL + 'get-state-by-country/$countryId';
@@ -77,6 +84,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
       });
     }
   }
+
   List city = [];
   Future getCity(stateId) async {
     var baseUrl = NetworkConstants.BASE_URL + 'get-city-by-state/$stateId';
@@ -90,33 +98,49 @@ class _LocationUpdateState extends State<LocationUpdate> {
       });
     }
   }
+
   var countryvalue;
   var statevalue;
   var cityvalue;
 
   TextEditingController zipController = TextEditingController();
-  void update(String title, category_id, date, start_time, end_time,country, state,
-      city, List<int> eligibility, details, task_type, zip_code) async {
-    String body = json.encode({ 'title': title,
+  void update(
+      String other,
+      title,
+      category_id,
+      date,
+      start_time,
+      end_time,
+      country,
+      state,
+      city,
+      List<int> eligibility,
+      details,
+      task_type,
+      zip_code) async {
+    String body = json.encode({
+      'title': title,
       'category_id': category_id,
       'date': date,
       'start_time': start_time,
       'end_time': end_time,
-      'eligibility_id': eligibility ,
+      'eligibility_id': eligibility,
+      'other': other,
       'details': details,
       'task_type': task_type,
       'country_id': country,
       'state_id': state,
       'city_id': city,
       'zip_code': zip_code,
-      'is_public': 'true',});
+      'is_public': 'true',
+    });
     try {
       Response response = await post(
-          Uri.parse(NetworkConstants.BASE_URL + 'opportunity/update/${widget.id}'),
+          Uri.parse(
+              NetworkConstants.BASE_URL + 'opportunity/update/${widget.id}'),
           headers: {
             "Authorization": "Bearer ${widget.token}",
             "Content-Type": "application/json"
-
           },
           body: body);
       if (response.statusCode == 200) {
@@ -128,7 +152,9 @@ class _LocationUpdateState extends State<LocationUpdate> {
       } else {
         var data = jsonDecode(response.body.toString());
         print(data);
-        showToast(context, data['error']['errors'].toString());
+        data['error'].length != 0?
+        showToast(context, data['error']['errors'].toString()):
+        showToast(context, data['message']);
       }
     } catch (e) {
       showDialog(
@@ -149,7 +175,6 @@ class _LocationUpdateState extends State<LocationUpdate> {
           });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -176,264 +201,116 @@ class _LocationUpdateState extends State<LocationUpdate> {
             SizedBox(
               height: 23,
             ),
-            FormField<String>(
-              builder: (FormFieldState<String>
-              state) {
-                return InputDecorator(
-                  decoration: InputDecoration(
-                    hintText: "Country",
-                    fillColor: Colors.white,
-                    labelStyle: TextStyle(
-                        fontWeight:
-                        FontWeight.bold),
-                    filled: true,
-                    contentPadding:
-                    EdgeInsets.fromLTRB(
-                        20, 10, 20, 10),
-                    focusedBorder:
-                    OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius
-                            .circular(
-                            12.0),
-                        borderSide: BorderSide(
-                            color: Colors
-                                .black)),
-                    enabledBorder:
-                    OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius
-                            .circular(
-                            12.0),
-                        borderSide: BorderSide(
-                            color: Colors
-                                .black)),
-                    errorBorder:
-                    OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius
-                            .circular(
-                            12.0),
-                        borderSide:
-                        BorderSide(
-                            color: Colors
-                                .red,
-                            width:
-                            2.0)),
-                    focusedErrorBorder:
-                    OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius
-                            .circular(
-                            12.0),
-                        borderSide:
-                        BorderSide(
-                            color: Colors
-                                .red,
-                            width:
-                            2.0)),
-                  ),
-                  child: Center(
-                    child: DropdownButton(
-                      hint: Text('Country',style:TextStyle(fontWeight: FontWeight.bold)),
-                      underline: SizedBox(),
-                      iconEnabledColor:
-                      Colors.black,
-                      isExpanded: true,
-                      items: countries.map((item) {
-                        return DropdownMenuItem(
-                          value: item['id'].toString(),
-                          child: Text(item['name'].toString()),
-                        );
-                      }).toList(),
-                      onChanged: (newVal) {
-                        setState(() {
-                          states.clear();
-                          statevalue = null;
-                          city.clear();
-                          cityvalue = null;
-                          countryvalue = newVal;
-                          getState(newVal);
-                        });
-                        print(countryvalue);
-                      },
-                      value: countryvalue,
-                    ),
-                  ),
-                );
+            CustomSearchableDropDown(
+              initialValue: [
+                {
+                  'parameter': 'id',
+                  'value': widget.country,
+                }
+              ],
+              items: countries,
+              label: 'Select Country',
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                      color: Colors.black
+                  )
+              ),
+              dropDownMenuItems:  countries?.map((item) {
+                return item['name'];
+              })?.toList() ??
+                  [],
+              onChanged: (newVal) {
+                if(newVal!=null)
+                {
+                  setState(() {
+                    states.clear();
+                    statevalue = null;
+                    city.clear();
+                    cityvalue = null;
+                    zipController.clear();
+                    countryvalue = newVal['id'];
+                    getState(countryvalue);
+                    print(countryvalue);
+                  });
+
+                }
+                else{
+                  countryvalue=null;
+                }
               },
             ),
             SizedBox(
-              height: 23,
+              height: 10,
             ),
-            FormField<String>(
-              builder: (FormFieldState<String>
-              state) {
-                return InputDecorator(
-                  decoration: InputDecoration(
-                    hintText: "State",
-                    fillColor: Colors.white,
-                    labelStyle: TextStyle(
-                        fontWeight:
-                        FontWeight.bold),
-                    filled: true,
-                    contentPadding:
-                    EdgeInsets.fromLTRB(
-                        20, 10, 20, 10),
-                    focusedBorder:
-                    OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius
-                            .circular(
-                            12.0),
-                        borderSide: BorderSide(
-                            color: Colors
-                                .black)),
-                    enabledBorder:
-                    OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius
-                            .circular(
-                            12.0),
-                        borderSide: BorderSide(
-                            color: Colors
-                                .black)),
-                    errorBorder:
-                    OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius
-                            .circular(
-                            12.0),
-                        borderSide:
-                        BorderSide(
-                            color: Colors
-                                .red,
-                            width:
-                            2.0)),
-                    focusedErrorBorder:
-                    OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius
-                            .circular(
-                            12.0),
-                        borderSide:
-                        BorderSide(
-                            color: Colors
-                                .red,
-                            width:
-                            2.0)),
-                  ),
-                  child: Center(
-                    child: DropdownButton(
-                      hint: Text('State',style:TextStyle(fontWeight: FontWeight.bold)),
-                      underline: SizedBox(),
-                      iconEnabledColor:
-                      Colors.black,
-                      isExpanded: true,
-                      items: states.map((item) {
-                        return DropdownMenuItem(
-                          value: item['id'].toString(),
-                          child: Text(item['name'].toString()),
-                        );
-                      }).toList(),
-                      onChanged: (newVal) {
-                        setState(() {
-                          city.clear();
-                          cityvalue = null;
-                          statevalue = newVal;
-                          getCity(newVal);
-                        });
-                        print(statevalue);
-                      },
-                      value: statevalue,
-                    ),
-                  ),
-                );
+            CustomSearchableDropDown(
+              initialValue: [
+                {
+                  'parameter': 'id',
+                  'value': widget.state,
+                }
+              ],
+              items: states,
+              label: 'Division/Province/State',
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                      color: Colors.black
+                  )
+              ),
+              dropDownMenuItems: states.map((item) {
+                return item['name'].toString();
+              }).toList() ??
+                  [],
+              onChanged: (newVal)  {
+                if(newVal!=null)
+                {
+                  setState(() {
+                    city.clear();
+                    cityvalue = null;
+                    zipController.clear();
+                    statevalue = newVal['id'];
+                    print(statevalue);
+                    getCity(statevalue);
+                  });
+                }
+                else{
+                  statevalue=null;
+                }
               },
             ),
             SizedBox(
-              height: 23,
+              height: 10,
             ),
-            FormField<String>(
-              builder: (FormFieldState<String>
-              state) {
-                return InputDecorator(
-                  decoration: InputDecoration(
-                    hintText: "City",
-                    fillColor: Colors.white,
-                    labelStyle: TextStyle(
-                        fontWeight:
-                        FontWeight.bold),
-                    filled: true,
-                    contentPadding:
-                    EdgeInsets.fromLTRB(
-                        20, 10, 20, 10),
-                    focusedBorder:
-                    OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius
-                            .circular(
-                            12.0),
-                        borderSide: BorderSide(
-                            color: Colors
-                                .black)),
-                    enabledBorder:
-                    OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius
-                            .circular(
-                            12.0),
-                        borderSide: BorderSide(
-                            color: Colors
-                                .black)),
-                    errorBorder:
-                    OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius
-                            .circular(
-                            12.0),
-                        borderSide:
-                        BorderSide(
-                            color: Colors
-                                .red,
-                            width:
-                            2.0)),
-                    focusedErrorBorder:
-                    OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius
-                            .circular(
-                            12.0),
-                        borderSide:
-                        BorderSide(
-                            color: Colors
-                                .red,
-                            width:
-                            2.0)),
-                  ),
-                  child: Center(
-                    child: DropdownButton(
-                      hint: Text('City',style:TextStyle(fontWeight: FontWeight.bold)),
-                      underline: SizedBox(),
-                      iconEnabledColor:
-                      Colors.black,
-                      isExpanded: true,
-                      items: city.map((item) {
-                        return DropdownMenuItem(
-                          value: item['id'].toString(),
-                          child: Text(item['name'].toString()),
-                        );
-                      }).toList(),
-                      onChanged: (newVal) {
-                        setState(() {
-                          cityvalue = newVal;
-                        });
-                        print(cityvalue);
-                      },
-                      value: cityvalue,
-                    ),
-                  ),
-                );
+            CustomSearchableDropDown(
+              initialValue: [
+                {
+                  'parameter': 'id',
+                  'value': widget.city,
+                }
+              ],
+              items: city,
+              label: 'City',
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                      color: Colors.black
+                  )
+              ),
+              dropDownMenuItems: city.map((item) {
+                return item['name'].toString();
+              }).toList() ??
+                  [],
+              onChanged: (newVal) {
+                if(newVal!=null)
+                {
+                  cityvalue = newVal['id'];
+                  zipController.clear();
+                  print(cityvalue);
+                }
+                else{
+                  cityvalue=null;
+                }
               },
             ),
             SizedBox(
@@ -441,15 +318,13 @@ class _LocationUpdateState extends State<LocationUpdate> {
             ),
             Container(
               child: TextFormField(
+                style: TextStyle(fontSize: 14),
                 keyboardType: TextInputType.number,
                 controller: zipController,
                 decoration: ThemeHelper()
-                    .textInputDecoration(
-                    'Zip Code',
-                    'Enter your zip code'),
+                    .textInputDecoration('Zip Code', 'Enter your zip code'),
               ),
-              decoration: ThemeHelper()
-                  .inputBoxDecorationShaddow(),
+              decoration: ThemeHelper().inputBoxDecorationShaddow(),
             ),
             SizedBox(height: 20),
             Row(
@@ -487,6 +362,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
                               zipController.text.toString());
                         });
                         update(
+                            widget.other,
                             widget.title,
                             widget.category,
                             widget.date,

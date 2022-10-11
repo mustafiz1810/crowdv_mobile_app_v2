@@ -4,15 +4,13 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruit
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/design_details.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
-import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:inkwell_splash/inkwell_splash.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class EligibilityUpdate extends StatefulWidget {
-  final dynamic token,id ,title, category, type, description, date, time, etime, slug,eligibility,country,city,state,zip;
+  final dynamic token,id ,title, category, type, description, date, time, etime, slug,eligibility,other,country,city,state,zip;
   EligibilityUpdate(
       {@required this.token,
         this.id,
@@ -25,8 +23,10 @@ class EligibilityUpdate extends StatefulWidget {
         this.etime,
         this.slug,
       this.eligibility,
+        this.other,
         this.country,
-      this.city,this.state,this.zip});
+      this.city,this.state,
+        this.zip});
   @override
   _EligibilityUpdateState createState() => _EligibilityUpdateState();
 }
@@ -61,9 +61,10 @@ class _EligibilityUpdateState extends State<EligibilityUpdate> {
   void initState() {
     super.initState();
     tempArray = widget.eligibility;
+    othersController.text = widget.other.toString();
     myFuture = getEligibilityApi();
   }
-
+  TextEditingController othersController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,6 +83,7 @@ class _EligibilityUpdateState extends State<EligibilityUpdate> {
             onTap: () {
               // getItems();
               Get.to(() => LocationUpdate(
+                other:othersController.text.toString(),
                 eligibility: tempArray,
                 title: widget.title,
                 category: widget.category,
@@ -147,36 +149,72 @@ class _EligibilityUpdateState extends State<EligibilityUpdate> {
                 future: myFuture,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: snapshot.data.data.length,
-                      itemBuilder: (context, index) {
-                        return Column(children: <Widget>[
-                          Card(
-                              child: new CheckboxListTile(
-                                  activeColor: primaryColor,
-                                  dense: true,
-                                  //font change
-                                  title: new Text(
-                                    snapshot.data.data[index].title,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        letterSpacing: 0.5),
-                                  ),
-                                  value:  tempArray.contains(
-                                      snapshot.data.data[index].id)
-                                      ?true:snapshot.data.data[index].isChecked,
-                                  onChanged: (bool value) {
-                                    setState(() {
-                                      snapshot.data.data[index].isChecked = value;
-                                      _answerQuestion(
-                                          snapshot.data.data[index].id);
-                                    });
-                                  })),
-                        ]);
-                      },
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: snapshot.data.data.length,
+                            itemBuilder: (context, index) {
+                              return Column(children: <Widget>[
+                                Card(
+                                    child: new CheckboxListTile(
+                                        activeColor: primaryColor,
+                                        dense: true,
+                                        //font change
+                                        title: new Text(
+                                          snapshot.data.data[index].title,
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                              letterSpacing: 0.5),
+                                        ),
+                                        value:  tempArray.contains(
+                                            snapshot.data.data[index].id)
+                                            ?true:snapshot.data.data[index].isChecked,
+                                        onChanged: (bool value) {
+                                          setState(() {
+                                            snapshot.data.data[index].isChecked = value;
+                                            _answerQuestion(
+                                                snapshot.data.data[index].id);
+                                          });
+                                        })),
+                              ]);
+                            },
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          //--------------------------------here is discription
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              child: TextFormField(
+                                textInputAction: TextInputAction.done,
+                                controller: othersController,
+                                maxLines: 3,
+                                maxLength: 100,
+                                decoration: InputDecoration(
+                                    hintText: "Type your eligibility",
+                                    hintStyle: TextStyle(
+                                        fontSize: 14
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.grey.shade200),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   } else {
                     return Center(child: CircularProgressIndicator());

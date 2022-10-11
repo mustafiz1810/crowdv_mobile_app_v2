@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crowdv_mobile_app/data/models/volunteer/video_list_model.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/test.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/widget/videos_screen.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
@@ -9,12 +8,10 @@ import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-// import 'package:random_color/random_color.dart';
 class TrainingVideo extends StatefulWidget {
   final id;
   TrainingVideo({this.id});
@@ -54,7 +51,7 @@ class _TrainingVideoState extends State<TrainingVideo> {
     }
   }
 
-  void train(int id, String name, mediaUrl, details, videos) async {
+  void train(int id, String name, mediaUrl, details, videos,trainingId) async {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'track-video-info/$id'),
@@ -77,6 +74,7 @@ class _TrainingVideoState extends State<TrainingVideo> {
                     name: name,
                     mediaUrl: mediaUrl,
                     details: details,
+                trainingId:trainingId,
                   )),
         );
       } else {
@@ -157,7 +155,8 @@ class _TrainingVideoState extends State<TrainingVideo> {
                                 snapshot.data.data.videos[index].title,
                                 snapshot.data.data.videos[index].video,
                                 snapshot.data.data.videos[index].details,
-                                snapshot.data.data.videos);
+                                snapshot.data.data.videos, widget.id,
+                            );
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -211,26 +210,6 @@ class _TrainingVideoState extends State<TrainingVideo> {
 
               },
             )),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: SizedBox(
-                width: 250,
-                height: 40,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: primaryColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30)),
-                  ),
-                  onPressed: () {
-                    Get.to(() => Test(
-                      trainingId: widget.id,
-                    ));
-                  },
-                  child: Text("Take the test"),
-                ),
-              ),
-            )
           ],
         ),
       ),

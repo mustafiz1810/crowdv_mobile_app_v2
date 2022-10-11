@@ -104,6 +104,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         itemCount: snapshot.data.data.length,
+                        physics: ClampingScrollPhysics(),
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.all(5),
@@ -117,8 +118,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                   MaterialPageRoute(
                                       builder: (context) => OpportunityDetails(
                                           role: widget.role,
-                                          id: snapshot.data.data[index].id,
-                                          token: token)),
+                                          id: snapshot.data.data[index].id,)),
                                 ).then((value) => setState(() {}));
                               },
                               child: Container(

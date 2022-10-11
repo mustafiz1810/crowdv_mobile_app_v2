@@ -156,17 +156,6 @@ class _CheckBoxState extends State<CheckBox> {
                                         value: snapshot.data.data[index].isChecked,
                                         onChanged: (bool value) {
                                           setState(() {
-                                            // if (tempArray.contains(
-                                            //     snapshot.data.data[index].id)) {
-                                            //   tempArray.remove(
-                                            //       snapshot.data.data[index].id);
-                                            //   snapshot.data.data[index].isChecked = value;
-                                            //   print(tempArray);
-                                            // } else {
-                                            //   snapshot.data.data[index].isChecked = value;
-                                            //   _answerQuestion(
-                                            //       snapshot.data.data[index].id);
-                                            // }
                                             snapshot.data.data[index].isChecked = value;
                                             _answerQuestion(snapshot.data.data[index].id);
                                           });

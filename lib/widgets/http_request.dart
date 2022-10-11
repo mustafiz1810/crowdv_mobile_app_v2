@@ -12,10 +12,13 @@ Future getRequest(path, qparam, headers) async {
 
   if (response.statusCode == 200) {
     var data = json.decode(response.body);
+    print(data);
     return data;
   } else {
     var data = json.decode(response.body);
-    showToast(data["message"]);
+    print(data);
+    data['error'].length != 0?
+    showToast(data['error']['errors'].toString()):showToast(data['message']);
     print(HtmlParser.parseHTML(response.body).body.innerHtml);
     throw Exception('Failed to load data');
   }
@@ -33,7 +36,8 @@ Future getRequestWithoutParam(path, headers) async {
   } else {
     var data = json.decode(response.body);
     print(data);
-    showToast(data['message']);
+    data['error'].length != 0?
+    showToast(data['error']['errors'].toString()):showToast(data['message']);
     // print(
     //   path,
     // );

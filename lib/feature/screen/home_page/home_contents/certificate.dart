@@ -142,7 +142,7 @@ class _CertificateState extends State<Certificate> {
                                     MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
-                                        width: 320,
+                                        width: 280,
                                         child: Text(
                                           "Test Name: " +
                                               snapshot

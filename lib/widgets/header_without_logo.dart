@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
@@ -108,6 +109,7 @@ class _HeaderWidgetState extends State<HeaderWidget>
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             widget.role == "organization"
                 ? Container(
@@ -154,9 +156,7 @@ class _HeaderWidgetState extends State<HeaderWidget>
                             ),
                     ],
                   ),
-            SizedBox(
-              width: 60,
-            ),
+
             Column(
               children: [
                 Row(children: [

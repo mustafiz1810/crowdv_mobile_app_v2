@@ -1,3 +1,4 @@
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/common_profile.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
@@ -9,15 +10,14 @@ import '../../../data/models/notification_model.dart';
 import 'home_contents/widgets/applied_volunteer.dart';
 
 class NotificationPage extends StatefulWidget {
-  final dynamic id,data, token,role;
-  NotificationPage({this.id,this.data, this.token,this.role});
+  final dynamic id, data, token, role;
+  NotificationPage({this.id, this.data, this.token, this.role});
 
   @override
   _NotificationPageState createState() => _NotificationPageState();
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +58,7 @@ class _NotificationPageState extends State<NotificationPage> {
                     itemBuilder: (context, index) {
                       return InkWellSplash(
                         splashColor: Colors.white,
-                        onTap: (){
+                        onTap: () {
                           // print(widget.data[index].data.opportunityId.toString());
                           getRequest(
                               '/api/v1/mark-notification/${widget.data[index].id}',
@@ -66,29 +66,74 @@ class _NotificationPageState extends State<NotificationPage> {
                             'Content-Type': "application/json",
                             "Authorization": "Bearer ${widget.token}"
                           }).then((value) async {
-                            widget.data[index].data.opportunityId != null && widget.data[index].data.status != "hired" ?Navigator.push(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>  AppliedVolunteer(
-                                    token:
-                                    widget.token,
-                                    id: widget.data[index].data.opportunityId,
-                                  )),
-                            ):Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CommonProfile(id: widget.data[index].data.volunteerId,)),
+                                  builder: (context) => OpportunityDetails(
+                                      role: widget.role,
+                                      id: widget
+                                          .data[index].data.opportunityId,
+                                      friendId: widget
+                                          .data[index].data.volunteerUid,
+                                      friendName:
+                                      widget.data[index].data.volunteer,
+                                      friendImage: widget
+                                          .data[index].data.volunteerImage,
+                                      isOnline:
+                                      widget.data[index].data.isOnline)),
                             );
+                            // if (widget.data[index].data.status ==
+                            //         "invitation" ||
+                            //     widget.data[index].data.status == "hired") {
+                            //   Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => OpportunityDetails(
+                            //             role: widget.role,
+                            //             id: widget
+                            //                 .data[index].data.opportunityId,
+                            //             friendId: widget
+                            //                 .data[index].data.volunteerUid,
+                            //             friendName:
+                            //                 widget.data[index].data.volunteer,
+                            //             friendImage: widget
+                            //                 .data[index].data.volunteerImage,
+                            //             isOnline:
+                            //                 widget.data[index].data.isOnline)),
+                            //   );
+                            // } else if (widget.data[index].data.status ==
+                            //     "applied") {
+                            //   Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => AppliedVolunteer(
+                            //               token: widget.token,
+                            //               id: widget
+                            //                   .data[index].data.opportunityId,
+                            //             )),
+                            //   );
+                            // } else {
+                            //   Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => CommonProfile(
+                            //               id: widget
+                            //                   .data[index].data.volunteerId,
+                            //             )),
+                            //   );
+                            // }
                             setState(() {});
                           });
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Container(
-                            height: 90,
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: widget.data[index].readAt.toString() == null?Color(0xFFe5e5e5):Colors.white,
+                              color:
+                                  widget.data[index].readAt.toString() == null
+                                      ? Color(0xFFe5e5e5)
+                                      : Colors.white,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.4),
@@ -98,7 +143,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                 ),
                               ],
                               borderRadius:
-                              BorderRadius.all(Radius.circular(20)),
+                                  BorderRadius.all(Radius.circular(20)),
                             ),
                             child: ListTile(
                               leading: IconBox(
@@ -111,7 +156,7 @@ class _NotificationPageState extends State<NotificationPage> {
                               ),
                               title: Row(
                                 children: [
-                                  Text(widget.data[index].data.volunteer != null?widget.data[index].data.volunteer:"",
+                                  Text(widget.data[index].data.volunteer,
                                       style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
@@ -119,7 +164,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                   SizedBox(
                                     width: 5,
                                   ),
-                                  Text(widget.data[index].data.status != null?widget.data[index].data.status:"",
+                                  Text(widget.data[index].data.status,
                                       style: TextStyle(
                                           fontSize: 14, color: Colors.black)),
                                 ],
@@ -128,9 +173,11 @@ class _NotificationPageState extends State<NotificationPage> {
                                 height: 10,
                                 width: 10,
                                 decoration: BoxDecoration(
-                                    color: widget.data[index].readAt == null?Color(0xFF1d4e89):Colors.white,
+                                    color: widget.data[index].readAt == null
+                                        ? Color(0xFF1d4e89)
+                                        : Colors.white,
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(100))),
+                                        BorderRadius.all(Radius.circular(100))),
                               ),
                               subtitle: Text(widget.data[index].data.title),
                             ),

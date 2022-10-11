@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:empty_widget/empty_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -148,6 +149,7 @@ class _OrganizationOpportunitiesState extends State<OrganizationOpportunities> {
                                           height: 10,
                                         ),
                                         Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Row(
                                               children: [
@@ -172,12 +174,12 @@ class _OrganizationOpportunitiesState extends State<OrganizationOpportunities> {
                                                       }
                                                     },
                                                     child: SizedBox(
-                                                        width: 200,
+                                                        width: 170,
                                                         height: 20,
                                                         child: Text(snapshot
                                                             .data
                                                             .data[index]
-                                                            .links))),
+                                                            .links,style: TextStyle(overflow: TextOverflow.ellipsis),))),
                                               ],
                                             ),
                                             TextButton(

@@ -3,6 +3,7 @@ import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/widgets/multi_
 import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/widgets/multi_select_static.dart';
 import 'package:crowdv_mobile_app/feature/screen/Volunteer_search/search_volunteer.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
+import 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
@@ -36,7 +37,6 @@ class _VolunteerFilterState extends State<VolunteerFilter> {
   List<int> _selectedMembership = [];
   List<String> _selectedGender = [];
   List<String> _selectedProfession = [];
-  RangeValues _currentRangeValues = const RangeValues(0, 100);
   String selectedCountry;
   String selectedProvince;
   List countries = [];
@@ -279,64 +279,37 @@ class _VolunteerFilterState extends State<VolunteerFilter> {
                         SizedBox(
                           height: 10,
                         ),
-                        FormField<String>(
-                          builder: (FormFieldState<String> state) {
-                            return InputDecorator(
-                              decoration: InputDecoration(
-                                hintText: "Country",
-                                fillColor: Colors.white,
-                                labelStyle:
-                                    TextStyle(fontWeight: FontWeight.bold),
-                                filled: true,
-                                contentPadding:
-                                    EdgeInsets.fromLTRB(20, 10, 20, 10),
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12.0),
-                                    borderSide:
-                                        BorderSide(color: Colors.black)),
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12.0),
-                                    borderSide:
-                                        BorderSide(color: Colors.black)),
-                                errorBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12.0),
-                                    borderSide: BorderSide(
-                                        color: Colors.red, width: 2.0)),
-                                focusedErrorBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12.0),
-                                    borderSide: BorderSide(
-                                        color: Colors.red, width: 2.0)),
-                              ),
-                              child: Center(
-                                child: DropdownButton(
-                                  hint: Text('Country',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  underline: SizedBox(),
-                                  iconEnabledColor: Colors.black,
-                                  isExpanded: true,
-                                  items: countries.map((item) {
-                                    return DropdownMenuItem(
-                                      value: item['id'].toString(),
-                                      child: Text(item['name'].toString()),
-                                    );
-                                  }).toList(),
-                                  onChanged: (newVal) {
-                                    setState(() {
-                                      states.clear();
-                                      statevalue = null;
-                                      city.clear();
-                                      cityvalue = null;
-                                      countryvalue = newVal;
-                                      getState(newVal);
-                                      isStateVisible = true;
-                                    });
-                                    print(countryvalue);
-                                  },
-                                  value: countryvalue,
-                                ),
-                              ),
-                            );
+                        CustomSearchableDropDown(
+                          items: countries,
+                          label: 'Select Country',
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  color: Colors.black
+                              )
+                          ),
+                          dropDownMenuItems:  countries?.map((item) {
+                            return item['name'];
+                          })?.toList() ??
+                              [],
+                          onChanged: (newVal) {
+                            if(newVal!=null)
+                            {
+                              setState(() {
+                                states.clear();
+                                statevalue = null;
+                                city.clear();
+                                cityvalue = null;
+                                countryvalue = newVal['id'];
+                                getState(countryvalue);
+                                countryvalue != null?isStateVisible = true:isStateVisible = false;
+                                print(isStateVisible);
+                              });
+
+                            }
+                            else{
+                              countryvalue=null;
+                            }
                           },
                         ),
                         SizedBox(
@@ -344,67 +317,34 @@ class _VolunteerFilterState extends State<VolunteerFilter> {
                         ),
                         Visibility(
                           visible: isStateVisible,
-                          child:  FormField<String>(
-                            builder: (FormFieldState<String> state) {
-                              return InputDecorator(
-                                decoration: InputDecoration(
-                                  hintText: "Division/Province/State",
-                                  fillColor: Colors.white,
-                                  labelStyle: TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                  filled: true,
-                                  contentPadding:
-                                  EdgeInsets.fromLTRB(20, 10, 20, 10),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(12.0),
-                                      borderSide:
-                                      BorderSide(color: Colors.black)),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(12.0),
-                                      borderSide:
-                                      BorderSide(color: Colors.black)),
-                                  errorBorder: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(12.0),
-                                      borderSide: BorderSide(
-                                          color: Colors.red, width: 2.0)),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(12.0),
-                                      borderSide: BorderSide(
-                                          color: Colors.red, width: 2.0)),
-                                ),
-                                child: Center(
-                                  child: DropdownButton(
-                                    hint: Text("Division/Province/State",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    underline: SizedBox(),
-                                    iconEnabledColor: Colors.black,
-                                    isExpanded: true,
-                                    items: states.map((item) {
-                                      return DropdownMenuItem(
-                                        value: item['id'].toString(),
-                                        child:
-                                        Text(item['name'].toString()),
-                                      );
-                                    }).toList(),
-                                    onChanged: (newVal) {
-                                      setState(() {
-                                        city.clear();
-                                        cityvalue = null;
-                                        statevalue = newVal;
-                                        getCity(newVal);
-                                        isCityVisible = true;
-                                      });
-                                      print(statevalue);
-                                    },
-                                    value: statevalue,
-                                  ),
-                                ),
-                              );
+                          child: CustomSearchableDropDown(
+                            items: states,
+                            label: 'Division/Province/State',
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: Colors.black
+                                )
+                            ),
+                            dropDownMenuItems: states.map((item) {
+                              return item['name'].toString();
+                            }).toList() ??
+                                [],
+                            onChanged: (newVal)  {
+                              if(newVal!=null)
+                              {
+                                setState(() {
+                                  city.clear();
+                                  cityvalue = null;
+                                  statevalue = newVal['id'];
+                                  getCity(statevalue);
+                                  statevalue != null?isCityVisible = true:isCityVisible = false;
+                                  print(statevalue);
+                                });
+                              }
+                              else{
+                                statevalue=null;
+                              }
                             },
                           ),
                         ),
@@ -413,63 +353,28 @@ class _VolunteerFilterState extends State<VolunteerFilter> {
                         ),
                         Visibility(
                           visible: isCityVisible,
-                          child: FormField<String>(
-                            builder: (FormFieldState<String> state) {
-                              return InputDecorator(
-                                decoration: InputDecoration(
-                                  hintText: "City",
-                                  fillColor: Colors.white,
-                                  labelStyle: TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                  filled: true,
-                                  contentPadding:
-                                  EdgeInsets.fromLTRB(20, 10, 20, 10),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(12.0),
-                                      borderSide:
-                                      BorderSide(color: Colors.black)),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(12.0),
-                                      borderSide:
-                                      BorderSide(color: Colors.black)),
-                                  errorBorder: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(12.0),
-                                      borderSide: BorderSide(
-                                          color: Colors.red, width: 2.0)),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(12.0),
-                                      borderSide: BorderSide(
-                                          color: Colors.red, width: 2.0)),
-                                ),
-                                child: Center(
-                                  child: DropdownButton(
-                                    hint: Text('City',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    underline: SizedBox(),
-                                    iconEnabledColor: Colors.black,
-                                    isExpanded: true,
-                                    items: city.map((item) {
-                                      return DropdownMenuItem(
-                                        value: item['id'].toString(),
-                                        child:
-                                        Text(item['name'].toString()),
-                                      );
-                                    }).toList(),
-                                    onChanged: (newVal) {
-                                      setState(() {
-                                        cityvalue = newVal;
-                                      });
-                                      print(cityvalue);
-                                    },
-                                    value: cityvalue,
-                                  ),
-                                ),
-                              );
+                          child: CustomSearchableDropDown(
+                            items: city,
+                            label: 'City',
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: Colors.black
+                                )
+                            ),
+                            dropDownMenuItems: city.map((item) {
+                              return item['name'].toString();
+                            }).toList() ??
+                                [],
+                            onChanged: (newVal) {
+                              if(newVal!=null)
+                              {
+                                cityvalue = newVal['id'];
+                                print(cityvalue);
+                              }
+                              else{
+                                cityvalue=null;
+                              }
                             },
                           ),
                         ),

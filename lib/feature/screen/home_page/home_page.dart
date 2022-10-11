@@ -47,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     getCred();
     //Foreground State
     FirebaseMessaging.instance.getInitialMessage();
+
     FirebaseMessaging.onMessage.listen((message) {
       if (message.notification != null) {
         print(message.notification.title);
@@ -311,7 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Carousel(
                                     dotSpacing: 15.0,
                                     dotSize: 4.0,
-                                    dotIncreasedColor: Colors.blueAccent,
+                                    dotIncreasedColor: Colors.grey,
                                     dotBgColor: Colors.transparent,
                                     indicatorBgPadding: 10.0,
                                     dotPosition: DotPosition.bottomCenter,
@@ -365,7 +366,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ))
                                         .toList(),
                                     autoplayDuration:
-                                        const Duration(seconds: 5),
+                                        const Duration(seconds: 15),
                                   ),
                                 ),
                               ));
@@ -374,6 +375,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Center(
                               child: CircularProgressIndicator(
                                 color: Colors.white,
+
                               ),
                             ),
                           );
@@ -452,15 +454,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                       }).then((value) async {
                                         print(value);
                                         Get.to(() => ServiceLocation(
-                                              country: value['data']
-                                                  ['service_country']['id'],
-                                              state: value['data']
-                                                  ['service_state']['id'],
-                                              city: value['data']
-                                                  ['service_city']['id'],
-                                              zip: value['data']
-                                                  ['service_zip_code'],
-                                            ));
+                                          country: value['data']
+                                          ['service_country']['id'],
+                                          state: value['data']
+                                          ['service_state']['id'],
+                                          city: value['data']
+                                          ['service_city']['id'],
+                                          zip: value['data']
+                                          ['service_zip_code'],
+                                        ));
                                       });
                                     },
                                   ),
@@ -496,7 +498,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     title: "Create Opportunity",
                                     svgSrc: "assets/edit.svg",
                                     press: () {
-                                      profileComplete == 100
+                                      profileComplete == 100 && profileComplete != null
                                           ? Get.to(CreateOpportunity())
                                           : showToast(
                                               "Please complete your profile");

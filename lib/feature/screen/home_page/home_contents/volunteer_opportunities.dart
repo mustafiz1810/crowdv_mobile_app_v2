@@ -61,7 +61,6 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
         Uri.parse(NetworkConstants.BASE_URL + 'volunteer/own/tasks'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
-    print(data);
     if (response.statusCode == 200) {
       return VolunteerOpportunityModel.fromJson(data);
     } else {
@@ -116,6 +115,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                     } else {
                       return ListView.builder(
                         scrollDirection: Axis.vertical,
+                        physics: ClampingScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: snapshot.data.data.length,
                         itemBuilder: (context, index) {
@@ -181,8 +181,6 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                               .data
                                                               .data[index]
                                                               .taskId,
-                                                          token: token,
-                                                          uid: uid,
                                                           friendId: snapshot
                                                               .data
                                                               .data[index]

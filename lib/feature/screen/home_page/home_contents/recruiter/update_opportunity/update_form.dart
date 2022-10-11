@@ -24,13 +24,14 @@ class OpportunityUpdate extends StatefulWidget {
       etimem,
       slug,
       eligibility,
-  country,
-  city,
-  state,
-  zip;
+      other,
+      country,
+      city,
+      state,
+      zip;
   OpportunityUpdate(
       {@required this.token,
-        this.id,
+      this.id,
       this.title,
       this.category,
       this.type,
@@ -42,7 +43,8 @@ class OpportunityUpdate extends StatefulWidget {
       this.etimem,
       this.slug,
       this.eligibility,
-        this.country,
+      this.other,
+      this.country,
       this.city,
       this.state,
       this.zip});
@@ -67,10 +69,11 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
       return CategoryModel.fromJson(data);
     }
   }
+
   List<int> eligibility = [];
   @override
   void initState() {
-    for(Map map in widget.eligibility){
+    for (Map map in widget.eligibility) {
       eligibility.add(map['id']);
     }
     titleController.text = widget.title.toString();
@@ -118,22 +121,6 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Text(
-                    "Provide details of your opportunity: ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      letterSpacing: 0.27,
-                      color: primaryColor,
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 25,
-              ),
               //--------------------------------here is title
               Container(
                 child: TextFormField(
@@ -430,7 +417,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                                   '${time.hour}:${time.minute.toString().padLeft(2, '0')}');
                             });
                           },
-                          child: getTimeBoxUI('$hours:$minutes', 100)),
+                          child: getTimeBoxUI('$hours:$minutes', 80)),
                       SizedBox(
                         width: 5,
                       ),
@@ -453,7 +440,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                               print(_time.toString());
                             });
                           },
-                          child: getTimeBoxUI('$_hours:$_minutes', 100)),
+                          child: getTimeBoxUI('$_hours:$_minutes', 80)),
                     ],
                   ),
                   SizedBox(
@@ -461,28 +448,29 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                   ),
                 ],
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 20.0),
               InkWellSplash(
                 onTap: () {
                   Get.to(() => EligibilityUpdate(
-                    slug: sslug.toString(),
-                    title: titleController.text,
-                    category: _selectedIndex.toString(),
-                    type: _typevalue.toString(),
-                    description: descriptionController.text,
-                    date: dateTime.toString(),
-                    time:
-                    '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
-                    etime:
-                    '${_time.hour}:${_time.minute.toString().padLeft(2, '0')}',
-                    eligibility:eligibility,
-                    country:widget.country,
-                    city:widget.city,
-                    state:widget.state,
-                    zip: widget.zip,
-                    id:widget.id,
-                    token:widget.token,
-                  ));
+                        slug: sslug.toString(),
+                        title: titleController.text,
+                        category: _selectedIndex.toString(),
+                        type: _typevalue.toString(),
+                        description: descriptionController.text,
+                        date: dateTime.toString(),
+                        time:
+                            '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
+                        etime:
+                            '${_time.hour}:${_time.minute.toString().padLeft(2, '0')}',
+                        eligibility: eligibility,
+                        other: widget.other,
+                        country: widget.country,
+                        city: widget.city,
+                        state: widget.state,
+                        zip: widget.zip,
+                        id: widget.id,
+                        token: widget.token,
+                      ));
                 },
                 child: Container(
                   height: 48,
@@ -532,7 +520,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
             BoxShadow(
                 color: DesignCourseAppTheme.grey.withOpacity(0.2),
                 offset: const Offset(1.1, 1.1),
-                blurRadius: 8.0),
+                blurRadius: 2.0),
           ],
         ),
         child: Padding(

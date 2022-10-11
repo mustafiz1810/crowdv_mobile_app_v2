@@ -219,8 +219,6 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                             padding: const EdgeInsets.only(
                                 left: 10, top: 10, right: 10),
                             child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height:  MediaQuery.of(context).size.width/1.7,
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -255,8 +253,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                           .recruiter
                                                           .role,
                                                       id: snapshot
-                                                          .data.data[index].id,
-                                                      token: token)),
+                                                          .data.data[index].id)),
                                             );
                                           },
                                           child: Column(

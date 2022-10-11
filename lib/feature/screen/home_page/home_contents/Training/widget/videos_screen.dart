@@ -5,14 +5,21 @@ import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
-
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/Training/test.dart';
 import '../../../../../../widgets/http_request.dart';
 
 class VideoScreen extends StatefulWidget {
   final String token, name, mediaUrl, details;
-  final int id;
-  VideoScreen({this.id, this.token, this.name, this.mediaUrl, this.details});
+  final int id, trainingId;
+  VideoScreen(
+      {this.id,
+      this.token,
+      this.name,
+      this.mediaUrl,
+      this.details,
+      this.trainingId});
 
   @override
   _VideoScreenState createState() => _VideoScreenState();
@@ -60,6 +67,7 @@ class _VideoScreenState extends State<VideoScreen> {
       } else {
         var data = jsonDecode(response.body.toString());
         showToast(context, data['message']);
+        print(data);
       }
     } catch (e) {
       showDialog(
@@ -113,12 +121,10 @@ class _VideoScreenState extends State<VideoScreen> {
         backgroundColor: primaryColor,
       ),
       body: Container(
-        height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           color: Color(0xFF415a77),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AspectRatio(
               aspectRatio: 16 / 9,
@@ -128,117 +134,140 @@ class _VideoScreenState extends State<VideoScreen> {
               ),
             ),
             Padding(
-                padding: const EdgeInsets.only(
-                    top: 5, left: 20.0, right: 20.0, bottom: 20.0),
-                child: Column(
-                  children: [
-                    SizedBox(
-                        child: Text(
-                      "Title: " + widget.name,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
-                    )),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.lightBlueAccent,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                          ),
-                          onPressed: () async {
-                            getRequest(
-                                '/api/v1/previous-video/${widget.id}', null, {
-                              'Content-Type': "application/json",
-                              "Authorization": "Bearer ${widget.token}"
-                            }).then((value) async {
-                              print(value["data"]["questions"]);
-                              VideoScreen(
-                                id: value["data"]["id"],
-                                token: widget.token,
-                                name: value["data"]["title"],
-                                mediaUrl: value["data"]["details"],
-                                details: value["data"]["details"],
-                              );
-                            });
-                          },
-                          child: Row(
-                            children: [
-                              Icon(Icons.arrow_back_ios_rounded),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text("Privious Lesson"),
-                            ],
-                          ),
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.lightBlueAccent,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                          ),
-                          onPressed: () async {
-                            getRequest(
-                                '/api/v1/next-video/${widget.id}', null, {
-                              'Content-Type': "application/json",
-                              "Authorization": "Bearer ${widget.token}"
-                            }).then((value) async {
-                              print(value["data"]["questions"]);
-                              VideoScreen(
-                                id: value["data"]["id"],
-                                token: widget.token,
-                                name: value["data"]["title"],
-                                mediaUrl: value["data"]["details"],
-                                details: value["data"]["details"],
-                              );
-                            });
-                          },
-                          child: Row(
-                            children: [
-                              Text("Next Lesson"),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Icon(Icons.arrow_forward_ios_rounded),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.fiber_manual_record_rounded,
-                          size: 12,
-                          color: Colors.lightBlue,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Details",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      widget.details,
-                      style: TextStyle(color: Colors.white),
-                    )
-                  ],
-                )),
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                  child: Text(
+                "Title: " + widget.name,
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              )),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.lightBlueAccent,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  onPressed: () async {
+                    getRequest('/api/v1/previous-video/${widget.id}', null, {
+                      'Content-Type': "application/json",
+                      "Authorization": "Bearer ${widget.token}"
+                    }).then((value) async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => VideoScreen(
+                          id: value["data"]["id"],
+                          token: widget.token,
+                          name: value["data"]["title"],
+                          mediaUrl: value["data"]["video"],
+                          details: value["data"]["details"],
+                        )),
+                      );
+                    });
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.arrow_back_ios_rounded),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text("Privious Lesson"),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.lightBlueAccent,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  onPressed: () async {
+                    getRequest('/api/v1/next-video/${widget.id}', null, {
+                      'Content-Type': "application/json",
+                      "Authorization": "Bearer ${widget.token}"
+                    }).then((value) async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => VideoScreen(
+                          id: value["data"]["id"],
+                          token: widget.token,
+                          name: value["data"]["title"],
+                          mediaUrl: value["data"]["video"],
+                          details: value["data"]["details"],
+                        )),
+                      );
+                    });
+                  },
+                  child: Row(
+                    children: [
+                      Text("Next Lesson"),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Icon(Icons.arrow_forward_ios_rounded),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.fiber_manual_record_rounded,
+                    size: 12,
+                    color: Colors.lightBlue,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "Details",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.white),
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    widget.details,
+                    style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: SizedBox(
+                width: 250,
+                height: 40,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.lightBlueAccent,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                  ),
+                  onPressed: () {
+                    Get.to(() => Test(
+                          trainingId: widget.trainingId,
+                        ));
+                  },
+                  child: Text("Take the test"),
+                ),
+              ),
+            )
           ],
         ),
       ),

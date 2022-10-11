@@ -49,6 +49,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       } else {
         var data = jsonDecode(response.body.toString());
         showToast(context, data['message']);
+        setState(() {
+          isApiCallProcess = false;
+        });
       }
     } catch (e) {
       setState(() {

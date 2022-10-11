@@ -212,8 +212,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                               MaterialPageRoute(
                                   builder: (context) => OpportunityDetails(
                                       role: role,
-                                      id: snapshot.data.data[index].id,
-                                      token: token)),
+                                      id: snapshot.data.data[index].id,)),
                             ).then((value) => setState(() {}));
                           },
                           child: Container(

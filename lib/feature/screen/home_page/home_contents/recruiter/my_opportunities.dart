@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crowdv_mobile_app/data/models/recruiter/my_opportunity.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/applied_volunteer.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/chat.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
@@ -13,7 +11,6 @@ import 'package:custom_timer/custom_timer.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:sweetalert/sweetalert.dart';
@@ -59,7 +56,6 @@ class _MyOpportunityState extends State<MyOpportunity> {
         Uri.parse(NetworkConstants.BASE_URL + 'opportunity'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
-    print(data);
     if (response.statusCode == 200) {
       return MyOpportunityModel.fromJson(data);
     } else {
@@ -116,12 +112,13 @@ class _MyOpportunityState extends State<MyOpportunity> {
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         itemCount: snapshot.data.data.length,
+                        physics: ClampingScrollPhysics(),
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.all(5),
                             child: Container(
                               width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.width / 1.7,
+                              height: 230,
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -177,8 +174,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                           role: widget.role,
                                                           id: snapshot.data
                                                               .data[index].id,
-                                                          token: token,
-                                                          uid: uid, friendId: snapshot
+                                                          friendId: snapshot
                                                           .data
                                                           .data[index]
                                                           .volunteer
@@ -258,23 +254,6 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                   Text(
                                                       snapshot.data.data[index].expiredAt,
                                                       style: TextStyle(fontSize: 12.0)),
-                                                  // Column(
-                                                  //   children: [
-                                                  // Text(
-                                                  // "Expired in (D:H:M)",
-                                                  //     style: TextStyle(fontSize: 12.0)),
-                                                  //     CustomTimer(
-                                                  //         controller: _controller,
-                                                  //         from: Duration(days:daysBetween(DateTime.now(),DateTime(2023, 10, 12),)),
-                                                  //         to: Duration(),
-                                                  //         onBuildAction: CustomTimerAction.auto_start,
-                                                  //         builder: (remaining) {
-                                                  //           return Text(
-                                                  //               "${remaining.days+" "}:${" "+remaining.hours+" "}:${" "+remaining.minutes+" "}",
-                                                  //               style: TextStyle(fontSize: 12.0));
-                                                  //         }),
-                                                  //   ],
-                                                  // ),
                                                 ],
                                               ),
                                             ],
@@ -419,8 +398,6 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                   ),
                                             IconBox(
                                               onTap: () {
-                                                print(snapshot
-                                                    .data.data[index].id);
                                                 SweetAlert.show(context,
                                                     subtitle: "Are you sure?",
                                                     style:
