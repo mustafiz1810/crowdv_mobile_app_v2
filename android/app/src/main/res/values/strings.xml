@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Crowdv</string>
+    <string name="facebook_app_id">1186279545630414</string>
+    <string name="fb_login_protocol_scheme">fb1186279545630414</string>
+    <string name="facebook_client_token">af712b66140e37af2b53d2b0df1866a0</string>
+</resources>

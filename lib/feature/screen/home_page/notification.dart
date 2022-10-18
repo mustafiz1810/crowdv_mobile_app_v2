@@ -1,4 +1,4 @@
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/recruiter_task_details.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/common_profile.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:inkwell_splash/inkwell_splash.dart';
 import '../../../data/models/notification_model.dart';
 import 'home_contents/widgets/applied_volunteer.dart';
+import 'home_contents/widgets/volunteer_task_details.dart';
 
 class NotificationPage extends StatefulWidget {
   final dynamic id, data, token, role;
@@ -69,7 +70,20 @@ class _NotificationPageState extends State<NotificationPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => OpportunityDetails(
+                                  builder: (context) => widget.role == "volunteer"?
+                                  VolunteerTaskDetails(
+                                      role: widget.role,
+                                      id: widget
+                                          .data[index].data.opportunityId,
+                                      friendId: widget
+                                          .data[index].data.volunteerUid,
+                                      friendName:
+                                      widget.data[index].data.volunteer,
+                                      friendImage: widget
+                                          .data[index].data.volunteerImage,
+                                      isOnline:
+                                      widget.data[index].data.isOnline):
+                                  RecruiterTaskDetails(
                                       role: widget.role,
                                       id: widget
                                           .data[index].data.opportunityId,

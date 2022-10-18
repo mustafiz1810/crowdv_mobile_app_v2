@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:badges/badges.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crowdv_mobile_app/data/models/recruiter/opportunity_detail.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruiter/update_opportunity/update_form.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/chat.dart';
@@ -15,15 +16,13 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../profile/common_profile.dart';
 
-class OpportunityDetails extends StatefulWidget {
+class RecruiterTaskDetails extends StatefulWidget {
   final dynamic role, id, friendId, friendName, friendImage, isOnline;
   final bool isRead;
-  OpportunityDetails(
+  RecruiterTaskDetails(
       {this.role,
       this.id,
       this.friendId,
@@ -32,10 +31,10 @@ class OpportunityDetails extends StatefulWidget {
       this.isOnline,
       this.isRead});
   @override
-  _OpportunityDetailsState createState() => _OpportunityDetailsState();
+  _RecruiterTaskDetailsState createState() => _RecruiterTaskDetailsState();
 }
 
-class _OpportunityDetailsState extends State<OpportunityDetails> {
+class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails> {
   var eligibility;
   final double infoHeight = 364.0;
   String uid;
@@ -112,11 +111,31 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                               SizedBox(
                                 height: 10,
                               ),
-                              CircleAvatar(
-                                backgroundColor: Colors.blue,
-                                backgroundImage: NetworkImage(
-                                    snapshot.data.data.recruiter.image),
-                                radius: 25,
+                              CachedNetworkImage(
+                                imageUrl:  snapshot
+                                    .data
+                                    .data
+                                    .recruiter
+                                    .image,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                      width: 60.0,
+                                      height: 60.0,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            image: imageProvider, fit: BoxFit.cover),
+                                      ),
+                                    ),
+                                placeholder: (context, url) => Icon(
+                                    Icons.downloading_rounded,
+                                    size: 40,
+                                    color: Colors.grey),
+                                errorWidget: (context, url, error) => Icon(
+                                  Icons.image_outlined,
+                                  size: 40,
+                                  color: Colors.grey,
+                                ),
                               ),
                               SizedBox(
                                 height: 5,
@@ -187,15 +206,33 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: DefaultTabController(
-                        length: 3,
+                        length: widget.role == 'recruiter'
+                            ? 3
+                            : 2,
                         child: CustomScrollView(
                           slivers: <Widget>[
                             SliverToBoxAdapter(
-                              child: TabBar(
+                              child:  widget.role == 'recruiter'
+                                  ?TabBar(
                                 tabs: [
-                                  widget.role == 'volunteer'
-                                      ? Tab(child: const Text('Recruiter'))
-                                      : Tab(child: const Text('Volunteer')),
+                                  Tab(child: const Text('Volunteer')),
+                                  Tab(child: const Text('Location')),
+                                  Tab(child: const Text('Details')),
+                                ],
+                                unselectedLabelColor: Colors.black,
+                                indicatorSize: TabBarIndicatorSize.tab,
+                                indicator: BubbleTabIndicator(
+                                  indicatorHeight: 45.0,
+                                  indicatorColor: primaryColor,
+                                  indicatorRadius: 5,
+                                  tabBarIndicatorSize: TabBarIndicatorSize.tab,
+                                  // Other flags
+                                  // indicatorRadius: 1,
+                                  insets: EdgeInsets.all(2),
+                                  // padding: EdgeInsets.all(10)
+                                ),
+                              ):TabBar(
+                                tabs: [
                                   Tab(child: const Text('Location')),
                                   Tab(child: const Text('Details')),
                                 ],
@@ -246,16 +283,31 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                                     .id,
                                                               ));
                                                     },
-                                                    child: CircleAvatar(
-                                                      backgroundColor:
-                                                          Colors.blue,
-                                                      backgroundImage:
-                                                          NetworkImage(snapshot
-                                                              .data
-                                                              .data
-                                                              .recruiter
-                                                              .image),
-                                                      radius: 46,
+                                                    child: CachedNetworkImage(
+                                                      imageUrl:  snapshot
+                                                          .data
+                                                          .data
+                                                          .recruiter
+                                                          .image,
+                                                      imageBuilder: (context, imageProvider) =>
+                                                          Container(
+                                                            width: 80.0,
+                                                            height: 80.0,
+                                                            decoration: BoxDecoration(
+                                                              shape: BoxShape.circle,
+                                                              image: DecorationImage(
+                                                                  image: imageProvider, fit: BoxFit.cover),
+                                                            ),
+                                                          ),
+                                                      placeholder: (context, url) => Icon(
+                                                          Icons.downloading_rounded,
+                                                          size: 40,
+                                                          color: Colors.grey),
+                                                      errorWidget: (context, url, error) => Icon(
+                                                        Icons.image_outlined,
+                                                        size: 40,
+                                                        color: Colors.grey,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -507,17 +559,31 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
                                                                       .id,
                                                                 ));
                                                           },
-                                                          child: CircleAvatar(
-                                                            backgroundColor:
-                                                                Colors.blue,
-                                                            backgroundImage:
-                                                                NetworkImage(
-                                                                    snapshot
-                                                                        .data
-                                                                        .data
-                                                                        .volunteer
-                                                                        .image),
-                                                            radius: 46,
+                                                          child: CachedNetworkImage(
+                                                            imageUrl:  snapshot
+                                                                .data
+                                                                .data
+                                                                .volunteer
+                                                                .image,
+                                                            imageBuilder: (context, imageProvider) =>
+                                                                Container(
+                                                                  width: 80.0,
+                                                                  height: 80.0,
+                                                                  decoration: BoxDecoration(
+                                                                    shape: BoxShape.circle,
+                                                                    image: DecorationImage(
+                                                                        image: imageProvider, fit: BoxFit.cover),
+                                                                  ),
+                                                                ),
+                                                            placeholder: (context, url) => Icon(
+                                                                Icons.downloading_rounded,
+                                                                size: 40,
+                                                                color: Colors.grey),
+                                                            errorWidget: (context, url, error) => Icon(
+                                                              Icons.image_outlined,
+                                                              size: 40,
+                                                              color: Colors.grey,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
@@ -1278,12 +1344,6 @@ class _OpportunityDetailsState extends State<OpportunityDetails> {
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-            // boxShadow: <BoxShadow>[
-            //   BoxShadow(
-            //       color: DesignCourseAppTheme.grey.withOpacity(0.2),
-            //       offset: const Offset(1.1, 1.1),
-            //       blurRadius: 2.0),
-            // ],
             border: Border.all(color: Colors.black)),
         child: Padding(
           padding: const EdgeInsets.all(12),

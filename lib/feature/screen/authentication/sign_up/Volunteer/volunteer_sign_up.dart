@@ -119,7 +119,7 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
           });
     }
   }
-  bool _obscured = false;
+  bool _obscured = true;
   final textFieldFocusNode = FocusNode();
   void _toggleObscured() {
     setState(() {
@@ -205,11 +205,11 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                             style: TextStyle(fontSize: 16),
                             decoration: InputDecoration(
                               labelText: "Password",
+                              hintText: 'Enter your password',
+                              hintStyle: TextStyle(fontSize: 14),
                               fillColor: Colors.white,
                               contentPadding:
-                              EdgeInsets.fromLTRB(20, 20, 20, 20),
-                              labelStyle:
-                              TextStyle(fontWeight: FontWeight.bold),
+                              EdgeInsets.fromLTRB(15, 15, 15, 15),
                               filled: true,
                               focusedBorder: OutlineInputBorder(
                                   borderRadius:
@@ -240,8 +240,8 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                                   onTap: _toggleObscured,
                                   child: Icon(
                                     _obscured
-                                        ? Icons.visibility_off_rounded
-                                        : Icons.visibility_rounded,
+                                        ? Icons.visibility_rounded
+                                        : Icons.visibility_off_rounded,
                                     size: 24,
                                   ),
                                 ),

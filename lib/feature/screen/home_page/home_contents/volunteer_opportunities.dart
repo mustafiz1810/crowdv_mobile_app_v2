@@ -1,18 +1,25 @@
 import 'dart:convert';
 import 'package:badges/badges.dart';
+import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/data/models/volunteer/volunteer_opportunity_model.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/recruiter_task_details.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/volunteer_task_details.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/chat.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
+import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:custom_timer/custom_timer.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/route_manager.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:sweetalert/sweetalert.dart';
@@ -24,19 +31,11 @@ class VolunteerMyOpportunity extends StatefulWidget {
   State<VolunteerMyOpportunity> createState() => _VolunteerMyOpportunityState();
 }
 
-class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
-  final CustomTimerController _controller = CustomTimerController();
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  int daysBetween(DateTime from, DateTime to) {
-    from = DateTime(from.year, from.month, from.day);
-    to = DateTime(to.year, to.month, to.day);
-    return to.difference(from).inDays;
-  }
+class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity>  with TickerProviderStateMixin {
+  TextEditingController reviewController = TextEditingController();
+  TextEditingController reportController = TextEditingController();
+  TextEditingController detailsController = TextEditingController();
+  TabController _tabController;
 
   String token = "";
   String uid;
@@ -45,6 +44,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
   @override
   void initState() {
     getCred();
+    _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
     super.initState();
   }
 
@@ -55,7 +55,122 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
       uid = pref.getString("uid");
     });
   }
-
+  void rate(int rating, int id) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'volunteer/rating/$id'),
+          headers: {
+            "Authorization": "Bearer ${token}",
+            "Accept": "application/json"
+          },
+          body: {
+            'rating': rating.toString(),
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+        showToast(context, data['message']);
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+  void review(String review, int id) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'volunteer/review/$id'),
+          headers: {
+            "Authorization": "Bearer ${token}"
+          },
+          body: {
+            'remark': review,
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        int count = 0;
+        Navigator.popUntil(context, (route) => count++ == 2);
+        setState(() {});
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+        showToast(context, data['error']['errors']);
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+  void report(String report, details, int id) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'volunteer/report/$id'),
+          headers: {
+            "Authorization": "Bearer ${token}"
+          },
+          body: {
+            'remarks': report,
+            'details': details,
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        int count = 0;
+        Navigator.popUntil(context, (route) => count++ == 2);
+        setState(() {});
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+        showToast(context, data['message']);
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
   Future<VolunteerOpportunityModel> getVOpportunityApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL + 'volunteer/own/tasks'),
@@ -78,15 +193,10 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
             'My Opportunity',
             style: TextStyle(color: Colors.white),
           ),
-          // ),
-          // centerTitle: true,
           backgroundColor: primaryColor,
-          // pinned: true,
-          // floating: true,
-          // forceElevated: innerBoxIsScrolled,
         ),
         body: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               Expanded(
@@ -174,8 +284,8 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      OpportunityDetails(
-                                                        isRead:isRead,
+                                                      VolunteerTaskDetails(
+                                                          isRead: isRead,
                                                           role: widget.role,
                                                           id: snapshot
                                                               .data
@@ -208,7 +318,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               SizedBox(
-                                                width: 260,
+                                                width: 230,
                                                 child: Text(
                                                   snapshot
                                                       .data.data[index].title,
@@ -316,76 +426,321 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                           children: [
                                             snapshot.data.data[index].status ==
                                                     "hired"
-                                                ? IconBox(
-                                                    onTap: () {
-                                                      SweetAlert.show(context,
-                                                          subtitle:
-                                                              "Are you sure?",
-                                                          style: SweetAlertStyle
-                                                              .confirm,
-                                                          showCancelButton:
-                                                              true,
-                                                          onPress:
-                                                              (bool isConfirm) {
-                                                        if (isConfirm) {
-                                                          //Return false to keep dialog
+                                                ? SizedBox(
+                                                    height: 40,
+                                                    width: 100,
+                                                    child: TextButton(
+                                                      onPressed: () {
+                                                        SweetAlert.show(context,
+                                                            subtitle:
+                                                                "Are you sure?",
+                                                            style:
+                                                                SweetAlertStyle
+                                                                    .confirm,
+                                                            showCancelButton:
+                                                                true,
+                                                            onPress: (bool
+                                                                isConfirm) {
                                                           if (isConfirm) {
-                                                            // SweetAlert.show(context,
-                                                            //     subtitle:
-                                                            //         "Deleting...",
-                                                            //     style:
-                                                            //         SweetAlertStyle
-                                                            //             .loading);
-                                                            new Future.delayed(
-                                                                new Duration(
-                                                                    seconds: 1),
-                                                                () {
-                                                              getRequestWithoutParam(
-                                                                  '/api/v1/volunteer-request-for-task-complete/${snapshot.data.data[index].taskId}',
-                                                                  {
-                                                                    'Content-Type':
-                                                                        "application/json",
-                                                                    "Authorization":
-                                                                        "Bearer ${token}"
-                                                                  }).then(
-                                                                  (value) async {
-                                                                SweetAlert.show(
-                                                                    context,
-                                                                    title:
-                                                                        "Your Task is completed",
-                                                                    subtitle:
-                                                                        "Please go to History ",
-                                                                    style: SweetAlertStyle
-                                                                        .success,
-                                                                    onPress: (bool
-                                                                        isConfirm) {
-                                                                  if (isConfirm) {
-                                                                    // return false to keep dialog
-                                                                  }
-                                                                  return null;
-                                                                });
-                                                                setState(() {});
+                                                            //Return false to keep dialog
+                                                            if (isConfirm) {
+                                                              // SweetAlert.show(context,
+                                                              //     subtitle:
+                                                              //         "Deleting...",
+                                                              //     style:
+                                                              //         SweetAlertStyle
+                                                              //             .loading);
+                                                              new Future
+                                                                      .delayed(
+                                                                  new Duration(
+                                                                      seconds:
+                                                                          1),
+                                                                  () {
+                                                                    getRequestWithoutParam(
+                                                                        '/api/v1/volunteer-request-for-task-complete/${snapshot.data.data[index].taskId}',
+                                                                        {
+                                                                          'Content-Type':
+                                                                          "application/json",
+                                                                          "Authorization":
+                                                                          "Bearer ${token}"
+                                                                        }).then(
+                                                                            (value) async {
+                                                                              SweetAlert.show(
+                                                                                  context,
+                                                                                  title:
+                                                                                  "Your Task is completed",
+                                                                                  subtitle:
+                                                                                  "Do you want to rate? ",
+                                                                                  style: SweetAlertStyle
+                                                                                      .success,
+                                                                                  showCancelButton:
+                                                                                  true,
+                                                                                  onPress: (bool isConfirm) {
+                                                                                    if (isConfirm)
+                                                                                    {
+                                                                                      if (isConfirm) {
+                                                                                        showDialog(
+                                                                                            context:
+                                                                                            context,
+                                                                                            barrierDismissible:
+                                                                                            false,
+                                                                                            builder:
+                                                                                                (context) {
+                                                                                              return  Dialog(
+                                                                                                shape: RoundedRectangleBorder(
+                                                                                                    borderRadius: BorderRadius.all(Radius.circular(15))),
+                                                                                                child: Container(
+                                                                                                  height: 350,
+                                                                                                  decoration: BoxDecoration(
+                                                                                                    borderRadius: BorderRadius.all(
+                                                                                                      Radius.circular(15),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  child: Column(
+                                                                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                                                                    mainAxisSize: MainAxisSize.min,
+                                                                                                    children: [
+                                                                                                      TabBar(
+                                                                                                        controller: _tabController,
+                                                                                                        unselectedLabelColor: Colors.grey,
+                                                                                                        unselectedLabelStyle: TextStyle(
+                                                                                                            fontWeight: FontWeight.w600,
+                                                                                                            fontSize: 16,
+                                                                                                            color: Color.fromRGBO(142, 142, 142, 1)),
+                                                                                                        labelColor: Colors.blue,
+                                                                                                        labelStyle: TextStyle(
+                                                                                                          fontSize: 16,
+                                                                                                          fontWeight: FontWeight.w600,
+                                                                                                        ),
+                                                                                                        tabs: [
+                                                                                                          Tab(
+                                                                                                            child: Text(
+                                                                                                              "Review",
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Tab(
+                                                                                                            child: Text(
+                                                                                                              "Report",
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                        ],
+                                                                                                      ),
+                                                                                                      Expanded(
+                                                                                                        child: TabBarView(
+                                                                                                          controller: _tabController,
+                                                                                                          children: [
+                                                                                                            SingleChildScrollView(
+                                                                                                              child: Column(
+                                                                                                                children: [
+                                                                                                                  CachedNetworkImage(
+                                                                                                                      imageUrl:snapshot.data.data[index].recruiter.image,
+                                                                                                                      imageBuilder: (context, imageProvider) =>
+                                                                                                                          Container(
+                                                                                                                            width: 80.0,
+                                                                                                                            height: 80.0,
+                                                                                                                            decoration: BoxDecoration(
+                                                                                                                              shape: BoxShape.circle,
+                                                                                                                              image: DecorationImage(
+                                                                                                                                  image: imageProvider, fit: BoxFit.fitHeight),
+                                                                                                                            ),
+                                                                                                                          )),
+                                                                                                                  Text(snapshot.data.data[index].recruiter.firstName,textAlign: TextAlign.center,),
+                                                                                                                  SizedBox(height: 5,),
+                                                                                                                  Text('Rate ${snapshot.data.data[index].recruiter.firstName} and tell him what you think.'
+                                                                                                                      ' Add a review if you want.',textAlign: TextAlign.center,style: TextStyle(fontSize: 16),),
+                                                                                                                  SizedBox(height: 10,),
+                                                                                                                  RatingBar.builder(
+                                                                                                                    itemSize: 35,
+                                                                                                                    minRating: 1,
+                                                                                                                    direction:
+                                                                                                                    Axis.horizontal,
+                                                                                                                    itemCount: 5,
+                                                                                                                    itemPadding: EdgeInsets
+                                                                                                                        .symmetric(
+                                                                                                                        horizontal:
+                                                                                                                        4.0),
+                                                                                                                    itemBuilder:
+                                                                                                                        (context, _) =>
+                                                                                                                        Icon(
+                                                                                                                          Icons.star,
+                                                                                                                          color: Colors.amber,
+                                                                                                                        ),
+                                                                                                                    onRatingUpdate:
+                                                                                                                        (rating) {
+                                                                                                                      rate(
+                                                                                                                          rating.toInt(),
+                                                                                                                          snapshot
+                                                                                                                              .data
+                                                                                                                              .data[index].taskId);
+                                                                                                                    },
+                                                                                                                  ),
+                                                                                                                  Padding(
+                                                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                                                    child: TextFormField(
+                                                                                                                        controller:
+                                                                                                                        reviewController,
+                                                                                                                        keyboardType: TextInputType.multiline,
+                                                                                                                        textInputAction: TextInputAction.done,
+                                                                                                                        maxLines: null,
+                                                                                                                        textAlign: TextAlign.center,
+                                                                                                                        decoration: InputDecoration(
+                                                                                                                          hintText: "Tell us your review",
+                                                                                                                          enabledBorder: UnderlineInputBorder(
+                                                                                                                            borderSide: BorderSide(color: Colors.blue),
+                                                                                                                          ),
+                                                                                                                          focusedBorder: UnderlineInputBorder(
+                                                                                                                            borderSide: BorderSide(color: Colors.blue),
+                                                                                                                          ),
+                                                                                                                        )
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                  FlatButton(
+                                                                                                                    child: new Text(
+                                                                                                                      'Submit',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                                                                                                                    onPressed: () {
+                                                                                                                      reviewController.text != ''?review(
+                                                                                                                          reviewController
+                                                                                                                              .text
+                                                                                                                              .toString(),
+                                                                                                                          snapshot.data.data[index].taskId):showToast(context, "write something");
+                                                                                                                    },
+                                                                                                                  )
+
+
+                                                                                                                ],
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                            Padding(
+                                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                                              child: Column(
+                                                                                                                children: [
+                                                                                                                  Row(
+                                                                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                                    children: [
+                                                                                                                      Icon(
+                                                                                                                        Icons
+                                                                                                                            .warning_rounded,
+                                                                                                                        color: Colors
+                                                                                                                            .red,
+                                                                                                                      ),
+                                                                                                                      SizedBox(
+                                                                                                                        width: 5,
+                                                                                                                      ),
+                                                                                                                      Text('Report to admin'),
+                                                                                                                    ],
+                                                                                                                  ),
+                                                                                                                  SizedBox(
+                                                                                                                    height: 10,
+                                                                                                                  ),
+                                                                                                                  TextFormField(
+                                                                                                                    textInputAction:
+                                                                                                                    TextInputAction
+                                                                                                                        .done,
+                                                                                                                    controller:
+                                                                                                                    reportController,
+                                                                                                                    decoration:
+                                                                                                                    ThemeHelper()
+                                                                                                                        .textInputDecoration('Subject'),
+                                                                                                                  ),
+                                                                                                                  SizedBox(
+                                                                                                                    height: 10,
+                                                                                                                  ),
+                                                                                                                  Row(
+                                                                                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                                                                                    children: [
+                                                                                                                      SizedBox(
+                                                                                                                        width: 5,
+                                                                                                                      ),
+                                                                                                                      Text('Details'),
+                                                                                                                    ],
+                                                                                                                  ),
+                                                                                                                  TextFormField(
+                                                                                                                    textInputAction:
+                                                                                                                    TextInputAction
+                                                                                                                        .done,
+                                                                                                                    controller:
+                                                                                                                    detailsController,
+                                                                                                                    maxLines: 4,
+                                                                                                                    decoration:
+                                                                                                                    ThemeHelper()
+                                                                                                                        .textInputDecoration(),
+                                                                                                                  ),
+                                                                                                                  SizedBox(height: 10,),
+                                                                                                                  FlatButton(
+                                                                                                                    child: new Text(
+                                                                                                                        'Submit',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
+                                                                                                                    onPressed: () {
+                                                                                                                      reportController.text != ''? report(
+                                                                                                                          reportController
+                                                                                                                              .text
+                                                                                                                              .toString(),
+                                                                                                                          detailsController
+                                                                                                                              .text
+                                                                                                                              .toString(),
+                                                                                                                          snapshot
+                                                                                                                              .data
+                                                                                                                              .data[
+                                                                                                                          index]
+                                                                                                                              .taskId):showToast(context, "write something");
+                                                                                                                    },
+                                                                                                                  )
+                                                                                                                ],
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ],
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ],
+                                                                                                  ),
+                                                                                                ),
+                                                                                              );
+                                                                                            });
+                                                                                      }
+                                                                                      else {
+                                                                                        SweetAlert.show(
+                                                                                            context,
+                                                                                            subtitle:
+                                                                                            "Canceled!",
+                                                                                            style:
+                                                                                            SweetAlertStyle.error);
+                                                                                      }
+                                                                                      return false;
+                                                                                    }
+                                                                                    setState(() {});
+                                                                                    return null;
+                                                                                  });
+                                                                        });
                                                               });
-                                                            });
-                                                          } else {
-                                                            SweetAlert.show(
-                                                                context,
-                                                                subtitle:
-                                                                    "Canceled!",
-                                                                style:
-                                                                    SweetAlertStyle
-                                                                        .error);
+                                                            }
+                                                            else {
+                                                              SweetAlert.show(
+                                                                  context,
+                                                                  subtitle:
+                                                                      "Canceled!",
+                                                                  style:
+                                                                      SweetAlertStyle
+                                                                          .error);
+                                                            }
+                                                            return false;
                                                           }
-                                                          return false;
-                                                        }
-                                                        return null;
-                                                      });
-                                                    },
-                                                    child: Icon(
-                                                        Icons.check_circle,
-                                                        color: Colors.green),
-                                                    bgColor: Colors.white,
-                                                    borderColor: Colors.black12,
+                                                          return null;
+                                                        });
+                                                      },
+                                                      child: Text("Complete ?",
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 14,
+                                                              color: Colors
+                                                                  .deepOrange)),
+                                                      style: ButtonStyle(
+                                                        overlayColor:
+                                                            MaterialStateProperty
+                                                                .all(Colors
+                                                                    .transparent),
+                                                      ),
+                                                    ),
                                                   )
                                                 : Container(),
                                             Container(
@@ -405,8 +760,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity> {
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         fontSize: 14,
-                                                        color:
-                                                            Colors.deepOrange)),
+                                                        color: Colors.grey)),
                                               ),
                                             ),
                                           ],

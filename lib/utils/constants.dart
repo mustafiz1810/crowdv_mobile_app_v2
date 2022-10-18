@@ -8,6 +8,7 @@ class AssetConstants {
 
 class NetworkConstants {
   static const BASE_URL = "https://system.getcrowdv.com/api/v1/";
+  // static const BASE_URL = "http://192.168.68.106:8000/api/v1/";
   // static const BASE_URL_IMAGE = "";
 
   //header parameters

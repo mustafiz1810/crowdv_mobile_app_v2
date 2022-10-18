@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crowdv_mobile_app/data/models/volunteer/task_search_category.dart';
 import 'package:crowdv_mobile_app/feature/screen/Volunteer_search/Widgets/volunteer_filter.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/recruiter_task_details.dart';
 import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:get/route_manager.dart';
@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../widgets/http_request.dart';
 import '../../../widgets/icon_box.dart';
+import '../home_page/home_contents/widgets/volunteer_task_details.dart';
 
 class VolunteerSearchPage extends StatefulWidget {
   final List<int> category;
@@ -210,7 +211,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => OpportunityDetails(
+                                  builder: (context) => VolunteerTaskDetails(
                                       role: role,
                                       id: snapshot.data.data[index].id,)),
                             ).then((value) => setState(() {}));

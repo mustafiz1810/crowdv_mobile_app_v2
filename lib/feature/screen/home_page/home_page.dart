@@ -122,6 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Uri.parse(NetworkConstants.BASE_URL + 'organizational/opportunity'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body);
+    print(data);
     if (response.statusCode == 200) {
       return BannerModel.fromJson(data);
     } else {
@@ -141,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return NotificationModel.fromJson(data);
     }
   }
-
+  List images = [ NetworkImage('https://alkuwaiti.com/wp-content/uploads/2020/05/Hero-Banner-Placeholder-Dark-1024x480.png'),];
   int _currentIndex = 1;
   @override
   Widget build(BuildContext context) {
@@ -320,51 +321,51 @@ class _HomeScreenState extends State<HomeScreen> {
                                       _currentIndex = index;
                                       print(_currentIndex);
                                     },
-                                    images: snapshot.data.data.banner
+                                    images: snapshot.data.data.banner.length != 0?snapshot.data.data.banner
                                         .map((item) => Container(
-                                              child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(5.0)),
-                                                  child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: <Widget>[
-                                                        SizedBox(
-                                                          height:140,
-                                                          width: double.infinity,
-                                                          child: Image.network(
-                                                            item,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                            padding: EdgeInsets
-                                                                .symmetric(
-                                                                    vertical:
-                                                                        5.0,
-                                                                    horizontal:
-                                                                        20.0),
-                                                            child: Text(
-                                                              snapshot
-                                                                  .data
-                                                                  .data
-                                                                  .title[
-                                                                      _currentIndex]
-                                                                  .toString(),
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 16.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ))
-                                                      ])),
-                                            ))
-                                        .toList(),
+                                      child: ClipRRect(
+                                          borderRadius:
+                                          BorderRadius.all(
+                                              Radius.circular(5.0)),
+                                          child: Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment
+                                                  .start,
+                                              children: <Widget>[
+                                                SizedBox(
+                                                  height:140,
+                                                  width: double.infinity,
+                                                  child: Image.network(
+                                                    item,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                    padding: EdgeInsets
+                                                        .symmetric(
+                                                        vertical:
+                                                        5.0,
+                                                        horizontal:
+                                                        20.0),
+                                                    child: Text(
+                                                      snapshot
+                                                          .data
+                                                          .data
+                                                          .title[
+                                                      _currentIndex]
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                        color: Colors
+                                                            .black,
+                                                        fontSize: 16.0,
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .bold,
+                                                      ),
+                                                    ))
+                                              ])),
+                                    ))
+                                        .toList():images,
                                     autoplayDuration:
                                         const Duration(seconds: 15),
                                   ),

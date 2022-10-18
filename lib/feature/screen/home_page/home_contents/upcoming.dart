@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/data/models/volunteer/upcoming_opportunity.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/recruiter_task_details.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/volunteer_task_details.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
@@ -116,7 +117,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => OpportunityDetails(
+                                      builder: (context) => VolunteerTaskDetails(
                                           role: widget.role,
                                           id: snapshot.data.data[index].id,)),
                                 ).then((value) => setState(() {}));

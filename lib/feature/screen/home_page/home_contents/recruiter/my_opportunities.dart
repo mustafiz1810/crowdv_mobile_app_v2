@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crowdv_mobile_app/data/models/recruiter/my_opportunity.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/applied_volunteer.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/recruiter_task_details.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
@@ -169,7 +169,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      OpportunityDetails(
+                                                      RecruiterTaskDetails(
                                                         isRead: isRead,
                                                           role: widget.role,
                                                           id: snapshot.data

@@ -11,6 +11,7 @@ import 'package:crowdv_mobile_app/widgets/progres_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -139,6 +140,8 @@ class _LoginPageState extends State<LoginPage> {
           false; // Prevents focus if tap on eye
     });
   }
+  // Map<String,dynamic> _userData;
+  // bool _isLogIn = false;
 
   bool isApiCallProcess = false;
   @override
@@ -340,6 +343,49 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   )),
             ),
+            // Padding(
+            //   padding: const EdgeInsets.all(50.0),
+            //   child: InkWell(
+            //     onTap: () async{
+            //       FacebookAuth.instance.login(
+            //           permissions: ["public_profile","email"]
+            //       ).then((value) {
+            //         FacebookAuth.instance.getUserData().then((userData) {
+            //           setState((){
+            //             _isLogIn = true;
+            //             _userData = userData;
+            //           });
+            //         });
+            //       });
+            //     },
+            //     child: Center(
+            //       child: Container(
+            //         width: 28,
+            //         child: Image.asset(
+            //             "assets/gold.png"),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // _isLogIn?Container(
+            //   child: Column(
+            //     children: [
+            //       Text(_userData["name"]),
+            //       Text(_userData["email"]),
+            //
+            //     ],
+            //   ),
+            // ):Container(
+            //   child: Column(
+            //     children: [
+            //       Text("name"),
+            //       Text("name"),
+            //       Text("name"),
+            //       Text("name"),
+            //
+            //     ],
+            //   ),
+            // )
           ],
         ),
       ),

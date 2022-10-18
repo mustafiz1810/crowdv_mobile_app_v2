@@ -1,4 +1,4 @@
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/recruiter_task_details.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:flutter/cupertino.dart';
@@ -126,7 +126,7 @@ class NameCard extends StatelessWidget {
                       children: [
                         InkWell(
                           onTap: () {
-                            Get.to(() => OpportunityDetails());
+                            Get.to(() => RecruiterTaskDetails());
                           },
                           child: Container(
                             // width: 80,

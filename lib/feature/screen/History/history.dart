@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/data/models/volunteer/history_model.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/details.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/recruiter_task_details.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/common_profile.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
@@ -17,6 +18,8 @@ import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+
+import '../home_page/home_contents/widgets/volunteer_task_details.dart';
 
 class VolunteerHistory extends StatefulWidget {
   @override
@@ -246,7 +249,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      OpportunityDetails(
+                                                      VolunteerTaskDetails(
                                                           role: snapshot
                                                               .data
                                                               .data[index]
@@ -355,16 +358,28 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                 Column(
                                                   children: [
                                                     InkWell(
-                                                        child: CircleAvatar(
-                                                          backgroundImage:
-                                                              NetworkImage(
-                                                                  snapshot
-                                                                      .data
-                                                                      .data[
-                                                                          index]
-                                                                      .recruiter
-                                                                      .image),
-                                                          radius: 20,
+                                                        child: CachedNetworkImage(
+                                                          imageUrl:
+                                                          snapshot.data.data[index].recruiter.image,
+                                                          imageBuilder: (context, imageProvider) =>
+                                                              Container(
+                                                                width: 40.0,
+                                                                height: 40.0,
+                                                                decoration: BoxDecoration(
+                                                                  shape: BoxShape.circle,
+                                                                  image: DecorationImage(
+                                                                      image: imageProvider, fit: BoxFit.cover),
+                                                                ),
+                                                              ),
+                                                          placeholder: (context, url) => Icon(Icons.downloading_rounded,
+                                                              size: 40,
+                                                              color: Colors.grey),
+                                                          errorWidget: (context, url, error) =>
+                                                              Icon(
+                                                                Icons.image_outlined,
+                                                                size: 40,
+                                                                color: Colors.grey,
+                                                              ),
                                                         ),
                                                         onTap: () {
                                                           Get.to(() =>

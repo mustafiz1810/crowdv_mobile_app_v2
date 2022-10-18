@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/about_us.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/faq.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/settings.dart';
@@ -81,9 +82,27 @@ class _NavDrawerState extends State<NavDrawer> {
             decoration: new BoxDecoration(
               color: Colors.white,
             ),
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(widget.image),
-              backgroundColor: Colors.transparent,
+            currentAccountPicture: CachedNetworkImage(
+              imageUrl:widget.image,
+              imageBuilder: (context, imageProvider) =>
+                  Container(
+                    width: 30.0,
+                    height: 30.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover),
+                    ),
+                  ),
+              placeholder: (context, url) => Icon(Icons.downloading_rounded,
+                  size: 30,
+                  color: Colors.grey),
+              errorWidget: (context, url, error) =>
+                  Icon(
+                    Icons.image_outlined,
+                    size: 30,
+                    color: Colors.grey,
+                  ),
             ),
           ),
           ListTile(

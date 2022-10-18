@@ -381,27 +381,66 @@ class _CommonProfileState extends State<CommonProfile> {
                                                         child: ListTile(
                                                           leading: CircleAvatar(
                                                             backgroundImage:
-                                                                NetworkImage(
-                                                                    snapshot
-                                                                        .data
-                                                                        .data
-                                                                        .reviews[
-                                                                            index]
-                                                                        .reviewFrom
-                                                                        .image),
+                                                            NetworkImage(
+                                                                snapshot
+                                                                    .data
+                                                                    .data
+                                                                    .reviews[
+                                                                index]
+                                                                    .reviewFrom
+                                                                    .image),
                                                             radius: 20,
                                                           ),
-                                                          title: Text(snapshot
-                                                              .data
-                                                              .data
-                                                              .reviews[index]
-                                                              .reviewFrom
-                                                              .firstName),
+                                                          title: Padding(
+                                                            padding: const EdgeInsets.only(top: 10.0,bottom: 8.0),
+                                                            child: Row(
+                                                              children: [
+                                                                SizedBox(
+                                                                  width:130,
+                                                                    child: Text(snapshot
+                                                                        .data
+                                                                        .data
+                                                                        .reviews[index]
+                                                                        .reviewFrom
+                                                                        .firstName,style: TextStyle(overflow: TextOverflow.ellipsis),)),
+                                                                SizedBox(width: 5,),
+                                                                RatingBar.builder(
+                                                                  itemSize: 15,
+                                                                  initialRating:  snapshot
+                                                                      .data
+                                                                      .data
+                                                                      .rating ==
+                                                                      null
+                                                                      ? 0
+                                                                      : snapshot
+                                                                      .data.data.rating
+                                                                      .toDouble(),
+                                                                  minRating: 1,
+                                                                  direction:
+                                                                  Axis.horizontal,
+                                                                  itemCount: 5,
+                                                                  ignoreGestures: true,
+                                                                  tapOnlyMode: true,
+                                                                  itemPadding:
+                                                                  EdgeInsets.symmetric(
+                                                                      horizontal: 4.0),
+                                                                  itemBuilder:
+                                                                      (context, _) => Icon(
+                                                                    Icons.star,
+                                                                    color: Colors.amber,
+                                                                  ),
+                                                                  onRatingUpdate:
+                                                                      (rating) {},
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
                                                           subtitle: Text(snapshot
                                                               .data
                                                               .data
                                                               .reviews[index]
                                                               .remark),
+
                                                         )),
                                                   );
                                                 },

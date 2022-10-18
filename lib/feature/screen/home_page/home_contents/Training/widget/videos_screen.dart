@@ -162,6 +162,7 @@ class _VideoScreenState extends State<VideoScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => VideoScreen(
+                          trainingId: widget.trainingId,
                           id: value["data"]["id"],
                           token: widget.token,
                           name: value["data"]["title"],
@@ -195,6 +196,7 @@ class _VideoScreenState extends State<VideoScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => VideoScreen(
+                          trainingId: widget.trainingId,
                           id: value["data"]["id"],
                           token: widget.token,
                           name: value["data"]["title"],

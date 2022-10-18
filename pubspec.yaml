@@ -81,6 +81,7 @@ dependencies:
   toast: ^0.3.0
   one_context: any
   custom_searchable_dropdown: ^2.1.1
+  flutter_facebook_auth: ^4.4.1+1
 
 
 dev_dependencies:
