@@ -73,7 +73,7 @@ class _CertificateState extends State<Certificate> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Certificate'),
+        title: Text('Certificate List'),
         backgroundColor: primaryColor,
       ),
       body: Padding(
@@ -144,13 +144,11 @@ class _CertificateState extends State<Certificate> {
                                       SizedBox(
                                         width: 280,
                                         child: Text(
-                                          "Test Name: " +
-                                              snapshot
-                                                  .data.data[index].test.title,
+                                          "Volunteer Certification",
                                           style: TextStyle(
                                               color: primaryColor,
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 18),
+                                              fontSize: 17),
                                         ),
                                       ),
                                     ],
@@ -163,17 +161,39 @@ class _CertificateState extends State<Certificate> {
                                 ),
                                 Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 20, right: 20, top: 10),
+                                        left: 20, right: 20, top: 5),
                                     child: Column(
                                       children: [
                                         Row(
                                           children: [
                                             Text(
-                                              'Candidate name:  ',
+                                              'Test:  ',
                                               style: TextStyle(
                                                   color: primaryColor,
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 18),
+                                                  fontSize: 16),
+                                            ),
+                                            SizedBox(
+                                              width: 200,
+                                              child: Text(
+                                                snapshot.data.data[index].test.title
+                                                    .toString(),
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Candidate :  ',
+                                              style: TextStyle(
+                                                  color: primaryColor,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16),
                                             ),
                                             Text(
                                               snapshot.data.data[index].user
@@ -190,11 +210,11 @@ class _CertificateState extends State<Certificate> {
                                         Row(
                                           children: [
                                             Text(
-                                              'Total Score:  ',
+                                              'Score :  ',
                                               style: TextStyle(
                                                   color: primaryColor,
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 18),
+                                                  fontSize: 16),
                                             ),
                                             Text(
                                               snapshot.data.data[index].totalScore
@@ -212,7 +232,7 @@ class _CertificateState extends State<Certificate> {
                                               style: TextStyle(
                                                   color: primaryColor,
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 18),
+                                                  fontSize: 16),
                                             ),
                                             Text(
                                                 snapshot.data.data[index].result

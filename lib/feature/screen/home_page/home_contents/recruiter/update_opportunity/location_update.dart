@@ -47,11 +47,14 @@ class LocationUpdate extends StatefulWidget {
 class _LocationUpdateState extends State<LocationUpdate> {
   @override
   void initState() {
+    countryvalue = widget.country;
+    statevalue = widget.state;
+    cityvalue = widget.city;
+    zipController.text = widget.zip;
     super.initState();
-    zipController.text = widget.zip.toString();
-    print(widget.country);
-    print(widget.state);
-    print(widget.city);
+    print(countryvalue);
+    print(statevalue);
+    print(cityvalue);
     getCountry();
     widget.state != null ? getState(widget.country) : "";
     widget.city != null ? getCity(widget.state) : "";
@@ -68,6 +71,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
       setState(() {
         countries = jsonData['data'];
       });
+      print(jsonData);
     }
   }
 
@@ -98,7 +102,6 @@ class _LocationUpdateState extends State<LocationUpdate> {
       });
     }
   }
-
   var countryvalue;
   var statevalue;
   var cityvalue;
@@ -236,7 +239,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
 
                 }
                 else{
-                  countryvalue=null;
+                  countryvalue = widget.country;
                 }
               },
             ),
@@ -275,7 +278,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
                   });
                 }
                 else{
-                  statevalue=null;
+                  statevalue=widget.state;
                 }
               },
             ),
@@ -309,7 +312,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
                   print(cityvalue);
                 }
                 else{
-                  cityvalue=null;
+                  cityvalue=widget.city;
                 }
               },
             ),
@@ -338,29 +341,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
                     child: InkWell(
                       splashColor: secondaryColor, // splash color
                       onTap: () {
-                        setState(() {
-                          print(widget.id.toString() +
-                              "  " +
-                              widget.category +
-                              "  " +
-                              widget.date +
-                              "  " +
-                              widget.time +
-                              "  " +
-                              widget.etime +
-                              "  " +
-                              countryvalue.toString() +
-                              "  " +
-                              statevalue.toString() +
-                              "  " +
-                              widget.eligibility.toString() +
-                              "  " +
-                              widget.description +
-                              "  " +
-                              widget.type +
-                              "  " +
-                              zipController.text.toString());
-                        });
+                        // print(countryvalue);
                         update(
                             widget.other,
                             widget.title,

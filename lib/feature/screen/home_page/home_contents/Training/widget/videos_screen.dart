@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:better_player/better_player.dart';
+import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
@@ -12,14 +13,19 @@ import '../../../../../../widgets/http_request.dart';
 
 class VideoScreen extends StatefulWidget {
   final String token, name, mediaUrl, details;
-  final int id, trainingId;
+  bool isWatched;
+  int id, trainingId, index,length;
   VideoScreen(
-      {this.id,
+      {
+        this.isWatched,
+        this.id,
       this.token,
       this.name,
       this.mediaUrl,
       this.details,
-      this.trainingId});
+      this.trainingId,
+      this.index,
+      this.length});
 
   @override
   _VideoScreenState createState() => _VideoScreenState();
@@ -30,12 +36,13 @@ class _VideoScreenState extends State<VideoScreen> {
   GlobalKey _betterPlayerKey = GlobalKey();
   @override
   void initState() {
-    print(widget.mediaUrl.toString());
+    print(widget.length);
     var betterPlayerConfiguration = BetterPlayerConfiguration(
+      startAt: Duration(hours: 0,minutes: 5,seconds: 10),
       controlsConfiguration: BetterPlayerControlsConfiguration(
-        enableSkips: false,
-        enableProgressBarDrag: false,
-      ),
+          // enableSkips: false,
+          // enableProgressBarDrag: false,
+          ),
       aspectRatio: 16 / 9,
       fit: BoxFit.contain,
       eventListener: _onPlayerEvent,
@@ -92,6 +99,7 @@ class _VideoScreenState extends State<VideoScreen> {
     if (_checkIfCanProcessPlayerEvent(event)) {
       Duration progress = event.parameters['progress'];
       Duration duration = event.parameters['duration'];
+      print(progress);
       if (progress == duration) {
         print(duration);
         setState(() {
@@ -137,7 +145,7 @@ class _VideoScreenState extends State<VideoScreen> {
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                   child: Text(
-                "Title: " + widget.name,
+                widget.name,
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
               )),
@@ -148,72 +156,95 @@ class _VideoScreenState extends State<VideoScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.lightBlueAccent,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                  onPressed: () async {
-                    getRequest('/api/v1/previous-video/${widget.id}', null, {
-                      'Content-Type': "application/json",
-                      "Authorization": "Bearer ${widget.token}"
-                    }).then((value) async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => VideoScreen(
-                          trainingId: widget.trainingId,
-                          id: value["data"]["id"],
-                          token: widget.token,
-                          name: value["data"]["title"],
-                          mediaUrl: value["data"]["video"],
-                          details: value["data"]["details"],
-                        )),
-                      );
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      Icon(Icons.arrow_back_ios_rounded),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text("Privious Lesson"),
-                    ],
+                Container(
+                  decoration: widget.index != 0
+                      ? ThemeHelper().buttonBoxDecoration(context)
+                      : ThemeHelper().buttonBoxDecoration(
+                      context, "#AAAAAA", "#AAAAAA"),
+                  child: ElevatedButton(
+                    style: ThemeHelper().buttonStyle(),
+                    child: Row(
+                      children: [
+                        Icon(Icons.arrow_back_ios_rounded),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text("Privious Lesson",),
+                      ],
+                    ),
+                    onPressed: widget.index != 0
+                        ? () {
+                      getRequest(
+                          '/api/v1/previous-video/${widget.id}', null, {
+                        'Content-Type': "application/json",
+                        "Authorization": "Bearer ${widget.token}"
+                      }).then((value) async {
+                        setState(() {
+                          widget.index--;
+                        });
+                        print(widget.index);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => VideoScreen(
+                                length: widget.length,
+                                index: widget.index,
+                                trainingId: widget.trainingId,
+                                id: value["data"]["id"],
+                                token: widget.token,
+                                name: value["data"]["title"],
+                                mediaUrl: value["data"]["video"],
+                                details: value["data"]["details"],
+                              )),
+                        );
+                      });
+                    }
+                        : null,
                   ),
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.lightBlueAccent,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                  onPressed: () async {
-                    getRequest('/api/v1/next-video/${widget.id}', null, {
-                      'Content-Type': "application/json",
-                      "Authorization": "Bearer ${widget.token}"
-                    }).then((value) async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => VideoScreen(
-                          trainingId: widget.trainingId,
-                          id: value["data"]["id"],
-                          token: widget.token,
-                          name: value["data"]["title"],
-                          mediaUrl: value["data"]["video"],
-                          details: value["data"]["details"],
-                        )),
-                      );
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      Text("Next Lesson"),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Icon(Icons.arrow_forward_ios_rounded),
-                    ],
+                Container(
+                  decoration: widget.isWatched == true || widget.index == widget.length - 1
+                      ? ThemeHelper().buttonBoxDecoration(context)
+                      : ThemeHelper().buttonBoxDecoration(
+                      context, "#AAAAAA", "#AAAAAA"),
+                  child: ElevatedButton(
+                    style: ThemeHelper().buttonStyle(),
+                    child: Row(
+                      children: [
+                        Text("Next Lesson"),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(Icons.arrow_forward_ios_rounded),
+                      ],
+                    ),
+                    onPressed: widget.isWatched == true || widget.index == widget.length - 1
+                        ? () {
+                      getRequest('/api/v1/next-video/${widget.id}', null, {
+                        'Content-Type': "application/json",
+                        "Authorization": "Bearer ${widget.token}"
+                      }).then((value) async {
+                        setState(() {
+                          widget.index++;
+                        });
+                        print(widget.index);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => VideoScreen(
+                                length: widget.length,
+                                index: widget.index,
+                                trainingId: widget.trainingId,
+                                id: value["data"]["id"],
+                                token: widget.token,
+                                name: value["data"]["title"],
+                                mediaUrl: value["data"]["video"],
+                                details: value["data"]["details"],
+                              )),
+                        );
+                      });
+                    }
+                        : null,
                   ),
                 ),
               ],
@@ -250,7 +281,7 @@ class _VideoScreenState extends State<VideoScreen> {
                 ),
               ),
             ),
-            Padding(
+            widget.index == widget.length - 1?Padding(
               padding: const EdgeInsets.all(20.0),
               child: SizedBox(
                 width: 250,
@@ -269,7 +300,7 @@ class _VideoScreenState extends State<VideoScreen> {
                   child: Text("Take the test"),
                 ),
               ),
-            )
+            ):Container(),
           ],
         ),
       ),

@@ -42,6 +42,7 @@ class _TrainingListState extends State<TrainingList> {
         Uri.parse(NetworkConstants.BASE_URL + 'training/list'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
+    print(data);
     if (response.statusCode == 200) {
       return TrainingModel.fromJson(data);
     } else {
@@ -183,14 +184,8 @@ class _TrainingListState extends State<TrainingList> {
                                         Row(
                                           children: [
                                             Text(
-                                              'Status:  ',
-                                              style: TextStyle(
-                                                  color: primaryColor,
-                                                  fontSize: 16),
-                                            ),
-                                            Text(
                                               snapshot.data.data[index]
-                                                  .trainingStatus,
+                                                  .trainingDescription,
                                               style: TextStyle(
                                                   fontSize: 14),
                                             ),

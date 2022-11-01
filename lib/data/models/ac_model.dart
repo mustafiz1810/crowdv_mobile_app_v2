@@ -40,6 +40,8 @@ class Data {
     this.lastName,
     this.email,
     this.phone,
+    this.aboutMe,
+    this.institution,
     this.country,
     this.state,
     this.city,
@@ -64,6 +66,8 @@ class Data {
     this.opportunities,
     this.isComplete,
     this.isOnline,
+    this.uid,
+    this.reviews,
   });
 
   int id;
@@ -72,11 +76,13 @@ class Data {
   String lastName;
   String email;
   String phone;
+  dynamic aboutMe;
+  dynamic institution;
   City country;
   City state;
   City city;
-  String zipCode;
-  List<String> typeOfDisability;
+  dynamic zipCode;
+  List<dynamic> typeOfDisability;
   String profession;
   bool termsAndConditions;
   Membership membership;
@@ -87,7 +93,7 @@ class Data {
   City serviceCountry;
   City serviceState;
   City serviceCity;
-  String serviceZipCode;
+  dynamic serviceZipCode;
   bool isEmailNotification;
   bool isDatabaseNotification;
   bool isSmsNotification;
@@ -96,6 +102,8 @@ class Data {
   int opportunities;
   int isComplete;
   bool isOnline;
+  String uid;
+  List<dynamic> reviews;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     id: json["id"],
@@ -104,11 +112,13 @@ class Data {
     lastName: json["last_name"],
     email: json["email"],
     phone: json["phone"],
+    aboutMe: json["about_me"],
+    institution: json["institution"],
     country: City.fromJson(json["country"]),
     state: City.fromJson(json["state"]),
     city: City.fromJson(json["city"]),
     zipCode: json["zip_code"],
-    typeOfDisability: List<String>.from(json["type_of_disability"].map((x) => x)),
+    typeOfDisability: List<dynamic>.from(json["type_of_disability"].map((x) => x)),
     profession: json["profession"],
     termsAndConditions: json["terms_and_conditions"],
     membership: Membership.fromJson(json["membership"]),
@@ -128,6 +138,8 @@ class Data {
     opportunities: json["opportunities"],
     isComplete: json["is_complete"],
     isOnline: json["is_online"],
+    uid: json["uid"],
+    reviews: List<dynamic>.from(json["reviews"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -137,6 +149,8 @@ class Data {
     "last_name": lastName,
     "email": email,
     "phone": phone,
+    "about_me": aboutMe,
+    "institution": institution,
     "country": country.toJson(),
     "state": state.toJson(),
     "city": city.toJson(),
@@ -161,6 +175,8 @@ class Data {
     "opportunities": opportunities,
     "is_complete": isComplete,
     "is_online": isOnline,
+    "uid": uid,
+    "reviews": List<dynamic>.from(reviews.map((x) => x)),
   };
 }
 
@@ -174,12 +190,12 @@ class City {
   String name;
 
   factory City.fromJson(Map<String, dynamic> json) => City(
-    id: json["id"],
+    id: json["id"] == null ? null : json["id"],
     name: json["name"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
+    "id": id == null ? null : id,
     "name": name,
   };
 }

@@ -408,13 +408,11 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                                   .data
                                                                   .data[index]
                                                                   .recruiter
-                                                                  .firstName +
-                                                              " " +
-                                                              snapshot
+                                                                  .firstName.toString() + " " + snapshot
                                                                   .data
                                                                   .data[index]
                                                                   .recruiter
-                                                                  .lastName,
+                                                                  .lastName.toString(),
                                                           maxLines: 1,
                                                           overflow:
                                                               TextOverflow.ellipsis,
@@ -615,7 +613,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                                       reportController,
                                                                       decoration:
                                                                       ThemeHelper()
-                                                                          .textInputDecoration('Remark'),
+                                                                          .textInputDecoration('Subject'),
                                                                     ),
                                                                     SizedBox(
                                                                       height: 10,
@@ -673,7 +671,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                                   child: new Text(
                                                                       'Submit'),
                                                                   onPressed: () {
-                                                                    reportController.text != ''? report(
+                                                                    reportController.text != '' && detailsController.text != ''? report(
                                                                         reportController
                                                                             .text
                                                                             .toString(),

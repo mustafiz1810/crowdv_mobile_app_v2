@@ -72,6 +72,8 @@ class Video {
     this.details,
     this.video,
     this.thumbnail,
+    this.isWatched,
+    this.watchedStatus,
   });
 
   int id;
@@ -80,6 +82,8 @@ class Video {
   String details;
   String video;
   String thumbnail;
+  bool isWatched;
+  String watchedStatus;
 
   factory Video.fromJson(Map<String, dynamic> json) => Video(
     id: json["id"],
@@ -88,6 +92,8 @@ class Video {
     details: json["details"],
     video: json["video"],
     thumbnail: json["thumbnail"],
+    isWatched: json["is_watched"],
+    watchedStatus: json["watched_status"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -97,5 +103,7 @@ class Video {
     "details": details,
     "video": video,
     "thumbnail": thumbnail,
+    "is_watched": isWatched,
+    "watched_status": watchedStatus,
   };
 }

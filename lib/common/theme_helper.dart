@@ -47,8 +47,8 @@ class ThemeHelper{
   }
 
   BoxDecoration buttonBoxDecoration(BuildContext context, [String color1 = "", String color2 = ""]) {
-    Color c1 = Theme.of(context).primaryColor;
-    Color c2 = Theme.of(context).accentColor;
+    Color c1 = Colors.lightBlueAccent;
+    Color c2 = Colors.lightBlueAccent;
     if (color1.isEmpty == false) {
       c1 = HexColor(color1);
     }

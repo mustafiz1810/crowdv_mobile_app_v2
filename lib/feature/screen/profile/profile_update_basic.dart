@@ -8,15 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 class ProfileUpdate extends StatefulWidget {
-  final dynamic token, fname, lname, email, phone, dob, prof, gender;
+  final dynamic token, fname, lname,about, email, phone, dob, prof,institute, gender;
   ProfileUpdate(
       {@required this.token,
         this.fname,
         this.lname,
+        this.about,
         this.email,
         this.phone,
         this.dob,
         this.prof,
+        this.institute,
         this.gender});
   @override
   _ProfileUpdateState createState() => _ProfileUpdateState();
@@ -34,13 +36,17 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
     widget.gender == null ? _gender = "Male" : _gender = widget.gender;
     fnameController.text = widget.fname.toString();
     lnameController.text = widget.lname.toString();
+    widget.about != null?descriptionController.text = widget.about.toString():descriptionController.text;
+    widget.institute != null?instituteController.text = widget.institute.toString():instituteController.text;
     dateTime = widget.dob;
     super.initState();
   }
 
   TextEditingController fnameController = TextEditingController();
   TextEditingController lnameController = TextEditingController();
-  void update(String fname, lname,date,profession,gender) async {
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController instituteController = TextEditingController();
+  void update(String fname, lname,about_me,date,profession,institution,gender) async {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'profile/update?type=basic'),
@@ -50,8 +56,10 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
           body: {
             "first_name": fname,
             "last_name": lname,
+            "about_me":about_me,
             "dob": date,
             "profession":profession,
+            "institution":institution,
             "gender":gender,
           });
       if (response.statusCode == 200) {
@@ -116,8 +124,10 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                     update(
                         fnameController.text.toString(),
                         lnameController.text.toString(),
+                        descriptionController.text.toString(),
                         dateTime.toString(),
                         _profession,
+                        instituteController.text.toString(),
                         _gender);
 
                   }, // button pressed
@@ -152,6 +162,9 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              SizedBox(
+                height: 5,
+              ),
               //--------------------------------here is Fname
               Container(
                 child: TextFormField(
@@ -163,7 +176,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 decoration: ThemeHelper().inputBoxDecorationShaddow(),
               ),
               SizedBox(
-                height: 25,
+                height: 15,
               ),
               //--------------------------------here is Lname
               Container(
@@ -175,7 +188,34 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 decoration: ThemeHelper().inputBoxDecorationShaddow(),
               ),
               SizedBox(
-                height: 25,
+                height: 15,
+              ),
+              Row(
+                children: [
+                  SizedBox(width: 10,),
+                  Text(
+                    "About me: ",
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  )
+                ],
+              ),
+              Container(
+                child: TextFormField(
+                  textInputAction: TextInputAction.done,
+                  controller: descriptionController,
+                  maxLines: 3,
+                  maxLength: 50,
+                  decoration: InputDecoration(
+                    hintText: "Write a short description about yourself.",
+                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
+                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
               ),
               FormField<String>(
                 builder: (FormFieldState<String> state) {
@@ -186,7 +226,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                       fillColor: Colors.white,
                       labelStyle: TextStyle(fontWeight: FontWeight.bold),
                       filled: true,
-                      contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                      contentPadding: EdgeInsets.fromLTRB(20,5, 20, 5),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                           borderSide: BorderSide(color: Colors.black)),
@@ -209,9 +249,8 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                             child: Text(
                               "Select Profession",
                               style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 16,
+                                  color: Colors.black,),
                             ),
                           ),
                           value: _profession,
@@ -219,8 +258,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                           // elevation: 5,
                           style: TextStyle(
                               color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
+                              fontSize: 16,),
                           iconEnabledColor: Colors.black,
                           items: _items
                               .map<DropdownMenuItem<String>>((String value) {
@@ -234,9 +272,8 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                             child: Text(
                               e,
                               style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 16,
+                                  color: Colors.black,),
                             ),
                           ))
                               .toList(),
@@ -253,6 +290,18 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
               SizedBox(
                 height: 20,
               ),
+              Container(
+                child: TextFormField(
+                  keyboardType: TextInputType.text,
+                  controller: instituteController,
+                  decoration: ThemeHelper()
+                      .textInputDecoration('Institute', 'Your institute name'),
+                ),
+                decoration: ThemeHelper().inputBoxDecorationShaddow(),
+              ),
+              SizedBox(
+                height: 15,
+              ),
               FormField<String>(
                 builder: (FormFieldState<String> state) {
                   return InputDecorator(
@@ -262,7 +311,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                       fillColor: Colors.white,
                       labelStyle: TextStyle(fontWeight: FontWeight.bold),
                       filled: true,
-                      contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                      contentPadding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                           borderSide: BorderSide(color: Colors.black)),
@@ -288,15 +337,13 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                               "Select Gender",
                               style: TextStyle(
                                   fontSize: 16,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
+                                  color: Colors.white,),
                             ),
                           ),
                           // elevation: 5,
                           style: TextStyle(
                               color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
+                              fontSize: 16,),
                           iconEnabledColor: Colors.black,
                           items: _item
                               .map<DropdownMenuItem<String>>((String value) {
@@ -310,9 +357,8 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                             child: Text(
                               value,
                               style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 16,
+                                  color: Colors.black,),
                             ),
                           ))
                               .toList(),
@@ -327,7 +373,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 },
               ),
               SizedBox(
-                height: 25,
+                height: 15,
               ),
               //--------------------------------here is date
               Row(
@@ -337,9 +383,8 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                     "Date of Birth: ",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 16,
                       letterSpacing: 0.27,
-                      color: primaryColor,
                     ),
                   ),
                   InkWell(
@@ -376,7 +421,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
             BoxShadow(
                 color: DesignCourseAppTheme.grey.withOpacity(0.2),
                 offset: const Offset(1.1, 1.1),
-                blurRadius: 8.0),
+                blurRadius: 3.0),
           ],
         ),
         child: Padding(

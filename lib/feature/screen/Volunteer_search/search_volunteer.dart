@@ -49,14 +49,14 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
     print(widget.city);
     print(widget.state);
     print(widget.country);
-    print(widget.category);
-    print(widget.taskType);
-    print(widget.gender);
-    print(widget.profession);
-    print(widget.membership);
-    print(widget.min_age);
-    print(widget.max_age);
-    print(recruiterController.text.toString());
+    // print(widget.category);
+    // print(widget.taskType);
+    // print(widget.gender);
+    // print(widget.profession);
+    // print(widget.membership);
+    // print(widget.min_age);
+    // print(widget.max_age);
+    // print(recruiterController.text.toString());
 
     getCred();
     super.initState();
@@ -73,7 +73,18 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
   Future<CategorywiseTask> getCateTaskApi() async {
     final response = await http.get(
         Uri.parse(NetworkConstants.BASE_URL +
-            'task-search?state_id=${widget.state}&city_id=${widget.city}&category_id=${widget.category}&gender=${widget.gender}&membership_id=${widget.membership}&search=${recruiterController.text.toString()}&profession=${widget.profession}&country_id=${widget.country}&task_type=${widget.taskType}&min_age=${widget.min_age}&max_age=${widget.max_age}'),
+            'task-search?'
+                'state_id=${widget.state}&'
+                'city_id=${widget.city}&'
+                'category_id=${widget.category}&'
+                'gender=${widget.gender}&'
+                'membership_id=${widget.membership}&'
+                'search=${recruiterController.text.toString()}&'
+                'profession=${widget.profession}&'
+                'country_id=${widget.country}&'
+                'task_type=${widget.taskType}&'
+                'min_age=${widget.min_age}&'
+                'max_age=${widget.max_age}'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
     print(data);
@@ -273,7 +284,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                             size: 20,
                                           ),
                                           Text(
-                                            snapshot.data.data[index].state.name,
+                                            snapshot.data.data[index].city.name.toString(),
                                             style: TextStyle(
                                                 fontSize: 15,
                                                 color: Colors.blueAccent,

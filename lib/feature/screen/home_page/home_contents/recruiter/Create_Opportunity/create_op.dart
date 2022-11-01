@@ -488,7 +488,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                       //       " " +
                       //       '${_time.hour}:${_time.minute.toString().padLeft(2, '0') + "  " + slug.toString()}');
                       // });
-                      if (time.hour <= _time.hour &&
+                      if (time.hour < _time.hour && time.hour != _time.hour &&
                           _formKey.currentState.validate()) {
                         Get.to(() => CheckBox(
                               token: token,

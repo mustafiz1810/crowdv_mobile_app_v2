@@ -143,7 +143,54 @@ class _CommonProfileState extends State<CommonProfile> {
                         SizedBox(
                           height: 15,
                         ),
+                        snapshot.data.data.role == "recruiter"?
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  snapshot.data.data.opportunities.toString(),
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                                Text(
+                                  "Opportunity",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.black),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      snapshot.data.data.rating.toString(),
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
+                                    Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                      size: 16,
+                                    )
+                                  ],
+                                ),
+                                Text(
+                                  "Rating",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.black),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                            :Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Column(
@@ -243,15 +290,10 @@ class _CommonProfileState extends State<CommonProfile> {
                                                 tiles: [
                                                   ListTile(
                                                     leading: Icon(Icons
-                                                        .person_outline_rounded),
-                                                    title: Text("Name:"),
+                                                        .person_pin_outlined),
+                                                    title: Text("Bio:"),
                                                     subtitle: Text(
-                                                      snapshot.data.data
-                                                              .firstName
-                                                              .toString() +
-                                                          " " +
-                                                          snapshot.data.data
-                                                              .lastName,
+                                                      snapshot.data.data.aboutMe.toString(),
                                                     ),
                                                   ),
                                                   ListTile(
@@ -267,6 +309,14 @@ class _CommonProfileState extends State<CommonProfile> {
                                                           ? snapshot.data.data
                                                               .profession
                                                           : "")),
+                                                  ListTile(
+                                                      leading: Icon(Icons
+                                                          .home_work_outlined),
+                                                      title:
+                                                      Text("Institute:"),
+                                                      subtitle: Text(snapshot
+                                                          .data
+                                                          .data.institution.toString())),
                                                   ListTile(
                                                       leading: Icon(Icons.male),
                                                       title: Text("Gender:"),
@@ -435,11 +485,14 @@ class _CommonProfileState extends State<CommonProfile> {
                                                               ],
                                                             ),
                                                           ),
-                                                          subtitle: Text(snapshot
-                                                              .data
-                                                              .data
-                                                              .reviews[index]
-                                                              .remark),
+                                                          subtitle: Padding(
+                                                            padding: const EdgeInsets.only(bottom: 8.0),
+                                                            child: Text(snapshot
+                                                                .data
+                                                                .data
+                                                                .reviews[index]
+                                                                .remark),
+                                                          ),
 
                                                         )),
                                                   );

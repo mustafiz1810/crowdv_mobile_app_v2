@@ -59,12 +59,10 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void initState() {
-    print(widget.country);
-    print(widget.city);
-    print(widget.state);
-    widget.zip == null
-        ? zipController.text = ""
-        : zipController.text = widget.zip;
+    countryvalue = widget.country;
+    statevalue = widget.state;
+    cityvalue = widget.city;
+    zipController.text = widget.zip;
     super.initState();
     getCred();
     getCountry();
@@ -152,7 +150,7 @@ class _ProfilePageState extends State<ProfilePage> {
       } else {
         var data = jsonDecode(response.body.toString());
         print(data);
-        showToast(context, data['error'].toString());
+        showToast(context, data['error'].length!=0?data['error'].toString():data['message'].toString());
       }
     } catch (e) {
       showDialog(
@@ -529,6 +527,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                                 snapshot.data.data.firstName,
                                                                             lname:
                                                                                 snapshot.data.data.lastName,
+                                                                            about:snapshot.data.data.aboutMe,
                                                                             email:
                                                                                 snapshot.data.data.email,
                                                                             phone:
@@ -537,6 +536,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                                 snapshot.data.data.dob,
                                                                             prof:
                                                                                 snapshot.data.data.profession,
+                                                                            institute:snapshot.data.data.institution,
                                                                             gender:
                                                                                 snapshot.data.data.gender,
                                                                           )),
@@ -606,6 +606,21 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                 .profession
                                                             : "")),
                                                     ListTile(
+                                                        leading: Icon(Icons.home_filled),
+                                                        title:
+                                                        Text("Institution:"),
+                                                        subtitle: Text(
+                                                            snapshot
+                                                                .data
+                                                                .data
+                                                                .institution != null
+                                                                ? snapshot
+                                                                .data
+                                                                .data
+                                                                .institution
+                                                                : "Not Provided"
+                                                            )),
+                                                    ListTile(
                                                         leading:
                                                             Icon(Icons.male),
                                                         title: Text("Gender:"),
@@ -617,6 +632,20 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             ? snapshot.data.data
                                                                 .gender
                                                             : "")),
+                                                    ListTile(
+                                                        leading: Icon(Icons.person_pin_outlined),
+                                                        title:
+                                                        Text("About me:"),
+                                                        subtitle: Text(
+                                                            snapshot
+                                                                .data
+                                                                .data
+                                                                .aboutMe != null
+                                                                ? snapshot
+                                                                .data
+                                                                .data
+                                                                .aboutMe
+                                                                : "Not Provided")),
                                                   ],
                                                 ),
                                               ],
@@ -758,7 +787,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                                                   }
                                                   else{
-                                                    countryvalue=null;
+                                                    countryvalue=widget.country;
                                                   }
                                                 },
                                               ),
@@ -797,7 +826,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     });
                                                   }
                                                   else{
-                                                    statevalue=null;
+                                                    statevalue=widget.state;
                                                   }
                                                 },
                                               ),
@@ -831,7 +860,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     print(cityvalue);
                                                   }
                                                   else{
-                                                    cityvalue=null;
+                                                    cityvalue=widget.city;
                                                   }
                                                 },
                                               ),
@@ -868,15 +897,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                         13)),
                                                   ),
                                                   onPressed: () {
-                                                    print(countryvalue
-                                                            .toString() +
-                                                        " " +
-                                                        statevalue.toString() +
-                                                        " " +
-                                                        cityvalue.toString() +
-                                                        " " +
-                                                        zipController.text
-                                                            .toString());
                                                     location(
                                                         countryvalue.toString(),
                                                         statevalue.toString(),

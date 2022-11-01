@@ -5,7 +5,6 @@ import 'package:crowdv_mobile_app/data/models/volunteer/banner_model.dart';
 import 'package:crowdv_mobile_app/feature/screen/Recruiter_search/search.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/certificate.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruiter/Create_Opportunity/create_op.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/service_location.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/set_category.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/upcoming.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/volunteer_opportunities.dart';
@@ -122,7 +121,6 @@ class _HomeScreenState extends State<HomeScreen> {
         Uri.parse(NetworkConstants.BASE_URL + 'organizational/opportunity'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body);
-    print(data);
     if (response.statusCode == 200) {
       return BannerModel.fromJson(data);
     } else {
@@ -445,28 +443,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                       });
                                     },
                                   ),
-                                  CategoryCard(
-                                    title: "Service Location",
-                                    svgSrc: "assets/home-location-alt.svg",
-                                    press: () async {
-                                      getRequestWithoutParam(
-                                          '/api/v1/get-category', {
-                                        "Authorization": "Bearer ${token}"
-                                      }).then((value) async {
-                                        print(value);
-                                        Get.to(() => ServiceLocation(
-                                          country: value['data']
-                                          ['service_country']['id'],
-                                          state: value['data']
-                                          ['service_state']['id'],
-                                          city: value['data']
-                                          ['service_city']['id'],
-                                          zip: value['data']
-                                          ['service_zip_code'],
-                                        ));
-                                      });
-                                    },
-                                  ),
+                                  // CategoryCard(
+                                  //   title: "Service Location",
+                                  //   svgSrc: "assets/home-location-alt.svg",
+                                  //   press: () async {
+                                  //     getRequestWithoutParam(
+                                  //         '/api/v1/get-category', {
+                                  //       "Authorization": "Bearer ${token}"
+                                  //     }).then((value) async {
+                                  //       print(value);
+                                  //       Get.to(() => ServiceLocation(
+                                  //         country: value['data']
+                                  //         ['service_country']['id'],
+                                  //         state: value['data']
+                                  //         ['service_state']['id'],
+                                  //         city: value['data']
+                                  //         ['service_city']['id'],
+                                  //         zip: value['data']
+                                  //         ['service_zip_code'],
+                                  //       ));
+                                  //     });
+                                  //   },
+                                  // ),
                                   CategoryCard(
                                     title: "Training",
                                     svgSrc: "assets/e-learning.svg",

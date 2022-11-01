@@ -40,6 +40,8 @@ class Data {
     this.lastName,
     this.email,
     this.phone,
+    this.aboutMe,
+    this.institution,
     this.country,
     this.state,
     this.city,
@@ -74,10 +76,12 @@ class Data {
   String lastName;
   String email;
   String phone;
+  dynamic aboutMe;
+  dynamic institution;
   City country;
   City state;
   City city;
-  String zipCode;
+  dynamic zipCode;
   List<dynamic> typeOfDisability;
   String profession;
   bool termsAndConditions;
@@ -108,6 +112,8 @@ class Data {
     lastName: json["last_name"],
     email: json["email"],
     phone: json["phone"],
+    aboutMe: json["about_me"],
+    institution: json["institution"],
     country: City.fromJson(json["country"]),
     state: City.fromJson(json["state"]),
     city: City.fromJson(json["city"]),
@@ -143,6 +149,8 @@ class Data {
     "last_name": lastName,
     "email": email,
     "phone": phone,
+    "about_me": aboutMe,
+    "institution": institution,
     "country": country.toJson(),
     "state": state.toJson(),
     "city": city.toJson(),
@@ -223,6 +231,7 @@ class Review {
     this.reviewTo,
     this.taskId,
     this.remark,
+    this.rating,
   });
 
   int id;
@@ -230,6 +239,7 @@ class Review {
   ReviewFromClass reviewTo;
   TaskId taskId;
   String remark;
+  String rating;
 
   factory Review.fromJson(Map<String, dynamic> json) => Review(
     id: json["id"],
@@ -237,6 +247,7 @@ class Review {
     reviewTo: ReviewFromClass.fromJson(json["review_to"]),
     taskId: TaskId.fromJson(json["task_id"]),
     remark: json["remark"],
+    rating: json["rating"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -245,6 +256,7 @@ class Review {
     "review_to": reviewTo.toJson(),
     "task_id": taskId.toJson(),
     "remark": remark,
+    "rating": rating,
   };
 }
 

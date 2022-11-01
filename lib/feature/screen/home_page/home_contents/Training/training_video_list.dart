@@ -51,7 +51,7 @@ class _TrainingVideoState extends State<TrainingVideo> {
     }
   }
 
-  void train(int id, String name, mediaUrl, details, videos,trainingId) async {
+  void train(bool isWatched,int length,int index,int id, String name, mediaUrl, details, videos,trainingId) async {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'track-video-info/$id'),
@@ -69,6 +69,9 @@ class _TrainingVideoState extends State<TrainingVideo> {
           context,
           MaterialPageRoute(
               builder: (context) => VideoScreen(
+                isWatched:isWatched,
+                length: length,
+                index:index,
                     id: id,
                     token: token,
                     name: name,
@@ -109,7 +112,7 @@ class _TrainingVideoState extends State<TrainingVideo> {
         iconTheme: IconThemeData(color: Colors.white),
         // collapsedHeight: 150,
         title: const Text(
-          'Training video',
+          'Training videos',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: primaryColor,
@@ -151,6 +154,9 @@ class _TrainingVideoState extends State<TrainingVideo> {
                         return GestureDetector(
                           onTap: () {
                             train(
+                              snapshot.data.data.videos[index].isWatched,
+                                snapshot.data.data.videos.length,
+                              snapshot.data.data.videos.indexOf(snapshot.data.data.videos[index]),
                                 snapshot.data.data.videos[index].id,
                                 snapshot.data.data.videos[index].title,
                                 snapshot.data.data.videos[index].video,
@@ -170,30 +176,51 @@ class _TrainingVideoState extends State<TrainingVideo> {
                                   Container(
                                       height: 140,
                                       width: MediaQuery.of(context).size.width,
-                                      child: CachedNetworkImage(
-                                        imageUrl: snapshot.data.data.videos[index].thumbnail,
-                                        imageBuilder:
-                                            (context, imageProvider) =>
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.fill,),
-                                              ),
+                                      child: Stack(
+                                        children:[
+                                          Center(
+                                            child: CachedNetworkImage(
+                                              imageUrl: snapshot.data.data.videos[index].thumbnail,
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.fill,),
+                                                    ),
+                                                  ),
+                                              placeholder: (context, url) =>
+                                                  Icon(Icons.downloading_rounded,size: 100,),
+                                              errorWidget: (context, url, error)
+                                              => Icon(Icons.image_outlined,size: 100,),
                                             ),
-                                        placeholder: (context, url) =>
-                                            Icon(Icons.downloading_rounded,size: 100,),
-                                        errorWidget: (context, url, error)
-                                        => Icon(Icons.image_outlined,size: 100,),
+                                          ),
+                                          snapshot.data.data.videos[index].watchedStatus.isEmpty == false?Container(
+                                            height: 30,
+                                            width: 80,
+                                            color: Colors.black38,
+                                            child: Center(child: Text(snapshot.data.data.videos[index].watchedStatus,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)),
+                                          ):Container(),
+                                          Center(child: Container(
+                                            height: 80,
+                                            width: 80,
+                                            decoration: BoxDecoration(
+                                              color: Colors.black38,
+                                              borderRadius: BorderRadius.circular(100)
+                                            ),
+                                          )),
+                                          Center(child: Icon(Icons.play_arrow,size: 70,color: Colors.white,))
+                                        ]
+
                                       )),
                                   SizedBox(
                                       child: Text(
-                                        "Title: " +
-                                            snapshot.data.data.videos[index].title,
+                                        snapshot.data.data.videos[index].title,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.black),
-                                      ))
+                                      ),)
                                 ],
                               ),
                             ),

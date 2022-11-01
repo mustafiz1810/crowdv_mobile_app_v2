@@ -6,29 +6,29 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class CustomBottomNavigation extends StatefulWidget {
   @override
   State<CustomBottomNavigation> createState() => _CustomBottomNavigationState();
 }
 
 class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
-  String token,role;
+  String token, role;
   int id;
   @override
   void initState() {
     getCred();
     super.initState();
   }
+
   void getCred() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       token = pref.getString("user");
       role = pref.getString("role");
       id = pref.getInt("id");
-
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
@@ -44,14 +44,17 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
           case 0:
             return Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
-                    builder: (context) =>
-                        HomeScreen(
-                            id: id,
-                            role: role,)),
-                    (Route<dynamic> route) => false);
+                    builder: (context) => HomeScreen(
+                          id: id,
+                          role: role,
+                        )),
+                (Route<dynamic> route) => false);
+            break;
           case 1:
-            role=='volunteer'?
-             Get.to(VolunteerHistory()):Get.to(RecruiterHistory());
+            role == 'volunteer'
+                ? Get.to(VolunteerHistory())
+                : Get.to(RecruiterHistory());
+            break;
         }
       },
       selectedLabelStyle: TextStyle(

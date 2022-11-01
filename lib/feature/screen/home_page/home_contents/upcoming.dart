@@ -172,22 +172,30 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                             height: 25,
                                           ),
                                           Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Icon(
-                                                Icons.location_on_rounded,
-                                                color: Colors.blueAccent,
-                                                size: 20,
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.location_on_rounded,
+                                                    color: Colors.blueAccent,
+                                                    size: 20,
+                                                  ),
+                                                  Text(
+                                                    snapshot.data.data[index].city !=
+                                                        null
+                                                        ? snapshot
+                                                        .data.data[index].city
+                                                        : "",
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        color: Colors.blueAccent,
+                                                        fontWeight: FontWeight.bold),
+                                                  ),
+                                                ],
                                               ),
                                               Text(
-                                                snapshot.data.data[index].city !=
-                                                    null
-                                                    ? snapshot
-                                                    .data.data[index].city
-                                                    : "",
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    color: Colors.blueAccent,
-                                                    fontWeight: FontWeight.bold),
+                                                snapshot.data.data[index].taskType,
                                               ),
                                             ],
                                           ),

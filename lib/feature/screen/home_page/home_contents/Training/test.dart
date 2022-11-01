@@ -202,7 +202,7 @@ class _TestState extends State<Test> {
                                           Row(
                                             children: [
                                               Text(
-                                                'Passing mark: ',
+                                                'Passing score: ',
                                                 style: TextStyle(
                                                     color: primaryColor,
                                                     fontSize: 16),

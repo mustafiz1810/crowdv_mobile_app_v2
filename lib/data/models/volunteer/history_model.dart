@@ -77,9 +77,9 @@ class Datum {
   dynamic benefits;
   bool isPublic;
   String status;
-  int applyStatus;
+  bool applyStatus;
   Category category;
-  List<Eligibility> eligibility;
+  List<dynamic> eligibility;
   Recruiter volunteer;
   Recruiter recruiter;
 
@@ -104,7 +104,7 @@ class Datum {
     status: json["status"],
     applyStatus: json["apply_status"],
     category: Category.fromJson(json["category"]),
-    eligibility: List<Eligibility>.from(json["eligibility"].map((x) => Eligibility.fromJson(x))),
+    eligibility: List<dynamic>.from(json["eligibility"].map((x) => x)),
     volunteer: Recruiter.fromJson(json["volunteer"]),
     recruiter: Recruiter.fromJson(json["recruiter"]),
   );
@@ -130,7 +130,7 @@ class Datum {
     "status": status,
     "apply_status": applyStatus,
     "category": category.toJson(),
-    "eligibility": List<dynamic>.from(eligibility.map((x) => x.toJson())),
+    "eligibility": List<dynamic>.from(eligibility.map((x) => x)),
     "volunteer": volunteer.toJson(),
     "recruiter": recruiter.toJson(),
   };
@@ -170,77 +170,13 @@ class City {
   String name;
 
   factory City.fromJson(Map<String, dynamic> json) => City(
-    id: json["id"],
-    name: json["name"],
+    id: json["id"] == null ? null : json["id"],
+    name: json["name"] == null ? null : json["name"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-  };
-}
-
-class Eligibility {
-  Eligibility({
-    this.id,
-    this.categoryId,
-    this.title,
-    this.details,
-    this.status,
-    this.createdAt,
-    this.updatedAt,
-    this.pivot,
-  });
-
-  int id;
-  int categoryId;
-  String title;
-  dynamic details;
-  int status;
-  dynamic createdAt;
-  dynamic updatedAt;
-  Pivot pivot;
-
-  factory Eligibility.fromJson(Map<String, dynamic> json) => Eligibility(
-    id: json["id"],
-    categoryId: json["category_id"],
-    title: json["title"],
-    details: json["details"],
-    status: json["status"],
-    createdAt: json["created_at"],
-    updatedAt: json["updated_at"],
-    pivot: Pivot.fromJson(json["pivot"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "category_id": categoryId,
-    "title": title,
-    "details": details,
-    "status": status,
-    "created_at": createdAt,
-    "updated_at": updatedAt,
-    "pivot": pivot.toJson(),
-  };
-}
-
-class Pivot {
-  Pivot({
-    this.opportunityId,
-    this.eligibilityId,
-  });
-
-  int opportunityId;
-  int eligibilityId;
-
-  factory Pivot.fromJson(Map<String, dynamic> json) => Pivot(
-    opportunityId: json["opportunity_id"],
-    eligibilityId: json["eligibility_id"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "opportunity_id": opportunityId,
-    "eligibility_id": eligibilityId,
+    "id": id == null ? null : id,
+    "name": name == null ? null : name,
   };
 }
 
@@ -295,7 +231,7 @@ class Recruiter {
     city: json["city"],
     zipCode: json["zip_code"],
     role: json["role"],
-    profileRating: json["profile_rating"] == null ? null : json["profile_rating"],
+    profileRating: json["profile_rating"],
     rating: json["rating"],
     review: json["review"],
   );
@@ -314,7 +250,7 @@ class Recruiter {
     "city": city,
     "zip_code": zipCode,
     "role": role,
-    "profile_rating": profileRating == null ? null : profileRating,
+    "profile_rating": profileRating,
     "rating": rating,
     "review": review,
   };

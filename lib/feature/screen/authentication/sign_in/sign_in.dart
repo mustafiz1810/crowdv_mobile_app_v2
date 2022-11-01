@@ -11,7 +11,7 @@ import 'package:crowdv_mobile_app/widgets/progres_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -178,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                             fontSize: 60, fontWeight: FontWeight.bold),
                       ),
                       const Text(
-                        'Signin into your account',
+                        'Sign in into your account',
                         style: TextStyle(color: Colors.grey),
                       ),
                       SizedBox(height: 30.0),

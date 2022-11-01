@@ -27,8 +27,8 @@ class _VolunteerFilterState extends State<VolunteerFilter> {
     super.initState();
     getCountry();
   }
-  int minAge = 18;
-  int maxAge = 65;
+  int minAge = 0;
+  int maxAge = 100;
   var countryvalue;
   var statevalue;
   var cityvalue;
@@ -705,7 +705,7 @@ class _VolunteerFilterState extends State<VolunteerFilter> {
                               ),
                               child: NumberPicker(
                                 value: minAge>maxAge?maxAge:minAge,
-                                minValue: 18,
+                                minValue: 0,
                                 maxValue: maxAge,
                                 onChanged: (value) {
                                   setState(() => minAge = value);
@@ -721,8 +721,8 @@ class _VolunteerFilterState extends State<VolunteerFilter> {
                               ),
                               child: NumberPicker(
                                 value: maxAge,
-                                minValue: 18,
-                                maxValue: 65,
+                                minValue: 0,
+                                maxValue: 100,
                                 onChanged: (value) => setState(() => maxAge = value),
                               ),
                             ),

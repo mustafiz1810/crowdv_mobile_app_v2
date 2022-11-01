@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/recruiter_task_details.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/common_profile.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
@@ -17,8 +18,13 @@ class NotificationPage extends StatefulWidget {
   @override
   _NotificationPageState createState() => _NotificationPageState();
 }
-
 class _NotificationPageState extends State<NotificationPage> {
+  @override
+  void initState() {
+    print(widget.data);
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,17 +76,20 @@ class _NotificationPageState extends State<NotificationPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => widget.role == "volunteer"?
+                                  builder: (context) =>
+                                  widget.data[index].data.status == "Gold"?CommonProfile(
+                                    id: widget.data[index].data.senderId,
+                                  ):widget.role == "volunteer"?
                                   VolunteerTaskDetails(
                                       role: widget.role,
                                       id: widget
                                           .data[index].data.opportunityId,
                                       friendId: widget
-                                          .data[index].data.volunteerUid,
+                                          .data[index].data.senderUid,
                                       friendName:
-                                      widget.data[index].data.volunteer,
+                                      widget.data[index].data.senderName,
                                       friendImage: widget
-                                          .data[index].data.volunteerImage,
+                                          .data[index].data.senderImage,
                                       isOnline:
                                       widget.data[index].data.isOnline):
                                   RecruiterTaskDetails(
@@ -88,54 +97,14 @@ class _NotificationPageState extends State<NotificationPage> {
                                       id: widget
                                           .data[index].data.opportunityId,
                                       friendId: widget
-                                          .data[index].data.volunteerUid,
+                                          .data[index].data.senderUid,
                                       friendName:
-                                      widget.data[index].data.volunteer,
+                                      widget.data[index].data.senderName,
                                       friendImage: widget
-                                          .data[index].data.volunteerImage,
+                                          .data[index].data.senderImage,
                                       isOnline:
                                       widget.data[index].data.isOnline)),
                             );
-                            // if (widget.data[index].data.status ==
-                            //         "invitation" ||
-                            //     widget.data[index].data.status == "hired") {
-                            //   Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => OpportunityDetails(
-                            //             role: widget.role,
-                            //             id: widget
-                            //                 .data[index].data.opportunityId,
-                            //             friendId: widget
-                            //                 .data[index].data.volunteerUid,
-                            //             friendName:
-                            //                 widget.data[index].data.volunteer,
-                            //             friendImage: widget
-                            //                 .data[index].data.volunteerImage,
-                            //             isOnline:
-                            //                 widget.data[index].data.isOnline)),
-                            //   );
-                            // } else if (widget.data[index].data.status ==
-                            //     "applied") {
-                            //   Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => AppliedVolunteer(
-                            //               token: widget.token,
-                            //               id: widget
-                            //                   .data[index].data.opportunityId,
-                            //             )),
-                            //   );
-                            // } else {
-                            //   Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => CommonProfile(
-                            //               id: widget
-                            //                   .data[index].data.volunteerId,
-                            //             )),
-                            //   );
-                            // }
                             setState(() {});
                           });
                         },
@@ -145,7 +114,7 @@ class _NotificationPageState extends State<NotificationPage> {
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               color:
-                                  widget.data[index].readAt.toString() == null
+                                  widget.data[index].readAt != null
                                       ? Color(0xFFe5e5e5)
                                       : Colors.white,
                               boxShadow: [
@@ -160,29 +129,34 @@ class _NotificationPageState extends State<NotificationPage> {
                                   BorderRadius.all(Radius.circular(20)),
                             ),
                             child: ListTile(
-                              leading: IconBox(
-                                child: Icon(
-                                  Icons.notifications,
-                                  color: Colors.white,
-                                  size: 25,
-                                ),
-                                bgColor: primaryColor,
+                              leading: CachedNetworkImage(
+                                imageUrl:widget
+                                    .data[index].data.senderImage,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                      width: 30.0,
+                                      height: 30.0,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            image: imageProvider, fit: BoxFit.cover),
+                                      ),
+                                    ),
+                                placeholder: (context, url) => Icon(Icons.downloading_rounded,
+                                    size: 30,
+                                    color: Colors.grey),
+                                errorWidget: (context, url, error) =>
+                                    Icon(
+                                      Icons.image_outlined,
+                                      size: 30,
+                                      color: Colors.grey,
+                                    ),
                               ),
-                              title: Row(
-                                children: [
-                                  Text(widget.data[index].data.volunteer,
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black)),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(widget.data[index].data.status,
-                                      style: TextStyle(
-                                          fontSize: 14, color: Colors.black)),
-                                ],
-                              ),
+                              title:Text(widget.data[index].data.senderName.toString(),
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black)),
                               trailing: Container(
                                 height: 10,
                                 width: 10,
