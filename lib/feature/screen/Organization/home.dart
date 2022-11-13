@@ -1,11 +1,8 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/feature/screen/Organization/widgets/drawer.dart';
-import 'package:crowdv_mobile_app/feature/screen/Organization/create_opportunity.dart';
 import 'package:crowdv_mobile_app/feature/screen/Organization/op_list.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/applied_volunteer.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:crowdv_mobile_app/widgets/category_grid.dart';
 import 'package:crowdv_mobile_app/widgets/header_without_logo.dart';
@@ -13,9 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/models/organization/org_profile_model.dart';
+import 'create_opportunity.dart';
 class OrganizationHome extends StatefulWidget {
-  final dynamic id, role;
-  OrganizationHome({this.id, this.role});
+  final dynamic id, role,data;
+  OrganizationHome({this.id, this.role,this.data});
   @override
   _OrganizationHomeState createState() => new _OrganizationHomeState();
 }
@@ -84,19 +82,24 @@ class _OrganizationHomeState extends State<OrganizationHome> {
                 icon: snapshot.data.data.logo,
               );
             } else {
-              return Container();
+              return Container(color: Colors.white,);
             }
           }),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
         actions: [
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Icon(
-          Icons.notifications,
-          color: Colors.black,
+        InkWell(
+          onTap: (){
+            print(widget.data['id']);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Icon(
+            Icons.notifications,
+            color: Colors.black,
       ),
+          ),
         ),
         ],
       ),

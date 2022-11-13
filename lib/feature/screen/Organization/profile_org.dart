@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:crowdv_mobile_app/feature/screen/Organization/widgets/org_profile_update.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,23 +9,6 @@ import 'package:http/http.dart' as http;
 import '../../../data/models/organization/org_profile_model.dart';
 
 class OrgProfile extends StatefulWidget {
-  final data,
-      role,
-      disability,
-      chosenValue,
-      dropdown,
-      selectedCountry,
-      selectedProvince,
-      zip;
-  OrgProfile(
-      {this.data,
-        this.role,
-        this.disability,
-        this.chosenValue,
-        this.dropdown,
-        this.selectedProvince,
-        this.selectedCountry,
-        this.zip});
   @override
   State<StatefulWidget> createState() {
     return _OrgProfileState();
@@ -51,6 +35,7 @@ class _OrgProfileState extends State<OrgProfile> {
         Uri.parse(NetworkConstants.BASE_URL + 'organization/profile'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
+    print(data);
     if (response.statusCode == 200) {
       return OrgProfileModel.fromJson(data);
     } else {
@@ -144,33 +129,48 @@ class _OrgProfileState extends State<OrgProfile> {
                       ),
                     ),
                     Divider(
-                      height: 10,
+                      height: 5,
                       color: Colors.black,
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left: 8.0,right: 8),
                       child: Column(
                         children: <Widget>[
-                          Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment
-                                .spaceBetween,
-                            children: [
-                              Text(
-                                "User Information",
-                                style: TextStyle(
-                                  color: Colors.black87,
-                                  fontWeight:
-                                  FontWeight.w700,
-                                  fontSize: 16,
+                          Container(
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment
+                                  .spaceBetween,
+                              children: [
+                                Text(
+                                  "User Information",
+                                  style: TextStyle(
+                                    color: Colors.black87,
+                                    fontWeight:
+                                    FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
+                                  textAlign:
+                                  TextAlign.left,
                                 ),
-                                textAlign:
-                                TextAlign.left,
-                              ),
-                            ],
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder:
+                                                (context) =>
+                                                    OrgProfileUpdate()),
+                                      ).then((value) =>
+                                          setState(
+                                                  () {}));
+                                    },
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: Colors.black,
+                                    ))
+                              ],
+                            ),
                           ),
                           ...ListTile.divideTiles(
                             color: Colors.grey,
@@ -200,6 +200,12 @@ class _OrgProfileState extends State<OrgProfile> {
                               ),
                               ListTile(
                                 leading: Icon(Icons.location_on),
+                                title: Text("Country:"),
+                                subtitle: Text(snapshot
+                                    .data.data.country.toString()),
+                              ),
+                              ListTile(
+                                leading: Icon(Icons.location_on),
                                 title: Text("State:"),
                                 subtitle: Text(snapshot
                                     .data.data.state.toString()),
@@ -214,13 +220,15 @@ class _OrgProfileState extends State<OrgProfile> {
                                 leading: Icon(Icons.http),
                                 title: Text("Website:"),
                                 subtitle: Text(snapshot
-                                    .data.data.website),
+                                    .data.data.website != null?snapshot
+                                    .data.data.website:""),
                               ),
                               ListTile(
                                 leading: Icon(Icons.facebook_rounded),
                                 title: Text("Facebook:"),
                                 subtitle: Text(snapshot
-                                    .data.data.facebook),
+                                    .data.data.facebook != null ?snapshot
+                                    .data.data.facebook:""),
                               ),
 
                             ],

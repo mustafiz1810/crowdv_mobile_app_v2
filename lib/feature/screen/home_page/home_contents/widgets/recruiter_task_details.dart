@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:badges/badges.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/data/models/recruiter/opportunity_detail.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/recruiter/update_opportunity/update_form.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/chat.dart';
@@ -13,9 +14,11 @@ import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sweetalert/sweetalert.dart';
 import '../../../profile/common_profile.dart';
@@ -35,7 +38,12 @@ class RecruiterTaskDetails extends StatefulWidget {
   _RecruiterTaskDetailsState createState() => _RecruiterTaskDetailsState();
 }
 
-class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails> {
+class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
+    with TickerProviderStateMixin {
+  TextEditingController reviewController = TextEditingController();
+  TextEditingController reportController = TextEditingController();
+  TextEditingController detailsController = TextEditingController();
+  TabController _tabController;
   var eligibility;
   String uid;
   String token;
@@ -45,6 +53,125 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails> {
       token = pref.getString("user");
       uid = pref.getString("uid");
     });
+  }
+
+  void rate(int rating, int id) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'recruiter/rating/$id'),
+          headers: {
+            "Authorization": "Bearer ${token}",
+            "Accept": "application/json"
+          },
+          body: {
+            'rating': rating.toString(),
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+        showToast(context, data['message']);
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+
+  void review(String review, int id) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'recruiter/review/$id'),
+          headers: {
+            "Authorization": "Bearer ${token}"
+          },
+          body: {
+            'remark': review,
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        int count = 0;
+        Navigator.popUntil(context, (route) => count++ == 3);
+        setState(() {});
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+        showToast(context, data['error']['errors']);
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+
+  void report(String report, details, int id) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'recruiter/report/$id'),
+          headers: {
+            "Authorization": "Bearer ${token}"
+          },
+          body: {
+            'remarks': report,
+            'details': details,
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        int count = 0;
+        Navigator.popUntil(context, (route) => count++ == 3);
+        setState(() {});
+        showToast(context, data['message']);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+        showToast(context, data['message']);
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
   }
 
   Future<OpportunityDetail> getDetailsApi() async {
@@ -65,9 +192,11 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails> {
   void initState() {
     getCred();
     print(widget.isRead);
+    _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
     super.initState();
   }
 
+  int count = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,21 +241,18 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails> {
                                 height: 10,
                               ),
                               CachedNetworkImage(
-                                imageUrl:  snapshot
-                                    .data
-                                    .data
-                                    .recruiter
-                                    .image,
+                                imageUrl: snapshot.data.data.recruiter.image,
                                 imageBuilder: (context, imageProvider) =>
                                     Container(
-                                      width: 60.0,
-                                      height: 60.0,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                            image: imageProvider, fit: BoxFit.cover),
-                                      ),
-                                    ),
+                                  width: 60.0,
+                                  height: 60.0,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
                                 placeholder: (context, url) => Icon(
                                     Icons.downloading_rounded,
                                     size: 40,
@@ -210,576 +336,628 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails> {
                         child: CustomScrollView(
                           slivers: <Widget>[
                             SliverToBoxAdapter(
-                              child:  TabBar(
-                                tabs: [
-                                  Tab(child: const Text('Volunteer')),
-                                  Tab(child: const Text('Location')),
-                                  Tab(child: const Text('Details')),
-                                ],
-                                unselectedLabelColor: Colors.black,
-                                indicatorSize: TabBarIndicatorSize.tab,
-                                indicator: BubbleTabIndicator(
-                                  indicatorHeight: 45.0,
-                                  indicatorColor: primaryColor,
-                                  indicatorRadius: 5,
-                                  tabBarIndicatorSize: TabBarIndicatorSize.tab,
-                                  // Other flags
-                                  // indicatorRadius: 1,
-                                  insets: EdgeInsets.all(2),
-                                  // padding: EdgeInsets.all(10)
-                                ),
-                              )
-                            ),
+                                child: TabBar(
+                              tabs: [
+                                Tab(child: const Text('Volunteer')),
+                                Tab(child: const Text('Location')),
+                                Tab(child: const Text('Details')),
+                              ],
+                              unselectedLabelColor: Colors.black,
+                              indicatorSize: TabBarIndicatorSize.tab,
+                              indicator: BubbleTabIndicator(
+                                indicatorHeight: 45.0,
+                                indicatorColor: primaryColor,
+                                indicatorRadius: 5,
+                                tabBarIndicatorSize: TabBarIndicatorSize.tab,
+                                // Other flags
+                                // indicatorRadius: 1,
+                                insets: EdgeInsets.all(2),
+                                // padding: EdgeInsets.all(10)
+                              ),
+                            )),
                             SliverFillRemaining(
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: TabBarView(
                                   children: [
-                                    snapshot.data.data.status == 'Pending' ?
-                                    snapshot.data.data.applyInvite.length != 0?
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(
-                                                20.0) //                 <--- border radius here
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: ListView.builder(
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          itemCount: snapshot.data.data.applyInvite.length,
-                                          itemBuilder: (context, index) {
-                                            return Padding(
-                                              padding: const EdgeInsets.all(5.0),
-                                              child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                    BorderRadius
-                                                        .circular(20),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.grey
-                                                            .withOpacity(
-                                                            0.5),
-                                                        spreadRadius: -1,
-                                                        blurRadius: 4,
-                                                        offset: Offset(-1,
-                                                            0), // changes position of shadow
+                                    snapshot.data.data.status == 'Pending'
+                                        ? snapshot.data.data.applyInvite
+                                                    .length !=
+                                                0
+                                            ? Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(
+                                                          20.0) //                 <--- border radius here
                                                       ),
-                                                    ],
-                                                  ),
-                                                  child: snapshot.data.data.applyInvite[index].status == "applied"?
-                                                  ListTile(
-                                                    leading: InkWell(
-                                                      onTap: (){
-                                                        Get.to(() => CommonProfile(
-                                                          id: snapshot.data.data.applyInvite[index].volunteerId,
-                                                        ));
-                                                      },
-                                                      child: CircleAvatar(
-                                                        backgroundImage:
-                                                        NetworkImage(
-                                                            snapshot
-                                                                .data
-                                                                .data.applyInvite[index].volunteerImage),
-                                                        radius: 20,
-                                                      ),
-                                                    ),
-                                                    title: InkWell(
-                                                      onTap: (){
-                                                        Get.to(() => CommonProfile(
-                                                          id: snapshot.data.data.applyInvite[index].volunteerId,
-                                                        ));
-                                                      },
-                                                      child: Text(snapshot
-                                                          .data
-                                                          .data.applyInvite[index].volunteerName,style: TextStyle(overflow: TextOverflow.ellipsis),),
-                                                    ),
-                                                    subtitle: Text(
-                                                        snapshot
-                                                            .data
-                                                            .data
-                                                            .applyInvite[index].location,
-                                                        style: TextStyle(fontSize: 14)),
-                                                    trailing: SizedBox(
-                                                      width: 80,
-                                                      child: Row(
-                                                        children: [
-                                                          IconBox(
-                                                            onTap: () {
-                                                              SweetAlert.show(context,
-                                                                  subtitle: "Are you sure?",
-                                                                  style:
-                                                                  SweetAlertStyle.confirm,
-                                                                  showCancelButton: true,
-                                                                  onPress: (bool isConfirm) {
-                                                                    if (isConfirm) {
-                                                                      SweetAlert.show(context,
-                                                                          subtitle: "Loading...",
-                                                                          style: SweetAlertStyle
-                                                                              .loading);
-                                                                      //Return false to keep dialog
-                                                                      if (isConfirm) {
-                                                                        new Future.delayed(
-                                                                            new Duration(
-                                                                                seconds: 1), () {
-                                                                          getRequestWithoutParam(
-                                                                              '/api/v1/opportunity/reject/${snapshot.data.data.applyInvite[index].id}',
-                                                                              {
-                                                                                'Content-Type':
-                                                                                "application/json",
-                                                                                "Authorization":
-                                                                                "Bearer $token"
-                                                                              }).then(
-                                                                                  (value) async {
-                                                                                showToast(context,
-                                                                                    'Volunteer Rejected');
-                                                                                Navigator.pop(context);
-                                                                                setState(() {});
-                                                                              });
-                                                                        });
-                                                                      } else {
-                                                                        SweetAlert.show(context,
-                                                                            subtitle: "Canceled!",
-                                                                            style: SweetAlertStyle
-                                                                                .error);
-                                                                      }
-                                                                      return false;
-                                                                    }
-                                                                    return null;
-                                                                  });
-                                                            },
-                                                            bgColor: Colors.white,
-                                                            child: Icon(
-                                                              Icons.cancel,
-                                                              color: Colors.red,
-                                                              size: 22,
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            width: 10,
-                                                          ),
-                                                          IconBox(
-                                                            onTap: () {
-                                                              SweetAlert.show(context,
-                                                                  subtitle: "Are you sure?",
-                                                                  style:
-                                                                  SweetAlertStyle.confirm,
-                                                                  showCancelButton: true,
-                                                                  onPress: (bool isConfirm) {
-                                                                    if (isConfirm) {
-                                                                      //Return false to keep dialog
-                                                                      if (isConfirm) {
-                                                                        SweetAlert.show(context,
-                                                                            subtitle: "Loading",
-                                                                            style: SweetAlertStyle
-                                                                                .loading);
-                                                                        new Future.delayed(
-                                                                            new Duration(
-                                                                                seconds: 1), () {
-                                                                          getRequestWithoutParam(
-                                                                              '/api/v1/opportunity/hired/${snapshot.data.data.applyInvite[index].id}',
-                                                                              {
-                                                                                'Content-Type':
-                                                                                "application/json",
-                                                                                "Authorization":
-                                                                                "Bearer $token"
-                                                                              }).then(
-                                                                                  (value) async {
-                                                                                showToast(context,
-                                                                                    'Volunteer Hired');
-                                                                                Navigator.pop(context);
-                                                                                setState(() {});
-                                                                              });
-                                                                        });
-                                                                      } else {
-                                                                        SweetAlert.show(context,
-                                                                            subtitle: "Canceled!",
-                                                                            style: SweetAlertStyle
-                                                                                .error);
-                                                                      }
-                                                                      return false;
-                                                                    }
-                                                                    return null;
-                                                                  });
-                                                            },
-                                                            bgColor: Colors.white,
-                                                            child: Icon(
-                                                              Icons.check_circle,
-                                                              color: Colors.green,
-                                                              size: 22,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-
-                                                  )
-                                                      :ListTile(
-                                                    leading: InkWell(
-                                                      onTap: (){
-                                                        Get.to(() => CommonProfile(
-                                                          id: snapshot.data.data.applyInvite[index].volunteerId,
-                                                        ));
-                                                      },
-                                                      child: CircleAvatar(
-                                                        backgroundImage:
-                                                        NetworkImage(
-                                                            snapshot
-                                                                .data
-                                                                .data.applyInvite[index].volunteerImage),
-                                                        radius: 20,
-                                                      ),
-                                                    ),
-                                                    title: InkWell(
-                                                      onTap: (){
-                                                        Get.to(() => CommonProfile(
-                                                          id: snapshot.data.data.applyInvite[index].volunteerId,
-                                                        ));
-                                                      },
-                                                      child: Text(snapshot
-                                                          .data
-                                                          .data.applyInvite[index].volunteerName,style: TextStyle(overflow: TextOverflow.ellipsis),),
-                                                    ),
-                                                    subtitle: Text(
-                                                        snapshot
-                                                            .data
-                                                            .data
-                                                            .applyInvite[index].location.toString(),
-                                                        style: TextStyle(fontSize: 14)),
-                                                    trailing: Container(
-                                                      width: 80,
-                                                      height: 30,
-                                                      margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                                      decoration: BoxDecoration(
-                                                        color:  Colors.black12,
-                                                        borderRadius:
-                                                        BorderRadius.all(Radius.circular(20)),
-                                                      ),
-                                                      child: Center(
-                                                          child: Text(
-                                                              snapshot.data.data.applyInvite[index].status.toUpperCase(),
-                                                              style: TextStyle(
-                                                                  fontWeight: FontWeight.bold,
-                                                                  fontSize: 13,
-                                                                  color: Colors.black38))),
-                                                    ),
-
-                                                  )),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    )
-                                        :Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(
-                                                20.0) //                 <--- border radius here
-                                        ),
-                                      ),
-                                      child: Center(
-                                          child: Text(
-                                            "No one applied or invited.",
-                                            style: TextStyle(
-                                                color: Colors.grey),
-                                          )),
-                                    )
-                                        : Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(
-                                                  20.0) //                 <--- border radius here
-                                          ),
-                                        ),
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            children: [
-                                              SizedBox(
-                                                height: 40,
-                                              ),
-                                              Container(
-                                                height: 95,
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    Get.to(() =>
-                                                        CommonProfile(
-                                                          id: snapshot
-                                                              .data
-                                                              .data
-                                                              .volunteer
-                                                              .id,
-                                                        ));
-                                                  },
-                                                  child: CachedNetworkImage(
-                                                    imageUrl:  snapshot
+                                                ),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      10.0),
+                                                  child: ListView.builder(
+                                                    scrollDirection:
+                                                        Axis.vertical,
+                                                    shrinkWrap: true,
+                                                    itemCount: snapshot
                                                         .data
                                                         .data
-                                                        .volunteer
-                                                        .image,
-                                                    imageBuilder: (context, imageProvider) =>
-                                                        Container(
-                                                          width: 95.0,
-                                                          height: 95.0,
-                                                          decoration: BoxDecoration(
-                                                            shape: BoxShape.circle,
-                                                            image: DecorationImage(
-                                                                image: imageProvider, fit: BoxFit.cover),
-                                                          ),
-                                                        ),
-                                                    placeholder: (context, url) => Icon(
-                                                        Icons.downloading_rounded,
-                                                        size: 40,
-                                                        color: Colors.grey),
-                                                    errorWidget: (context, url, error) => Icon(
-                                                      Icons.image_outlined,
-                                                      size: 40,
-                                                      color: Colors.grey,
-                                                    ),
+                                                        .applyInvite
+                                                        .length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(5.0),
+                                                        child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color:
+                                                                  Colors.white,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20),
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                  color: Colors
+                                                                      .grey
+                                                                      .withOpacity(
+                                                                          0.5),
+                                                                  spreadRadius:
+                                                                      -1,
+                                                                  blurRadius: 4,
+                                                                  offset: Offset(
+                                                                      -1,
+                                                                      0), // changes position of shadow
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            child: snapshot
+                                                                        .data
+                                                                        .data
+                                                                        .applyInvite[
+                                                                            index]
+                                                                        .status ==
+                                                                    "applied"
+                                                                ? ListTile(
+                                                                    leading:
+                                                                        InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        Get.to(() =>
+                                                                            CommonProfile(
+                                                                              id: snapshot.data.data.applyInvite[index].volunteerId,
+                                                                            ));
+                                                                      },
+                                                                      child:
+                                                                          CircleAvatar(
+                                                                        backgroundImage: NetworkImage(snapshot
+                                                                            .data
+                                                                            .data
+                                                                            .applyInvite[index]
+                                                                            .volunteerImage),
+                                                                        radius:
+                                                                            20,
+                                                                      ),
+                                                                    ),
+                                                                    title:
+                                                                        InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        Get.to(() =>
+                                                                            CommonProfile(
+                                                                              id: snapshot.data.data.applyInvite[index].volunteerId,
+                                                                            ));
+                                                                      },
+                                                                      child:
+                                                                          Text(
+                                                                        snapshot
+                                                                            .data
+                                                                            .data
+                                                                            .applyInvite[index]
+                                                                            .volunteerName,
+                                                                        style: TextStyle(
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis),
+                                                                      ),
+                                                                    ),
+                                                                    subtitle: Text(
+                                                                        snapshot
+                                                                            .data
+                                                                            .data
+                                                                            .applyInvite[
+                                                                                index]
+                                                                            .location,
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                14)),
+                                                                    trailing:
+                                                                        SizedBox(
+                                                                      width: 80,
+                                                                      child:
+                                                                          Row(
+                                                                        children: [
+                                                                          IconBox(
+                                                                            onTap:
+                                                                                () {
+                                                                              SweetAlert.show(context, subtitle: "Are you sure?", style: SweetAlertStyle.confirm, showCancelButton: true, onPress: (bool isConfirm) {
+                                                                                if (isConfirm) {
+                                                                                  SweetAlert.show(context, subtitle: "Loading...", style: SweetAlertStyle.loading);
+                                                                                  //Return false to keep dialog
+                                                                                  if (isConfirm) {
+                                                                                    new Future.delayed(new Duration(seconds: 1), () {
+                                                                                      getRequestWithoutParam('/api/v1/opportunity/reject/${snapshot.data.data.applyInvite[index].id}', {
+                                                                                        'Content-Type': "application/json",
+                                                                                        "Authorization": "Bearer $token"
+                                                                                      }).then((value) async {
+                                                                                        showToast(context, 'Volunteer Rejected');
+                                                                                        Navigator.pop(context);
+                                                                                        setState(() {});
+                                                                                      });
+                                                                                    });
+                                                                                  } else {
+                                                                                    SweetAlert.show(context, subtitle: "Canceled!", style: SweetAlertStyle.error);
+                                                                                  }
+                                                                                  return false;
+                                                                                }
+                                                                                return null;
+                                                                              });
+                                                                            },
+                                                                            bgColor:
+                                                                                Colors.white,
+                                                                            child:
+                                                                                Icon(
+                                                                              Icons.cancel,
+                                                                              color: Colors.red,
+                                                                              size: 22,
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                10,
+                                                                          ),
+                                                                          IconBox(
+                                                                            onTap:
+                                                                                () {
+                                                                              SweetAlert.show(context, subtitle: "Are you sure?", style: SweetAlertStyle.confirm, showCancelButton: true, onPress: (bool isConfirm) {
+                                                                                if (isConfirm) {
+                                                                                  //Return false to keep dialog
+                                                                                  if (isConfirm) {
+                                                                                    SweetAlert.show(context, subtitle: "Loading", style: SweetAlertStyle.loading);
+                                                                                    new Future.delayed(new Duration(seconds: 1), () {
+                                                                                      getRequestWithoutParam('/api/v1/opportunity/hired/${snapshot.data.data.applyInvite[index].id}', {
+                                                                                        'Content-Type': "application/json",
+                                                                                        "Authorization": "Bearer $token"
+                                                                                      }).then((value) async {
+                                                                                        showToast(context, 'Volunteer Hired');
+                                                                                        Navigator.pop(context);
+                                                                                        setState(() {});
+                                                                                      });
+                                                                                    });
+                                                                                  } else {
+                                                                                    SweetAlert.show(context, subtitle: "Canceled!", style: SweetAlertStyle.error);
+                                                                                  }
+                                                                                  return false;
+                                                                                }
+                                                                                return null;
+                                                                              });
+                                                                            },
+                                                                            bgColor:
+                                                                                Colors.white,
+                                                                            child:
+                                                                                Icon(
+                                                                              Icons.check_circle,
+                                                                              color: Colors.green,
+                                                                              size: 22,
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                : ListTile(
+                                                                    leading:
+                                                                        InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        Get.to(() =>
+                                                                            CommonProfile(
+                                                                              id: snapshot.data.data.applyInvite[index].volunteerId,
+                                                                            ));
+                                                                      },
+                                                                      child:
+                                                                          CircleAvatar(
+                                                                        backgroundImage: NetworkImage(snapshot
+                                                                            .data
+                                                                            .data
+                                                                            .applyInvite[index]
+                                                                            .volunteerImage),
+                                                                        radius:
+                                                                            20,
+                                                                      ),
+                                                                    ),
+                                                                    title:
+                                                                        InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        Get.to(() =>
+                                                                            CommonProfile(
+                                                                              id: snapshot.data.data.applyInvite[index].volunteerId,
+                                                                            ));
+                                                                      },
+                                                                      child:
+                                                                          Text(
+                                                                        snapshot
+                                                                            .data
+                                                                            .data
+                                                                            .applyInvite[index]
+                                                                            .volunteerName,
+                                                                        style: TextStyle(
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis),
+                                                                      ),
+                                                                    ),
+                                                                    subtitle: Text(
+                                                                        snapshot
+                                                                            .data
+                                                                            .data
+                                                                            .applyInvite[
+                                                                                index]
+                                                                            .location
+                                                                            .toString(),
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                14)),
+                                                                    trailing:
+                                                                        Container(
+                                                                      width: 80,
+                                                                      height:
+                                                                          30,
+                                                                      margin: EdgeInsets
+                                                                          .fromLTRB(
+                                                                              0,
+                                                                              0,
+                                                                              0,
+                                                                              5),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: Colors
+                                                                            .black12,
+                                                                        borderRadius:
+                                                                            BorderRadius.all(Radius.circular(20)),
+                                                                      ),
+                                                                      child: Center(
+                                                                          child: Text(
+                                                                              snapshot.data.data.applyInvite[index].status.toUpperCase(),
+                                                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.black38))),
+                                                                    ),
+                                                                  )),
+                                                      );
+                                                    },
                                                   ),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .center,
+                                              )
+                                            : Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(
+                                                          20.0) //                 <--- border radius here
+                                                      ),
+                                                ),
+                                                child: Center(
+                                                    child: Text(
+                                                  "No one applied or invited.",
+                                                  style: TextStyle(
+                                                      color: Colors.grey),
+                                                )),
+                                              )
+                                        : Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(
+                                                      20.0) //                 <--- border radius here
+                                                  ),
+                                            ),
+                                            child: SingleChildScrollView(
+                                              child: Column(
                                                 children: [
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        snapshot
+                                                  SizedBox(
+                                                    height: 40,
+                                                  ),
+                                                  Container(
+                                                    height: 95,
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        Get.to(
+                                                            () => CommonProfile(
+                                                                  id: snapshot
+                                                                      .data
+                                                                      .data
+                                                                      .volunteer
+                                                                      .id,
+                                                                ));
+                                                      },
+                                                      child: CachedNetworkImage(
+                                                        imageUrl: snapshot
                                                             .data
                                                             .data
                                                             .volunteer
-                                                            .firstName +
-                                                            " " +
-                                                            snapshot
-                                                                .data
-                                                                .data
-                                                                .volunteer
-                                                                .lastName,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .bold,
-                                                            fontSize:
-                                                            22,
-                                                            color: Colors
-                                                                .black),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .center,
-                                                children: [
-                                                  Icon(
-                                                    Icons
-                                                        .location_on_rounded,
-                                                    size: 13,
-                                                  ),
-                                                  Text(
-                                                    snapshot.data.data
-                                                        .volunteer.state
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors
-                                                            .black),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 15,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceAround,
-                                                children: [
-                                                  widget.friendId !=
-                                                      null &&
-                                                      snapshot
-                                                          .data
-                                                          .data
-                                                          .status ==
-                                                          'Hired' ||
-                                                      snapshot
-                                                          .data
-                                                          .data
-                                                          .status ==
-                                                          'invitation'
-                                                      ? Column(
-                                                        children: [
-                                                          Badge(
-                                                    elevation: 0,
-                                                    position: BadgePosition
-                                                            .topEnd(
-                                                            end:
-                                                            -4,
-                                                            top:
-                                                            -4),
-                                                    padding:
-                                                    EdgeInsetsDirectional
-                                                            .only(
-                                                            end: 0),
-                                                    badgeColor: Colors
-                                                            .transparent,
-                                                    badgeContent: Icon(
-                                                            Icons
-                                                                .fiber_manual_record,
-                                                            size:
-                                                            17.0,
-                                                            color: widget.isRead ==
-                                                                false
-                                                                ? Colors
-                                                                .lightBlue
-                                                                : Colors
-                                                                .transparent),
-                                                    child:
-                                                    IconBox(
-                                                          child: Icon(
-                                                            Icons
-                                                                .forum,
-                                                            color:
-                                                            primaryColor,
-                                                            size: 25,
+                                                            .image,
+                                                        imageBuilder: (context,
+                                                                imageProvider) =>
+                                                            Container(
+                                                          width: 95.0,
+                                                          height: 95.0,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            image: DecorationImage(
+                                                                image:
+                                                                    imageProvider,
+                                                                fit: BoxFit
+                                                                    .cover),
                                                           ),
-                                                          onTap: () {
-                                                            Get.to(() => ChatUi(
-                                                                uid:
-                                                                uid,
-                                                                friendId: widget
-                                                                    .friendId,
-                                                                friendName: widget
-                                                                    .friendName,
-                                                                friendImage: widget
-                                                                    .friendImage,
-                                                                isOnline:
-                                                                widget.isOnline));
-                                                          },
-                                                          bgColor: Colors
-                                                              .white,
+                                                        ),
+                                                        placeholder: (context,
+                                                                url) =>
+                                                            Icon(
+                                                                Icons
+                                                                    .downloading_rounded,
+                                                                size: 40,
+                                                                color: Colors
+                                                                    .grey),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            Icon(
+                                                          Icons.image_outlined,
+                                                          size: 40,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
-                                                          SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Text("Chat",
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                14,
-                                                                color: Colors
-                                                                    .black),)
-                                                        ],
-                                                      )
-                                                      : Column(
-                                                    children: [
-                                                      Text(
-                                                          snapshot
-                                                              .data
-                                                              .data
-                                                              .volunteer
-                                                              .city,
-                                                          style: TextStyle(
-                                                              fontSize:
-                                                              15,
-                                                              fontWeight:
-                                                              FontWeight.bold,
-                                                              color: Colors.black)),
-                                                      Text("City",
-                                                          style: TextStyle(
-                                                              fontSize:
-                                                              14,
-                                                              color:
-                                                              Colors.black)),
-                                                    ],
+                                                  SizedBox(
+                                                    height: 5,
                                                   ),
-                                                  Column(
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: [
                                                       Row(
                                                         children: [
                                                           Text(
                                                             snapshot
-                                                                .data
-                                                                .data
-                                                                .volunteer
-                                                                .profileRating
-                                                                .toString(),
+                                                                    .data
+                                                                    .data
+                                                                    .volunteer
+                                                                    .firstName +
+                                                                " " +
+                                                                snapshot
+                                                                    .data
+                                                                    .data
+                                                                    .volunteer
+                                                                    .lastName,
                                                             style: TextStyle(
-                                                                fontSize:
-                                                                15,
                                                                 fontWeight:
-                                                                FontWeight
-                                                                    .bold,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 22,
                                                                 color: Colors
                                                                     .black),
                                                           ),
-                                                          Icon(
-                                                            Icons.star,
-                                                            color: Colors
-                                                                .amber,
-                                                            size: 16,
-                                                          )
                                                         ],
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(top:17),
-                                                        child: Text(
-                                                          "Rating",
-                                                          style: TextStyle(
-                                                              fontSize:
-                                                              14,
-                                                              color: Colors
-                                                                  .black),
-                                                        ),
                                                       ),
                                                     ],
                                                   ),
-                                                  Column(
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: [
-                                                      Text(
-                                                          snapshot
-                                                              .data
-                                                              .data
-                                                              .volunteer
-                                                              .gender,
-                                                          style: TextStyle(
-                                                              fontSize:
-                                                              15,
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold,
-                                                              color: Colors
-                                                                  .black)),
-                                                      SizedBox(
-                                                        height: 17,
+                                                      Icon(
+                                                        Icons
+                                                            .location_on_rounded,
+                                                        size: 13,
                                                       ),
-                                                      Text("Gender",
-                                                          style: TextStyle(
-                                                              fontSize:
-                                                              14,
-                                                              color: Colors
-                                                                  .black)),
+                                                      Text(
+                                                        snapshot.data.data
+                                                            .volunteer.state
+                                                            .toString(),
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
+                                                    children: [
+                                                      widget.friendId != null &&
+                                                                  snapshot
+                                                                          .data
+                                                                          .data
+                                                                          .status ==
+                                                                      'Hired' ||
+                                                              snapshot.data.data
+                                                                      .status ==
+                                                                  'invitation'||snapshot.data.data
+                                                          .status ==
+                                                          'Done'
+                                                          ? Column(
+                                                              children: [
+                                                                Badge(
+                                                                  elevation: 0,
+                                                                  position: BadgePosition
+                                                                      .topEnd(
+                                                                          end:
+                                                                              -4,
+                                                                          top:
+                                                                              -4),
+                                                                  padding:
+                                                                      EdgeInsetsDirectional
+                                                                          .only(
+                                                                              end: 0),
+                                                                  badgeColor: Colors
+                                                                      .transparent,
+                                                                  badgeContent: Icon(
+                                                                      Icons
+                                                                          .fiber_manual_record,
+                                                                      size:
+                                                                          17.0,
+                                                                      color: widget.isRead ==
+                                                                              false
+                                                                          ? Colors
+                                                                              .lightBlue
+                                                                          : Colors
+                                                                              .transparent),
+                                                                  child:
+                                                                      IconBox(
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .forum,
+                                                                      color:
+                                                                          primaryColor,
+                                                                      size: 25,
+                                                                    ),
+                                                                    onTap: () {
+                                                                      Get.to(() => ChatUi(
+                                                                          uid:
+                                                                              uid,
+                                                                          friendId: widget
+                                                                              .friendId,
+                                                                          friendName: widget
+                                                                              .friendName,
+                                                                          friendImage: widget
+                                                                              .friendImage,
+                                                                          isOnline:
+                                                                              widget.isOnline));
+                                                                    },
+                                                                    bgColor: Colors
+                                                                        .white,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 5,
+                                                                ),
+                                                                Text(
+                                                                  "Chat",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          14,
+                                                                      color: Colors
+                                                                          .black),
+                                                                )
+                                                              ],
+                                                            )
+                                                          : Column(
+                                                              children: [
+                                                                Text(
+                                                                    snapshot
+                                                                        .data
+                                                                        .data
+                                                                        .volunteer
+                                                                        .city,
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            15,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        color: Colors
+                                                                            .black)),
+                                                                Text("City",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        color: Colors
+                                                                            .black)),
+                                                              ],
+                                                            ),
+                                                      Column(
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              Text(
+                                                                snapshot
+                                                                    .data
+                                                                    .data
+                                                                    .volunteer
+                                                                    .profileRating
+                                                                    .toString(),
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color: Colors
+                                                                        .black),
+                                                              ),
+                                                              Icon(
+                                                                Icons.star,
+                                                                color: Colors
+                                                                    .amber,
+                                                                size: 16,
+                                                              )
+                                                            ],
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    top: 17),
+                                                            child: Text(
+                                                              "Rating",
+                                                              style: TextStyle(
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Column(
+                                                        children: [
+                                                          Text(
+                                                              snapshot
+                                                                  .data
+                                                                  .data
+                                                                  .volunteer
+                                                                  .gender,
+                                                              style: TextStyle(
+                                                                  fontSize: 15,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: Colors
+                                                                      .black)),
+                                                          SizedBox(
+                                                            height: 17,
+                                                          ),
+                                                          Text("Gender",
+                                                              style: TextStyle(
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .black)),
+                                                        ],
+                                                      )
                                                     ],
                                                   )
                                                 ],
-                                              )
-                                            ],
-                                          ),
-                                        )),
+                                              ),
+                                            )),
                                     Container(
                                         child: Column(
                                       children: [
@@ -1123,7 +1301,8 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails> {
                                                                 .data
                                                                 .eligibility[
                                                                     index]
-                                                                .title.toString()),
+                                                                .title
+                                                                .toString()),
                                                             subtitle: snapshot
                                                                             .data
                                                                             .data
@@ -1252,11 +1431,10 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails> {
                                             slug: snapshot
                                                 .data.data.category.slug,
                                             eligibility: eligibility,
-                                            other:snapshot
-                                                .data
-                                                .data
-                                                .otherEligibility,
-                                            country:  snapshot.data.data.country.id,
+                                            other: snapshot
+                                                .data.data.otherEligibility,
+                                            country:
+                                                snapshot.data.data.country.id,
                                             city: snapshot.data.data.city.id,
                                             state: snapshot.data.data.state.id,
                                             zip: snapshot.data.data.zipCode,
@@ -1270,41 +1448,378 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails> {
                               ),
                             ),
                           )
-                        : SizedBox(
-                      height: 50,
-                      width: MediaQuery.of(context)
-                          .size
-                          .width /
-                          2.2,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.red.shade500,
-                          // shape: RoundedRectangleBorder(
-                          //     borderRadius:
-                          //     BorderRadius.circular(13)),
-                        ),
-                        onPressed: () {
-                          getRequestWithoutParam(
-                              '/api/v1/cancel-hiring/${snapshot.data.data.applyId}',
-                              {
-                                'Content-Type':
-                                "application/json",
-                                "Authorization":
-                                "Bearer $token"
-                              }).then((value) async {
-                            Navigator.pop(context);
-                            showToast(context,
-                                'Application Cancelled');
-                          });
-                        },
-                        child: Text(
-                          "Cancel",
-                          style: GoogleFonts.kanit(
-                              color: Colors.white,
-                              fontSize: 18),
-                        ),
-                      ),
-                    ),
+                        : snapshot.data.data.status == "Done"
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 50,
+                                    width:
+                                        MediaQuery.of(context).size.width / 2.2,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.red.shade500,
+                                        // shape: RoundedRectangleBorder(
+                                        //     borderRadius:
+                                        //     BorderRadius.circular(13)),
+                                      ),
+                                      onPressed: () {
+                                        SweetAlert.show(context,
+                                            title: "Are you sure?",
+                                            style: SweetAlertStyle.confirm,
+                                            showCancelButton: true,
+                                            onPress: (bool isConfirm) {
+                                          if (isConfirm) {
+                                            //Return false to keep dialog
+                                            if (isConfirm) {
+                                              new Future.delayed(
+                                                  new Duration(seconds: 1), () {
+                                                getRequestWithoutParam(
+                                                    '/api/v1/cancel-task-complete/${snapshot.data.data.applyId}',
+                                                    {
+                                                      'Content-Type':
+                                                          "application/json",
+                                                      "Authorization":
+                                                          "Bearer $token"
+                                                    }).then((value) async {
+                                                  Navigator.pop(context);
+                                                  showToast(context,
+                                                      'Request Canceled');
+                                                });
+                                              });
+                                            } else {
+                                              SweetAlert.show(context,
+                                                  subtitle: "Canceled!",
+                                                  style: SweetAlertStyle.error);
+                                            }
+                                            return false;
+                                          }
+                                          return null;
+                                        });
+                                      },
+                                      child: Text(
+                                        "Cancel",
+                                        style: GoogleFonts.kanit(
+                                            color: Colors.white, fontSize: 18),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                    width:
+                                        MediaQuery.of(context).size.width / 2.2,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.green,
+                                      ),
+                                      onPressed: () {
+                                        SweetAlert.show(context,
+                                            subtitle: "Are you sure?",
+                                            style: SweetAlertStyle.confirm,
+                                            showCancelButton: true,
+                                            onPress: (bool isConfirm) {
+                                          if (isConfirm) {
+                                            //Return false to keep dialog
+                                            if (isConfirm) {
+                                              new Future.delayed(
+                                                  new Duration(seconds: 1), () {
+                                                getRequestWithoutParam(
+                                                    '/api/v1/recruiter-task-complete/${widget.id}',
+                                                    {
+                                                      'Content-Type':
+                                                          "application/json",
+                                                      "Authorization":
+                                                          "Bearer ${token}"
+                                                    }).then((value) async {
+                                                  SweetAlert.show(context,
+                                                      title:
+                                                          "Your Task is completed",
+                                                      subtitle:
+                                                          "Do you want to rate? ",
+                                                      style: SweetAlertStyle
+                                                          .success,
+                                                      showCancelButton: true,
+                                                      onPress:
+                                                          (bool isConfirm) {
+                                                    if (isConfirm) {
+                                                      if (isConfirm) {
+                                                        showDialog(
+                                                            context: context,
+                                                            barrierDismissible:
+                                                                false,
+                                                            builder: (context) {
+                                                              return Dialog(
+                                                                shape: RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.all(
+                                                                            Radius.circular(15))),
+                                                                child:
+                                                                    Container(
+                                                                  height: 350,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .all(
+                                                                      Radius.circular(
+                                                                          15),
+                                                                    ),
+                                                                  ),
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .min,
+                                                                    children: [
+                                                                      TabBar(
+                                                                        controller:
+                                                                            _tabController,
+                                                                        unselectedLabelColor:
+                                                                            Colors.grey,
+                                                                        unselectedLabelStyle: TextStyle(
+                                                                            fontWeight: FontWeight
+                                                                                .w600,
+                                                                            fontSize:
+                                                                                16,
+                                                                            color: Color.fromRGBO(
+                                                                                142,
+                                                                                142,
+                                                                                142,
+                                                                                1)),
+                                                                        labelColor:
+                                                                            Colors.blue,
+                                                                        labelStyle:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
+                                                                        ),
+                                                                        tabs: [
+                                                                          Tab(
+                                                                            child:
+                                                                                Text(
+                                                                              "Review",
+                                                                            ),
+                                                                          ),
+                                                                          Tab(
+                                                                            child:
+                                                                                Text(
+                                                                              "Report",
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Expanded(
+                                                                        child:
+                                                                            TabBarView(
+                                                                          controller:
+                                                                              _tabController,
+                                                                          children: [
+                                                                            SingleChildScrollView(
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Column(
+                                                                                  children: [
+                                                                                    CachedNetworkImage(
+                                                                                        imageUrl: snapshot.data.data.volunteer.image,
+                                                                                        imageBuilder: (context, imageProvider) => Container(
+                                                                                              width: 80.0,
+                                                                                              height: 80.0,
+                                                                                              decoration: BoxDecoration(
+                                                                                                shape: BoxShape.circle,
+                                                                                                image: DecorationImage(image: imageProvider, fit: BoxFit.fitHeight),
+                                                                                              ),
+                                                                                            )),
+                                                                                    Text(
+                                                                                      snapshot.data.data.volunteer.firstName,
+                                                                                      textAlign: TextAlign.center,
+                                                                                    ),
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(5.0),
+                                                                                      child: Text(
+                                                                                        'Rate ${snapshot.data.data.volunteer.firstName} and tell him what you think.',
+                                                                                        style: TextStyle(fontSize: 16),
+                                                                                      ),
+                                                                                    ),
+                                                                                    RatingBar.builder(
+                                                                                      itemSize: 35,
+                                                                                      minRating: 1,
+                                                                                      direction: Axis.horizontal,
+                                                                                      itemCount: 5,
+                                                                                      itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                                                                      itemBuilder: (context, _) => Icon(
+                                                                                        Icons.star,
+                                                                                        color: Colors.amber,
+                                                                                      ),
+                                                                                      onRatingUpdate: (rating) {
+                                                                                        rate(rating.toInt(), widget.id);
+                                                                                      },
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      height: 10,
+                                                                                    ),
+                                                                                    TextFormField(
+                                                                                        controller: reviewController,
+                                                                                        keyboardType: TextInputType.multiline,
+                                                                                        textInputAction: TextInputAction.done,
+                                                                                        maxLines: null,
+                                                                                        textAlign: TextAlign.center,
+                                                                                        decoration: InputDecoration(
+                                                                                          hintText: "Share your experience",
+                                                                                          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
+                                                                                          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
+                                                                                        )),
+                                                                                    FlatButton(
+                                                                                      child: new Text(
+                                                                                        'Submit',
+                                                                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                                                                      ),
+                                                                                      onPressed: () {
+                                                                                        reviewController.text != '' ? review(reviewController.text.toString(), widget.id) : Navigator.popUntil(context, (route) => count++ == 3);
+                                                                                        setState(() {});
+                                                                                      },
+                                                                                    )
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Column(
+                                                                                children: [
+                                                                                  Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                                    children: [
+                                                                                      Icon(
+                                                                                        Icons.warning_rounded,
+                                                                                        color: Colors.red,
+                                                                                      ),
+                                                                                      SizedBox(
+                                                                                        width: 5,
+                                                                                      ),
+                                                                                      Text('Report to admin'),
+                                                                                    ],
+                                                                                  ),
+                                                                                  SizedBox(
+                                                                                    height: 10,
+                                                                                  ),
+                                                                                  TextFormField(
+                                                                                    textInputAction: TextInputAction.done,
+                                                                                    controller: reportController,
+                                                                                    decoration: ThemeHelper().textInputDecoration('Subject'),
+                                                                                  ),
+                                                                                  SizedBox(
+                                                                                    height: 10,
+                                                                                  ),
+                                                                                  Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                                                    children: [
+                                                                                      SizedBox(
+                                                                                        width: 5,
+                                                                                      ),
+                                                                                      Text('Details'),
+                                                                                    ],
+                                                                                  ),
+                                                                                  TextFormField(
+                                                                                    textInputAction: TextInputAction.done,
+                                                                                    controller: detailsController,
+                                                                                    maxLines: 4,
+                                                                                    decoration: ThemeHelper().textInputDecoration(),
+                                                                                  ),
+                                                                                  SizedBox(
+                                                                                    height: 10,
+                                                                                  ),
+                                                                                  FlatButton(
+                                                                                    child: new Text('Submit', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                                                                    onPressed: () {
+                                                                                      reportController.text != '' ? report(reportController.text.toString(), detailsController.text.toString(), widget.id) : Navigator.popUntil(context, (route) => count++ == 3);
+                                                                                    },
+                                                                                  )
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            });
+                                                      } else {
+                                                        SweetAlert.show(context,
+                                                            subtitle:
+                                                                "Canceled!",
+                                                            style:
+                                                                SweetAlertStyle
+                                                                    .error);
+                                                      }
+                                                      return false;
+                                                    }
+                                                    Navigator.popUntil(
+                                                        context,
+                                                        (route) =>
+                                                            count++ == 1);
+                                                    print("hello");
+                                                    return null;
+                                                  });
+                                                });
+                                              });
+                                            } else {
+                                              SweetAlert.show(context,
+                                                  subtitle: "Canceled!",
+                                                  style: SweetAlertStyle.error);
+                                            }
+                                            return false;
+                                          }
+                                          return null;
+                                        });
+                                      },
+                                      child: Text(
+                                        "Complete",
+                                        style: GoogleFonts.kanit(
+                                            color: Colors.white, fontSize: 18),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : SizedBox(
+                                height: 50,
+                                width: MediaQuery.of(context).size.width / 2.2,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.red.shade500,
+                                    // shape: RoundedRectangleBorder(
+                                    //     borderRadius:
+                                    //     BorderRadius.circular(13)),
+                                  ),
+                                  onPressed: () {
+                                    getRequestWithoutParam(
+                                        '/api/v1/cancel-hiring/${snapshot.data.data.applyId}',
+                                        {
+                                          'Content-Type': "application/json",
+                                          "Authorization": "Bearer $token"
+                                        }).then((value) async {
+                                      Navigator.pop(context);
+                                      showToast(
+                                          context, 'Application Cancelled');
+                                    });
+                                  },
+                                  child: Text(
+                                    "Cancel",
+                                    style: GoogleFonts.kanit(
+                                        color: Colors.white, fontSize: 18),
+                                  ),
+                                ),
+                              ),
                   ),
                 ],
               ),

@@ -71,6 +71,7 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                   builder: (context) => OrganizationHome(
+                      data:data['result']['data'],
                       id: data['result']['data']['id'],
                       role: data['result']['data']['role'])),
                   (Route<dynamic> route) => false);
@@ -123,10 +124,6 @@ class _LoginPageState extends State<LoginPage> {
   void roleRoute(String role) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString("role", role);
-  }
-  void bannerRoute(List<String> banner) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    await pref.setStringList("banner", banner);
   }
 
   bool _obscured = true;
@@ -299,24 +296,15 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   ),
                                   onPressed: () async{
-                                    getRequest('/api/v1/organization/opportunity/banner-list', null, {
-                                      'Content-Type': "application/json",
-                                    }).then((value) async {
-                                       List<String> banner = [];
-                                      for(Map map in value["data"]){
-                                        banner.add(map["banner"]);
-                                      }
-                                      if (_formKey.currentState.validate()) {
-                                        setState(() {
-                                          isApiCallProcess = true;
-                                        });
-                                        signin(
-                                          emailController.text.toString(),
-                                          passwordController.text.toString(),
-                                        );
-                                      }
-
-                                    });
+                                    if (_formKey.currentState.validate()) {
+                                      setState(() {
+                                        isApiCallProcess = true;
+                                      });
+                                      signin(
+                                        emailController.text.toString(),
+                                        passwordController.text.toString(),
+                                      );
+                                    }
                                   },
                                 ),
                               ),

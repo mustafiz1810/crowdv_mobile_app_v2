@@ -38,6 +38,7 @@ class Data {
     this.name,
     this.email,
     this.phone,
+    this.country,
     this.state,
     this.city,
     this.zipCode,
@@ -52,10 +53,11 @@ class Data {
   String name;
   String email;
   String phone;
-  dynamic state;
-  dynamic city;
+  String country;
+  String state;
+  String city;
   dynamic zipCode;
-  dynamic logo;
+  String logo;
   dynamic facebook;
   dynamic website;
   dynamic linkedin;
@@ -66,6 +68,7 @@ class Data {
     name: json["name"],
     email: json["email"],
     phone: json["phone"],
+    country: json["country"],
     state: json["state"],
     city: json["city"],
     zipCode: json["zip_code"],
@@ -81,6 +84,7 @@ class Data {
     "name": name,
     "email": email,
     "phone": phone,
+    "country": country,
     "state": state,
     "city": city,
     "zip_code": zipCode,

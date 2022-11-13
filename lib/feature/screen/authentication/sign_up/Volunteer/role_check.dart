@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
+import 'package:crowdv_mobile_app/feature/screen/Organization/home.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/header_widget.dart';
-import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/progres_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,17 +20,20 @@ class RoleCheck extends StatefulWidget {
     return _RoleCheckState();
   }
 }
+class Role {
+  const Role(this.value,this.text);
 
+  final String value;
+  final String text;
+}
 class _RoleCheckState extends State<RoleCheck> {
-  String _dropdown;
-  List<String> _item = ["volunteer", "recruiter"];
-  int selectedIndex = 0;
-  String selectedValue = "";
+  Role selectedUser;
+  List<Role> users = <Role>[const Role('volunteer','Volunteer'), const Role('recruiter','Individual Recruiter',),const Role('organization','Organizational Recruiter')];
   final _auth = FirebaseAuth.instance;
   void role(String uid) async {
     try {
       Response response = await post(Uri.parse(
-          NetworkConstants.BASE_URL + 'role/${widget.id}/$_dropdown'),
+          NetworkConstants.BASE_URL + 'role/${widget.id}/${selectedUser.value}'),
         headers: {
           "Accept": "application/json"
         },
@@ -40,27 +43,45 @@ class _RoleCheckState extends State<RoleCheck> {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         print(data);
-        final newUser = await _auth.signInWithEmailAndPassword(email: widget.email.trim(), password: widget.password);
-        if (newUser != null) {
-        uidRoute(widget.uid);
-        pageRoute(widget.token.toString());
-        idRoute(data['data']['id']);
-        roleRoute(data['data']['role']);
-        setState(() {
-          isApiCallProcess = false;
-        });
-        showToast(context, data['message']);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => HomeScreen(
-                id: data['data']['id'],
-                role: data['data']['role'],),),
-        );}
+        if(data['data']['role'] != "organization")
+        {
+          final newUser = await _auth.signInWithEmailAndPassword(email: widget.email.trim(), password: widget.password);
+          if (newUser != null) {
+            uidRoute(widget.uid);
+            pageRoute(widget.token.toString());
+            idRoute(data['data']['id']);
+            roleRoute(data['data']['role']);
+            setState(() {
+              isApiCallProcess = false;
+            });
+            showToast(context, data['message']);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => HomeScreen(
+                      id: data['data']['id'],
+                      role: data['data']['role'],)),
+                    (Route<dynamic> route) => false);}
+        }
+        else{
+          pageRoute(widget.token.toString());
+          idRoute(data['data']['id']);
+          roleRoute(data['data']['role']);
+          setState(() {
+            isApiCallProcess = false;
+          });
+          showToast(context, data['message']);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) => OrganizationHome(
+                    id: data['data']['id'],
+                    role: data['data']['role'],)),
+                  (Route<dynamic> route) => false);
+        }
       }
       else {
         var data = jsonDecode(response.body.toString());
         showToast(context, data['message']);
+        print(data);
         setState(() {
           isApiCallProcess = false;
         });
@@ -176,65 +197,46 @@ class _RoleCheckState extends State<RoleCheck> {
                           padding:
                               EdgeInsets.symmetric(vertical: 2, horizontal: 15),
                           decoration: BoxDecoration(
-                              color: primaryColor,
-                              borderRadius: BorderRadius.circular(30)),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(color: Colors.grey, offset: Offset(0, 1), blurRadius: 1.8)
+                            ],),
                           child: Center(
-                            child: DropdownButton<String>(
-                                hint: Center(
-                                  child: Text(
-                                    'Select Role',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+                            child:  DropdownButton<Role>(
+                              underline: SizedBox(),
+                              hint: Center(
+                                child: Text(
+                                  'Select Role',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                value: _dropdown,
-                                isExpanded: true,
-                                // elevation: 5,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600),
-                                iconEnabledColor: Colors.white,
-                                items: _item.map<DropdownMenuItem<String>>(
-                                    (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                selectedItemBuilder: (BuildContext context) =>
-                                    _item
-                                        .map((e) => Center(
-                                              child: Text(
-                                                e,
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ))
-                                        .toList(),
-                                underline: Container(),
-                                // hint: Text(
-                                //   "Please choose a service",
-                                //   style: TextStyle(
-                                //       fontSize: 18,
-                                //       color: Colors.white,
-                                //       fontWeight: FontWeight.bold),
-                                // ),
-                                // icon: Icon(
-                                //   Icons.arrow_downward,
-                                //   color: Colors.yellow,
-                                // ),
-                                // isExpanded: true,
-                                onChanged: (String value) {
-                                  setState(() {
-                                    _dropdown = value;
-                                  });
-                                }),
+                              ),
+                              isExpanded: true,
+                              value: selectedUser,
+                              onChanged: (Role newValue) {
+                                setState(() {
+                                  selectedUser = newValue;
+                                  print(selectedUser.value);
+                                });
+                              },
+                              iconEnabledColor: Colors.black,
+                              items: users.map((Role user) {
+                                return new DropdownMenuItem<Role>(
+                                  value: user,
+                                  child: new Text(
+                                    user.text,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                      fontWeight:
+                                      FontWeight.bold),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
                           ),
                         ),
                         SizedBox(height: 40.0),

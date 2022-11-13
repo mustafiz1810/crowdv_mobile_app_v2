@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/recruiter_task_details.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/common_profile.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
+import 'package:crowdv_mobile_app/utils/view_utils/common_util.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:empty_widget/empty_widget.dart';
@@ -21,7 +22,6 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   @override
   void initState() {
-    print(widget.data);
     // TODO: implement initState
     super.initState();
   }
@@ -77,9 +77,11 @@ class _NotificationPageState extends State<NotificationPage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                  widget.data[index].data.status == "Gold"?CommonProfile(
+                                  widget.data[index].data.status == "Gold" ?
+                                  CommonProfile(
                                     id: widget.data[index].data.senderId,
-                                  ):widget.role == "volunteer"?
+                                  ):
+                                  widget.role == "volunteer"?
                                   VolunteerTaskDetails(
                                       role: widget.role,
                                       id: widget

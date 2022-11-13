@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:better_player/better_player.dart';
-import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
@@ -38,7 +37,6 @@ class _VideoScreenState extends State<VideoScreen> {
   void initState() {
     print(widget.length);
     var betterPlayerConfiguration = BetterPlayerConfiguration(
-      startAt: Duration(hours: 0,minutes: 5,seconds: 10),
       controlsConfiguration: BetterPlayerControlsConfiguration(
           // enableSkips: false,
           // enableProgressBarDrag: false,
@@ -55,7 +53,7 @@ class _VideoScreenState extends State<VideoScreen> {
     _betterPlayerController.setBetterPlayerGlobalKey(_betterPlayerKey);
     super.initState();
   }
-
+ bool watch = false;
   void train(duration, total) async {
     try {
       Response response = await post(
@@ -99,10 +97,10 @@ class _VideoScreenState extends State<VideoScreen> {
     if (_checkIfCanProcessPlayerEvent(event)) {
       Duration progress = event.parameters['progress'];
       Duration duration = event.parameters['duration'];
-      print(progress);
       if (progress == duration) {
-        print(duration);
         setState(() {
+          watch = true;
+          print(watch);
           train(progress.toString(), duration.toString());
         });
       }
@@ -157,12 +155,16 @@ class _VideoScreenState extends State<VideoScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  decoration: widget.index != 0
-                      ? ThemeHelper().buttonBoxDecoration(context)
-                      : ThemeHelper().buttonBoxDecoration(
-                      context, "#AAAAAA", "#AAAAAA"),
+                  height: 40,
+                  decoration: BoxDecoration(
+                      color: widget.index != 0?Colors.lightBlueAccent:Colors.grey,
+                      borderRadius: BorderRadius.circular(10)
+                  ),
                   child: ElevatedButton(
-                    style: ThemeHelper().buttonStyle(),
+                    style:ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
                     child: Row(
                       children: [
                         Icon(Icons.arrow_back_ios_rounded),
@@ -203,13 +205,17 @@ class _VideoScreenState extends State<VideoScreen> {
                   ),
                 ),
                 Container(
-                  decoration: widget.isWatched == true || widget.index == widget.length - 1
-                      ? ThemeHelper().buttonBoxDecoration(context)
-                      : ThemeHelper().buttonBoxDecoration(
-                      context, "#AAAAAA", "#AAAAAA"),
+                  height: 40,
+                  decoration: BoxDecoration(
+                      color:  widget.index != widget.length - 1 && watch == true?Colors.lightBlueAccent:Colors.grey,
+                      borderRadius: BorderRadius.circular(10)
+                  ),
                   child: ElevatedButton(
-                    style: ThemeHelper().buttonStyle(),
-                    child: Row(
+                    style:ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                    child:  Row(
                       children: [
                         Text("Next Lesson"),
                         SizedBox(
@@ -218,7 +224,7 @@ class _VideoScreenState extends State<VideoScreen> {
                         Icon(Icons.arrow_forward_ios_rounded),
                       ],
                     ),
-                    onPressed: widget.isWatched == true || widget.index == widget.length - 1
+                    onPressed: widget.index != widget.length - 1 && watch == true
                         ? () {
                       getRequest('/api/v1/next-video/${widget.id}', null, {
                         'Content-Type': "application/json",
@@ -281,7 +287,7 @@ class _VideoScreenState extends State<VideoScreen> {
                 ),
               ),
             ),
-            widget.index == widget.length - 1?Padding(
+            widget.index == widget.length - 1&& watch == true?Padding(
               padding: const EdgeInsets.all(20.0),
               child: SizedBox(
                 width: 250,

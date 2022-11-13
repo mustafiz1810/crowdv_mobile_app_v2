@@ -181,6 +181,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity>
         Uri.parse(NetworkConstants.BASE_URL + 'volunteer/own/tasks'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
+    print(data);
     if (response.statusCode == 200) {
       return VolunteerOpportunityModel.fromJson(data);
     } else {
@@ -291,6 +292,10 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity>
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       VolunteerTaskDetails(
+                                                        status:snapshot
+                                                            .data
+                                                            .data[index]
+                                                            .status,
                                                           isRead: isRead,
                                                           role: widget.role,
                                                           id: snapshot
@@ -457,7 +462,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity>
                                                                     seconds: 1),
                                                                 () {
                                                               getRequestWithoutParam(
-                                                                  '/api/v1/volunteer-request-for-task-complete/${snapshot.data.data[index].taskId}',
+                                                                  '/api/v1/volunteer-request-for-task-done/${snapshot.data.data[index].taskId}',
                                                                   {
                                                                     'Content-Type':
                                                                         "application/json",
@@ -468,7 +473,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity>
                                                                 SweetAlert.show(
                                                                     context,
                                                                     title:
-                                                                        "Your Task is completed",
+                                                                        "Your task is done",
                                                                     subtitle:
                                                                         "Do you want to rate? ",
                                                                     style: SweetAlertStyle

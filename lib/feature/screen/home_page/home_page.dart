@@ -204,6 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             onTap: () {
+                              print(snapshot.data.data.list);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

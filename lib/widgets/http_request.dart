@@ -5,8 +5,9 @@ import 'package:flutter_html/html_parser.dart';
 import 'package:http/http.dart' as http;
 
 Future getRequest(path, qparam, headers) async {
-  final response = await http
-      .get(Uri.https('system.getcrowdv.com', path, qparam), headers: headers);
+  final response = await http.get(Uri.https('system.getcrowdv.com', path, qparam),
+  //     final response = await http.get(Uri.http('192.168.68.126:8000', path, qparam),
+      headers: headers);
 
   // debugPrint(response.body);
 
@@ -17,16 +18,17 @@ Future getRequest(path, qparam, headers) async {
   } else {
     var data = json.decode(response.body);
     print(data);
-    data['error'].length != 0?
-    showToast(data['error']['errors'].toString()):showToast(data['message']);
+    data['error'].length != 0
+        ? showToast(data['error']['errors'].toString())
+        : showToast(data['message']);
     print(HtmlParser.parseHTML(response.body).body.innerHtml);
     throw Exception('Failed to load data');
   }
 }
 
 Future getRequestWithoutParam(path, headers) async {
-  final response =
-      await http.get(Uri.https('system.getcrowdv.com', path), headers: headers);
+      final response = await http.get(Uri.https('system.getcrowdv.com', path), headers: headers);
+  // final response = await http.get(Uri.http('192.168.68.126:8000', path), headers: headers);
 
   // debugPrint(response.body);
 
@@ -36,8 +38,9 @@ Future getRequestWithoutParam(path, headers) async {
   } else {
     var data = json.decode(response.body);
     print(data);
-    data['error'].length != 0?
-    showToast(data['error']['errors'].toString()):showToast(data['message']);
+    data['error'].length != 0
+        ? showToast(data['error']['errors'].toString())
+        : showToast(data['message']);
     // print(
     //   path,
     // );
@@ -51,6 +54,7 @@ Future getRequestWithoutParam(path, headers) async {
 
 Future postRequest(path, headers, body) async {
   final response = await http.post(Uri.https('system.getcrowdv.com', path),
+  //     final response = await http.post(Uri.http('192.168.68.126:8000', path),
       headers: headers, body: body);
 
   if (response.statusCode == 200 || response.statusCode == 201) {

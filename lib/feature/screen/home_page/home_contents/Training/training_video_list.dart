@@ -167,6 +167,18 @@ class _TrainingVideoState extends State<TrainingVideo> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                      offset: Offset(0,1),
+                                      spreadRadius: .5,
+                                      blurRadius: 3,
+                                      color: Colors.grey
+                                  )
+                                ]
+                              ),
                               // color: _randomColor.randomColor(colorHue: ColorHue.random,colorSaturation: ColorSaturation.monochrome,colorBrightness: ColorBrightness.veryLight),
                               height: MediaQuery.of(context).size.height / 4,
                               width: MediaQuery.of(context).size.width,
@@ -185,6 +197,7 @@ class _TrainingVideoState extends State<TrainingVideo> {
                                                   (context, imageProvider) =>
                                                   Container(
                                                     decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
                                                       image: DecorationImage(
                                                         image: imageProvider,
                                                         fit: BoxFit.fill,),
@@ -196,31 +209,40 @@ class _TrainingVideoState extends State<TrainingVideo> {
                                               => Icon(Icons.image_outlined,size: 100,),
                                             ),
                                           ),
-                                          snapshot.data.data.videos[index].watchedStatus.isEmpty == false?Container(
+                                          snapshot.data.data.videos[index].watchedStatus.isEmpty == false?
+                                          Container(
                                             height: 30,
                                             width: 80,
-                                            color: Colors.black38,
+                                            decoration: BoxDecoration(
+                                                color: Colors.black38,
+                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10))
+                                            ),
                                             child: Center(child: Text(snapshot.data.data.videos[index].watchedStatus,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)),
-                                          ):Container(),
+                                          )
+                                              :Container(),
                                           Center(child: Container(
                                             height: 80,
                                             width: 80,
                                             decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(100),
                                               color: Colors.black38,
-                                              borderRadius: BorderRadius.circular(100)
                                             ),
                                           )),
                                           Center(child: Icon(Icons.play_arrow,size: 70,color: Colors.white,))
                                         ]
 
                                       )),
-                                  SizedBox(
-                                      child: Text(
-                                        snapshot.data.data.videos[index].title,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
-                                      ),)
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0,right: 8,top: 2),
+                                    child: SizedBox(
+                                      height: 38,
+                                        child: Text(
+                                          snapshot.data.data.videos[index].title,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black),
+                                        ),),
+                                  )
                                 ],
                               ),
                             ),

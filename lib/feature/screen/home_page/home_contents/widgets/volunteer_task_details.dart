@@ -24,10 +24,11 @@ import '../../../../../common/theme_helper.dart';
 import '../../../profile/common_profile.dart';
 
 class VolunteerTaskDetails extends StatefulWidget {
-  final dynamic role, id, friendId, friendName, friendImage, isOnline;
+  final dynamic role, id, friendId, friendName, friendImage, isOnline,status;
   final bool isRead;
   VolunteerTaskDetails(
-      {this.role,
+      {this.status,
+        this.role,
       this.id,
       this.friendId,
       this.friendName,
@@ -44,7 +45,6 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
   TextEditingController reportController = TextEditingController();
   TextEditingController detailsController = TextEditingController();
   TabController _tabController;
-  final double infoHeight = 364.0;
   String uid;
   String token;
   void getCred() async {
@@ -837,7 +837,30 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                   ),
                   Padding(
                       padding: const EdgeInsets.only(bottom: 20.0),
-                      child: snapshot.data.data.status == "Completed"
+                      child:
+
+                      widget.status == "done"?
+                      SizedBox(
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.grey,
+                            // shape: RoundedRectangleBorder(
+                            //     borderRadius:
+                            //     BorderRadius.circular(13)),
+                          ),
+                          onPressed: () {
+                            showToast(context,
+                                'Your request for completing task is pending for recruiter review');
+                          },
+                          child: Text(
+                            "Waiting for recruiter acknowledgement",
+                            style: GoogleFonts.kanit(
+                                color: Colors.white, fontSize: 18),
+                          ),
+                        ),
+                      ):
+                      snapshot.data.data.status == "Completed"
                           ? SizedBox(
                               height: 50,
                               width: MediaQuery.of(context).size.width / 2.2,
@@ -850,10 +873,10 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                 ),
                                 onPressed: () {
                                   showToast(context,
-                                      'This opportunity is complete');
+                                      'Your request for completing task is pending for recruiter review');
                                 },
                                 child: Text(
-                                  "Completed",
+                                  "Request Pending",
                                   style: GoogleFonts.kanit(
                                       color: Colors.white, fontSize: 18),
                                 ),
@@ -997,7 +1020,7 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                                   seconds: 1),
                                                               () {
                                                             getRequestWithoutParam(
-                                                                '/api/v1/volunteer-request-for-task-complete/${widget.id}',
+                                                                '/api/v1/volunteer-request-for-task-done/${widget.id}',
                                                                 {
                                                                   'Content-Type':
                                                                       "application/json",
@@ -1008,7 +1031,7 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                               SweetAlert.show(
                                                                   context,
                                                                   title:
-                                                                      "Your Task is completed",
+                                                                      "Your task is done",
                                                                   subtitle:
                                                                   "Do you want to rate? ",
                                                                   style: SweetAlertStyle
@@ -1031,7 +1054,7 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                                                 RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
                                                                             child:
                                                                                 Container(
-                                                                              height: 350,
+                                                                              height: 360,
                                                                               decoration: BoxDecoration(
                                                                                 borderRadius: BorderRadius.all(
                                                                                   Radius.circular(15),
@@ -1127,7 +1150,8 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                                                                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                                                                                                   ),
                                                                                                   onPressed: () {
-                                                                                                    reviewController.text != '' ? review(reviewController.text.toString(), widget.id) : Navigator.popUntil(context, (route) => count++ == 3);
+                                                                                                    reviewController.text != '' ? review(reviewController.text.toString(), widget.id)
+                                                                                                        : Navigator.popUntil(context, (route) => count++ == 3);
                                                                                                     setState(() {});
                                                                                                   },
                                                                                                 )

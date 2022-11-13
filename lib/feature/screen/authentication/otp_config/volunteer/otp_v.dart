@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/feature/screen/authentication/otp_config/volunteer/phone_v.dart';
-import 'package:crowdv_mobile_app/feature/screen/authentication/sign_up/Volunteer/volunteer_sign_up.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
-import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/header_widget.dart';
 import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/gestures.dart';
@@ -174,7 +172,7 @@ class _OtpVolunteerPageState extends State<OtpVolunteer> {
                                   new TextSpan(
                                       text: widget.email.replaceRange(
                                           0,
-                                          widget.email.indexOf("@") - 2,
+                                          widget.email.indexOf("@")-1,
                                           "***"),
                                       style: new TextStyle(
                                           fontWeight: FontWeight.bold,

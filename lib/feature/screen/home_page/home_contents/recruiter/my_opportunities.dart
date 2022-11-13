@@ -23,17 +23,6 @@ class MyOpportunity extends StatefulWidget {
 }
 
 class _MyOpportunityState extends State<MyOpportunity> {
-  final CustomTimerController _controller = CustomTimerController();
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-  int daysBetween(DateTime from, DateTime to) {
-    from = DateTime(from.year, from.month, from.day);
-    to = DateTime(to.year, to.month, to.day);
-    return to.difference(from).inDays;
-  }
   String token = "";
   String uid;
   bool isRead;
@@ -57,6 +46,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
     if (response.statusCode == 200) {
+      print(data);
       return MyOpportunityModel.fromJson(data);
     } else {
       return MyOpportunityModel.fromJson(data);
@@ -275,7 +265,8 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             snapshot.data.data[index].status ==
-                                                    'Hired'
+                                                    'Hired'||snapshot.data.data[index].status ==
+                                                'Done'
                                                 ? Container(
                                         width: 80,
                                           height: 35,
