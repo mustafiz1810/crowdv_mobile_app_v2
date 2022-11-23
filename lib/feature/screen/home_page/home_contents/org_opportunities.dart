@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/org_task_details.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:empty_widget/empty_widget.dart';
@@ -115,193 +116,172 @@ class _OrganizationOpportunitiesState extends State<OrganizationOpportunities> {
                                   ),
                                 ],
                               ),
-                              child: Stack(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(23.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          snapshot.data.data[index].title,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                              fontSize: 16),
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        SizedBox(
-                                          width: 200,
-                                          height: 40,
-                                          child: Text(
-                                            snapshot.data.data[index]
-                                                        .description !=
-                                                    null
-                                                ? snapshot.data.data[index]
-                                                    .description
-                                                : "",
+                              child: Padding(
+                                padding: const EdgeInsets.all(23.0),
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    InkWell(
+                                      onTap: (){
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>OrganizationTaskDetails(id: snapshot.data.data[index].id,)));
+                                      },
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            snapshot.data.data[index].title,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                                fontSize: 16),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.add_link_rounded,
-                                                  color: Colors.blueAccent,
-                                                  size: 20,
-                                                ),
-                                                TextButton(
-                                                    onPressed: () async {
-                                                      String _url = snapshot
-                                                          .data
-                                                          .data[index]
-                                                          .links;
-                                                      print('launching');
-                                                      try {
-                                                        await canLaunch(_url)
-                                                            ? await launch(_url)
-                                                            : throw 'Could not launch $_url';
-                                                      } catch (_, __) {
-                                                        showToast("Failed");
-                                                      }
-                                                    },
-                                                    child: SizedBox(
-                                                        width: 170,
-                                                        height: 20,
-                                                        child: Text(snapshot
-                                                            .data
-                                                            .data[index]
-                                                            .links,style: TextStyle(overflow: TextOverflow.ellipsis),))),
-                                              ],
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          SizedBox(
+                                            width: 200,
+                                            height: 40,
+                                            child: Text(
+                                              snapshot.data.data[index]
+                                                  .description !=
+                                                  null
+                                                  ? snapshot.data.data[index]
+                                                  .description
+                                                  : "",
                                             ),
-                                            TextButton(
-                                                onPressed: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return AlertDialog(
-                                                          title: Text(snapshot
-                                                              .data
-                                                              .data[index]
-                                                              .organization.state.toString()),
-                                                          content: Row(
-                                                            children: [
-                                                              Flexible(
-                                                                  child: Text("City: " +
-                                                                      snapshot
-                                                                          .data
-                                                                          .data[index]
-                                                                          .organization
-                                                                          .city.toString())),
-                                                              SizedBox(
-                                                                width: 20,
-                                                              ),
-                                                              Flexible(
-                                                                child: Text("Zip Code: " +
-                                                                    snapshot
-                                                                        .data
-                                                                        .data[
-                                                                            index]
-                                                                        .organization
-                                                                        .zipCode.toString()),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          actions: [
-                                                            FlatButton(
-                                                              child: Text(
-                                                                "ok",
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white),
-                                                              ),
-                                                              onPressed: () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              },
-                                                              color:
-                                                                  primaryColor,
-                                                            )
-                                                          ],
-                                                        );
-                                                      });
-                                                },
-                                                child: Text(
-                                                  "Address",
-                                                  style: TextStyle(
-                                                      decoration: TextDecoration
-                                                          .underline),
-                                                )),
-                                          ],
-                                        ),
-                                        Divider(
-                                          height: 1,
-                                          color: Colors.grey.withOpacity(.5),
-                                          thickness: 1,
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons
-                                                      .home_repair_service_outlined,
-                                                  size: 20,
-                                                ),
-                                                SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text(
-                                                  snapshot.data.data[index]
-                                                      .organization.name.toString(),
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 16),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.phone,
-                                                  size: 20,
-                                                ),
-                                                SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text(
-                                                  snapshot.data.data[index]
-                                                      .organization.phone.toString(),
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 14),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
                                         Row(
                                           children: [
                                             Icon(
-                                              Icons.email_outlined,
+                                              Icons.add_link_rounded,
+                                              color: Colors.blueAccent,
+                                              size: 20,
+                                            ),
+                                            TextButton(
+                                                onPressed: () async {
+                                                  String _url = snapshot
+                                                      .data
+                                                      .data[index]
+                                                      .links;
+                                                  print('launching');
+                                                  try {
+                                                    await canLaunch(_url)
+                                                        ? await launch(_url)
+                                                        : throw 'Could not launch $_url';
+                                                  } catch (_, __) {
+                                                    showToast("Failed");
+                                                  }
+                                                },
+                                                child: SizedBox(
+                                                    width: 170,
+                                                    height: 20,
+                                                    child: Text(
+                                                      snapshot
+                                                          .data
+                                                          .data[index]
+                                                          .links,
+                                                      style: TextStyle(
+                                                          overflow:
+                                                          TextOverflow
+                                                              .ellipsis),
+                                                    ))),
+                                          ],
+                                        ),
+                                        TextButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (BuildContext
+                                                  context) {
+                                                    return AlertDialog(
+                                                      title: Text(snapshot
+                                                          .data
+                                                          .data[index]
+                                                          .organization
+                                                          .state
+                                                          .toString()),
+                                                      content: Row(
+                                                        children: [
+                                                          Flexible(
+                                                              child: Text("City: " +
+                                                                  snapshot
+                                                                      .data
+                                                                      .data[
+                                                                  index]
+                                                                      .organization
+                                                                      .city
+                                                                      .toString())),
+                                                          SizedBox(
+                                                            width: 20,
+                                                          ),
+                                                          Flexible(
+                                                            child: Text("Zip Code: " +
+                                                                snapshot
+                                                                    .data
+                                                                    .data[
+                                                                index]
+                                                                    .organization
+                                                                    .zipCode
+                                                                    .toString()),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      actions: [
+                                                        FlatButton(
+                                                          child: Text(
+                                                            "ok",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                context)
+                                                                .pop();
+                                                          },
+                                                          color:
+                                                          primaryColor,
+                                                        )
+                                                      ],
+                                                    );
+                                                  });
+                                            },
+                                            child: Text(
+                                              "Address",
+                                              style: TextStyle(
+                                                  decoration: TextDecoration
+                                                      .underline),
+                                            )),
+                                      ],
+                                    ),
+                                    Divider(
+                                      height: 1,
+                                      color: Colors.grey.withOpacity(.5),
+                                      thickness: 1,
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons
+                                                  .home_repair_service_outlined,
                                               size: 20,
                                             ),
                                             SizedBox(
@@ -309,7 +289,27 @@ class _OrganizationOpportunitiesState extends State<OrganizationOpportunities> {
                                             ),
                                             Text(
                                               snapshot.data.data[index]
-                                                  .organization.email.toString(),
+                                                  .organization.name
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 16),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.phone,
+                                              size: 20,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              snapshot.data.data[index]
+                                                  .organization.phone
+                                                  .toString(),
                                               style: TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 14),
@@ -318,8 +318,30 @@ class _OrganizationOpportunitiesState extends State<OrganizationOpportunities> {
                                         ),
                                       ],
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.email_outlined,
+                                          size: 20,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          snapshot.data.data[index]
+                                              .organization.email
+                                              .toString(),
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           );

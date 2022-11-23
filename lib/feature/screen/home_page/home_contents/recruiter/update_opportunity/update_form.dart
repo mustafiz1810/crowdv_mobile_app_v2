@@ -10,6 +10,8 @@ import 'package:get/route_manager.dart';
 import 'package:inkwell_splash/inkwell_splash.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../../../../utils/view_utils/common_util.dart';
+
 class OpportunityUpdate extends StatefulWidget {
   final dynamic token,
       id,
@@ -451,26 +453,29 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
               SizedBox(height: 20.0),
               InkWellSplash(
                 onTap: () {
-                  Get.to(() => EligibilityUpdate(
-                        slug: sslug.toString(),
-                        title: titleController.text,
-                        category: _selectedIndex.toString(),
-                        type: _typevalue.toString(),
-                        description: descriptionController.text,
-                        date: dateTime.toString(),
-                        time:
-                            '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
-                        etime:
-                            '${_time.hour}:${_time.minute.toString().padLeft(2, '0')}',
-                        eligibility: eligibility,
-                        other: widget.other,
-                        country: widget.country,
-                        city: widget.city,
-                        state: widget.state,
-                        zip: widget.zip,
-                        id: widget.id,
-                        token: widget.token,
-                      ));
+                  if (time.hour < _time.hour && time.hour != _time.hour) {
+                    Get.to(() => EligibilityUpdate(
+                      slug: sslug.toString(),
+                      title: titleController.text,
+                      category: _selectedIndex.toString(),
+                      type: _typevalue.toString(),
+                      description: descriptionController.text,
+                      date: dateTime.toString(),
+                      time:
+                      '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
+                      etime:
+                      '${_time.hour}:${_time.minute.toString().padLeft(2, '0')}',
+                      eligibility: eligibility,
+                      other: widget.other,
+                      country: widget.country,
+                      city: widget.city,
+                      state: widget.state,
+                      zip: widget.zip,
+                      id: widget.id,
+                      token: widget.token,
+                    ));
+                  } else
+                    (showToast("End time must be greater than start time"));
                 },
                 child: Container(
                   height: 48,

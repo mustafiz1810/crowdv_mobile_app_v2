@@ -453,32 +453,41 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: CustomScrollView(
                         slivers: <Widget>[
                           SliverToBoxAdapter(
-                            child: TabBar(
-                              tabs: [
-                                Tab(
-                                    icon: Icon(Icons.info_rounded),
-                                    child: const Text('Basic Info')),
-                                Tab(
-                                    icon: Icon(Icons.wheelchair_pickup_rounded),
-                                    child: const Text('Disabilities')),
-                                Tab(
-                                    icon: Icon(Icons.location_on_rounded),
-                                    child: const Text('Address')),
-                              ],
-                              labelColor: Colors.black,
-                              unselectedLabelColor: Colors.black38,
-                              indicatorSize: TabBarIndicatorSize.tab,
-                              indicator: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                color: Color(0xFFfaf9f9),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black38,
-                                    blurRadius: 2,
-                                    offset: Offset(
-                                        1, 1), // changes position of shadow
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade300,
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: TabBar(
+                                  tabs: [
+                                    Tab(
+                                        icon: Icon(Icons.info_rounded),
+                                        child: const Text('Basic Info')),
+                                    Tab(
+                                        icon: Icon(Icons.wheelchair_pickup_rounded),
+                                        child: const Text('Disabilities')),
+                                    Tab(
+                                        icon: Icon(Icons.location_on_rounded),
+                                        child: const Text('Address')),
+                                  ],
+                                  labelColor: Colors.black,
+                                  unselectedLabelColor: Colors.black38,
+                                  indicatorSize: TabBarIndicatorSize.tab,
+                                  indicator: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: Color(0xFFfaf9f9),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black38,
+                                        blurRadius: 2,
+                                        offset: Offset(
+                                            1, 1), // changes position of shadow
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
                             ),
                           ),

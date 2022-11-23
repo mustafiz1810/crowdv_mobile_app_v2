@@ -4,7 +4,8 @@
 
 import 'dart:convert';
 
-BannerModel bannerModelFromJson(String str) => BannerModel.fromJson(json.decode(str));
+BannerModel bannerModelFromJson(String str) =>
+    BannerModel.fromJson(json.decode(str));
 
 String bannerModelToJson(BannerModel data) => json.encode(data.toJson());
 
@@ -20,16 +21,16 @@ class BannerModel {
   Data data;
 
   factory BannerModel.fromJson(Map<String, dynamic> json) => BannerModel(
-    success: json["success"],
-    message: json["message"],
-    data: Data.fromJson(json["data"]),
-  );
+        success: json["success"],
+        message: json["message"],
+        data: Data.fromJson(json["data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "success": success,
-    "message": message,
-    "data": data.toJson(),
-  };
+        "success": success,
+        "message": message,
+        "data": data.toJson(),
+      };
 }
 
 class Data {
@@ -42,12 +43,12 @@ class Data {
   List<String> banner;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    title: List<String>.from(json["title"].map((x) => x)),
-    banner: List<String>.from(json["banner"].map((x) => x)),
-  );
+        title: List<String>.from(json["title"].map((x) => x)),
+        banner: List<String>.from(json["banner"].map((x) => x)),
+      );
 
   Map<String, dynamic> toJson() => {
-    "title": List<dynamic>.from(title.map((x) => x)),
-    "banner": List<dynamic>.from(banner.map((x) => x)),
-  };
+        "title": List<dynamic>.from(title.map((x) => x)),
+        "banner": List<dynamic>.from(banner.map((x) => x)),
+      };
 }

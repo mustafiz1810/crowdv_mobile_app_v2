@@ -758,12 +758,30 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity>
                                           ),
                                           SizedBox(height: 5,),
                                           Container(
-                                            height: 50,
-                                            width: 50,
-                                            child: IconBox(
-                                              child: Image.network(snapshot
-                                                  .data.data[index].categoryIcon),
-                                              bgColor: Colors.white,
+                                            height: 40,
+                                            width: 40,
+                                            child:CircleAvatar(
+                                              backgroundColor: Colors.white,
+                                              child: CachedNetworkImage(
+                                                imageUrl: snapshot.data.data[index].categoryIcon,
+                                                imageBuilder: (context, imageProvider) =>
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        image: DecorationImage(
+                                                          image: imageProvider,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                placeholder: (context, url) => Icon(
+                                                    Icons.downloading_rounded,
+                                                    size: 40,
+                                                    color: Colors.grey),
+                                                errorWidget: (context, url, error) => Icon(
+                                                  Icons.image_outlined,
+                                                  size: 40,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ],

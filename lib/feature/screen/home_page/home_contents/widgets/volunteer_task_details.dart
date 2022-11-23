@@ -287,7 +287,7 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             widget.friendId != null &&
-                                snapshot.data.data.status == 'Hired'
+                                snapshot.data.data.status == 'Hired' || snapshot.data.data.status == 'Done'
                                 ? Column(
                               children: [
                                 Text("Chat",
@@ -840,48 +840,48 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                       child:
 
                       widget.status == "done"?
-                      SizedBox(
-                        height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.grey,
-                            // shape: RoundedRectangleBorder(
-                            //     borderRadius:
-                            //     BorderRadius.circular(13)),
-                          ),
-                          onPressed: () {
-                            showToast(context,
-                                'Your request for completing task is pending for recruiter review');
-                          },
-                          child: Text(
-                            "Waiting for recruiter acknowledgement",
-                            style: GoogleFonts.kanit(
-                                color: Colors.white, fontSize: 18),
-                          ),
-                        ),
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: Container(
+                            color:Colors.white,
+                            height: 50,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Waiting for recruiter acknowledgement",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(Icons.timelapse,color: Colors.deepOrangeAccent,size: 20,)
+                                )
+                              ],
+                            ),
+                          )
                       ):
                       snapshot.data.data.status == "Completed"
-                          ? SizedBox(
-                              height: 50,
-                              width: MediaQuery.of(context).size.width / 2.2,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.grey,
-                                  // shape: RoundedRectangleBorder(
-                                  //     borderRadius:
-                                  //     BorderRadius.circular(13)),
+                          ? Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: Container(
+                            color:Colors.white,
+                            width: 300,
+                            height: 50,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "The opportunity is completed",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                onPressed: () {
-                                  showToast(context,
-                                      'Your request for completing task is pending for recruiter review');
-                                },
-                                child: Text(
-                                  "Request Pending",
-                                  style: GoogleFonts.kanit(
-                                      color: Colors.white, fontSize: 18),
-                                ),
-                              ),
-                            )
+                                Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(Icons.done,color: Colors.green,size: 20,)
+                                )
+                              ],
+                            ),
+                          )
+                      )
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
@@ -962,6 +962,7 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                                               "Bearer $token"
                                                                             }).then((value) async {
                                                                           Navigator.pop(context);
+                                                                          setState(() {});
                                                                           showToast(context,
                                                                               'Application Canceled');
                                                                         });

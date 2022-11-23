@@ -8,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:sweetalert/sweetalert.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../data/models/org_opp_model.dart';
 import '../../../utils/view_utils/common_util.dart';
 import '../../../widgets/http_request.dart';
@@ -35,7 +34,7 @@ class _OrgOpportunityListState extends State<OrgOpportunityList> {
 
   Future<OrgModel> getOrgApi() async {
     final response = await http.get(
-        Uri.parse(NetworkConstants.BASE_URL + 'organization/opportunity/list'),
+        Uri.parse(NetworkConstants.BASE_URL + 'organization/own-opportunity/list'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
     if (response.statusCode == 200) {

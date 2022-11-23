@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crowdv_mobile_app/data/models/recruiter/my_opportunity.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/applied_volunteer.dart';
@@ -108,7 +109,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                             padding: const EdgeInsets.all(5),
                             child: Container(
                               width: MediaQuery.of(context).size.width,
-                              height: 230,
+                              height: 240,
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -141,7 +142,8 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                               itemBuilder: (context, index) {
                                                 isRead = snapshot.data
                                                     .docs[index]['is_read'];
-                                                print(isRead);
+                                                print(snapshot.data
+                                                    .docs[index]['is_read']);
                                                 return Center();
                                               });
                                         }
@@ -267,27 +269,40 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                             snapshot.data.data[index].status ==
                                                     'Hired'||snapshot.data.data[index].status ==
                                                 'Done'
-                                                ? Container(
-                                        width: 80,
+                                                ?  Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                Container(
+                                                width: 70,
                                           height: 35,
                                           decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)),
-                                          ),
+                                              color: Colors.green,
+                                              borderRadius:
+                                              BorderRadius
+                                                  .circular(6)),
                                           child: Center(
                                             child: Text(
-                                                snapshot
-                                                    .data.data[index].status
-                                                    .toUpperCase(),
+                                                "Done",
                                                 style: TextStyle(
                                                     fontWeight:
-                                                    FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color:
-                                                    Colors.deepOrange)),
+                                                    FontWeight
+                                                        .bold,
+                                                    fontSize: 15,
+                                                    color: Colors
+                                                        .white)),
                                           ),
-                                        )
+                                        ),
+                                        Text(
+                                            "Request Is Pending",
+                                            style: TextStyle(
+                                                fontWeight:
+                                                FontWeight.bold,
+                                                fontSize: 14,
+                                                color:
+                                                Colors.grey)),
+                                      ],
+                                    )
                                                 : Row(
                                                     children: [
                                                       IconBox(
@@ -449,14 +464,32 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                       top: 20,
                                       right: 20,
                                       child: Container(
-                                        height: 50,
-                                        width: 50,
-                                        child: IconBox(
-                                          child: Image.network(snapshot
-                                              .data.data[index].category.icon),
-                                          bgColor: Colors.white,
+                                        height: 40,
+                                        width: 40,
+                                        child:CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          child: CachedNetworkImage(
+                                            imageUrl: snapshot.data.data[index].category.icon,
+                                            imageBuilder: (context, imageProvider) =>
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                      image: imageProvider,
+                                                    ),
+                                                  ),
+                                                ),
+                                            placeholder: (context, url) => Icon(
+                                                Icons.downloading_rounded,
+                                                size: 40,
+                                                color: Colors.grey),
+                                            errorWidget: (context, url, error) => Icon(
+                                              Icons.image_outlined,
+                                              size: 40,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
                                         ),
-                                      ))
+                                      ),)
                                 ],
                               ),
                             ),

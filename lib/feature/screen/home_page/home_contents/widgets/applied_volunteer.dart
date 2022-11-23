@@ -208,16 +208,18 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
                                                       return null;
                                                     });
                                               },
-                                              borderColor: Colors.red,
-                                              bgColor: Colors.white,
-                                              child: Icon(
-                                                Icons.cancel,
-                                                color: Colors.red,
-                                                size: 25,
+                                              bgColor:
+                                              Colors.red,
+                                              borderColor: Colors.white,
+                                              child:
+                                              Icon(
+                                                Icons.clear,
+                                                color: Colors.white,
+                                                size: 18,
                                               ),
                                             ),
                                             SizedBox(
-                                              width: 5,
+                                              width: 8,
                                             ),
                                             IconBox(
                                               onTap: () {
@@ -267,12 +269,14 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
                                                       return null;
                                                     });
                                               },
-                                              borderColor: Colors.green,
-                                              bgColor: Colors.white,
-                                              child: Icon(
-                                                Icons.check_circle,
-                                                color: Colors.green,
-                                                size: 25,
+                                              bgColor:
+                                              Colors.green,
+                                              borderColor: Colors.white,
+                                              child:
+                                              Icon(
+                                                Icons.check,
+                                                color: Colors.white,
+                                                size:18,
                                               ),
                                             ),
                                           ],

@@ -44,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     getCred();
+    print(token);
     //Foreground State
     FirebaseMessaging.instance.getInitialMessage();
 
@@ -141,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
   List images = [ NetworkImage('https://alkuwaiti.com/wp-content/uploads/2020/05/Hero-Banner-Placeholder-Dark-1024x480.png'),];
-  int _currentIndex = 1;
+  int _currentIndex = 0 ;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -204,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             onTap: () {
-                              print(snapshot.data.data.list);
+                              print(token);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

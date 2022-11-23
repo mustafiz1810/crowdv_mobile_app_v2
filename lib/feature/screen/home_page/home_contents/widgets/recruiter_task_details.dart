@@ -51,6 +51,7 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       token = pref.getString("user");
+      print(token);
       uid = pref.getString("uid");
     });
   }
@@ -191,7 +192,6 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
   @override
   void initState() {
     getCred();
-    print(widget.isRead);
     _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
     super.initState();
   }
@@ -313,12 +313,30 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                 height: 10,
                               ),
                               Container(
-                                height: 50,
-                                width: 50,
-                                child: IconBox(
-                                  child: Image.network(
-                                      snapshot.data.data.category.icon),
-                                  bgColor: Colors.white,
+                                height: 40,
+                                width: 40,
+                                child:CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  child: CachedNetworkImage(
+                                    imageUrl: snapshot.data.data.category.icon,
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: imageProvider,
+                                            ),
+                                          ),
+                                        ),
+                                    placeholder: (context, url) => Icon(
+                                        Icons.downloading_rounded,
+                                        size: 40,
+                                        color: Colors.grey),
+                                    errorWidget: (context, url, error) => Icon(
+                                      Icons.image_outlined,
+                                      size: 40,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
                                 ),
                               ),
                               Text(snapshot.data.data.category.name)
@@ -506,12 +524,13 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                                               });
                                                                             },
                                                                             bgColor:
-                                                                                Colors.white,
+                                                                                Colors.red,
+                                                                            borderColor: Colors.white,
                                                                             child:
                                                                                 Icon(
-                                                                              Icons.cancel,
-                                                                              color: Colors.red,
-                                                                              size: 22,
+                                                                              Icons.clear,
+                                                                              color: Colors.white,
+                                                                              size: 18,
                                                                             ),
                                                                           ),
                                                                           SizedBox(
@@ -545,12 +564,13 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                                               });
                                                                             },
                                                                             bgColor:
-                                                                                Colors.white,
+                                                                                Colors.green,
+                                                                            borderColor: Colors.white,
                                                                             child:
                                                                                 Icon(
-                                                                              Icons.check_circle,
-                                                                              color: Colors.green,
-                                                                              size: 22,
+                                                                              Icons.check,
+                                                                              color: Colors.white,
+                                                                              size:18,
                                                                             ),
                                                                           ),
                                                                         ],
@@ -1394,7 +1414,7 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                       ),
                     ),
                   ),
-                  Padding(
+                  snapshot.data.data.status != "Completed"? Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: snapshot.data.data.status == "Pending"
                         ? SizedBox(
@@ -1476,16 +1496,17 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                               new Future.delayed(
                                                   new Duration(seconds: 1), () {
                                                 getRequestWithoutParam(
-                                                    '/api/v1/cancel-task-complete/${snapshot.data.data.applyId}',
+                                                    '/api/v1/cancel-task-complete/${widget.id}',
                                                     {
                                                       'Content-Type':
                                                           "application/json",
                                                       "Authorization":
                                                           "Bearer $token"
                                                     }).then((value) async {
-                                                  Navigator.pop(context);
                                                   showToast(context,
                                                       'Request Canceled');
+                                                  Navigator.pop(context);
+                                                  setState(() {});
                                                 });
                                               });
                                             } else {
@@ -1820,6 +1841,26 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                   ),
                                 ),
                               ),
+                  ):Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: Container(
+                      color:Colors.white,
+                      width: 300,
+                      height: 50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "The opportunity is completed",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(Icons.done,color: Colors.green,size: 20,)
+                          )
+                        ],
+                      ),
+                    )
                   ),
                 ],
               ),

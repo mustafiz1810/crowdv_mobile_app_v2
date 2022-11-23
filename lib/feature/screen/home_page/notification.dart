@@ -2,14 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/recruiter_task_details.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/common_profile.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
-import 'package:crowdv_mobile_app/utils/view_utils/common_util.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
-import 'package:crowdv_mobile_app/widgets/icon_box.dart';
+import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:inkwell_splash/inkwell_splash.dart';
 import '../../../data/models/notification_model.dart';
-import 'home_contents/widgets/applied_volunteer.dart';
 import 'home_contents/widgets/volunteer_task_details.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -19,12 +17,14 @@ class NotificationPage extends StatefulWidget {
   @override
   _NotificationPageState createState() => _NotificationPageState();
 }
+
 class _NotificationPageState extends State<NotificationPage> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,46 +67,68 @@ class _NotificationPageState extends State<NotificationPage> {
                         splashColor: Colors.white,
                         onTap: () {
                           // print(widget.data[index].data.opportunityId.toString());
+
                           getRequest(
                               '/api/v1/mark-notification/${widget.data[index].id}',
                               null, {
                             'Content-Type': "application/json",
                             "Authorization": "Bearer ${widget.token}"
                           }).then((value) async {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                  widget.data[index].data.status == "Gold" ?
-                                  CommonProfile(
-                                    id: widget.data[index].data.senderId,
-                                  ):
-                                  widget.role == "volunteer"?
-                                  VolunteerTaskDetails(
-                                      role: widget.role,
-                                      id: widget
-                                          .data[index].data.opportunityId,
-                                      friendId: widget
-                                          .data[index].data.senderUid,
-                                      friendName:
-                                      widget.data[index].data.senderName,
-                                      friendImage: widget
-                                          .data[index].data.senderImage,
-                                      isOnline:
-                                      widget.data[index].data.isOnline):
-                                  RecruiterTaskDetails(
-                                      role: widget.role,
-                                      id: widget
-                                          .data[index].data.opportunityId,
-                                      friendId: widget
-                                          .data[index].data.senderUid,
-                                      friendName:
-                                      widget.data[index].data.senderName,
-                                      friendImage: widget
-                                          .data[index].data.senderImage,
-                                      isOnline:
-                                      widget.data[index].data.isOnline)),
-                            );
+                            widget.role == widget.data[index].receiverRole
+                                ? Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            widget.data[index].data.status ==
+                                                    "Gold"
+                                                ? CommonProfile(
+                                                    id: widget.data[index].data
+                                                        .senderId,
+                                                  )
+                                                : widget.role == "volunteer"
+                                                    ? VolunteerTaskDetails(
+                                                        role: widget.role,
+                                                        id: widget.data[index]
+                                                            .data.opportunityId,
+                                                        friendId: widget
+                                                            .data[index]
+                                                            .data
+                                                            .senderUid,
+                                                        friendName: widget
+                                                            .data[index]
+                                                            .data
+                                                            .senderName,
+                                                        friendImage: widget
+                                                            .data[index]
+                                                            .data
+                                                            .senderImage,
+                                                        isOnline: widget
+                                                            .data[index]
+                                                            .data
+                                                            .isOnline)
+                                                    : RecruiterTaskDetails(
+                                                        role: widget.role,
+                                                        id: widget.data[index]
+                                                            .data.opportunityId,
+                                                        friendId: widget
+                                                            .data[index]
+                                                            .data
+                                                            .senderUid,
+                                                        friendName: widget
+                                                            .data[index]
+                                                            .data
+                                                            .senderName,
+                                                        friendImage: widget
+                                                            .data[index]
+                                                            .data
+                                                            .senderImage,
+                                                        isOnline: widget
+                                                            .data[index]
+                                                            .data
+                                                            .isOnline)),
+                                  )
+                                : showToast(context,
+                                    'You are now ${widget.role} \nPlease Change your role and try again');
                             setState(() {});
                           });
                         },
@@ -115,10 +137,9 @@ class _NotificationPageState extends State<NotificationPage> {
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color:
-                                  widget.data[index].readAt != null
-                                      ? Color(0xFFe5e5e5)
-                                      : Colors.white,
+                              color: widget.data[index].readAt != null
+                                  ? Color(0xFFe5e5e5)
+                                  : Colors.white,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.4),
@@ -132,29 +153,30 @@ class _NotificationPageState extends State<NotificationPage> {
                             ),
                             child: ListTile(
                               leading: CachedNetworkImage(
-                                imageUrl:widget
-                                    .data[index].data.senderImage,
+                                imageUrl: widget.data[index].data.senderImage,
                                 imageBuilder: (context, imageProvider) =>
                                     Container(
-                                      width: 30.0,
-                                      height: 30.0,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                            image: imageProvider, fit: BoxFit.cover),
-                                      ),
-                                    ),
-                                placeholder: (context, url) => Icon(Icons.downloading_rounded,
+                                  width: 50.0,
+                                  height: 50.0,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
+                                placeholder: (context, url) => Icon(
+                                    Icons.downloading_rounded,
                                     size: 30,
                                     color: Colors.grey),
-                                errorWidget: (context, url, error) =>
-                                    Icon(
-                                      Icons.image_outlined,
-                                      size: 30,
-                                      color: Colors.grey,
-                                    ),
+                                errorWidget: (context, url, error) => Icon(
+                                  Icons.image_outlined,
+                                  size: 30,
+                                  color: Colors.grey,
+                                ),
                               ),
-                              title:Text(widget.data[index].data.senderName.toString(),
+                              title: Text(
+                                  widget.data[index].data.senderName.toString(),
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,

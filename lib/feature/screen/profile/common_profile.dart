@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/data/models/common_profile_model.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
+import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
@@ -143,111 +144,120 @@ class _CommonProfileState extends State<CommonProfile> {
                         SizedBox(
                           height: 15,
                         ),
-                        snapshot.data.data.role == "recruiter"?
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              children: [
-                                Text(
-                                  snapshot.data.data.opportunities.toString(),
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                                Text(
-                                  "Opportunity",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      snapshot.data.data.rating.toString(),
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                      size: 16,
-                                    )
-                                  ],
-                                ),
-                                Text(
-                                  "Rating",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                ),
-                              ],
-                            ),
-                          ],
-                        )
-                            :Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              children: [
-                                Text(
-                                  snapshot.data.data.opportunities.toString(),
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                                Text(
-                                  "Opportunity",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      snapshot.data.data.rating.toString(),
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                      size: 16,
-                                    )
-                                  ],
-                                ),
-                                Text(
-                                  "Rating",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Text(snapshot.data.data.workingHours.toString(),
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black)),
-                                Text("Working Hour",
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.black)),
-                              ],
-                            )
-                          ],
-                        )
+                        snapshot.data.data.role == "recruiter"
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Text(
+                                        snapshot.data.data.opportunities
+                                            .toString(),
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      ),
+                                      Text(
+                                        "Opportunity",
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            snapshot.data.data.rating
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                            size: 16,
+                                          )
+                                        ],
+                                      ),
+                                      Text(
+                                        "Rating",
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            : Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Text(
+                                        snapshot.data.data.opportunities
+                                            .toString(),
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      ),
+                                      Text(
+                                        "Opportunity",
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            snapshot.data.data.rating
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                            size: 16,
+                                          )
+                                        ],
+                                      ),
+                                      Text(
+                                        "Rating",
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Text(
+                                          snapshot.data.data.workingHours
+                                              .toString(),
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black)),
+                                      Text("Working Hour",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black)),
+                                    ],
+                                  )
+                                ],
+                              )
                       ],
                     ),
                   ),
@@ -261,17 +271,36 @@ class _CommonProfileState extends State<CommonProfile> {
                       child: CustomScrollView(
                         slivers: <Widget>[
                           SliverToBoxAdapter(
-                            child: TabBar(
-                              tabs: [
-                                Tab(child: const Text('Basic Info')),
-                                Tab(child: const Text('Review')),
-                              ],
-                              indicatorSize: TabBarIndicatorSize.label,
-                              indicatorColor: Colors.teal,
-                              labelColor: Colors.black,
-                              unselectedLabelColor: Colors.black38,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade300,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: TabBar(
+                            tabs: [
+                                  Tab(child: const Text('Basic Info')),
+                                  Tab(child: const Text('Review')),
+                            ],
+                            labelColor: Colors.white,
+                            unselectedLabelColor: Colors.black38,
+                            indicatorSize: TabBarIndicatorSize.tab,
+                            indicator: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  color: Colors.grey,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black38,
+                                      blurRadius: 2,
+                                      offset: Offset(
+                                          1, 1), // changes position of shadow
+                                    ),
+                                  ],
                             ),
                           ),
+                                ),
+                              )),
                           SliverFillRemaining(
                             child: Column(
                               children: [
@@ -293,7 +322,8 @@ class _CommonProfileState extends State<CommonProfile> {
                                                         .person_pin_outlined),
                                                     title: Text("Bio:"),
                                                     subtitle: Text(
-                                                      snapshot.data.data.aboutMe.toString(),
+                                                      snapshot.data.data.aboutMe
+                                                          .toString(),
                                                     ),
                                                   ),
                                                   ListTile(
@@ -312,11 +342,10 @@ class _CommonProfileState extends State<CommonProfile> {
                                                   ListTile(
                                                       leading: Icon(Icons
                                                           .home_work_outlined),
-                                                      title:
-                                                      Text("Institute:"),
+                                                      title: Text("Institute:"),
                                                       subtitle: Text(snapshot
-                                                          .data
-                                                          .data.institution.toString())),
+                                                          .data.data.institution
+                                                          .toString())),
                                                   ListTile(
                                                       leading: Icon(Icons.male),
                                                       title: Text("Gender:"),
@@ -409,9 +438,12 @@ class _CommonProfileState extends State<CommonProfile> {
                                                     .data.data.reviews.length,
                                                 itemBuilder: (context, index) {
                                                   return Padding(
-                                                    padding: const EdgeInsets.all(5.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            5.0),
                                                     child: Container(
-                                                        decoration: BoxDecoration(
+                                                        decoration:
+                                                            BoxDecoration(
                                                           color: Colors.white,
                                                           borderRadius:
                                                               BorderRadius
@@ -431,53 +463,74 @@ class _CommonProfileState extends State<CommonProfile> {
                                                         child: ListTile(
                                                           leading: CircleAvatar(
                                                             backgroundImage:
-                                                            NetworkImage(
-                                                                snapshot
+                                                                NetworkImage(snapshot
                                                                     .data
                                                                     .data
                                                                     .reviews[
-                                                                index]
+                                                                        index]
                                                                     .reviewFrom
                                                                     .image),
                                                             radius: 20,
                                                           ),
                                                           title: Padding(
-                                                            padding: const EdgeInsets.only(top: 10.0,bottom: 8.0),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    top: 10.0,
+                                                                    bottom:
+                                                                        8.0),
                                                             child: Row(
                                                               children: [
                                                                 SizedBox(
-                                                                  width:130,
-                                                                    child: Text(snapshot
-                                                                        .data
-                                                                        .data
-                                                                        .reviews[index]
-                                                                        .reviewFrom
-                                                                        .firstName,style: TextStyle(overflow: TextOverflow.ellipsis),)),
-                                                                SizedBox(width: 5,),
-                                                                RatingBar.builder(
+                                                                    width: 130,
+                                                                    child: Text(
+                                                                      snapshot
+                                                                          .data
+                                                                          .data
+                                                                          .reviews[
+                                                                              index]
+                                                                          .reviewFrom
+                                                                          .firstName,
+                                                                      style: TextStyle(
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis),
+                                                                    )),
+                                                                SizedBox(
+                                                                  width: 5,
+                                                                ),
+                                                                RatingBar
+                                                                    .builder(
                                                                   itemSize: 15,
-                                                                  initialRating:  snapshot
-                                                                      .data
-                                                                      .data
-                                                                      .rating ==
-                                                                      null
+                                                                  initialRating: snapshot
+                                                                              .data
+                                                                              .data
+                                                                              .rating ==
+                                                                          null
                                                                       ? 0
                                                                       : snapshot
-                                                                      .data.data.rating
-                                                                      .toDouble(),
+                                                                          .data
+                                                                          .data
+                                                                          .rating
+                                                                          .toDouble(),
                                                                   minRating: 1,
-                                                                  direction:
-                                                                  Axis.horizontal,
+                                                                  direction: Axis
+                                                                      .horizontal,
                                                                   itemCount: 5,
-                                                                  ignoreGestures: true,
-                                                                  tapOnlyMode: true,
-                                                                  itemPadding:
-                                                                  EdgeInsets.symmetric(
-                                                                      horizontal: 4.0),
+                                                                  ignoreGestures:
+                                                                      true,
+                                                                  tapOnlyMode:
+                                                                      true,
+                                                                  itemPadding: EdgeInsets
+                                                                      .symmetric(
+                                                                          horizontal:
+                                                                              4.0),
                                                                   itemBuilder:
-                                                                      (context, _) => Icon(
+                                                                      (context,
+                                                                              _) =>
+                                                                          Icon(
                                                                     Icons.star,
-                                                                    color: Colors.amber,
+                                                                    color: Colors
+                                                                        .amber,
                                                                   ),
                                                                   onRatingUpdate:
                                                                       (rating) {},
@@ -486,14 +539,17 @@ class _CommonProfileState extends State<CommonProfile> {
                                                             ),
                                                           ),
                                                           subtitle: Padding(
-                                                            padding: const EdgeInsets.only(bottom: 8.0),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    bottom:
+                                                                        8.0),
                                                             child: Text(snapshot
                                                                 .data
                                                                 .data
                                                                 .reviews[index]
                                                                 .remark),
                                                           ),
-
                                                         )),
                                                   );
                                                 },
