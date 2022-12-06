@@ -392,7 +392,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       color: Colors.black),
                                 ),
                                 Text(
-                                  "Opportunity",
+                                  "Opportunities",
                                   style: TextStyle(
                                       fontSize: 14, color: Colors.black),
                                 ),
@@ -430,7 +430,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black)),
-                                Text("Working Hour",
+                                Text("Working Hours",
                                     style: TextStyle(
                                         fontSize: 14, color: Colors.black)),
                               ],

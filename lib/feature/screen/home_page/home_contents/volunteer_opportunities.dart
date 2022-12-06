@@ -692,7 +692,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity>
                                                       });
                                                     },
                                                     child: Container(
-                                                      width: 80,
+                                                      width: 160,
                                                       height: 40,
                                                       decoration: BoxDecoration(
                                                           color: Colors.green,
@@ -701,7 +701,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity>
                                                                   .circular(6)),
                                                       child: Center(
                                                         child: Text(
-                                                            "Done ?",
+                                                            "Mark as complete",
                                                             style: TextStyle(
                                                                 fontWeight:
                                                                     FontWeight

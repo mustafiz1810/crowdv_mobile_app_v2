@@ -23,7 +23,7 @@ class TermsCondition extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Terms & Condition"),
+        title: Text("Terms & Conditions"),
         backgroundColor: primaryColor,
       ),
         body: FutureBuilder<TextModel>(
@@ -50,11 +50,11 @@ class TermsCondition extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Terms & Condition",
+                            "Terms & Conditions",
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "Last update: August 3 2022",
+                            "Last update: December 6 2022",
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w300,

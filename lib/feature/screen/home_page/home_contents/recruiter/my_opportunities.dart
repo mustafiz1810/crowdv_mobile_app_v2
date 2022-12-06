@@ -8,7 +8,6 @@ import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
-import 'package:custom_timer/custom_timer.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

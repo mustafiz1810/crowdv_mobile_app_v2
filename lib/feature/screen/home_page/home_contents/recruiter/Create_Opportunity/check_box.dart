@@ -176,7 +176,7 @@ class _CheckBoxState extends State<CheckBox> {
                                 maxLines: 3,
                                 maxLength: 100,
                                 decoration: InputDecoration(
-                                  hintText: "Type your eligibility",
+                                  hintText: "Enter your eligibility",
                                     hintStyle: TextStyle(
                                       fontSize: 14
                                     ),

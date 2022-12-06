@@ -719,7 +719,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
                                                   style: TextStyle(
                                                       fontSize: 14)),
                                               Icon(
-                                                Icons.star,
+                                                   Icons.star,
                                                 color: Colors.amber,
                                                 size: 16,
                                               )

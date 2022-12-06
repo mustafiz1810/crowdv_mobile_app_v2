@@ -143,7 +143,7 @@ class _SettingsState extends State<Settings> {
                               ),
                               children: [
                                 new TextSpan(
-                                  text: "Enable app notification",
+                                  text: "Enable app notifications",
                                   style: TextStyle(color: Colors.black),
                                 ),
                               ],
@@ -176,7 +176,7 @@ class _SettingsState extends State<Settings> {
                               ),
                               children: [
                                 new TextSpan(
-                                  text: "Enable sms notification",
+                                  text: "Enable sms notifications",
                                   style: TextStyle(color: Colors.black),
                                 ),
                               ],
@@ -209,7 +209,7 @@ class _SettingsState extends State<Settings> {
                               ),
                               children: [
                                 new TextSpan(
-                                  text: "Enable email notification",
+                                  text: "Enable email notifications",
                                   style: TextStyle(color: Colors.black),
                                 ),
                               ],

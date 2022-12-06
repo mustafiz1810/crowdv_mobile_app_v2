@@ -40,27 +40,23 @@ class _LoginPageState extends State<LoginPage> {
       });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        if(data['result']['data']['role'] != "organization")
-        {
-          final newUser = await _auth.signInWithEmailAndPassword(email: email.trim(), password: password);
-          if (newUser != null) {
-            pageRoute(data['result']['token'].toString());
-            idRoute(data['result']['data']['id']);
-            uidRoute(data['result']['data']['uid']);
-            roleRoute(data['result']['data']['role']);
-            setState(() {
-              isApiCallProcess = false;
-            });
-            showToast(context, data['message']);
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                    builder: (context) => HomeScreen(
-                      id: data['result']['data']['id'],
-                      role: data['result']['data']['role'],)),
-                    (Route<dynamic> route) => false);
-          }
-        }
-        else{
+        if (data['result']['data']['role'] != "organization") {
+          pageRoute(data['result']['token'].toString());
+          idRoute(data['result']['data']['id']);
+          uidRoute(data['result']['data']['uid']);
+          roleRoute(data['result']['data']['role']);
+          setState(() {
+            isApiCallProcess = false;
+          });
+          showToast(context, data['message']);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) => HomeScreen(
+                        id: data['result']['data']['id'],
+                        role: data['result']['data']['role'],
+                      )),
+              (Route<dynamic> route) => false);
+        } else {
           pageRoute(data['result']['token'].toString());
           idRoute(data['result']['data']['id']);
           roleRoute(data['result']['data']['role']);
@@ -71,17 +67,17 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                   builder: (context) => OrganizationHome(
-                      data:data['result']['data'],
+                      data: data['result']['data'],
                       id: data['result']['data']['id'],
                       role: data['result']['data']['role'])),
-                  (Route<dynamic> route) => false);
+              (Route<dynamic> route) => false);
         }
       } else {
         setState(() {
           isApiCallProcess = false;
         });
         var data = jsonDecode(response.body.toString());
-        print(data);
+        print(response.statusCode);
         showToast(context, data['message']);
       }
     } catch (e) {
@@ -116,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setInt("id", id);
   }
+
   void uidRoute(String uid) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString("uid", uid);
@@ -295,7 +292,7 @@ class _LoginPageState extends State<LoginPage> {
                                           color: Colors.white),
                                     ),
                                   ),
-                                  onPressed: () async{
+                                  onPressed: () async {
                                     if (_formKey.currentState.validate()) {
                                       setState(() {
                                         isApiCallProcess = true;
@@ -314,7 +311,7 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Text.rich(TextSpan(children: [
                                   TextSpan(text: "Don\'t have an account? "),
                                   TextSpan(
-                                    text: 'Create',
+                                    text: 'Create One',
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
                                         // Navigator.pop(context);

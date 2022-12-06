@@ -24,11 +24,11 @@ import '../../../../../common/theme_helper.dart';
 import '../../../profile/common_profile.dart';
 
 class VolunteerTaskDetails extends StatefulWidget {
-  final dynamic role, id, friendId, friendName, friendImage, isOnline,status;
+  final dynamic role, id, friendId, friendName, friendImage, isOnline, status;
   final bool isRead;
   VolunteerTaskDetails(
       {this.status,
-        this.role,
+      this.role,
       this.id,
       this.friendId,
       this.friendName,
@@ -229,7 +229,7 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                         ),
                       ],
                     ),
-                    child:Column(
+                    child: Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -239,15 +239,15 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                 imageUrl: snapshot.data.data.recruiter.image,
                                 imageBuilder: (context, imageProvider) =>
                                     Container(
-                                      width: 60.0,
-                                      height: 60.0,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.cover),
-                                      ),
-                                    ),
+                                  width: 60.0,
+                                  height: 60.0,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
                                 placeholder: (context, url) => Icon(
                                     Icons.downloading_rounded,
                                     size: 40,
@@ -258,12 +258,14 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                   color: Colors.grey,
                                 ),
                               ),
-                              SizedBox(width: 10,),
+                              SizedBox(
+                                width: 10,
+                              ),
                               InkWell(
                                 onTap: () {
                                   Get.to(() => CommonProfile(
-                                    id: snapshot.data.data.recruiter.id,
-                                  ));
+                                        id: snapshot.data.data.recruiter.id,
+                                      ));
                                 },
                                 child: Text(
                                   snapshot.data.data.recruiter.firstName +
@@ -287,70 +289,65 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             widget.friendId != null &&
-                                snapshot.data.data.status == 'Hired' || snapshot.data.data.status == 'Done'
+                                        snapshot.data.data.status == 'Hired' ||
+                                    snapshot.data.data.status == 'Done'
                                 ? Column(
-                              children: [
-                                Text("Chat",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black)),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                Badge(
-                                  elevation: 0,
-                                  position: BadgePosition.topEnd(
-                                      end: -4, top: -4),
-                                  padding:
-                                  EdgeInsetsDirectional.only(
-                                      end: 0),
-                                  badgeColor: Colors.transparent,
-                                  badgeContent: Icon(
-                                      Icons.fiber_manual_record,
-                                      size: 14.0,
-                                      color: widget.isRead == false
-                                          ? Colors.lightBlue
-                                          : Colors.transparent),
-                                  child: IconBox(
-                                    child: Icon(
-                                      Icons.forum,
-                                      color: primaryColor,
-                                      size: 28,
-                                    ),
-                                    onTap: () {
-                                      Get.to(() => ChatUi(
-                                          uid: uid,
-                                          friendId: widget.friendId,
-                                          friendName:
-                                          widget.friendName,
-                                          friendImage:
-                                          widget.friendImage,
-                                          isOnline:
-                                          widget.isOnline));
-                                    },
-                                    bgColor: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            )
+                                    children: [
+                                      Text("Chat",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black)),
+                                      SizedBox(
+                                        height: 3,
+                                      ),
+                                      Badge(
+                                        elevation: 0,
+                                        position: BadgePosition.topEnd(
+                                            end: -4, top: -4),
+                                        padding:
+                                            EdgeInsetsDirectional.only(end: 0),
+                                        badgeColor: Colors.transparent,
+                                        badgeContent: Icon(
+                                            Icons.fiber_manual_record,
+                                            size: 14.0,
+                                            color: widget.isRead == false
+                                                ? Colors.lightBlue
+                                                : Colors.transparent),
+                                        child: IconBox(
+                                          child: Icon(
+                                            Icons.forum,
+                                            color: primaryColor,
+                                            size: 28,
+                                          ),
+                                          onTap: () {
+                                            Get.to(() => ChatUi(
+                                                uid: uid,
+                                                friendId: widget.friendId,
+                                                friendName: widget.friendName,
+                                                friendImage: widget.friendImage,
+                                                isOnline: widget.isOnline));
+                                          },
+                                          bgColor: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  )
                                 : Column(
-                              children: [
-                                Text("City",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black)),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Text(
-                                    snapshot
-                                        .data.data.recruiter.city,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black)),
-                              ],
-                            ),
+                                    children: [
+                                      Text("City",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black)),
+                                      SizedBox(
+                                        height: 15,
+                                      ),
+                                      Text(snapshot.data.data.recruiter.city,
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black)),
+                                    ],
+                                  ),
                             Column(
                               children: [
                                 Text(
@@ -364,8 +361,7 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                 Row(
                                   children: [
                                     Text(
-                                      snapshot.data.data.recruiter
-                                          .profileRating
+                                      snapshot.data.data.recruiter.profileRating
                                           .toString(),
                                       style: TextStyle(
                                           fontSize: 16,
@@ -385,8 +381,7 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                               children: [
                                 Text("Gender",
                                     style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black)),
+                                        fontSize: 14, color: Colors.black)),
                                 SizedBox(
                                   height: 15,
                                 ),
@@ -436,22 +431,29 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                   children: [
                                     Container(
                                       padding:
-                                      EdgeInsets.only(left: 5, right: 5),
+                                          EdgeInsets.only(left: 5, right: 5),
                                       child: SingleChildScrollView(
                                         child: Column(
                                           children: [
-                                           ListCard(title:  "Title",text: snapshot
-                                               .data.data.title,),
+                                            ListCard(
+                                              title: "Title",
+                                              text: snapshot.data.data.title,
+                                            ),
                                             SizedBox(
                                               height: 10,
                                             ),
-                                            ListCard(title:  "Category",text: snapshot
-                                                .data.data.category.name,),
+                                            ListCard(
+                                              title: "Category",
+                                              text: snapshot
+                                                  .data.data.category.name,
+                                            ),
                                             SizedBox(
                                               height: 10,
                                             ),
-                                            ListCard(title:  "Opportunity Type",text: snapshot
-                                                .data.data.taskType,),
+                                            ListCard(
+                                              title: "Opportunity Type",
+                                              text: snapshot.data.data.taskType,
+                                            ),
                                             SizedBox(
                                               height: 10,
                                             ),
@@ -462,27 +464,27 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                               decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   borderRadius:
-                                                  BorderRadius.all(
-                                                      Radius.circular(12))),
+                                                      BorderRadius.all(
+                                                          Radius.circular(12))),
                                               child: Padding(
                                                 padding:
-                                                const EdgeInsets.all(15.0),
+                                                    const EdgeInsets.all(15.0),
                                                 child: Row(
                                                   mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
                                                     Text(
                                                       'Starts from',
                                                       textAlign: TextAlign.left,
                                                       style: GoogleFonts.lato(
                                                         fontWeight:
-                                                        FontWeight.bold,
+                                                            FontWeight.bold,
                                                         fontSize: 18,
                                                         letterSpacing: 0.27,
                                                         color:
-                                                        DesignCourseAppTheme
-                                                            .nearlyBlack,
+                                                            DesignCourseAppTheme
+                                                                .nearlyBlack,
                                                       ),
                                                     ),
                                                     Row(
@@ -513,28 +515,28 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                               decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   borderRadius:
-                                                  BorderRadius.all(
-                                                      Radius.circular(12))),
+                                                      BorderRadius.all(
+                                                          Radius.circular(12))),
                                               child: Padding(
                                                   padding: const EdgeInsets.all(
                                                       15.0),
                                                   child: Row(
                                                     mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
                                                       Text(
                                                         'Duration',
                                                         textAlign:
-                                                        TextAlign.left,
+                                                            TextAlign.left,
                                                         style: GoogleFonts.lato(
                                                           fontWeight:
-                                                          FontWeight.bold,
+                                                              FontWeight.bold,
                                                           fontSize: 18,
                                                           letterSpacing: 0.27,
                                                           color:
-                                                          DesignCourseAppTheme
-                                                              .nearlyBlack,
+                                                              DesignCourseAppTheme
+                                                                  .nearlyBlack,
                                                         ),
                                                       ),
                                                       Row(
@@ -577,33 +579,33 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                               decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   borderRadius:
-                                                  BorderRadius.all(
-                                                      Radius.circular(12))),
+                                                      BorderRadius.all(
+                                                          Radius.circular(12))),
                                               child: Padding(
                                                 padding:
-                                                const EdgeInsets.all(15.0),
+                                                    const EdgeInsets.all(15.0),
                                                 child: Column(
                                                   crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                                      CrossAxisAlignment.start,
                                                   children: <Widget>[
                                                     Text(
                                                       'Eligibility',
                                                       textAlign: TextAlign.left,
                                                       style: GoogleFonts.lato(
                                                         fontWeight:
-                                                        FontWeight.bold,
+                                                            FontWeight.bold,
                                                         fontSize: 18,
                                                         letterSpacing: 0.27,
                                                         color:
-                                                        DesignCourseAppTheme
-                                                            .nearlyBlack,
+                                                            DesignCourseAppTheme
+                                                                .nearlyBlack,
                                                       ),
                                                     ),
                                                     ListView.builder(
                                                         physics:
-                                                        ClampingScrollPhysics(),
+                                                            ClampingScrollPhysics(),
                                                         scrollDirection:
-                                                        Axis.vertical,
+                                                            Axis.vertical,
                                                         shrinkWrap: true,
                                                         itemCount: snapshot
                                                             .data
@@ -618,29 +620,30 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                                   .fiber_manual_record_rounded,
                                                               size: 12,
                                                               color:
-                                                              Colors.black,
+                                                                  Colors.black,
                                                             ),
                                                             title: Text(snapshot
                                                                 .data
                                                                 .data
                                                                 .eligibility[
-                                                            index]
+                                                                    index]
                                                                 .title),
-                                                            subtitle: snapshot.data
-                                                                .data
-                                                                .otherEligibility !=
-                                                                null &&
-                                                                snapshot
-                                                                    .data
-                                                                    .data
-                                                                    .eligibility[
-                                                                index]
-                                                                    .title ==
-                                                                    "Others"
+                                                            subtitle: snapshot
+                                                                            .data
+                                                                            .data
+                                                                            .otherEligibility !=
+                                                                        null &&
+                                                                    snapshot
+                                                                            .data
+                                                                            .data
+                                                                            .eligibility[
+                                                                                index]
+                                                                            .title ==
+                                                                        "Others"
                                                                 ? Text(snapshot
-                                                                .data
-                                                                .data
-                                                                .otherEligibility)
+                                                                    .data
+                                                                    .data
+                                                                    .otherEligibility)
                                                                 : SizedBox(),
                                                           );
                                                         }),
@@ -658,26 +661,26 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                               decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   borderRadius:
-                                                  BorderRadius.all(
-                                                      Radius.circular(12))),
+                                                      BorderRadius.all(
+                                                          Radius.circular(12))),
                                               child: Padding(
                                                 padding:
-                                                const EdgeInsets.all(15.0),
+                                                    const EdgeInsets.all(15.0),
                                                 child: Column(
                                                   crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
                                                       'Details',
                                                       textAlign: TextAlign.left,
                                                       style: GoogleFonts.lato(
                                                         fontWeight:
-                                                        FontWeight.bold,
+                                                            FontWeight.bold,
                                                         fontSize: 18,
                                                         letterSpacing: 0.27,
                                                         color:
-                                                        DesignCourseAppTheme
-                                                            .nearlyBlack,
+                                                            DesignCourseAppTheme
+                                                                .nearlyBlack,
                                                       ),
                                                     ),
                                                     SizedBox(
@@ -687,17 +690,17 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                       snapshot
                                                           .data.data.details,
                                                       textAlign:
-                                                      TextAlign.justify,
+                                                          TextAlign.justify,
                                                       style: TextStyle(
                                                         fontSize: 14,
                                                         letterSpacing: 0.27,
                                                         color:
-                                                        DesignCourseAppTheme
-                                                            .grey,
+                                                            DesignCourseAppTheme
+                                                                .grey,
                                                       ),
                                                       maxLines: 5,
                                                       overflow:
-                                                      TextOverflow.ellipsis,
+                                                          TextOverflow.ellipsis,
                                                     ),
                                                   ],
                                                 ),
@@ -837,91 +840,458 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                   ),
                   Padding(
                       padding: const EdgeInsets.only(bottom: 20.0),
-                      child:
-
-                      widget.status == "done"?
-                      Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: Container(
-                            color:Colors.white,
-                            height: 50,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Waiting for recruiter acknowledgement",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Icon(Icons.timelapse,color: Colors.deepOrangeAccent,size: 20,)
-                                )
-                              ],
-                            ),
-                          )
-                      ):
-                      snapshot.data.data.status == "Completed"
+                      child: widget.status == "done"
                           ? Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: Container(
-                            color:Colors.white,
-                            width: 300,
-                            height: 50,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "The opportunity is completed",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                              padding: const EdgeInsets.only(bottom: 10.0),
+                              child: Container(
+                                color: Colors.white,
+                                height: 50,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Waiting for recruiter acknowledgement",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Icon(
+                                          Icons.timelapse,
+                                          color: Colors.deepOrangeAccent,
+                                          size: 20,
+                                        ))
+                                  ],
                                 ),
-                                Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Icon(Icons.done,color: Colors.green,size: 20,)
-                                )
-                              ],
-                            ),
-                          )
-                      )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                snapshot.data.data.applyStatus == false
-                                    ? SizedBox(
-                                        height: 50,
-                                        width: 240,
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            primary: primaryColor,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(13)),
-                                          ),
-                                          onPressed: () {
-                                            getRequestWithoutParam(
-                                                '/api/v1/volunteer/apply-task/${widget.id}',
-                                                {
-                                                  'Content-Type':
-                                                      "application/json",
-                                                  "Authorization":
-                                                      "Bearer $token"
-                                                }).then((value) async {
-                                              Navigator.pop(context);
-                                              showToast(context,
-                                                  'Opportunity Applied');
-                                            });
-                                          },
-                                          child: Text(
-                                            "Apply Now",
-                                            style: GoogleFonts.kanit(
-                                                color: Colors.white,
-                                                fontSize: 18),
-                                          ),
+                              ))
+                          : snapshot.data.data.status == "Completed"
+                              ? Padding(
+                                  padding: const EdgeInsets.only(bottom: 10.0),
+                                  child: Container(
+                                    color: Colors.white,
+                                    width: 300,
+                                    height: 50,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "The opportunity is completed",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
                                         ),
-                                      )
-                                    : snapshot.data.data.status == "Hired"
-                                        ? Row(
-                                            children: [
-                                              SizedBox(
+                                        Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Icon(
+                                              Icons.done,
+                                              color: Colors.green,
+                                              size: 20,
+                                            ))
+                                      ],
+                                    ),
+                                  ))
+                              : Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    snapshot.data.data.applyStatus == false
+                                        ? SizedBox(
+                                            height: 50,
+                                            width: 240,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                primary: primaryColor,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            13)),
+                                              ),
+                                              onPressed: () {
+                                                getRequestWithoutParam(
+                                                    '/api/v1/volunteer/apply-task/${widget.id}',
+                                                    {
+                                                      'Content-Type':
+                                                          "application/json",
+                                                      "Authorization":
+                                                          "Bearer $token"
+                                                    }).then((value) async {
+                                                  Navigator.pop(context);
+                                                  showToast(context,
+                                                      'Applied for opportunity');
+                                                });
+                                              },
+                                              child: Text(
+                                                "Apply Now",
+                                                style: GoogleFonts.kanit(
+                                                    color: Colors.white,
+                                                    fontSize: 18),
+                                              ),
+                                            ),
+                                          )
+                                        : snapshot.data.data.status == "Hired"
+                                            ? Row(
+                                                children: [
+                                                  SizedBox(
+                                                    height: 50,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            2.2,
+                                                    child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        primary:
+                                                            Colors.red.shade500,
+                                                        // shape: RoundedRectangleBorder(
+                                                        //     borderRadius:
+                                                        //     BorderRadius.circular(13)),
+                                                      ),
+                                                      onPressed: () {
+                                                        SweetAlert.show(context,
+                                                            title:
+                                                                "Are you sure?",
+                                                            subtitle:
+                                                                "It will effect your overall ratings",
+                                                            style:
+                                                                SweetAlertStyle
+                                                                    .confirm,
+                                                            showCancelButton:
+                                                                true,
+                                                            onPress: (bool
+                                                                isConfirm) {
+                                                          if (isConfirm) {
+                                                            //Return false to keep dialog
+                                                            if (isConfirm) {
+                                                              new Future
+                                                                      .delayed(
+                                                                  new Duration(
+                                                                      seconds:
+                                                                          1),
+                                                                  () {
+                                                                getRequestWithoutParam(
+                                                                    '/api/v1/cancel-hiring/${snapshot.data.data.applyId}',
+                                                                    {
+                                                                      'Content-Type':
+                                                                          "application/json",
+                                                                      "Authorization":
+                                                                          "Bearer $token"
+                                                                    }).then(
+                                                                    (value) async {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                  setState(
+                                                                      () {});
+                                                                  showToast(
+                                                                      context,
+                                                                      'Application Canceled');
+                                                                });
+                                                              });
+                                                            } else {
+                                                              SweetAlert.show(
+                                                                  context,
+                                                                  subtitle:
+                                                                      "Canceled!",
+                                                                  style:
+                                                                      SweetAlertStyle
+                                                                          .error);
+                                                            }
+                                                            return false;
+                                                          }
+                                                          return null;
+                                                        });
+                                                      },
+                                                      child: Text(
+                                                        "Cancel",
+                                                        style:
+                                                            GoogleFonts.kanit(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 18),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  SizedBox(
+                                                    height: 50,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            2.2,
+                                                    child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        primary: Colors.green,
+                                                      ),
+                                                      onPressed: () {
+                                                        SweetAlert.show(context,
+                                                            subtitle:
+                                                                "Are you sure?",
+                                                            style:
+                                                                SweetAlertStyle
+                                                                    .confirm,
+                                                            showCancelButton:
+                                                                true,
+                                                            onPress: (bool
+                                                                isConfirm) {
+                                                          if (isConfirm) {
+                                                            //Return false to keep dialog
+                                                            if (isConfirm) {
+                                                              new Future
+                                                                      .delayed(
+                                                                  new Duration(
+                                                                      seconds:
+                                                                          1),
+                                                                  () {
+                                                                getRequestWithoutParam(
+                                                                    '/api/v1/volunteer-request-for-task-done/${widget.id}',
+                                                                    {
+                                                                      'Content-Type':
+                                                                          "application/json",
+                                                                      "Authorization":
+                                                                          "Bearer ${token}"
+                                                                    }).then(
+                                                                    (value) async {
+                                                                  SweetAlert.show(
+                                                                      context,
+                                                                      title:
+                                                                          "Your task is done",
+                                                                      subtitle:
+                                                                          "Please leave a rating ",
+                                                                      style: SweetAlertStyle
+                                                                          .success,
+                                                                      showCancelButton:
+                                                                          true,
+                                                                      onPress: (bool
+                                                                          isConfirm) {
+                                                                    if (isConfirm) {
+                                                                      if (isConfirm) {
+                                                                        showDialog(
+                                                                            context:
+                                                                                context,
+                                                                            barrierDismissible:
+                                                                                false,
+                                                                            builder:
+                                                                                (context) {
+                                                                              return Dialog(
+                                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+                                                                                child: Container(
+                                                                                  height: 360,
+                                                                                  decoration: BoxDecoration(
+                                                                                    borderRadius: BorderRadius.all(
+                                                                                      Radius.circular(15),
+                                                                                    ),
+                                                                                  ),
+                                                                                  child: Column(
+                                                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                                                    mainAxisSize: MainAxisSize.min,
+                                                                                    children: [
+                                                                                      TabBar(
+                                                                                        controller: _tabController,
+                                                                                        unselectedLabelColor: Colors.grey,
+                                                                                        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Color.fromRGBO(142, 142, 142, 1)),
+                                                                                        labelColor: Colors.blue,
+                                                                                        labelStyle: TextStyle(
+                                                                                          fontSize: 16,
+                                                                                          fontWeight: FontWeight.w600,
+                                                                                        ),
+                                                                                        tabs: [
+                                                                                          Tab(
+                                                                                            child: Text(
+                                                                                              "Review",
+                                                                                            ),
+                                                                                          ),
+                                                                                          Tab(
+                                                                                            child: Text(
+                                                                                              "Report",
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                      Expanded(
+                                                                                        child: TabBarView(
+                                                                                          controller: _tabController,
+                                                                                          children: [
+                                                                                            SingleChildScrollView(
+                                                                                              child: Padding(
+                                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                                child: Column(
+                                                                                                  children: [
+                                                                                                    CachedNetworkImage(
+                                                                                                        imageUrl: snapshot.data.data.recruiter.image,
+                                                                                                        imageBuilder: (context, imageProvider) => Container(
+                                                                                                              width: 80.0,
+                                                                                                              height: 80.0,
+                                                                                                              decoration: BoxDecoration(
+                                                                                                                shape: BoxShape.circle,
+                                                                                                                image: DecorationImage(image: imageProvider, fit: BoxFit.fitHeight),
+                                                                                                              ),
+                                                                                                            )),
+                                                                                                    Text(
+                                                                                                      snapshot.data.data.recruiter.firstName,
+                                                                                                      textAlign: TextAlign.center,
+                                                                                                    ),
+                                                                                                    Padding(
+                                                                                                      padding: const EdgeInsets.all(5.0),
+                                                                                                      child: Text(
+                                                                                                        'Rate ${snapshot.data.data.recruiter.firstName} and tell him what you think.',
+                                                                                                        style: TextStyle(fontSize: 16),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    RatingBar.builder(
+                                                                                                      itemSize: 35,
+                                                                                                      minRating: 1,
+                                                                                                      direction: Axis.horizontal,
+                                                                                                      itemCount: 5,
+                                                                                                      itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                                                                                      itemBuilder: (context, _) => Icon(
+                                                                                                        Icons.star,
+                                                                                                        color: Colors.amber,
+                                                                                                      ),
+                                                                                                      onRatingUpdate: (rating) {
+                                                                                                        rate(rating.toInt(), widget.id);
+                                                                                                      },
+                                                                                                    ),
+                                                                                                    SizedBox(
+                                                                                                      height: 10,
+                                                                                                    ),
+                                                                                                    TextFormField(
+                                                                                                        controller: reviewController,
+                                                                                                        keyboardType: TextInputType.multiline,
+                                                                                                        textInputAction: TextInputAction.done,
+                                                                                                        maxLines: null,
+                                                                                                        textAlign: TextAlign.center,
+                                                                                                        decoration: InputDecoration(
+                                                                                                          hintText: "Share your experience",
+                                                                                                          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
+                                                                                                          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
+                                                                                                        )),
+                                                                                                    FlatButton(
+                                                                                                      child: new Text(
+                                                                                                        'Submit',
+                                                                                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                                                                                      ),
+                                                                                                      onPressed: () {
+                                                                                                        reviewController.text != '' ? review(reviewController.text.toString(), widget.id) : Navigator.popUntil(context, (route) => count++ == 3);
+                                                                                                        setState(() {});
+                                                                                                      },
+                                                                                                    )
+                                                                                                  ],
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                            Padding(
+                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                              child: Column(
+                                                                                                children: [
+                                                                                                  Row(
+                                                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                    children: [
+                                                                                                      Icon(
+                                                                                                        Icons.warning_rounded,
+                                                                                                        color: Colors.red,
+                                                                                                      ),
+                                                                                                      SizedBox(
+                                                                                                        width: 5,
+                                                                                                      ),
+                                                                                                      Text('Report to admin'),
+                                                                                                    ],
+                                                                                                  ),
+                                                                                                  SizedBox(
+                                                                                                    height: 10,
+                                                                                                  ),
+                                                                                                  TextFormField(
+                                                                                                    textInputAction: TextInputAction.done,
+                                                                                                    controller: reportController,
+                                                                                                    decoration: ThemeHelper().textInputDecoration('Subject'),
+                                                                                                  ),
+                                                                                                  SizedBox(
+                                                                                                    height: 10,
+                                                                                                  ),
+                                                                                                  Row(
+                                                                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                                                                    children: [
+                                                                                                      SizedBox(
+                                                                                                        width: 5,
+                                                                                                      ),
+                                                                                                      Text('Details'),
+                                                                                                    ],
+                                                                                                  ),
+                                                                                                  TextFormField(
+                                                                                                    textInputAction: TextInputAction.done,
+                                                                                                    controller: detailsController,
+                                                                                                    maxLines: 4,
+                                                                                                    decoration: ThemeHelper().textInputDecoration(),
+                                                                                                  ),
+                                                                                                  SizedBox(
+                                                                                                    height: 10,
+                                                                                                  ),
+                                                                                                  FlatButton(
+                                                                                                    child: new Text('Submit', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                                                                                    onPressed: () {
+                                                                                                      reportController.text != '' ? report(reportController.text.toString(), detailsController.text.toString(), widget.id) : Navigator.popUntil(context, (route) => count++ == 3);
+                                                                                                    },
+                                                                                                  )
+                                                                                                ],
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                              );
+                                                                            });
+                                                                      } else {
+                                                                        SweetAlert.show(
+                                                                            context,
+                                                                            subtitle:
+                                                                                "Canceled!",
+                                                                            style:
+                                                                                SweetAlertStyle.error);
+                                                                      }
+                                                                      return false;
+                                                                    }
+                                                                    Navigator.popUntil(
+                                                                        context,
+                                                                        (route) =>
+                                                                            count++ ==
+                                                                            1);
+                                                                    return null;
+                                                                  });
+                                                                });
+                                                              });
+                                                            } else {
+                                                              SweetAlert.show(
+                                                                  context,
+                                                                  subtitle:
+                                                                      "Canceled!",
+                                                                  style:
+                                                                      SweetAlertStyle
+                                                                          .error);
+                                                            }
+                                                            return false;
+                                                          }
+                                                          return null;
+                                                        });
+                                                      },
+                                                      child: Text(
+                                                        "Done",
+                                                        style:
+                                                            GoogleFonts.kanit(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 18),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            : SizedBox(
                                                 height: 50,
                                                 width: MediaQuery.of(context)
                                                         .size
@@ -937,50 +1307,18 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                     //     BorderRadius.circular(13)),
                                                   ),
                                                   onPressed: () {
-                                                    SweetAlert.show(context,
-                                                        title: "Are you sure?",
-                                                        subtitle:
-                                                        "It will effect your overall ratings",
-                                                        style: SweetAlertStyle
-                                                            .confirm,
-                                                        showCancelButton: true,
-                                                        onPress:
-                                                            (bool isConfirm) {
-                                                          if (isConfirm) {
-                                                            //Return false to keep dialog
-                                                            if (isConfirm) {
-                                                              new Future.delayed(
-                                                                  new Duration(
-                                                                      seconds: 1),
-                                                                      () {
-                                                                        getRequestWithoutParam(
-                                                                            '/api/v1/cancel-hiring/${snapshot.data.data.applyId}',
-                                                                            {
-                                                                              'Content-Type':
-                                                                              "application/json",
-                                                                              "Authorization":
-                                                                              "Bearer $token"
-                                                                            }).then((value) async {
-                                                                          Navigator.pop(context);
-                                                                          setState(() {});
-                                                                          showToast(context,
-                                                                              'Application Canceled');
-                                                                        });
-                                                                  });
-                                                            } else {
-                                                              SweetAlert.show(
-                                                                  context,
-                                                                  subtitle:
-                                                                  "Canceled!",
-                                                                  style:
-                                                                  SweetAlertStyle
-                                                                      .error);
-                                                            }
-                                                            return false;
-                                                          }
-                                                          return null;
-                                                        });
-
+                                                    getRequestWithoutParam(
+                                                        '/api/v1/cancel-hiring/${snapshot.data.data.applyId}',
+                                                        {
+                                                          'Content-Type':
+                                                              "application/json",
+                                                          "Authorization":
+                                                              "Bearer $token"
+                                                        }).then((value) async {
+                                                      Navigator.pop(context);
+                                                      showToast(context,
+                                                          'Application Cancelled');
+                                                    });
                                                   },
                                                   child: Text(
                                                     "Cancel",
@@ -990,320 +1328,8 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                   ),
                                                 ),
                                               ),
-                                              SizedBox(
-                                                width: 5,
-                                              ),
-                                              SizedBox(
-                                                height: 50,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    2.2,
-                                                child: ElevatedButton(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    primary: Colors.green,
-                                                  ),
-                                                  onPressed: () {
-                                                    SweetAlert.show(context,
-                                                        subtitle:
-                                                            "Are you sure?",
-                                                        style: SweetAlertStyle
-                                                            .confirm,
-                                                        showCancelButton: true,
-                                                        onPress:
-                                                            (bool isConfirm) {
-                                                      if (isConfirm) {
-                                                        //Return false to keep dialog
-                                                        if (isConfirm) {
-                                                          new Future.delayed(
-                                                              new Duration(
-                                                                  seconds: 1),
-                                                              () {
-                                                            getRequestWithoutParam(
-                                                                '/api/v1/volunteer-request-for-task-done/${widget.id}',
-                                                                {
-                                                                  'Content-Type':
-                                                                      "application/json",
-                                                                  "Authorization":
-                                                                      "Bearer ${token}"
-                                                                }).then(
-                                                                (value) async {
-                                                              SweetAlert.show(
-                                                                  context,
-                                                                  title:
-                                                                      "Your task is done",
-                                                                  subtitle:
-                                                                  "Do you want to rate? ",
-                                                                  style: SweetAlertStyle
-                                                                      .success,
-                                                                  showCancelButton:
-                                                                      true,
-                                                                  onPress: (bool
-                                                                      isConfirm) {
-                                                                if (isConfirm) {
-                                                                  if (isConfirm) {
-                                                                    showDialog(
-                                                                        context:
-                                                                            context,
-                                                                        barrierDismissible:
-                                                                            false,
-                                                                        builder:
-                                                                            (context) {
-                                                                          return Dialog(
-                                                                            shape:
-                                                                                RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
-                                                                            child:
-                                                                                Container(
-                                                                              height: 360,
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.all(
-                                                                                  Radius.circular(15),
-                                                                                ),
-                                                                              ),
-                                                                              child: Column(
-                                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                                mainAxisSize: MainAxisSize.min,
-                                                                                children: [
-                                                                                  TabBar(
-                                                                                    controller: _tabController,
-                                                                                    unselectedLabelColor: Colors.grey,
-                                                                                    unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Color.fromRGBO(142, 142, 142, 1)),
-                                                                                    labelColor: Colors.blue,
-                                                                                    labelStyle: TextStyle(
-                                                                                      fontSize: 16,
-                                                                                      fontWeight: FontWeight.w600,
-                                                                                    ),
-                                                                                    tabs: [
-                                                                                      Tab(
-                                                                                        child: Text(
-                                                                                          "Review",
-                                                                                        ),
-                                                                                      ),
-                                                                                      Tab(
-                                                                                        child: Text(
-                                                                                          "Report",
-                                                                                        ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                  Expanded(
-                                                                                    child: TabBarView(
-                                                                                      controller: _tabController,
-                                                                                      children: [
-                                                                                        SingleChildScrollView(
-                                                                                          child: Padding(
-                                                                                            padding: const EdgeInsets.all(8.0),
-                                                                                            child: Column(
-                                                                                              children: [
-                                                                                                CachedNetworkImage(
-                                                                                                    imageUrl: snapshot.data.data.recruiter.image,
-                                                                                                    imageBuilder: (context, imageProvider) => Container(
-                                                                                                          width: 80.0,
-                                                                                                          height: 80.0,
-                                                                                                          decoration: BoxDecoration(
-                                                                                                            shape: BoxShape.circle,
-                                                                                                            image: DecorationImage(image: imageProvider, fit: BoxFit.fitHeight),
-                                                                                                          ),
-                                                                                                        )),
-                                                                                                Text(
-                                                                                                  snapshot.data.data.recruiter.firstName,
-                                                                                                  textAlign: TextAlign.center,
-                                                                                                ),
-                                                                                                Padding(
-                                                                                                  padding: const EdgeInsets.all(5.0),
-                                                                                                  child: Text(
-                                                                                                    'Rate ${snapshot.data.data.recruiter.firstName} and tell him what you think.',
-                                                                                                    style: TextStyle(fontSize: 16),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                RatingBar.builder(
-                                                                                                  itemSize: 35,
-                                                                                                  minRating: 1,
-                                                                                                  direction: Axis.horizontal,
-                                                                                                  itemCount: 5,
-                                                                                                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                                                                                                  itemBuilder: (context, _) => Icon(
-                                                                                                    Icons.star,
-                                                                                                    color: Colors.amber,
-                                                                                                  ),
-                                                                                                  onRatingUpdate: (rating) {
-                                                                                                    rate(rating.toInt(), widget.id);
-                                                                                                  },
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  height: 10,
-                                                                                                ),
-                                                                                                TextFormField(
-                                                                                                    controller: reviewController,
-                                                                                                    keyboardType: TextInputType.multiline,
-                                                                                                    textInputAction: TextInputAction.done,
-                                                                                                    maxLines: null,
-                                                                                                    textAlign: TextAlign.center,
-                                                                                                    decoration: InputDecoration(
-                                                                                                      hintText: "Share your experience",
-                                                                                                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
-                                                                                                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
-                                                                                                    )),
-                                                                                                FlatButton(
-                                                                                                  child: new Text(
-                                                                                                    'Submit',
-                                                                                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                                                                                                  ),
-                                                                                                  onPressed: () {
-                                                                                                    reviewController.text != '' ? review(reviewController.text.toString(), widget.id)
-                                                                                                        : Navigator.popUntil(context, (route) => count++ == 3);
-                                                                                                    setState(() {});
-                                                                                                  },
-                                                                                                )
-                                                                                              ],
-                                                                                            ),
-                                                                                          ),
-                                                                                        ),
-                                                                                        Padding(
-                                                                                          padding: const EdgeInsets.all(8.0),
-                                                                                          child: Column(
-                                                                                            children: [
-                                                                                              Row(
-                                                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                                                children: [
-                                                                                                  Icon(
-                                                                                                    Icons.warning_rounded,
-                                                                                                    color: Colors.red,
-                                                                                                  ),
-                                                                                                  SizedBox(
-                                                                                                    width: 5,
-                                                                                                  ),
-                                                                                                  Text('Report to admin'),
-                                                                                                ],
-                                                                                              ),
-                                                                                              SizedBox(
-                                                                                                height: 10,
-                                                                                              ),
-                                                                                              TextFormField(
-                                                                                                textInputAction: TextInputAction.done,
-                                                                                                controller: reportController,
-                                                                                                decoration: ThemeHelper().textInputDecoration('Subject'),
-                                                                                              ),
-                                                                                              SizedBox(
-                                                                                                height: 10,
-                                                                                              ),
-                                                                                              Row(
-                                                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                                                children: [
-                                                                                                  SizedBox(
-                                                                                                    width: 5,
-                                                                                                  ),
-                                                                                                  Text('Details'),
-                                                                                                ],
-                                                                                              ),
-                                                                                              TextFormField(
-                                                                                                textInputAction: TextInputAction.done,
-                                                                                                controller: detailsController,
-                                                                                                maxLines: 4,
-                                                                                                decoration: ThemeHelper().textInputDecoration(),
-                                                                                              ),
-                                                                                              SizedBox(
-                                                                                                height: 10,
-                                                                                              ),
-                                                                                              FlatButton(
-                                                                                                child: new Text('Submit', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                                                                                                onPressed: () {
-                                                                                                  reportController.text != '' ? report(reportController.text.toString(), detailsController.text.toString(), widget.id) : Navigator.popUntil(context, (route) => count++ == 3);
-                                                                                                },
-                                                                                              )
-                                                                                            ],
-                                                                                          ),
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ),
-                                                                          );
-                                                                        });
-                                                                  } else {
-                                                                    SweetAlert.show(
-                                                                        context,
-                                                                        subtitle:
-                                                                            "Canceled!",
-                                                                        style: SweetAlertStyle
-                                                                            .error);
-                                                                  }
-                                                                  return false;
-                                                                }
-                                                                Navigator.popUntil(
-                                                                    context,
-                                                                    (route) =>
-                                                                        count++ ==
-                                                                        1);
-                                                                print("hello");
-                                                                return null;
-                                                              });
-                                                            });
-                                                          });
-                                                        } else {
-                                                          SweetAlert.show(
-                                                              context,
-                                                              subtitle:
-                                                                  "Canceled!",
-                                                              style:
-                                                                  SweetAlertStyle
-                                                                      .error);
-                                                        }
-                                                        return false;
-                                                      }
-                                                      return null;
-                                                    });
-                                                  },
-                                                  child: Text(
-                                                    "Done",
-                                                    style: GoogleFonts.kanit(
-                                                        color: Colors.white,
-                                                        fontSize: 18),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        : SizedBox(
-                                            height: 50,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2.2,
-                                            child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                primary: Colors.red.shade500,
-                                                // shape: RoundedRectangleBorder(
-                                                //     borderRadius:
-                                                //     BorderRadius.circular(13)),
-                                              ),
-                                              onPressed: () {
-                                                getRequestWithoutParam(
-                                                    '/api/v1/cancel-hiring/${snapshot.data.data.applyId}',
-                                                    {
-                                                      'Content-Type':
-                                                          "application/json",
-                                                      "Authorization":
-                                                          "Bearer $token"
-                                                    }).then((value) async {
-                                                  Navigator.pop(context);
-                                                  showToast(context,
-                                                      'Application Cancelled');
-                                                });
-                                              },
-                                              child: Text(
-                                                "Cancel",
-                                                style: GoogleFonts.kanit(
-                                                    color: Colors.white,
-                                                    fontSize: 18),
-                                              ),
-                                            ),
-                                          ),
-                              ],
-                            )),
+                                  ],
+                                )),
                 ],
               ),
             );
