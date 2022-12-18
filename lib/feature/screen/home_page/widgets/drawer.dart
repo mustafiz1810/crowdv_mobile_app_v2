@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:crowdv_mobile_app/feature/screen/Subscription/basic_page.dart';
+import 'package:crowdv_mobile_app/feature/screen/Subscription/premium_page.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/about_us.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/faq.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/settings.dart';
@@ -24,24 +26,25 @@ class NavDrawer extends StatefulWidget {
       disability,
       prof,
       gender,
-  country,
+      country,
       state,
       city,
       zip;
-  NavDrawer(
-      {@required this.id,
-      this.role,
-      this.fname,
-      this.lname,
-      this.email,
-      this.image,
-      this.disability,
-      this.prof,
-      this.gender,
-        this.country,
-      this.state,
-      this.zip,
-      this.city,});
+  NavDrawer({
+    @required this.id,
+    this.role,
+    this.fname,
+    this.lname,
+    this.email,
+    this.image,
+    this.disability,
+    this.prof,
+    this.gender,
+    this.country,
+    this.state,
+    this.zip,
+    this.city,
+  });
   @override
   _NavDrawerState createState() => _NavDrawerState();
 }
@@ -82,28 +85,41 @@ class _NavDrawerState extends State<NavDrawer> {
             decoration: new BoxDecoration(
               color: Colors.white,
             ),
-            currentAccountPicture: CachedNetworkImage(
-              imageUrl:widget.image,
-              imageBuilder: (context, imageProvider) =>
-                  Container(
-                    width: 30.0,
-                    height: 30.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: imageProvider, fit: BoxFit.cover),
-                    ),
+            currentAccountPicture: Stack(children: [
+              CachedNetworkImage(
+                imageUrl: widget.image,
+                imageBuilder: (context, imageProvider) => Container(
+                  width: 150.0,
+                  height: 150.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.fitHeight),
                   ),
-              placeholder: (context, url) => Icon(Icons.downloading_rounded,
+                ),
+                placeholder: (context, url) => Icon(Icons.downloading_rounded,
+                    size: 30, color: Colors.grey),
+                errorWidget: (context, url, error) => Icon(
+                  Icons.image_outlined,
                   size: 30,
-                  color: Colors.grey),
-              errorWidget: (context, url, error) =>
-                  Icon(
-                    Icons.image_outlined,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-            ),
+                  color: Colors.grey,
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    border: Border.all(color: Colors.lightBlueAccent, width: 4),
+                    borderRadius: BorderRadius.circular(100)),
+              ),
+              Positioned(
+                  bottom: 38,
+                  left: 40,
+                  child: Image.asset(
+                    "assets/premium.png",
+                    height: 40,
+                    width: 40,
+                  ))
+            ]),
           ),
           ListTile(
             leading: Icon(
@@ -147,6 +163,18 @@ class _NavDrawerState extends State<NavDrawer> {
                     Get.to(const LoginPage());
                   }),
           ListTile(
+              leading: Icon(Icons.workspace_premium, color: Colors.black),
+              title: Text("Subscription "),
+              onTap: () {
+                Get.to(() => BasicPage());
+              }),
+          ListTile(
+              leading: Icon(Icons.workspace_premium, color: Colors.black),
+              title: Text("Subscription premium"),
+              onTap: () {
+                Get.to(() => PremiumPage());
+              }),
+          ListTile(
               leading: Icon(Icons.lock_outline_rounded, color: Colors.black),
               title: Text("Change Password"),
               onTap: () {
@@ -169,24 +197,27 @@ class _NavDrawerState extends State<NavDrawer> {
                 Get.to(() => Faq());
               }),
           ListTile(
-              leading: Icon(Icons.settings, color: Colors.black),
-              title: new Text("Settings"),
-              onTap: () async {
-                getRequest('/api/v1/profile', null, {
-                  'Content-Type': "application/json",
-                  "Authorization": "Bearer ${token}"
-                }).then((value) async {
-                  print(value['data']['is_email_notification']);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Settings(
-                          smsNotify:value['data']['is_sms_notification'],
-                          emailNotify: value['data']['is_email_notification'],
-                          appNotify: value['data']['is_database_notification'],)),
-                  );
-                });
-              },),
+            leading: Icon(Icons.settings, color: Colors.black),
+            title: new Text("Settings"),
+            onTap: () async {
+              getRequest('/api/v1/profile', null, {
+                'Content-Type': "application/json",
+                "Authorization": "Bearer ${token}"
+              }).then((value) async {
+                print(value['data']['is_email_notification']);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Settings(
+                            smsNotify: value['data']['is_sms_notification'],
+                            emailNotify: value['data']['is_email_notification'],
+                            appNotify: value['data']
+                                ['is_database_notification'],
+                          )),
+                );
+              });
+            },
+          ),
           ListTile(
               leading: Icon(Icons.info_outline_rounded, color: Colors.black),
               title: Text("About"),

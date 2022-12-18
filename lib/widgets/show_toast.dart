@@ -1,7 +1,6 @@
-import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
-import 'package:one_context/one_context.dart';
+
 void showToast(BuildContext context, msg) {
   ToastContext().init(context);
   Toast.show(

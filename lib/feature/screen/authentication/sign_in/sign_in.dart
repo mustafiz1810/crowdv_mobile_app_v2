@@ -32,9 +32,11 @@ class _LoginPageState extends State<LoginPage> {
   void signin(String email, password) async {
     try {
       Response response =
-          await post(Uri.parse(NetworkConstants.BASE_URL + 'login'), headers: {
+          await post(Uri.parse(NetworkConstants.BASE_URL + 'login'),
+              headers: {
         "Accept": "application/json"
-      }, body: {
+      },
+              body: {
         'email': email,
         'password': password,
       });
@@ -72,7 +74,8 @@ class _LoginPageState extends State<LoginPage> {
                       role: data['result']['data']['role'])),
               (Route<dynamic> route) => false);
         }
-      } else {
+      }
+      else {
         setState(() {
           isApiCallProcess = false;
         });
