@@ -51,7 +51,7 @@ class _FaqState extends State<Faq> {
         iconTheme: IconThemeData(color: Colors.white),
         // collapsedHeight: 150,
         title: const Text(
-          'FAQ',
+          "FAQ'S",
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: primaryColor,

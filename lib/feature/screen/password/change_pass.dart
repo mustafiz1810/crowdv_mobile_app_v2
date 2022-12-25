@@ -93,7 +93,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     TextFormField(
                       controller: oldPassEditingController,
                       decoration: ThemeHelper().textInputDecoration(
-                          'Current Password', 'Enter your current password'),
+                          'Current password', 'Enter your current password'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';
@@ -107,7 +107,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     TextFormField(
                       controller: newPassEditingController,
                       decoration: ThemeHelper().textInputDecoration(
-                          'New Password', 'Enter your new password'),
+                          'New password', 'Enter your new password'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';
@@ -121,7 +121,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     TextFormField(
                       controller: confirmPassEditingController,
                       decoration: ThemeHelper().textInputDecoration(
-                          'Confirm Password', 'Enter your password again'),
+                          'Confirm new password', 'Enter your password again'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';

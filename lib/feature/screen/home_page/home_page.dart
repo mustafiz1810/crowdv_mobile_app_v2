@@ -416,7 +416,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     },
                                   ),
                                   CategoryCard(
-                                    title: "My Opportunity",
+                                    title: "My Opportunities",
                                     svgSrc: "assets/list-check.svg",
                                     press: () {
                                       Get.to(VolunteerMyOpportunity(
@@ -425,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     },
                                   ),
                                   CategoryCard(
-                                    title: "Set category",
+                                    title: "Category",
                                     svgSrc: "assets/microsoft-line.svg",
                                     press: () async {
                                       getRequestWithoutParam(
@@ -506,7 +506,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     },
                                   ),
                                   CategoryCard(
-                                    title: "My Opportunity",
+                                    title: "My Opportunities",
                                     svgSrc: "assets/ballot.svg",
                                     press: () {
                                       Get.to(MyOpportunity(

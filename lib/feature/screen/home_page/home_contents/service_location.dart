@@ -7,9 +7,10 @@ import 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class ServiceLocation extends StatefulWidget {
-  final country,state ,city, zip;
-  ServiceLocation({this.country ,this.state,this.city, this.zip});
+  final country, state, city, zip;
+  ServiceLocation({this.country, this.state, this.city, this.zip});
 
   @override
   _ServiceLocationState createState() => _ServiceLocationState();
@@ -34,6 +35,7 @@ class _ServiceLocationState extends State<ServiceLocation> {
       token = pref.getString("user");
     });
   }
+
   TextEditingController zipController = TextEditingController();
   void set(String country, state, city, zip_code) async {
     try {
@@ -118,6 +120,7 @@ class _ServiceLocationState extends State<ServiceLocation> {
       });
     }
   }
+
   var countryvalue;
   var statevalue;
   var cityvalue;
@@ -128,7 +131,7 @@ class _ServiceLocationState extends State<ServiceLocation> {
         iconTheme: IconThemeData(color: Colors.white),
         // collapsedHeight: 150,
         title: const Text(
-          'Set Location',
+          'Service Location',
           style: TextStyle(color: Colors.white),
         ),
         // ),
@@ -157,17 +160,13 @@ class _ServiceLocationState extends State<ServiceLocation> {
                 label: 'Select Country',
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                        color: Colors.black
-                    )
-                ),
-                dropDownMenuItems:  countries?.map((item) {
-                  return item['name'];
-                })?.toList() ??
+                    border: Border.all(color: Colors.black)),
+                dropDownMenuItems: countries?.map((item) {
+                      return item['name'];
+                    })?.toList() ??
                     [],
                 onChanged: (newVal) {
-                  if(newVal!=null)
-                  {
+                  if (newVal != null) {
                     setState(() {
                       states.clear();
                       statevalue = null;
@@ -178,10 +177,8 @@ class _ServiceLocationState extends State<ServiceLocation> {
                       getState(countryvalue);
                       print(countryvalue);
                     });
-
-                  }
-                  else{
-                    countryvalue=null;
+                  } else {
+                    countryvalue = null;
                   }
                 },
               ),
@@ -199,17 +196,13 @@ class _ServiceLocationState extends State<ServiceLocation> {
                 label: 'Division/Province/State',
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                        color: Colors.black
-                    )
-                ),
+                    border: Border.all(color: Colors.black)),
                 dropDownMenuItems: states.map((item) {
-                  return item['name'].toString();
-                }).toList() ??
+                      return item['name'].toString();
+                    }).toList() ??
                     [],
-                onChanged: (newVal)  {
-                  if(newVal!=null)
-                  {
+                onChanged: (newVal) {
+                  if (newVal != null) {
                     setState(() {
                       city.clear();
                       cityvalue = null;
@@ -218,9 +211,8 @@ class _ServiceLocationState extends State<ServiceLocation> {
                       print(statevalue);
                       getCity(statevalue);
                     });
-                  }
-                  else{
-                    statevalue=null;
+                  } else {
+                    statevalue = null;
                   }
                 },
               ),
@@ -238,23 +230,18 @@ class _ServiceLocationState extends State<ServiceLocation> {
                 label: 'City',
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                        color: Colors.black
-                    )
-                ),
+                    border: Border.all(color: Colors.black)),
                 dropDownMenuItems: city.map((item) {
-                  return item['name'].toString();
-                }).toList() ??
+                      return item['name'].toString();
+                    }).toList() ??
                     [],
                 onChanged: (newVal) {
-                  if(newVal!=null)
-                  {
+                  if (newVal != null) {
                     cityvalue = newVal['id'];
                     zipController.clear();
                     print(cityvalue);
-                  }
-                  else{
-                    cityvalue=null;
+                  } else {
+                    cityvalue = null;
                   }
                 },
               ),

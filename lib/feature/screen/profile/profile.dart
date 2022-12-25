@@ -464,7 +464,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   tabs: [
                                     Tab(
                                         icon: Icon(Icons.info_rounded),
-                                        child: const Text('Basic Info')),
+                                        child: const Text('My Info')),
                                     Tab(
                                         icon: Icon(Icons.wheelchair_pickup_rounded),
                                         child: const Text('Disabilities')),

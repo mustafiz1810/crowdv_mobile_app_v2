@@ -202,7 +202,7 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         title: const Text(
-          'Opportunity Details',
+          'My Opportunity Details',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: primaryColor,
@@ -475,17 +475,8 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                           .spaceBetween,
                                                   children: [
                                                     Text(
-                                                      'Starts from',
+                                                      'DATE',
                                                       textAlign: TextAlign.left,
-                                                      style: GoogleFonts.lato(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18,
-                                                        letterSpacing: 0.27,
-                                                        color:
-                                                            DesignCourseAppTheme
-                                                                .nearlyBlack,
-                                                      ),
                                                     ),
                                                     Row(
                                                       children: [
@@ -526,18 +517,9 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                             .spaceBetween,
                                                     children: [
                                                       Text(
-                                                        'Duration',
+                                                        'TIME',
                                                         textAlign:
                                                             TextAlign.left,
-                                                        style: GoogleFonts.lato(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18,
-                                                          letterSpacing: 0.27,
-                                                          color:
-                                                              DesignCourseAppTheme
-                                                                  .nearlyBlack,
-                                                        ),
                                                       ),
                                                       Row(
                                                         children: [
@@ -591,15 +573,6 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                     Text(
                                                       'Eligibility',
                                                       textAlign: TextAlign.left,
-                                                      style: GoogleFonts.lato(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18,
-                                                        letterSpacing: 0.27,
-                                                        color:
-                                                            DesignCourseAppTheme
-                                                                .nearlyBlack,
-                                                      ),
                                                     ),
                                                     ListView.builder(
                                                         physics:
@@ -673,15 +646,6 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                     Text(
                                                       'Details',
                                                       textAlign: TextAlign.left,
-                                                      style: GoogleFonts.lato(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18,
-                                                        letterSpacing: 0.27,
-                                                        color:
-                                                            DesignCourseAppTheme
-                                                                .nearlyBlack,
-                                                      ),
                                                     ),
                                                     SizedBox(
                                                       height: 5,

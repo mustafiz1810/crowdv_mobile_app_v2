@@ -54,7 +54,7 @@ class _OrganizationOpportunitiesState extends State<OrganizationOpportunities> {
           iconTheme: IconThemeData(color: Colors.white),
           // collapsedHeight: 150,
           title: const Text(
-            'Organization Opportunity',
+            'My Organization Opportunities',
             style: TextStyle(color: Colors.white),
           ),
           // ),
@@ -79,7 +79,7 @@ class _OrganizationOpportunitiesState extends State<OrganizationOpportunities> {
                         child: EmptyWidget(
                           image: null,
                           packageImage: PackageImage.Image_3,
-                          title: 'No Opportunity',
+                          title: 'No Opportunities',
                           titleTextStyle: TextStyle(
                             fontSize: 22,
                             color: Color(0xff9da9c7),

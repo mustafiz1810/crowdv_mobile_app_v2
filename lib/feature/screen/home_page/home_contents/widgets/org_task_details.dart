@@ -164,7 +164,7 @@ class OrganizationTaskDetailsState extends State<OrganizationTaskDetails>
                             SliverToBoxAdapter(
                                 child: TabBar(
                                   tabs: [
-                                    Tab(child: const Text('Details')),
+                                    Tab(child: const Text('Opportunity Details')),
                                     Tab(child: const Text('Organization')),
                                   ],
                                   unselectedLabelColor: Colors.black,
@@ -201,17 +201,7 @@ class OrganizationTaskDetailsState extends State<OrganizationTaskDetails>
                                                   crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                                   children: <Widget>[
-                                                    Text(
-                                                      'Banner',
-                                                      textAlign: TextAlign.left,
-                                                      style: GoogleFonts.lato(
-                                                        fontWeight: FontWeight.bold,
-                                                        fontSize: 18,
-                                                        letterSpacing: 0.27,
-                                                        color: DesignCourseAppTheme
-                                                            .nearlyBlack,
-                                                      ),
-                                                    ),
+
                                                     Container(
                                                       child: Image.network(snapshot.data.data.banner),
                                                     )
@@ -234,18 +224,11 @@ class OrganizationTaskDetailsState extends State<OrganizationTaskDetails>
                                                   child: Row(
                                                     mainAxisAlignment:
                                                     MainAxisAlignment
-                                                        .spaceBetween,
+                                                        .start,
                                                     children: [
                                                       Text(
-                                                        'Link',
+                                                        'Apply',
                                                         textAlign: TextAlign.left,
-                                                        style: GoogleFonts.lato(
-                                                          fontWeight: FontWeight.bold,
-                                                          fontSize: 18,
-                                                          letterSpacing: 0.27,
-                                                          color: DesignCourseAppTheme
-                                                              .nearlyBlack,
-                                                        ),
                                                       ),
                                                       TextButton(
                                                           onPressed: () async {
@@ -263,7 +246,7 @@ class OrganizationTaskDetailsState extends State<OrganizationTaskDetails>
                                                             }
                                                           },
                                                           child: SizedBox(
-                                                              width: 200,
+                                                              width: 220,
                                                               height: 20,
                                                               child: Text(
                                                                 snapshot
@@ -297,13 +280,6 @@ class OrganizationTaskDetailsState extends State<OrganizationTaskDetails>
                                                     Text(
                                                       'Details',
                                                       textAlign: TextAlign.left,
-                                                      style: GoogleFonts.lato(
-                                                        fontWeight: FontWeight.bold,
-                                                        fontSize: 18,
-                                                        letterSpacing: 0.27,
-                                                        color: DesignCourseAppTheme
-                                                            .nearlyBlack,
-                                                      ),
                                                     ),
                                                     SizedBox(
                                                       height: 5,
@@ -346,13 +322,6 @@ class OrganizationTaskDetailsState extends State<OrganizationTaskDetails>
                                                     Text(
                                                       'Email',
                                                       textAlign: TextAlign.left,
-                                                      style: GoogleFonts.lato(
-                                                        fontWeight: FontWeight.bold,
-                                                        fontSize: 18,
-                                                        letterSpacing: 0.27,
-                                                        color: DesignCourseAppTheme
-                                                            .nearlyBlack,
-                                                      ),
                                                     ),
                                                     Text(
                                                       snapshot.data.data.organization.email,
@@ -380,13 +349,6 @@ class OrganizationTaskDetailsState extends State<OrganizationTaskDetails>
                                                     Text(
                                                       'Phone',
                                                       textAlign: TextAlign.left,
-                                                      style: GoogleFonts.lato(
-                                                        fontWeight: FontWeight.bold,
-                                                        fontSize: 18,
-                                                        letterSpacing: 0.27,
-                                                        color: DesignCourseAppTheme
-                                                            .nearlyBlack,
-                                                      ),
                                                     ),
                                                     Text(
                                                       snapshot.data.data.organization.phone,

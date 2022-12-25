@@ -192,7 +192,7 @@ class _NavDrawerState extends State<NavDrawer> {
           ListTile(
               leading:
                   Icon(Icons.question_answer_outlined, color: Colors.black),
-              title: new Text("FAQ"),
+              title: new Text("FAQ'S"),
               onTap: () {
                 Get.to(() => Faq());
               }),

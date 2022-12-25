@@ -376,7 +376,7 @@ class _CommonProfileState extends State<CommonProfile> {
                                                   snapshot.data.data.rating
                                                       .toString(),
                                                   style: TextStyle(
-                                                      fontSize: 30,
+                                                      fontSize: 35,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
@@ -504,14 +504,13 @@ class _CommonProfileState extends State<CommonProfile> {
                                                                   initialRating: snapshot
                                                                               .data
                                                                               .data
-                                                                              .rating ==
+                                                                              .reviews[index].rating ==
                                                                           null
-                                                                      ? 0
+                                                                      ? 0.0
                                                                       : snapshot
                                                                           .data
                                                                           .data
-                                                                          .rating
-                                                                          .toDouble(),
+                                                                          .rating.toDouble(),
                                                                   minRating: 1,
                                                                   direction: Axis
                                                                       .horizontal,

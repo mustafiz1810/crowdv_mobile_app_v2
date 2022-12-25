@@ -65,7 +65,8 @@ class PaymentController extends GetxController {
                 'Bearer sk_test_51MErClGMOrTjnIDXISlBeSprhuwpt9xHjHZITn9stPiBNOBcOWtPa7x7Sk2Dmx0Ql9pbuoZ6xfDDWZxX9RgxpujH00oZgz9OAk',
             'Content-Type': 'application/x-www-form-urlencoded'
           });
-      return jsonDecode(response.body);
+      var data=  jsonDecode(response.body);
+      return data;
     } catch (err) {
       print('err charging user: ${err.toString()}');
     }

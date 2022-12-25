@@ -180,7 +180,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: primaryColor,
-          title: Text('History'),
+          title: Text('My History'),
         ),
         bottomNavigationBar: CustomBottomNavigation(),
         body: Padding(
@@ -313,27 +313,30 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                         Icons
                                                             .location_on_rounded,
                                                         color:
-                                                        Colors.blueAccent,
+                                                            Colors.blueAccent,
                                                         size: 20,
                                                       ),
                                                       Text(
                                                         snapshot
-                                                            .data
-                                                            .data[index]
-                                                            .city.name !=
-                                                            null
+                                                                    .data
+                                                                    .data[index]
+                                                                    .city
+                                                                    .name !=
+                                                                null
                                                             ? snapshot
-                                                            .data
-                                                            .data[index]
-                                                            .city.name.toString()
+                                                                .data
+                                                                .data[index]
+                                                                .city
+                                                                .name
+                                                                .toString()
                                                             : "",
                                                         style: TextStyle(
                                                             fontSize: 15,
                                                             color: Colors
                                                                 .blueAccent,
                                                             fontWeight:
-                                                            FontWeight
-                                                                .bold),
+                                                                FontWeight
+                                                                    .bold),
                                                       ),
                                                     ],
                                                   ),
@@ -371,25 +374,26 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                         snapshot.data.data[index].status !=
                                                 "Completed"
                                             ? Container(
-                                          width: 80,
-                                          height: 35,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                                snapshot
-                                                    .data.data[index].status
-                                                    .toUpperCase(),
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                    FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: Colors.grey)),
-                                          ),
-                                        )
+                                                width: 80,
+                                                height: 35,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(20)),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                      snapshot.data.data[index]
+                                                          .status
+                                                          .toUpperCase(),
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 14,
+                                                          color: Colors.grey)),
+                                                ),
+                                              )
                                             : Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment

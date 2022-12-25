@@ -166,7 +166,7 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
                               height: 10,
                             ),
                             Text(
-                              'A verification code will be send to your email.',
+                              'A verification code will be sent to your email.',
                               style: TextStyle(
                                 color: Colors.black38,
                                 // fontSize: 20,

@@ -60,7 +60,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
           iconTheme: IconThemeData(color: Colors.white),
           // collapsedHeight: 150,
           title: const Text(
-            'My Opportunity',
+            'My Opportunities',
             style: TextStyle(color: Colors.white),
           ),
           // ),
@@ -85,7 +85,7 @@ class _MyOpportunityState extends State<MyOpportunity> {
                         child: EmptyWidget(
                           image: null,
                           packageImage: PackageImage.Image_3,
-                          title: 'No Opportunity',
+                          title: 'No Opportunities',
                           titleTextStyle: TextStyle(
                             fontSize: 22,
                             color: Color(0xff9da9c7),

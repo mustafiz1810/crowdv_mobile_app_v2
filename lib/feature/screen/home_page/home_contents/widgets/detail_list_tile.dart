@@ -33,15 +33,6 @@ class ListCard extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.left,
-              style: GoogleFonts.lato(
-                fontWeight:
-                FontWeight.bold,
-                fontSize: 18,
-                letterSpacing: 0.27,
-                color:
-                DesignCourseAppTheme
-                    .nearlyBlack,
-              ),
             ),
             SizedBox(
               width: 20,

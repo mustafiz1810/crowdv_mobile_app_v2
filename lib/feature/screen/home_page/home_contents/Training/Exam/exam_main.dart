@@ -35,7 +35,7 @@ class _ExamPageState extends State<ExamPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Exam'),
+        title: Text('Quiz'),
         backgroundColor: primaryColor,
       ),
       body: Padding(

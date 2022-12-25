@@ -93,7 +93,7 @@ class _BasicPageState extends State<BasicPage> {
                                 ),
                               ),
                               SizedBox(
-                                width: MediaQuery.of(context).size.width/1.5,
+                                width: MediaQuery.of(context).size.width / 1.5,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -104,8 +104,11 @@ class _BasicPageState extends State<BasicPage> {
                                           color: Colors.red,
                                           fontSize: 18,
                                         )),
-                                    SizedBox(height: 5,),
-                                    Text("You can cancel your subscription at any time to a free Basic membership. You’ll enjoy your benefits through the end of the billing term, though, and the next payment won’t be processed.",
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                        "You can cancel your subscription at any time to a free Basic membership. You’ll enjoy your benefits through the end of the billing term, though, and the next payment won’t be processed.",
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w500,
@@ -134,7 +137,7 @@ class _BasicPageState extends State<BasicPage> {
               left: 30,
               right: 30,
               child: InkWell(
-                onTap: ()=> obj.makePayment(amount: '5',currency: 'USD'),
+                onTap: () => obj.makePayment(amount: '5', currency: 'USD'),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: 280,

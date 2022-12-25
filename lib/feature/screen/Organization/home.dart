@@ -139,7 +139,7 @@ class _OrganizationHomeState extends State<OrganizationHome> {
                         },
                       ),
                       CategoryCard(
-                        title: "My Opportunity",
+                        title: "My Opportunities",
                         svgSrc: "assets/ballot.svg",
                         press: () {
                           Get.to(OrgOpportunityList());

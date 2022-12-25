@@ -383,13 +383,16 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                       Row(
                         children: [
                           Text(
-                            "Starting Date: ",
+                            "DATE: ",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                              fontSize: 16,
                               letterSpacing: 0.27,
                               color: primaryColor,
                             ),
+                          ),
+                          SizedBox(
+                            width: 30,
                           ),
                           InkWell(
                               onTap: () async {
@@ -415,16 +418,16 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                       Row(
                         children: [
                           Text(
-                            "Select time: ",
+                            "TIME: ",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                              fontSize: 16,
                               letterSpacing: 0.27,
                               color: primaryColor,
                             ),
                           ),
                           SizedBox(
-                            width: 2,
+                            width: 30,
                           ),
                           InkWell(
                               onTap: () async {

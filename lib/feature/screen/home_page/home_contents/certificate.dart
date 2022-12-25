@@ -29,7 +29,6 @@ class _CertificateState extends State<Certificate> {
   }
 
   void getCred() async {
-
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       token = pref.getString("user");
@@ -74,7 +73,7 @@ class _CertificateState extends State<Certificate> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Certificate List'),
+        title: Text('My Certificates'),
         backgroundColor: primaryColor,
       ),
       body: Padding(
@@ -178,40 +177,6 @@ class _CertificateState extends State<Certificate> {
                                                                 FontWeight.w600,
                                                             fontSize: 20,
                                                           ),
-                                                        ),
-                                                        Row(
-                                                          children: [
-                                                            Text(
-                                                              'Candidate :  ',
-                                                              style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .withOpacity(
-                                                                          0.8)),
-                                                            ),
-                                                            Text(
-                                                              snapshot
-                                                                      .data
-                                                                      .data[
-                                                                          index]
-                                                                      .user
-                                                                      .firstName +
-                                                                  " " +
-                                                                  snapshot
-                                                                      .data
-                                                                      .data[
-                                                                          index]
-                                                                      .user
-                                                                      .lastName,
-                                                              style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .withOpacity(
-                                                                          0.8)),
-                                                            ),
-                                                          ],
                                                         ),
                                                         Row(
                                                           children: [

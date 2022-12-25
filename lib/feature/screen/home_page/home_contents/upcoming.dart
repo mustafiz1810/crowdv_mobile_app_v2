@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/data/models/volunteer/upcoming_opportunity.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/recruiter_task_details.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/volunteer_task_details.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
@@ -63,7 +62,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
           iconTheme: IconThemeData(color: Colors.white),
           // collapsedHeight: 150,
           title: const Text(
-            'Upcoming Opportunity',
+            'My Upcoming Opportunities',
             style: TextStyle(color: Colors.white),
           ),
           // ),
@@ -88,7 +87,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                         child: EmptyWidget(
                           image: null,
                           packageImage: PackageImage.Image_3,
-                          title: 'No Opportunity',
+                          title: 'No opportunities',
                           titleTextStyle: TextStyle(
                             fontSize: 22,
                             color: Color(0xff9da9c7),
@@ -257,26 +256,6 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                                   ),
                                                 ],
                                               ),
-                                              // Container(
-                                              //   width: 80,
-                                              //   height: 35,
-                                              //   decoration: BoxDecoration(
-                                              //     color: Colors.white,
-                                              //     borderRadius: BorderRadius.all(
-                                              //         Radius.circular(20)),
-                                              //   ),
-                                              //   child: Center(
-                                              //     child: Text(
-                                              //         snapshot.data.data[index]
-                                              //             .status,
-                                              //         style: TextStyle(
-                                              //             fontWeight:
-                                              //             FontWeight.bold,
-                                              //             fontSize: 14,
-                                              //             color:
-                                              //             Colors.deepOrange)),
-                                              //   ),
-                                              // ),
                                             ],
                                           )
                                         ],

@@ -197,7 +197,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity>
           iconTheme: IconThemeData(color: Colors.white),
           // collapsedHeight: 150,
           title: const Text(
-            'My Opportunity',
+            'My Opportunities',
             style: TextStyle(color: Colors.white),
           ),
           backgroundColor: primaryColor,
@@ -217,7 +217,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity>
                         child: EmptyWidget(
                           image: null,
                           packageImage: PackageImage.Image_3,
-                          title: 'No Opportunity',
+                          title: 'No Opportunities',
                           titleTextStyle: TextStyle(
                             fontSize: 22,
                             color: Color(0xff9da9c7),

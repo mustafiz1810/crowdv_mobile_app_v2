@@ -180,7 +180,7 @@ class _VolunteerHistoryState extends State<VolunteerHistory> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: primaryColor,
-          title: Text('History'),
+          title: Text('My History'),
         ),
         bottomNavigationBar: CustomBottomNavigation(),
         body: Padding(

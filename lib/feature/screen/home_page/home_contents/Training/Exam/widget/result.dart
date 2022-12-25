@@ -118,10 +118,12 @@ class _ResultState extends State<Result> {
               visible: isShow,
               child: Column(
                 children: [
-                  Text("Test Complete",
-                      style: TextStyle(
-                          fontSize: 40, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 100,),
+                  Text("Quiz Complete",
+                      style:
+                          TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                  SizedBox(
+                    height: 100,
+                  ),
                   Align(
                     alignment: Alignment.center,
                     child: Lottie.asset(
@@ -130,7 +132,9 @@ class _ResultState extends State<Result> {
                       width: 300,
                     ),
                   ),
-                  SizedBox(height: 100,),
+                  SizedBox(
+                    height: 100,
+                  ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: primaryColor,
@@ -147,7 +151,10 @@ class _ResultState extends State<Result> {
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
-                      child: Text("View Result",style: TextStyle(fontWeight: FontWeight.bold),),
+                      child: Text(
+                        "View Result",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ],
@@ -176,12 +183,23 @@ class _ResultState extends State<Result> {
                               height: 10,
                             ),
                             Text(
-                              remark.toUpperCase(),
+                              "OOPS!!",
                               style: TextStyle(
                                   fontSize: 24, fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
-                              height: 40,
+                              height: 5,
+                            ),
+                            Text(
+                              "You can always try again",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black38,
+                                fontSize: 16,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30,
                             ),
                             Text(
                               name + " " + lastName,
@@ -308,12 +326,20 @@ class _ResultState extends State<Result> {
                               height: 10,
                             ),
                             Text(
-                              remark.toUpperCase(),
+                              "Congratulations!!",
                               style: TextStyle(
                                   fontSize: 24, fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
-                              height: 40,
+                              height: 5,
+                            ),
+                            Text(
+                              remark.toUpperCase(),
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 30,
                             ),
                             Text(
                               name + " " + lastName,
@@ -409,7 +435,7 @@ class _ResultState extends State<Result> {
                                     borderRadius: BorderRadius.circular(40)),
                               ),
                               onPressed: () {
-                                Get.to(()=>Certificate());
+                                Get.to(() => Certificate());
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(18.0),

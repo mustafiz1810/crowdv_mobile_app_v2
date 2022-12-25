@@ -53,7 +53,7 @@ class _SetCategoryState extends State<SetCategory> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Set Category'),
+        title: Text('Category'),
         backgroundColor: primaryColor,
       ),
       body: Center(
@@ -136,7 +136,7 @@ class _SetCategoryState extends State<SetCategory> {
                                           "Authorization": "Bearer $token"
                                         }).then((value) async {
                                           print(value);
-                                      showToast(context, 'remove');
+                                      showToast(context, 'Removed');
                                     });
                                     tempArray
                                         .remove(snapshot.data.data[index].name);
