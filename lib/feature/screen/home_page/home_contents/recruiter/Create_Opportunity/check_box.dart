@@ -10,7 +10,7 @@ import 'package:inkwell_splash/inkwell_splash.dart';
 import 'package:http/http.dart' as http;
 
 class CheckBox extends StatefulWidget {
-  final dynamic token,title, category, type, description, date, time, etime, slug;
+  final dynamic token,title, category, type, description, date, time, etime, slug,charge;
   CheckBox(
       {@required
       this.token,
@@ -21,7 +21,7 @@ class CheckBox extends StatefulWidget {
       this.date,
       this.time,
       this.etime,
-      this.slug});
+      this.slug,this.charge});
   @override
   _CheckBoxState createState() => _CheckBoxState();
 }
@@ -94,6 +94,7 @@ class _CheckBoxState extends State<CheckBox> {
                     date: widget.date,
                     time: widget.time,
                     etime: widget.etime,
+                charge: widget.charge,
                   ));
             },
             child: Container(

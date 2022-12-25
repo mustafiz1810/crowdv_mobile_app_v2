@@ -55,6 +55,8 @@ class Data {
     this.status,
     this.applyStatus,
     this.applyId,
+    this.charge,
+    this.type,
     this.category,
     this.eligibility,
     this.otherEligibility,
@@ -70,7 +72,7 @@ class Data {
   City country;
   City state;
   City city;
-  dynamic zipCode;
+  String zipCode;
   String taskType;
   String dateFormat;
   DateTime date;
@@ -83,7 +85,9 @@ class Data {
   bool isPublic;
   String status;
   bool applyStatus;
-  int applyId;
+  dynamic applyId;
+  int charge;
+  String type;
   Category category;
   List<Eligibility> eligibility;
   dynamic otherEligibility;
@@ -113,6 +117,8 @@ class Data {
     status: json["status"],
     applyStatus: json["apply_status"],
     applyId: json["apply_id"],
+    charge: json["charge"],
+    type: json["type"],
     category: Category.fromJson(json["category"]),
     eligibility: List<Eligibility>.from(json["eligibility"].map((x) => Eligibility.fromJson(x))),
     otherEligibility: json["other_eligibility"],
@@ -143,6 +149,8 @@ class Data {
     "status": status,
     "apply_status": applyStatus,
     "apply_id": applyId,
+    "charge": charge,
+    "type": type,
     "category": category.toJson(),
     "eligibility": List<dynamic>.from(eligibility.map((x) => x.toJson())),
     "other_eligibility": otherEligibility,
@@ -346,44 +354,44 @@ class Recruiter {
   bool isOnline;
 
   factory Recruiter.fromJson(Map<String, dynamic> json) => Recruiter(
-    id: json["id"],
-    firstName: json["first_name"],
-    lastName: json["last_name"],
-    email: json["email"],
-    gender: json["gender"],
-    phone: json["phone"],
-    image: json["image"],
+    id: json["id"] == null ? null : json["id"],
+    firstName: json["first_name"] == null ? null : json["first_name"],
+    lastName: json["last_name"] == null ? null : json["last_name"],
+    email: json["email"] == null ? null : json["email"],
+    gender: json["gender"] == null ? null : json["gender"],
+    phone: json["phone"] == null ? null : json["phone"],
+    image: json["image"] == null ? null : json["image"],
     typeOfDisability: json["type_of_disability"] == null ? null : json["type_of_disability"],
     country: json["country"],
     state: json["state"],
     city: json["city"],
     zipCode: json["zip_code"] == null ? null : json["zip_code"],
-    role: json["role"],
-    profileRating: json["profile_rating"],
+    role: json["role"] == null ? null : json["role"],
+    profileRating: json["profile_rating"] == null ? null : json["profile_rating"],
     rating: json["rating"],
     review: json["review"],
-    uid: json["uid"],
+    uid: json["uid"] == null ? null : json["uid"],
     isOnline: json["is_online"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "first_name": firstName,
-    "last_name": lastName,
-    "email": email,
-    "gender": gender,
-    "phone": phone,
-    "image": image,
+    "id": id == null ? null : id,
+    "first_name": firstName == null ? null : firstName,
+    "last_name": lastName == null ? null : lastName,
+    "email": email == null ? null : email,
+    "gender": gender == null ? null : gender,
+    "phone": phone == null ? null : phone,
+    "image": image == null ? null : image,
     "type_of_disability": typeOfDisability == null ? null : typeOfDisability,
     "country": country,
     "state": state,
     "city": city,
     "zip_code": zipCode == null ? null : zipCode,
-    "role": role,
-    "profile_rating": profileRating,
+    "role": role == null ? null : role,
+    "profile_rating": profileRating == null ? null : profileRating,
     "rating": rating,
     "review": review,
-    "uid": uid,
+    "uid": uid == null ? null : uid,
     "is_online": isOnline,
   };
 }

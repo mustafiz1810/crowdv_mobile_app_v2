@@ -28,7 +28,11 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
   String _typevalue;
   List<String> _type = ["Online", "Offline", "Both"];
   String token = "";
-
+  // Default Radio Button Selected Item When App Starts.
+  String radioButtonItem = 'free';
+  bool chargeVisible = false;
+  // Group Value for Radio Button.
+  int id = 1;
   @override
   void initState() {
     super.initState();
@@ -59,6 +63,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
   int _selectedIndex;
   String tileName, slug;
   TextEditingController titleController = TextEditingController();
+  TextEditingController chargeController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -106,7 +111,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                     decoration: ThemeHelper().inputBoxDecorationShaddow(),
                   ),
                   SizedBox(
-                    height:15,
+                    height: 15,
                   ),
                   //--------------------------------here is category
                   FormField<bool>(
@@ -125,31 +130,37 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                             child: Container(
                               width: 365,
                               height: 50,
-                              padding:
-                              EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 2, horizontal: 15),
                               child: Center(
                                 child: tileName != null
                                     ? Text(
-                                  tileName,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: primaryColor,
-                                      fontWeight: FontWeight.bold),
-                                )
+                                        tileName,
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            color: primaryColor,
+                                            fontWeight: FontWeight.bold),
+                                      )
                                     : Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SizedBox(width: 5,),
-                                    Text(
-                                      "Select Category",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: primaryColor,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Icon(Icons.arrow_drop_down,color: primaryColor,)
-                                  ],
-                                ),
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            "Select Category",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: primaryColor,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Icon(
+                                            Icons.arrow_drop_down,
+                                            color: primaryColor,
+                                          )
+                                        ],
+                                      ),
                               ),
                               decoration: BoxDecoration(
                                 boxShadow: [
@@ -163,7 +174,9 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Container(
                             alignment: Alignment.bottomCenter,
                             child: Text(
@@ -239,73 +252,75 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                       },
                     ),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
                   //--------------------------------here is task type
                   FormField<bool>(
                     builder: (state) {
                       return Column(
                         children: <Widget>[
-                        Container(
-                        width: 365,
-                        padding: EdgeInsets.symmetric(vertical: 2, horizontal: 15),
-                        child: Center(
-                          child: DropdownButton<String>(
-                              hint: Center(
-                                child: Text(
-                                  "Select Type",
+                          Container(
+                            width: 365,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 1, horizontal: 15),
+                            child: Center(
+                              child: DropdownButton<String>(
+                                  hint: Center(
+                                    child: Text(
+                                      "Select Type",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: primaryColor,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  value: _typevalue,
+                                  // elevation: 5,
                                   style: TextStyle(
-                                      fontSize: 18,
-                                      color: primaryColor,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              value: _typevalue,
-                              // elevation: 5,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600),
-                              iconEnabledColor: primaryColor,
-                              isExpanded: true,
-                              items: _type
-                                  .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              selectedItemBuilder: (BuildContext context) => _type
-                                  .map((e) => Center(
-                                child: Text(
-                                  e,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: primaryColor,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ))
-                                  .toList(),
-                              underline: Container(),
-                              onChanged: (String value) {
-                                setState(() {
-                                  _typevalue = value;
-                                });
-                              }),
-                        ),
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black26,
-                                offset: Offset(0, 2),
-                                blurRadius: 2.0)
-                          ],
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                          SizedBox(height: 10,),
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600),
+                                  iconEnabledColor: primaryColor,
+                                  isExpanded: true,
+                                  items: _type.map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  selectedItemBuilder: (BuildContext context) =>
+                                      _type
+                                          .map((e) => Center(
+                                                child: Text(
+                                                  e,
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      color: primaryColor,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ))
+                                          .toList(),
+                                  underline: Container(),
+                                  onChanged: (String value) {
+                                    setState(() {
+                                      _typevalue = value;
+                                    });
+                                  }),
+                            ),
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black26,
+                                    offset: Offset(0, 2),
+                                    blurRadius: 2.0)
+                              ],
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
                           Container(
                             alignment: Alignment.bottomCenter,
                             child: Text(
@@ -328,25 +343,70 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                       }
                     },
                   ),
-
-                  SizedBox(
-                    height: 5,
-                  ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        "Description: ",
+                        "Charge: ",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontSize: 16,
                           letterSpacing: 0.27,
                           color: primaryColor,
                         ),
-                      )
+                      ),
+                      Radio(
+                        value: 1,
+                        groupValue: id,
+                        onChanged: (val) {
+                          setState(() {
+                            chargeController.clear();
+                            radioButtonItem = 'free';
+                            chargeVisible = false;
+                            id = 1;
+                          });
+                        },
+                      ),
+                      Text(
+                        'Free',
+                        style: new TextStyle(fontSize: 16.0),
+                      ),
+                      Radio(
+                        value: 2,
+                        groupValue: id,
+                        onChanged: (val) {
+                          setState(() {
+                            radioButtonItem = 'paid';
+                            chargeVisible = true;
+                            id = 2;
+                          });
+                        },
+                      ),
+                      Text(
+                        'Paid',
+                        style: new TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(
                     height: 5,
+                  ),
+                  Visibility(
+                    visible: chargeVisible,
+                    child: Container(
+                      child: TextFormField(
+                        controller: chargeController,
+                        keyboardType: TextInputType.number,
+                        decoration: ThemeHelper()
+                            .textInputDecoration('Enter your amount'),
+                      ),
+                      decoration: ThemeHelper().inputBoxDecorationShaddow(),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   //--------------------------------here is discription
                   Container(
@@ -356,6 +416,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                       maxLines: 5,
                       maxLength: 200,
                       decoration: InputDecoration(
+                          hintText: "Details",
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.white),
                             borderRadius: BorderRadius.circular(10.0),
@@ -373,9 +434,6 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                         return null;
                       },
                     ),
-                  ),
-                  SizedBox(
-                    height: 5,
                   ),
                   //--------------------------------here is date
                   Column(
@@ -411,7 +469,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 10.0),
                   //--------------------------------here is time
                   Column(
                     children: [
@@ -469,11 +527,10 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                         ],
                       ),
                       SizedBox(
-                        height: 5,
+                        height: 15,
                       ),
                     ],
                   ),
-                  SizedBox(height: 30.0),
                   InkWellSplash(
                     onTap: () {
                       // setState(() {
@@ -491,7 +548,8 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                       //       " " +
                       //       '${_time.hour}:${_time.minute.toString().padLeft(2, '0') + "  " + slug.toString()}');
                       // });
-                      if (time.hour < _time.hour && time.hour != _time.hour &&
+                      if (time.hour < _time.hour &&
+                          time.hour != _time.hour &&
                           _formKey.currentState.validate()) {
                         Get.to(() => CheckBox(
                               token: token,
@@ -505,6 +563,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                                   '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
                               etime:
                                   '${_time.hour}:${_time.minute.toString().padLeft(2, '0')}',
+                              charge: chargeController.text,
                             ));
                       } else
                         (showToast("End time must be greater than start time"));

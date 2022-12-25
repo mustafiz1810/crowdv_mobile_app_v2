@@ -22,7 +22,8 @@ class LocationUpdate extends StatefulWidget {
       city,
       state,
       other,
-      zip;
+      zip,
+      charge;
   LocationUpdate(
       {@required this.token,
       this.id,
@@ -38,7 +39,8 @@ class LocationUpdate extends StatefulWidget {
       this.city,
       this.state,
       this.other,
-      this.zip});
+      this.zip,
+      this.charge});
 
   @override
   _LocationUpdateState createState() => _LocationUpdateState();
@@ -102,6 +104,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
       });
     }
   }
+
   var countryvalue;
   var statevalue;
   var cityvalue;
@@ -120,7 +123,8 @@ class _LocationUpdateState extends State<LocationUpdate> {
       List<int> eligibility,
       details,
       task_type,
-      zip_code) async {
+      zip_code,
+      charge) async {
     String body = json.encode({
       'title': title,
       'category_id': category_id,
@@ -136,6 +140,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
       'city_id': city,
       'zip_code': zip_code,
       'is_public': 'true',
+      'charge': charge,
     });
     try {
       Response response = await post(
@@ -148,16 +153,16 @@ class _LocationUpdateState extends State<LocationUpdate> {
           body: body);
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data);
+        print(body);
         showToast(context, data['message']);
         int count = 0;
         Navigator.popUntil(context, (route) => count++ == 3);
       } else {
         var data = jsonDecode(response.body.toString());
-        print(data);
-        data['error'].length != 0?
-        showToast(context, data['error']['errors'].toString()):
-        showToast(context, data['message']);
+        print(body);
+        data['error'].length != 0
+            ? showToast(context, data['error']['errors'].toString())
+            : showToast(context, data['message']);
       }
     } catch (e) {
       showDialog(
@@ -215,17 +220,13 @@ class _LocationUpdateState extends State<LocationUpdate> {
               label: 'Select Country',
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                      color: Colors.black
-                  )
-              ),
-              dropDownMenuItems:  countries?.map((item) {
-                return item['name'];
-              })?.toList() ??
+                  border: Border.all(color: Colors.black)),
+              dropDownMenuItems: countries?.map((item) {
+                    return item['name'];
+                  })?.toList() ??
                   [],
               onChanged: (newVal) {
-                if(newVal!=null)
-                {
+                if (newVal != null) {
                   setState(() {
                     states.clear();
                     statevalue = null;
@@ -236,9 +237,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
                     getState(countryvalue);
                     print(countryvalue);
                   });
-
-                }
-                else{
+                } else {
                   countryvalue = widget.country;
                 }
               },
@@ -257,17 +256,13 @@ class _LocationUpdateState extends State<LocationUpdate> {
               label: 'Division/Province/State',
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                      color: Colors.black
-                  )
-              ),
+                  border: Border.all(color: Colors.black)),
               dropDownMenuItems: states.map((item) {
-                return item['name'].toString();
-              }).toList() ??
+                    return item['name'].toString();
+                  }).toList() ??
                   [],
-              onChanged: (newVal)  {
-                if(newVal!=null)
-                {
+              onChanged: (newVal) {
+                if (newVal != null) {
                   setState(() {
                     city.clear();
                     cityvalue = null;
@@ -276,9 +271,8 @@ class _LocationUpdateState extends State<LocationUpdate> {
                     print(statevalue);
                     getCity(statevalue);
                   });
-                }
-                else{
-                  statevalue=widget.state;
+                } else {
+                  statevalue = widget.state;
                 }
               },
             ),
@@ -296,23 +290,18 @@ class _LocationUpdateState extends State<LocationUpdate> {
               label: 'City',
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                      color: Colors.black
-                  )
-              ),
+                  border: Border.all(color: Colors.black)),
               dropDownMenuItems: city.map((item) {
-                return item['name'].toString();
-              }).toList() ??
+                    return item['name'].toString();
+                  }).toList() ??
                   [],
               onChanged: (newVal) {
-                if(newVal!=null)
-                {
+                if (newVal != null) {
                   cityvalue = newVal['id'];
                   zipController.clear();
                   print(cityvalue);
-                }
-                else{
-                  cityvalue=widget.city;
+                } else {
+                  cityvalue = widget.city;
                 }
               },
             ),
@@ -341,7 +330,7 @@ class _LocationUpdateState extends State<LocationUpdate> {
                     child: InkWell(
                       splashColor: secondaryColor, // splash color
                       onTap: () {
-                        // print(countryvalue);
+                        print(widget.etime);
                         update(
                             widget.other,
                             widget.title,
@@ -355,7 +344,8 @@ class _LocationUpdateState extends State<LocationUpdate> {
                             widget.eligibility,
                             widget.description,
                             widget.type,
-                            zipController.text.toString());
+                            zipController.text.toString(),
+                            widget.charge);
                       }, // button pressed
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

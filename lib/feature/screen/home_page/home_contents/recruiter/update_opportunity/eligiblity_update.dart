@@ -10,7 +10,7 @@ import 'package:inkwell_splash/inkwell_splash.dart';
 import 'package:http/http.dart' as http;
 
 class EligibilityUpdate extends StatefulWidget {
-  final dynamic token,id ,title, category, type, description, date, time, etime, slug,eligibility,other,country,city,state,zip;
+  final dynamic token,id ,title, category, type, description, date, time, etime, slug,eligibility,other,country,city,state,zip,charge;
   EligibilityUpdate(
       {@required this.token,
         this.id,
@@ -26,7 +26,8 @@ class EligibilityUpdate extends StatefulWidget {
         this.other,
         this.country,
       this.city,this.state,
-        this.zip});
+        this.zip,
+      this.charge});
   @override
   _EligibilityUpdateState createState() => _EligibilityUpdateState();
 }
@@ -98,6 +99,7 @@ class _EligibilityUpdateState extends State<EligibilityUpdate> {
                 zip: widget.zip,
                 id:widget.id,
                 token: widget.token,
+                charge: widget.charge,
               ));
             },
             child: Container(

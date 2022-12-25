@@ -11,24 +11,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 class OpLocation extends StatefulWidget {
   final List<int> answer;
   final dynamic title,
-  eligibility,
+      eligibility,
       category,
       type,
       description,
       date,
       time,
-      etime;
+      etime,
+      charge;
   OpLocation(
-      {@required
-      this.answer,
-        this.eligibility,
+      {@required this.answer,
+      this.eligibility,
       this.title,
       this.category,
       this.type,
       this.description,
       this.date,
       this.time,
-      this.etime});
+      this.etime,
+      this.charge});
 
   @override
   _OpLocationState createState() => _OpLocationState();
@@ -64,6 +65,7 @@ class _OpLocationState extends State<OpLocation> {
       });
     }
   }
+
   List states = [];
   Future getState(countryId) async {
     var baseUrl = NetworkConstants.BASE_URL + 'get-state-by-country/$countryId';
@@ -77,6 +79,7 @@ class _OpLocationState extends State<OpLocation> {
       });
     }
   }
+
   List city = [];
   Future getCity(stateId) async {
     var baseUrl = NetworkConstants.BASE_URL + 'get-city-by-state/$stateId';
@@ -90,25 +93,42 @@ class _OpLocationState extends State<OpLocation> {
       });
     }
   }
+
   var countryvalue;
   var statevalue;
   var cityvalue;
   TextEditingController zipController = TextEditingController();
-  void create(title, category_id, date, start_time, end_time,country, state,
-      city, List<int> answer,eligibility, details, task_type, zip_code) async {
-    String body = json.encode({ 'title': title,
+  void create(
+      title,
+      category_id,
+      date,
+      start_time,
+      end_time,
+      country,
+      state,
+      city,
+      List<int> answer,
+      eligibility,
+      details,
+      task_type,
+      zip_code,
+      charge) async {
+    String body = json.encode({
+      'title': title,
       'category_id': category_id,
       'date': date,
       'start_time': start_time,
       'end_time': end_time,
-      'eligibility_id': answer ,
-      'other':eligibility,
+      'eligibility_id': answer,
+      'other': eligibility,
       'details': details,
       'task_type': task_type,
       'country_id': country,
       'state_id': state,
       'city_id': city,
-      'zip_code': zip_code,});
+      'zip_code': zip_code,
+      'charge': charge
+    });
     print(body);
     try {
       Response response = await post(
@@ -127,8 +147,9 @@ class _OpLocationState extends State<OpLocation> {
       } else {
         var data = jsonDecode(response.body.toString());
         print(data);
-        data['error'].length != 0?
-        showToast(context, data['error']['errors'].toString()):showToast(context, data['message']);
+        data['error'].length != 0
+            ? showToast(context, data['error']['errors'].toString())
+            : showToast(context, data['message']);
       }
     } catch (e) {
       showDialog(
@@ -148,6 +169,7 @@ class _OpLocationState extends State<OpLocation> {
           });
     }
   }
+
   bool isStateVisible = false;
   bool isCityVisible = false;
   @override
@@ -180,17 +202,13 @@ class _OpLocationState extends State<OpLocation> {
               label: 'Select Country',
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                      color: Colors.black
-                  )
-              ),
-              dropDownMenuItems:  countries?.map((item) {
-                return item['name'];
-              })?.toList() ??
+                  border: Border.all(color: Colors.black)),
+              dropDownMenuItems: countries?.map((item) {
+                    return item['name'];
+                  })?.toList() ??
                   [],
               onChanged: (newVal) {
-                if(newVal!=null)
-                {
+                if (newVal != null) {
                   setState(() {
                     states.clear();
                     statevalue = null;
@@ -198,13 +216,13 @@ class _OpLocationState extends State<OpLocation> {
                     cityvalue = null;
                     countryvalue = newVal['id'];
                     getState(countryvalue);
-                    countryvalue != null?isStateVisible = true:isStateVisible = false;
+                    countryvalue != null
+                        ? isStateVisible = true
+                        : isStateVisible = false;
                     print(isStateVisible);
                   });
-
-                }
-                else{
-                  countryvalue=null;
+                } else {
+                  countryvalue = null;
                 }
               },
             ),
@@ -218,28 +236,25 @@ class _OpLocationState extends State<OpLocation> {
                 label: 'Division/Province/State',
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                        color: Colors.black
-                    )
-                ),
+                    border: Border.all(color: Colors.black)),
                 dropDownMenuItems: states.map((item) {
-                  return item['name'].toString();
-                }).toList() ??
+                      return item['name'].toString();
+                    }).toList() ??
                     [],
-                onChanged: (newVal)  {
-                  if(newVal!=null)
-                  {
+                onChanged: (newVal) {
+                  if (newVal != null) {
                     setState(() {
                       city.clear();
                       cityvalue = null;
                       statevalue = newVal['id'];
                       getCity(statevalue);
-                      statevalue != null?isCityVisible = true:isCityVisible = false;
+                      statevalue != null
+                          ? isCityVisible = true
+                          : isCityVisible = false;
                       print(statevalue);
                     });
-                  }
-                  else{
-                    statevalue=null;
+                  } else {
+                    statevalue = null;
                   }
                 },
               ),
@@ -254,22 +269,17 @@ class _OpLocationState extends State<OpLocation> {
                 label: 'City',
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                        color: Colors.black
-                    )
-                ),
+                    border: Border.all(color: Colors.black)),
                 dropDownMenuItems: city.map((item) {
-                  return item['name'].toString();
-                }).toList() ??
+                      return item['name'].toString();
+                    }).toList() ??
                     [],
                 onChanged: (newVal) {
-                  if(newVal!=null)
-                  {
+                  if (newVal != null) {
                     cityvalue = newVal['id'];
                     print(cityvalue);
-                  }
-                  else{
-                    cityvalue=null;
+                  } else {
+                    cityvalue = null;
                   }
                 },
               ),
@@ -282,12 +292,9 @@ class _OpLocationState extends State<OpLocation> {
                 keyboardType: TextInputType.number,
                 controller: zipController,
                 decoration: ThemeHelper()
-                    .textInputDecoration(
-                    'Zip Code',
-                    'Enter your zip code'),
+                    .textInputDecoration('Zip Code', 'Enter your zip code'),
               ),
-              decoration: ThemeHelper()
-                  .inputBoxDecorationShaddow(),
+              decoration: ThemeHelper().inputBoxDecorationShaddow(),
             ),
             SizedBox(height: 20),
             Row(
@@ -314,7 +321,8 @@ class _OpLocationState extends State<OpLocation> {
                             widget.eligibility,
                             widget.description,
                             widget.type,
-                            zipController.text.toString());
+                            zipController.text.toString(),
+                            widget.charge);
                       }, // button pressed
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

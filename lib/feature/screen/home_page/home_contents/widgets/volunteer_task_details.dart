@@ -442,6 +442,49 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                             SizedBox(
                                               height: 10,
                                             ),
+                                            snapshot.data.data
+                                                .type !=
+                                                "free"
+                                                ?  Padding(
+                                              padding: const EdgeInsets.only(bottom: 10.0),
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                    BorderRadius.all(
+                                                        Radius.circular(12))),
+                                                child: Padding(
+                                                  padding:
+                                                  const EdgeInsets.all(15.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        "Charge",
+                                                        textAlign: TextAlign.left,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      Flexible(
+                                                        child: Text(
+                                                          snapshot
+                                                              .data.data.charge.toString(),
+                                                          textAlign:
+                                                          TextAlign.right,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                                : Container(),
                                             ListCard(
                                               title: "Category",
                                               text: snapshot
@@ -593,7 +636,7 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                                   .fiber_manual_record_rounded,
                                                               size: 12,
                                                               color:
-                                                                  Colors.black,
+                                                                  Colors.grey,
                                                             ),
                                                             title: Text(snapshot
                                                                 .data
@@ -694,13 +737,6 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                 Text(
                                                   'State',
                                                   textAlign: TextAlign.left,
-                                                  style: GoogleFonts.lato(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
-                                                    letterSpacing: 0.27,
-                                                    color: DesignCourseAppTheme
-                                                        .nearlyBlack,
-                                                  ),
                                                 ),
                                                 Text(
                                                   snapshot.data.data.state.name
@@ -731,13 +767,6 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                 Text(
                                                   'City',
                                                   textAlign: TextAlign.left,
-                                                  style: GoogleFonts.lato(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
-                                                    letterSpacing: 0.27,
-                                                    color: DesignCourseAppTheme
-                                                        .nearlyBlack,
-                                                  ),
                                                 ),
                                                 Text(
                                                   snapshot.data.data.city.name
@@ -768,13 +797,6 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                 Text(
                                                   'Zip Code',
                                                   textAlign: TextAlign.left,
-                                                  style: GoogleFonts.lato(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
-                                                    letterSpacing: 0.27,
-                                                    color: DesignCourseAppTheme
-                                                        .nearlyBlack,
-                                                  ),
                                                 ),
                                                 Text(
                                                   snapshot.data.data.zipCode !=

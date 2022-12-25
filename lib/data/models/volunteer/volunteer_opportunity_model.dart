@@ -44,6 +44,8 @@ class Datum {
     this.status,
     this.categoryIcon,
     this.taskType,
+    this.type,
+    this.charge,
     this.volunteers,
     this.recruiter,
   });
@@ -58,6 +60,8 @@ class Datum {
   String status;
   String categoryIcon;
   String taskType;
+  String type;
+  int charge;
   Volunteers volunteers;
   Recruiter recruiter;
 
@@ -72,6 +76,8 @@ class Datum {
     status: json["status"],
     categoryIcon: json["category_icon"],
     taskType: json["task_type"],
+    type: json["type"],
+    charge: json["charge"],
     volunteers: Volunteers.fromJson(json["volunteers"]),
     recruiter: Recruiter.fromJson(json["recruiter"]),
   );
@@ -87,6 +93,8 @@ class Datum {
     "status": status,
     "category_icon": categoryIcon,
     "task_type": taskType,
+    "type": type,
+    "charge": charge,
     "volunteers": volunteers.toJson(),
     "recruiter": recruiter.toJson(),
   };
@@ -161,7 +169,7 @@ class Volunteers {
   String country;
   String state;
   String city;
-  dynamic zipCode;
+  String zipCode;
   String profession;
   String role;
   int rating;

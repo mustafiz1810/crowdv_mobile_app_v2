@@ -193,6 +193,27 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                                   ),
                                                 ],
                                               ),
+                                              snapshot.data.data[index]
+                                                  .type !=
+                                                  "free"
+                                                  ? Row(
+                                                children: [
+                                                  Text(
+                                                    "Charge : ",
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                        12.0),
+                                                  ),
+                                                  Text(
+                                                      " ${snapshot.data.data[index].charge.toString()} Tk",
+                                                      style: TextStyle(
+                                                          color: Colors
+                                                              .red,
+                                                          fontSize:
+                                                          12.0)),
+                                                ],
+                                              )
+                                                  : Container(),
                                               Text(
                                                 snapshot.data.data[index].taskType,
                                               ),

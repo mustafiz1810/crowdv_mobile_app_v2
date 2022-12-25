@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-MyOpportunityModel myOpportunityModelFromJson(String str) => MyOpportunityModel.fromJson(json.decode(str));
+MyOpportunityModel myOpportunityModelFromJson(String str) =>
+    MyOpportunityModel.fromJson(json.decode(str));
 
-String myOpportunityModelToJson(MyOpportunityModel data) => json.encode(data.toJson());
+String myOpportunityModelToJson(MyOpportunityModel data) =>
+    json.encode(data.toJson());
 
 class MyOpportunityModel {
   MyOpportunityModel({
@@ -19,17 +21,18 @@ class MyOpportunityModel {
   String message;
   List<Datum> data;
 
-  factory MyOpportunityModel.fromJson(Map<String, dynamic> json) => MyOpportunityModel(
-    success: json["success"],
-    message: json["message"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-  );
+  factory MyOpportunityModel.fromJson(Map<String, dynamic> json) =>
+      MyOpportunityModel(
+        success: json["success"],
+        message: json["message"],
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "success": success,
-    "message": message,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
+        "success": success,
+        "message": message,
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
 }
 
 class Datum {
@@ -37,6 +40,8 @@ class Datum {
     this.id,
     this.title,
     this.details,
+    this.charge,
+    this.type,
     this.expiredAt,
     this.taskType,
     this.status,
@@ -51,6 +56,8 @@ class Datum {
   int id;
   String title;
   String details;
+  int charge;
+  String type;
   String expiredAt;
   String taskType;
   String status;
@@ -62,34 +69,38 @@ class Datum {
   Recruiter recruiter;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    title: json["title"],
-    details: json["details"],
-    expiredAt: json["expired_at"],
-    taskType: json["task_type"],
-    status: json["status"],
-    country: City.fromJson(json["country"]),
-    state: City.fromJson(json["state"]),
-    city: City.fromJson(json["city"]),
-    category: Category.fromJson(json["category"]),
-    volunteer: Recruiter.fromJson(json["volunteer"]),
-    recruiter: Recruiter.fromJson(json["recruiter"]),
-  );
+        id: json["id"],
+        title: json["title"],
+        details: json["details"],
+        charge: json["charge"],
+        type: json["type"],
+        expiredAt: json["expired_at"],
+        taskType: json["task_type"],
+        status: json["status"],
+        country: City.fromJson(json["country"]),
+        state: City.fromJson(json["state"]),
+        city: City.fromJson(json["city"]),
+        category: Category.fromJson(json["category"]),
+        volunteer: Recruiter.fromJson(json["volunteer"]),
+        recruiter: Recruiter.fromJson(json["recruiter"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "title": title,
-    "details": details,
-    "expired_at": expiredAt,
-    "task_type": taskType,
-    "status": status,
-    "country": country.toJson(),
-    "state": state.toJson(),
-    "city": city.toJson(),
-    "category": category.toJson(),
-    "volunteer": volunteer.toJson(),
-    "recruiter": recruiter.toJson(),
-  };
+        "id": id,
+        "title": title,
+        "details": details,
+        "charge": charge,
+        "type": type,
+        "expired_at": expiredAt,
+        "task_type": taskType,
+        "status": status,
+        "country": country.toJson(),
+        "state": state.toJson(),
+        "city": city.toJson(),
+        "category": category.toJson(),
+        "volunteer": volunteer.toJson(),
+        "recruiter": recruiter.toJson(),
+      };
 }
 
 class Category {
@@ -106,18 +117,18 @@ class Category {
   String icon;
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
-    id: json["id"],
-    name: json["name"],
-    slug: json["slug"],
-    icon: json["icon"],
-  );
+        id: json["id"],
+        name: json["name"],
+        slug: json["slug"],
+        icon: json["icon"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "slug": slug,
-    "icon": icon,
-  };
+        "id": id,
+        "name": name,
+        "slug": slug,
+        "icon": icon,
+      };
 }
 
 class City {
@@ -130,14 +141,14 @@ class City {
   String name;
 
   factory City.fromJson(Map<String, dynamic> json) => City(
-    id: json["id"],
-    name: json["name"],
-  );
+        id: json["id"],
+        name: json["name"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-  };
+        "id": id,
+        "name": name,
+      };
 }
 
 class Recruiter {
@@ -159,31 +170,32 @@ class Recruiter {
   String image;
   int profileRating;
   int rating;
-  String review;
+  dynamic review;
   String uid;
   bool isOnline;
 
   factory Recruiter.fromJson(Map<String, dynamic> json) => Recruiter(
-    id: json["id"],
-    firstName: json["first_name"],
-    lastName: json["last_name"],
-    image: json["image"],
-    profileRating: json["profile_rating"],
-    rating: json["rating"],
-    review: json["review"] == null ? null : json["review"],
-    uid: json["uid"] == null ? null : json["uid"],
-    isOnline: json["is_online"],
-  );
+        id: json["id"] == null ? null : json["id"],
+        firstName: json["first_name"] == null ? null : json["first_name"],
+        lastName: json["last_name"] == null ? null : json["last_name"],
+        image: json["image"] == null ? null : json["image"],
+        profileRating:
+            json["profile_rating"] == null ? null : json["profile_rating"],
+        rating: json["rating"],
+        review: json["review"],
+        uid: json["uid"] == null ? null : json["uid"],
+        isOnline: json["is_online"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "first_name": firstName,
-    "last_name": lastName,
-    "image": image,
-    "profile_rating": profileRating,
-    "rating": rating,
-    "review": review == null ? null : review,
-    "uid": uid == null ? null : uid,
-    "is_online": isOnline,
-  };
+        "id": id == null ? null : id,
+        "first_name": firstName == null ? null : firstName,
+        "last_name": lastName == null ? null : lastName,
+        "image": image == null ? null : image,
+        "profile_rating": profileRating == null ? null : profileRating,
+        "rating": rating,
+        "review": review,
+        "uid": uid == null ? null : uid,
+        "is_online": isOnline,
+      };
 }

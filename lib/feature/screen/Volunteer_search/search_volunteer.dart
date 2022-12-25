@@ -49,13 +49,13 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
     print(widget.city);
     print(widget.state);
     print(widget.country);
-    // print(widget.category);
-    // print(widget.taskType);
-    // print(widget.gender);
-    // print(widget.profession);
-    // print(widget.membership);
-    // print(widget.min_age);
-    // print(widget.max_age);
+    print(widget.category);
+    print(widget.taskType);
+    print(widget.gender);
+    print(widget.profession);
+    print(widget.membership);
+    print(widget.min_age);
+    print(widget.max_age);
     // print(recruiterController.text.toString());
 
     getCred();
@@ -87,7 +87,6 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                 'max_age=${widget.max_age}'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
-    print(data);
     if (response.statusCode == 200) {
       return CategorywiseTask.fromJson(data);
     } else {
@@ -277,19 +276,46 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                         height: 25,
                                       ),
                                       Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Icon(
-                                            Icons.location_on_rounded,
-                                            color: Colors.blueAccent,
-                                            size: 20,
-                                          ),
-                                          Text(
-                                            snapshot.data.data[index].city.name.toString(),
-                                            style: TextStyle(
-                                                fontSize: 15,
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.location_on_rounded,
                                                 color: Colors.blueAccent,
-                                                fontWeight: FontWeight.bold),
+                                                size: 20,
+                                              ),
+                                              Text(
+                                                snapshot.data.data[index].city.name.toString(),
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.blueAccent,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+
+                                            ],
                                           ),
+                                          snapshot.data.data[index]
+                                              .type !=
+                                              "free"
+                                              ? Row(
+                                            children: [
+                                              Text(
+                                                "Charge : ",
+                                                style: TextStyle(
+                                                    fontSize:
+                                                    12.0),
+                                              ),
+                                              Text(
+                                                  " ${snapshot.data.data[index].charge.toString()} Tk",
+                                                  style: TextStyle(
+                                                      color: Colors
+                                                          .red,
+                                                      fontSize:
+                                                      12.0)),
+                                            ],
+                                          )
+                                              : Container(),
                                         ],
                                       ),
                                       SizedBox(

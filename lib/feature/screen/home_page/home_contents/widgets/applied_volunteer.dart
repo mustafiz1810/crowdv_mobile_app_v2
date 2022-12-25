@@ -378,28 +378,28 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
                                                         .volunteers
                                                         .city,
                                                 style: TextStyle(fontSize: 14)),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                    snapshot
-                                                        .data
-                                                        .data
-                                                        .applyVolunteer[index]
-                                                        .volunteers
-                                                        .rating
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 14)),
-                                                Icon(
-                                                  Icons.star,
-                                                  color: Colors.amber,
-                                                  size: 14,
-                                                )
-                                              ],
-                                            ),
+                                            // SizedBox(
+                                            //   height: 5,
+                                            // ),
+                                            // Row(
+                                            //   children: [
+                                            //     Text(
+                                            //         snapshot
+                                            //             .data
+                                            //             .data
+                                            //             .applyVolunteer[index]
+                                            //             .volunteers
+                                            //             .rating
+                                            //             .toString(),
+                                            //         style: TextStyle(
+                                            //             fontSize: 14)),
+                                            //     Icon(
+                                            //       Icons.star,
+                                            //       color: Colors.amber,
+                                            //       size: 14,
+                                            //     )
+                                            //   ],
+                                            // ),
                                           ],
                                         )
                                       ],

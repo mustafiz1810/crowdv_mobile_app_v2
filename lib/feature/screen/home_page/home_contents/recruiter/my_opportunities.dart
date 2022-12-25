@@ -141,8 +141,8 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                               itemBuilder: (context, index) {
                                                 isRead = snapshot.data
                                                     .docs[index]['is_read'];
-                                                print(snapshot.data
-                                                    .docs[index]['is_read']);
+                                                print(snapshot.data.docs[index]
+                                                    ['is_read']);
                                                 return Center();
                                               });
                                         }
@@ -162,29 +162,30 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                   builder: (context) =>
                                                       RecruiterTaskDetails(
                                                         isRead: isRead,
-                                                          role: widget.role,
-                                                          id: snapshot.data
-                                                              .data[index].id,
-                                                          friendId: snapshot
-                                                          .data
-                                                          .data[index]
-                                                          .volunteer
-                                                          .uid,
-                                                          friendName: snapshot
-                                                              .data
-                                                              .data[index]
-                                                              .volunteer
-                                                              .firstName,
-                                                          friendImage: snapshot
-                                                              .data
-                                                              .data[index]
-                                                              .volunteer
-                                                              .image,
-                                                          isOnline: snapshot
-                                                              .data
-                                                              .data[index]
-                                                              .volunteer
-                                                              .isOnline)),
+                                                        role: widget.role,
+                                                        id: snapshot.data
+                                                            .data[index].id,
+                                                        friendId: snapshot
+                                                            .data
+                                                            .data[index]
+                                                            .volunteer
+                                                            .uid,
+                                                        friendName: snapshot
+                                                            .data
+                                                            .data[index]
+                                                            .volunteer
+                                                            .firstName,
+                                                        friendImage: snapshot
+                                                            .data
+                                                            .data[index]
+                                                            .volunteer
+                                                            .image,
+                                                        isOnline: snapshot
+                                                            .data
+                                                            .data[index]
+                                                            .volunteer
+                                                            .isOnline,
+                                                      )),
                                             ).then((value) => setState(() {}));
                                           },
                                           child: Column(
@@ -220,31 +221,62 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                 height: 25,
                                               ),
                                               Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   Row(
                                                     children: [
                                                       Icon(
-                                                        Icons.location_on_rounded,
-                                                        color: Colors.blueAccent,
+                                                        Icons
+                                                            .location_on_rounded,
+                                                        color:
+                                                            Colors.blueAccent,
                                                         size: 20,
                                                       ),
                                                       Text(
-                                                        snapshot.data.data[index]
-                                                            .city.name
+                                                        snapshot
+                                                            .data
+                                                            .data[index]
+                                                            .city
+                                                            .name
                                                             .toString(),
                                                         style: TextStyle(
                                                             fontSize: 15,
-                                                            color:
-                                                                Colors.blueAccent,
+                                                            color: Colors
+                                                                .blueAccent,
                                                             fontWeight:
-                                                                FontWeight.bold),
+                                                                FontWeight
+                                                                    .bold),
                                                       ),
                                                     ],
                                                   ),
+                                                  snapshot.data.data[index]
+                                                              .type !=
+                                                          "free"
+                                                      ? Row(
+                                                          children: [
+                                                            Text(
+                                                              "Charge : ",
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      12.0),
+                                                            ),
+                                                            Text(
+                                                                " ${snapshot.data.data[index].charge.toString()} Tk",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .red,
+                                                                    fontSize:
+                                                                        12.0)),
+                                                          ],
+                                                        )
+                                                      : Container(),
                                                   Text(
-                                                      snapshot.data.data[index].expiredAt,
-                                                      style: TextStyle(fontSize: 12.0)),
+                                                      snapshot.data.data[index]
+                                                          .expiredAt,
+                                                      style: TextStyle(
+                                                          fontSize: 12.0)),
                                                 ],
                                               ),
                                             ],
@@ -266,42 +298,47 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             snapshot.data.data[index].status ==
-                                                    'Hired'||snapshot.data.data[index].status ==
-                                                'Done'
-                                                ?  Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                Container(
-                                                width: 70,
-                                          height: 35,
-                                          decoration: BoxDecoration(
-                                              color: Colors.green,
-                                              borderRadius:
-                                              BorderRadius
-                                                  .circular(6)),
-                                          child: Center(
-                                            child: Text(
-                                                "Done",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .bold,
-                                                    fontSize: 15,
-                                                    color: Colors
-                                                        .white)),
-                                          ),
-                                        ),
-                                        Text(
-                                            "Request Is Pending",
-                                            style: TextStyle(
-                                                fontWeight:
-                                                FontWeight.bold,
-                                                fontSize: 14,
-                                                color:
-                                                Colors.grey)),
-                                      ],
-                                    )
+                                                        'Hired' ||
+                                                    snapshot.data.data[index]
+                                                            .status ==
+                                                        'Done'
+                                                ? Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Container(
+                                                        width: 70,
+                                                        height: 35,
+                                                        decoration: BoxDecoration(
+                                                            color: Colors.green,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        6)),
+                                                        child: Center(
+                                                          child: Text("Done",
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 15,
+                                                                  color: Colors
+                                                                      .white)),
+                                                        ),
+                                                      ),
+                                                      Text("Request Is Pending",
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 14,
+                                                              color:
+                                                                  Colors.grey)),
+                                                    ],
+                                                  )
                                                 : Row(
                                                     children: [
                                                       IconBox(
@@ -460,35 +497,39 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                     ),
                                   ),
                                   Positioned(
-                                      top: 20,
-                                      right: 20,
-                                      child: Container(
-                                        height: 40,
-                                        width: 40,
-                                        child:CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          child: CachedNetworkImage(
-                                            imageUrl: snapshot.data.data[index].category.icon,
-                                            imageBuilder: (context, imageProvider) =>
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                      image: imageProvider,
-                                                    ),
-                                                  ),
-                                                ),
-                                            placeholder: (context, url) => Icon(
-                                                Icons.downloading_rounded,
-                                                size: 40,
-                                                color: Colors.grey),
-                                            errorWidget: (context, url, error) => Icon(
-                                              Icons.image_outlined,
-                                              size: 40,
-                                              color: Colors.grey,
+                                    top: 20,
+                                    right: 20,
+                                    child: Container(
+                                      height: 40,
+                                      width: 40,
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        child: CachedNetworkImage(
+                                          imageUrl: snapshot
+                                              .data.data[index].category.icon,
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  Container(
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: imageProvider,
+                                              ),
                                             ),
                                           ),
+                                          placeholder: (context, url) => Icon(
+                                              Icons.downloading_rounded,
+                                              size: 40,
+                                              color: Colors.grey),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(
+                                            Icons.image_outlined,
+                                            size: 40,
+                                            color: Colors.grey,
+                                          ),
                                         ),
-                                      ),)
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
                             ),

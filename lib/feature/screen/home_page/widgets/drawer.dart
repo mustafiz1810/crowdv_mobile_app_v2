@@ -85,41 +85,60 @@ class _NavDrawerState extends State<NavDrawer> {
             decoration: new BoxDecoration(
               color: Colors.white,
             ),
-            currentAccountPicture: Stack(children: [
-              CachedNetworkImage(
-                imageUrl: widget.image,
-                imageBuilder: (context, imageProvider) => Container(
-                  width: 150.0,
-                  height: 150.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: imageProvider, fit: BoxFit.fitHeight),
-                  ),
-                ),
-                placeholder: (context, url) => Icon(Icons.downloading_rounded,
-                    size: 30, color: Colors.grey),
-                errorWidget: (context, url, error) => Icon(
-                  Icons.image_outlined,
-                  size: 30,
-                  color: Colors.grey,
-                ),
-              ),
-              Container(
+            currentAccountPicture: CachedNetworkImage(
+              imageUrl: widget.image,
+              imageBuilder: (context, imageProvider) => Container(
+                width: 150.0,
+                height: 150.0,
                 decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    border: Border.all(color: Colors.lightBlueAccent, width: 4),
-                    borderRadius: BorderRadius.circular(100)),
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: imageProvider, fit: BoxFit.fitHeight),
+                ),
               ),
-              Positioned(
-                  bottom: 38,
-                  left: 40,
-                  child: Image.asset(
-                    "assets/premium.png",
-                    height: 40,
-                    width: 40,
-                  ))
-            ]),
+              placeholder: (context, url) => Icon(Icons.downloading_rounded,
+                  size: 30, color: Colors.grey),
+              errorWidget: (context, url, error) => Icon(
+                Icons.image_outlined,
+                size: 30,
+                color: Colors.grey,
+              ),
+            ),
+            // Stack(children: [
+            //   CachedNetworkImage(
+            //     imageUrl: widget.image,
+            //     imageBuilder: (context, imageProvider) => Container(
+            //       width: 150.0,
+            //       height: 150.0,
+            //       decoration: BoxDecoration(
+            //         shape: BoxShape.circle,
+            //         image: DecorationImage(
+            //             image: imageProvider, fit: BoxFit.fitHeight),
+            //       ),
+            //     ),
+            //     placeholder: (context, url) => Icon(Icons.downloading_rounded,
+            //         size: 30, color: Colors.grey),
+            //     errorWidget: (context, url, error) => Icon(
+            //       Icons.image_outlined,
+            //       size: 30,
+            //       color: Colors.grey,
+            //     ),
+            //   ),
+            //   Container(
+            //     decoration: BoxDecoration(
+            //         color: Colors.transparent,
+            //         border: Border.all(color: Colors.lightBlueAccent, width: 4),
+            //         borderRadius: BorderRadius.circular(100)),
+            //   ),
+            //   Positioned(
+            //       bottom: 38,
+            //       left: 40,
+            //       child: Image.asset(
+            //         "assets/premium.png",
+            //         height: 40,
+            //         width: 40,
+            //       ))
+            // ]),
           ),
           ListTile(
             leading: Icon(
@@ -162,18 +181,18 @@ class _NavDrawerState extends State<NavDrawer> {
                     // Navigator.pushNamed(context, '/categories');
                     Get.to(const LoginPage());
                   }),
-          ListTile(
-              leading: Icon(Icons.workspace_premium, color: Colors.black),
-              title: Text("Subscription "),
-              onTap: () {
-                Get.to(() => BasicPage());
-              }),
-          ListTile(
-              leading: Icon(Icons.workspace_premium, color: Colors.black),
-              title: Text("Subscription premium"),
-              onTap: () {
-                Get.to(() => PremiumPage());
-              }),
+          // ListTile(
+          //     leading: Icon(Icons.workspace_premium, color: Colors.black),
+          //     title: Text("Subscription "),
+          //     onTap: () {
+          //       Get.to(() => BasicPage());
+          //     }),
+          // ListTile(
+          //     leading: Icon(Icons.workspace_premium, color: Colors.black),
+          //     title: Text("Subscription premium"),
+          //     onTap: () {
+          //       Get.to(() => PremiumPage());
+          //     }),
           ListTile(
               leading: Icon(Icons.lock_outline_rounded, color: Colors.black),
               title: Text("Change Password"),

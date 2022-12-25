@@ -436,8 +436,7 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                                         .data
                                                                         .data
                                                                         .applyInvite[
-                                                                            index]
-                                                                        .status ==
+                                                                            index].status==
                                                                     "applied"
                                                                 ? ListTile(
                                                                     leading:
@@ -1001,13 +1000,6 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                 Text(
                                                   'State',
                                                   textAlign: TextAlign.left,
-                                                  style: GoogleFonts.lato(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
-                                                    letterSpacing: 0.27,
-                                                    color: DesignCourseAppTheme
-                                                        .nearlyBlack,
-                                                  ),
                                                 ),
                                                 Text(
                                                   snapshot.data.data.state.name
@@ -1038,13 +1030,6 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                 Text(
                                                   'City',
                                                   textAlign: TextAlign.left,
-                                                  style: GoogleFonts.lato(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
-                                                    letterSpacing: 0.27,
-                                                    color: DesignCourseAppTheme
-                                                        .nearlyBlack,
-                                                  ),
                                                 ),
                                                 Text(
                                                   snapshot.data.data.city.name
@@ -1075,13 +1060,6 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                 Text(
                                                   'Zip Code',
                                                   textAlign: TextAlign.left,
-                                                  style: GoogleFonts.lato(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
-                                                    letterSpacing: 0.27,
-                                                    color: DesignCourseAppTheme
-                                                        .nearlyBlack,
-                                                  ),
                                                 ),
                                                 Text(
                                                   snapshot.data.data.zipCode !=
@@ -1126,15 +1104,6 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                     Text(
                                                       "Title",
                                                       textAlign: TextAlign.left,
-                                                      style: GoogleFonts.lato(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18,
-                                                        letterSpacing: 0.27,
-                                                        color:
-                                                            DesignCourseAppTheme
-                                                                .nearlyBlack,
-                                                      ),
                                                     ),
                                                     SizedBox(
                                                       width: 20,
@@ -1154,6 +1123,49 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                             SizedBox(
                                               height: 10,
                                             ),
+                                            snapshot.data.data
+                                                .type !=
+                                                "free"
+                                                ?  Padding(
+                                                  padding: const EdgeInsets.only(bottom: 10.0),
+                                                  child: Container(
+                                              width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                              decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                    BorderRadius.all(
+                                                        Radius.circular(12))),
+                                              child: Padding(
+                                                  padding:
+                                                  const EdgeInsets.all(15.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        "Charge",
+                                                        textAlign: TextAlign.left,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      Flexible(
+                                                        child: Text(
+                                                          snapshot
+                                                              .data.data.charge.toString(),
+                                                          textAlign:
+                                                          TextAlign.right,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                              ),
+                                            ),
+                                                )
+                                                : Container(),
                                             Container(
                                               width: MediaQuery.of(context)
                                                   .size
@@ -1174,15 +1186,6 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                     Text(
                                                       'Starts from',
                                                       textAlign: TextAlign.left,
-                                                      style: GoogleFonts.lato(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18,
-                                                        letterSpacing: 0.27,
-                                                        color:
-                                                            DesignCourseAppTheme
-                                                                .nearlyBlack,
-                                                      ),
                                                     ),
                                                     Row(
                                                       children: [
@@ -1226,15 +1229,6 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                         'Duration',
                                                         textAlign:
                                                             TextAlign.left,
-                                                        style: GoogleFonts.lato(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18,
-                                                          letterSpacing: 0.27,
-                                                          color:
-                                                              DesignCourseAppTheme
-                                                                  .nearlyBlack,
-                                                        ),
                                                       ),
                                                       Row(
                                                         children: [
@@ -1288,15 +1282,6 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                     Text(
                                                       'Eligibility',
                                                       textAlign: TextAlign.left,
-                                                      style: GoogleFonts.lato(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18,
-                                                        letterSpacing: 0.27,
-                                                        color:
-                                                            DesignCourseAppTheme
-                                                                .nearlyBlack,
-                                                      ),
                                                     ),
                                                     ListView.builder(
                                                         physics:
@@ -1317,7 +1302,7 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                                   .fiber_manual_record_rounded,
                                                               size: 12,
                                                               color:
-                                                                  Colors.black,
+                                                                  Colors.grey,
                                                             ),
                                                             title: Text(snapshot
                                                                 .data
@@ -1371,15 +1356,6 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                     Text(
                                                       'Details',
                                                       textAlign: TextAlign.left,
-                                                      style: GoogleFonts.lato(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18,
-                                                        letterSpacing: 0.27,
-                                                        color:
-                                                            DesignCourseAppTheme
-                                                                .nearlyBlack,
-                                                      ),
                                                     ),
                                                     SizedBox(
                                                       height: 5,
@@ -1469,6 +1445,8 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                       .data.data.state.id,
                                                   zip: snapshot
                                                       .data.data.zipCode,
+                                                  charge: snapshot.data.data.charge,
+                                                  chargeType: snapshot.data.data.type,
                                                 )),
                                       ).then((value) => setState(() {}));
                                     },

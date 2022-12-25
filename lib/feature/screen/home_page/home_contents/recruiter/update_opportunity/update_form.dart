@@ -6,6 +6,7 @@ import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/design_details.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/route_manager.dart';
 import 'package:inkwell_splash/inkwell_splash.dart';
 import 'package:http/http.dart' as http;
@@ -30,7 +31,9 @@ class OpportunityUpdate extends StatefulWidget {
       country,
       city,
       state,
-      zip;
+      zip,
+      charge,
+      chargeType;
   OpportunityUpdate(
       {@required this.token,
       this.id,
@@ -49,7 +52,9 @@ class OpportunityUpdate extends StatefulWidget {
       this.country,
       this.city,
       this.state,
-      this.zip});
+      this.zip,
+      this.charge,
+      this.chargeType});
   @override
   _OpportunityUpdateState createState() => _OpportunityUpdateState();
 }
@@ -79,6 +84,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
       eligibility.add(map['id']);
     }
     titleController.text = widget.title.toString();
+    chargeController.text = widget.charge.toString();
     descriptionController.text = widget.description.toString();
     _typevalue = widget.type.toString();
     dateTime = widget.date;
@@ -86,14 +92,27 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
     _time = TimeOfDay(hour: widget.etimeh, minute: widget.etimem);
     _selectedIndex = widget.category;
     sslug = widget.slug;
+    if (widget.charge != 0) {
+      chargeVisible = true;
+      id = 2;
+    } else {
+      chargeVisible = false;
+      id = 1;
+    }
     super.initState();
   }
 
+  // Default Radio Button Selected Item When App Starts.
+  String radioButtonItem = 'free';
+  bool chargeVisible;
+  // Group Value for Radio Button.
+  int id;
   bool isVisible = false;
   var dropdownvalue;
   int _selectedIndex;
   String tileName, sslug;
   TextEditingController titleController = TextEditingController();
+  TextEditingController chargeController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
   @override
@@ -133,7 +152,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                 decoration: ThemeHelper().inputBoxDecorationShaddow(),
               ),
               SizedBox(
-                height: 25,
+                height: 10,
               ),
               //--------------------------------here is category
               InkWellSplash(
@@ -154,14 +173,14 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                         ? Text(
                             tileName,
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 color: primaryColor,
                                 fontWeight: FontWeight.bold),
                           )
                         : Text(
                             widget.slug.toString().toUpperCase(),
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 color: primaryColor,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -236,7 +255,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                 ),
               ),
               SizedBox(
-                height: 25,
+                height: 15,
               ),
               //--------------------------------here is task type
               Container(
@@ -248,7 +267,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                         child: Text(
                           "Select Type",
                           style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                               color: primaryColor,
                               fontWeight: FontWeight.bold),
                         ),
@@ -273,25 +292,13 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                                 child: Text(
                                   e,
                                   style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       color: primaryColor,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ))
                           .toList(),
                       underline: Container(),
-                      // hint: Text(
-                      //   "Please choose a service",
-                      //   style: TextStyle(
-                      //       fontSize: 18,
-                      //       color: Colors.white,
-                      //       fontWeight: FontWeight.bold),
-                      // ),
-                      // icon: Icon(
-                      //   Icons.arrow_downward,
-                      //   color: Colors.yellow,
-                      // ),
-                      // isExpanded: true,
                       onChanged: (String value) {
                         setState(() {
                           _typevalue = value;
@@ -310,23 +317,72 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                 ),
               ),
               SizedBox(
-                height: 25,
+                height: 5,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Description: ",
+                    "Charge: ",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 16,
                       letterSpacing: 0.27,
                       color: primaryColor,
                     ),
-                  )
+                  ),
+                  Radio(
+                    value: 1,
+                    groupValue: id,
+                    onChanged: (val) {
+                      setState(() {
+                        chargeController.clear();
+                        radioButtonItem = 'free';
+                        chargeVisible = false;
+                        id = 1;
+                      });
+                    },
+                  ),
+                  Text(
+                    'Free',
+                    style: new TextStyle(fontSize: 16.0),
+                  ),
+                  Radio(
+                    value: 2,
+                    groupValue: id,
+                    onChanged: (val) {
+                      setState(() {
+                        radioButtonItem = 'paid';
+                        chargeVisible = true;
+                        id = 2;
+                      });
+                    },
+                  ),
+                  Text(
+                    'Paid',
+                    style: new TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  ),
                 ],
               ),
               SizedBox(
                 height: 5,
+              ),
+              Visibility(
+                visible: chargeVisible,
+                child: Container(
+                  child: TextFormField(
+                    controller: chargeController,
+                    keyboardType: TextInputType.number,
+                    decoration:
+                        ThemeHelper().textInputDecoration('Enter your amount'),
+                  ),
+                  decoration: ThemeHelper().inputBoxDecorationShaddow(),
+                ),
+              ),
+              SizedBox(
+                height: 15,
               ),
               //--------------------------------here is discription
               Container(
@@ -350,7 +406,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                           fontSize: 16,
                           fontWeight: FontWeight.w700),
                       hintText:
-                          "Example: Preffered cake shops,Text on the cake,delivery address in text,Phone number of the recepient,etc.",
+                          "Example: Preffered cake shops,Text on the cake.",
                       fillColor: Colors.grey.shade200),
                 ),
               ),
@@ -366,7 +422,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                         "Starting Date: ",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontSize: 16,
                           letterSpacing: 0.27,
                           color: primaryColor,
                         ),
@@ -388,7 +444,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                   ),
                 ],
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 6.0),
               //--------------------------------here is time
               Column(
                 children: [
@@ -398,7 +454,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                         "Select time: ",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontSize: 16,
                           letterSpacing: 0.27,
                           color: primaryColor,
                         ),
@@ -455,25 +511,26 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                 onTap: () {
                   if (time.hour < _time.hour && time.hour != _time.hour) {
                     Get.to(() => EligibilityUpdate(
-                      slug: sslug.toString(),
-                      title: titleController.text,
-                      category: _selectedIndex.toString(),
-                      type: _typevalue.toString(),
-                      description: descriptionController.text,
-                      date: dateTime.toString(),
-                      time:
-                      '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
-                      etime:
-                      '${_time.hour}:${_time.minute.toString().padLeft(2, '0')}',
-                      eligibility: eligibility,
-                      other: widget.other,
-                      country: widget.country,
-                      city: widget.city,
-                      state: widget.state,
-                      zip: widget.zip,
-                      id: widget.id,
-                      token: widget.token,
-                    ));
+                          slug: sslug.toString(),
+                          title: titleController.text,
+                          category: _selectedIndex.toString(),
+                          type: _typevalue.toString(),
+                          description: descriptionController.text,
+                          date: dateTime.toString(),
+                          time:
+                              '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
+                          etime:
+                              '${_time.hour}:${_time.minute.toString().padLeft(2, '0')}',
+                          eligibility: eligibility,
+                          other: widget.other,
+                          country: widget.country,
+                          city: widget.city,
+                          state: widget.state,
+                          zip: widget.zip,
+                          id: widget.id,
+                          token: widget.token,
+                          charge: chargeController.text,
+                        ));
                   } else
                     (showToast("End time must be greater than start time"));
                 },

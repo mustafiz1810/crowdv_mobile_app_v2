@@ -1,24 +1,17 @@
 import 'dart:convert';
-import 'package:badges/badges.dart';
-import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/data/models/volunteer/volunteer_opportunity_model.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/recruiter_task_details.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/home_contents/widgets/volunteer_task_details.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/chat.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
-import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
-import 'package:custom_timer/custom_timer.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -391,30 +384,32 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity>
                                                       ),
                                                     ],
                                                   ),
+                                                  snapshot.data.data[index]
+                                                      .type !=
+                                                      "free"
+                                                      ? Row(
+                                                    children: [
+                                                      Text(
+                                                        "Charge : ",
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                            12.0),
+                                                      ),
+                                                      Text(
+                                                          " ${snapshot.data.data[index].charge.toString()} Tk",
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .red,
+                                                              fontSize:
+                                                              12.0)),
+                                                    ],
+                                                  )
+                                                      : Container(),
                                                   Text(
                                                       snapshot.data.data[index]
                                                           .expiredAt,
                                                       style: TextStyle(
                                                           fontSize: 12.0)),
-                                                  // Column(
-                                                  //   children: [
-                                                  //     Text(
-                                                  //         "Expired in (D:H:M)",
-                                                  //         style: TextStyle(fontSize: 12.0)),
-                                                  //     CustomTimer(
-                                                  //         controller: _controller,
-                                                  //         from: Duration(days: 5-DateTime.now().day,
-                                                  //             hours:5-DateTime.now().hour,
-                                                  //             minutes: 5-DateTime.now().minute),
-                                                  //         to: Duration(),
-                                                  //         onBuildAction: CustomTimerAction.auto_start,
-                                                  //         builder: (remaining) {
-                                                  //           return Text(
-                                                  //               "${remaining.days+" "}:${" "+remaining.hours+" "}:${" "+remaining.minutes+" "}",
-                                                  //               style: TextStyle(fontSize: 12.0));
-                                                  //         }),
-                                                  //   ],
-                                                  // ),
                                                 ],
                                               ),
                                               SizedBox(
