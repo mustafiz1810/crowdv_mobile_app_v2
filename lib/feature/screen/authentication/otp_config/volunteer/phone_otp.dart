@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/feature/screen/authentication/sign_up/Volunteer/volunteer_sign_up.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
-import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/header_widget.dart';
 import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/gestures.dart';
@@ -78,7 +77,44 @@ class _PhoneOtpPageState extends State<PhoneOtp> {
           });
     }
   }
-
+  resend(String phone) async {
+    try {
+      Response response = await post(
+          Uri.parse(NetworkConstants.BASE_URL + 'phone-otp/resend'),
+          body: {
+            'phone': phone,
+          });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+      } else {
+        var data = jsonDecode(response.body.toString());
+        showToast(context, data['message']);
+        setState(() {
+          isApiCallProcess = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isApiCallProcess = false;
+      });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(e.toString()),
+              actions: [
+                FlatButton(
+                  child: Text("Try Again"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
   bool isApiCallProcess = false;
   bool _pinSuccess = false;
 
@@ -188,37 +224,38 @@ class _PhoneOtpPageState extends State<PhoneOtp> {
                                 "${remaining.minutes}:${remaining.seconds}",
                                 style: TextStyle(fontSize: 24.0));
                           }),
-                      // Text.rich(
-                      //   TextSpan(
-                      //     children: [
-                      //       TextSpan(
-                      //         text: "If you didn't receive a code! ",
-                      //         style: TextStyle(
-                      //           color: Colors.black38,
-                      //         ),
-                      //       ),
-                      //       TextSpan(
-                      //         text: 'Resend',
-                      //         recognizer: TapGestureRecognizer()
-                      //           ..onTap = () {
-                      //             _controller.start();
-                      //             showDialog(
-                      //               context: context,
-                      //               builder: (BuildContext context) {
-                      //                 return ThemeHelper().alartDialog(
-                      //                     "Successful",
-                      //                     "Verification code resend successful.",
-                      //                     context);
-                      //               },
-                      //             );
-                      //           },
-                      //         style: TextStyle(
-                      //             fontWeight: FontWeight.bold,
-                      //             color: Colors.orange),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
+                      Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "If you didn't receive a code! ",
+                              style: TextStyle(
+                                color: Colors.black38,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'Resend',
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  resend(widget.phone);
+                                  _controller.start();
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return ThemeHelper().alartDialog(
+                                          "Successful",
+                                          "Verification code resend successful.",
+                                          context);
+                                    },
+                                  );
+                                },
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange),
+                            ),
+                          ],
+                        ),
+                      ),
                       SizedBox(height: 40.0),
                       Container(
                         decoration: _pinSuccess == true

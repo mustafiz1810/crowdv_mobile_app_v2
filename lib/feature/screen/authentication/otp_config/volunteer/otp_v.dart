@@ -263,6 +263,7 @@ class _OtpVolunteerPageState extends State<OtpVolunteer> {
                         ),
                       ),
                       SizedBox(height: 40.0),
+
                       Container(
                         decoration: _pinSuccess == true
                             ? ThemeHelper().buttonBoxDecoration(context)
