@@ -510,7 +510,7 @@ class _CommonProfileState extends State<CommonProfile> {
                                                                       : snapshot
                                                                           .data
                                                                           .data
-                                                                          .rating.toDouble(),
+                                                                          .reviews[index].rating.toDouble(),
                                                                   minRating: 1,
                                                                   direction: Axis
                                                                       .horizontal,

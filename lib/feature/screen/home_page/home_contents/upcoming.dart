@@ -116,19 +116,22 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => VolunteerTaskDetails(
-                                          role: widget.role,
-                                          id: snapshot.data.data[index].id,)),
+                                      builder: (context) =>
+                                          VolunteerTaskDetails(
+                                            role: widget.role,
+                                            id: snapshot.data.data[index].id,
+                                          )),
                                 ).then((value) => setState(() {}));
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height / 3.7,
+                                height:
+                                    MediaQuery.of(context).size.height / 3.7,
                                 margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
+                                      BorderRadius.all(Radius.circular(20)),
                                   boxShadow: [
                                     BoxShadow(
                                       color: shadowColor.withOpacity(0.6),
@@ -144,14 +147,15 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                       padding: const EdgeInsets.all(23.0),
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
-                                            width:260,
+                                            width: 260,
                                             child: Text(
                                               snapshot.data.data[index].title,
                                               style: TextStyle(
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black,
                                                   fontSize: 16),
@@ -171,7 +175,8 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                             height: 25,
                                           ),
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Row(
                                                 children: [
@@ -181,41 +186,43 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                                     size: 20,
                                                   ),
                                                   Text(
-                                                    snapshot.data.data[index].city !=
-                                                        null
-                                                        ? snapshot
-                                                        .data.data[index].city
+                                                    snapshot.data.data[index]
+                                                                .city !=
+                                                            null
+                                                        ? snapshot.data
+                                                            .data[index].city
                                                         : "",
                                                     style: TextStyle(
                                                         fontSize: 15,
-                                                        color: Colors.blueAccent,
-                                                        fontWeight: FontWeight.bold),
+                                                        color:
+                                                            Colors.blueAccent,
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
                                                 ],
                                               ),
-                                              snapshot.data.data[index]
-                                                  .type !=
-                                                  "free"
+                                              snapshot.data.data[index].type !=
+                                                      "free"
                                                   ? Row(
-                                                children: [
-                                                  Text(
-                                                    "Charge : ",
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                        12.0),
-                                                  ),
-                                                  Text(
-                                                      " ${snapshot.data.data[index].charge.toString()} Tk",
-                                                      style: TextStyle(
-                                                          color: Colors
-                                                              .red,
-                                                          fontSize:
-                                                          12.0)),
-                                                ],
-                                              )
+                                                      children: [
+                                                        Text(
+                                                          "Charge : ",
+                                                          style: TextStyle(
+                                                              fontSize: 12.0),
+                                                        ),
+                                                        Text(
+                                                            " ${snapshot.data.data[index].charge.toString()} Tk",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                                fontSize:
+                                                                    12.0)),
+                                                      ],
+                                                    )
                                                   : Container(),
                                               Text(
-                                                snapshot.data.data[index].taskType,
+                                                snapshot
+                                                    .data.data[index].taskType,
                                               ),
                                             ],
                                           ),
@@ -232,7 +239,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                           ),
                                           Row(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Row(
                                                 children: [
@@ -250,8 +257,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                               Row(
                                                 children: [
                                                   Icon(
-                                                    Icons
-                                                        .watch_later_outlined,
+                                                    Icons.watch_later_outlined,
                                                     color: Colors.black,
                                                     size: 15,
                                                   ),
@@ -305,7 +311,8 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                   } else if (snapshot.connectionState == ConnectionState.none) {
                     return Text('Error'); // error
                   } else {
-                    return Center(child: CircularProgressIndicator()); // loading
+                    return Center(
+                        child: CircularProgressIndicator()); // loading
                   }
                 },
               )),

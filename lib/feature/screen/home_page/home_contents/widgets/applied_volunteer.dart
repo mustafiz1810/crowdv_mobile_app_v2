@@ -92,7 +92,7 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
                                 left: 15, top: 10, right: 15),
                             child: Container(
                               width: MediaQuery.of(context).size.width,
-                              height: 200,
+                              height: 190,
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                               decoration: BoxDecoration(
                                 color: Colors.white,

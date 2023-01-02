@@ -3,6 +3,7 @@ import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/feature/screen/authentication/sign_up/Volunteer/role_check.dart';
 import 'package:crowdv_mobile_app/feature/screen/authentication/widgets/terms_condition.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
+import 'package:crowdv_mobile_app/widgets/custom_dialog.dart';
 import 'package:crowdv_mobile_app/widgets/header_widget.dart';
 import 'package:crowdv_mobile_app/widgets/progres_hud.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -327,6 +328,16 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
                                             print(checkboxValue.toString());
                                             checkboxValue = value;
                                             state.didChange(value);
+                                            if(value == true){
+                                              showDialog(context: context,
+                                                  builder: (BuildContext context){
+                                                    return CustomDialogBox(
+                                                      descriptions: "CrowdV does not employ any volunteers/assistants or event recruiters. We are not responsible for the conduct of any user of our site. All information in member profiles, opportunity, applications, and messages are created by users of our site and is not generated. You need to do your own diligence to ensure the opportunity or volunteer you choose is appropriate for your needs and complies with applicable laws.",
+                                                      text: "Accept",
+                                                    );
+                                                  }
+                                              );
+                                            }
                                           });
                                         }),
                                     InkWell(

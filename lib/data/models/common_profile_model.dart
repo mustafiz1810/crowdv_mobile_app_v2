@@ -76,13 +76,13 @@ class Data {
   String lastName;
   String email;
   String phone;
-  dynamic aboutMe;
-  dynamic institution;
+  String aboutMe;
+  String institution;
   City country;
   City state;
   City city;
-  dynamic zipCode;
-  List<dynamic> typeOfDisability;
+  String zipCode;
+  List<String> typeOfDisability;
   String profession;
   bool termsAndConditions;
   Membership membership;
@@ -118,7 +118,7 @@ class Data {
     state: City.fromJson(json["state"]),
     city: City.fromJson(json["city"]),
     zipCode: json["zip_code"],
-    typeOfDisability: List<dynamic>.from(json["type_of_disability"].map((x) => x)),
+    typeOfDisability: List<String>.from(json["type_of_disability"].map((x) => x)),
     profession: json["profession"],
     termsAndConditions: json["terms_and_conditions"],
     membership: Membership.fromJson(json["membership"]),
@@ -239,7 +239,7 @@ class Review {
   ReviewFromClass reviewTo;
   TaskId taskId;
   String remark;
-  String rating;
+  int rating;
 
   factory Review.fromJson(Map<String, dynamic> json) => Review(
     id: json["id"],
