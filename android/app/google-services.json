@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "590815132019",
-    "project_id": "crowd-v-82453",
-    "storage_bucket": "crowd-v-82453.appspot.com"
+    "project_number": "1037498261537",
+    "project_id": "crowdv-a67db",
+    "storage_bucket": "crowdv-a67db.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:590815132019:android:f21a8693fbf9b12dff2d06",
+        "mobilesdk_app_id": "1:1037498261537:android:ccd155c7700b0d56454360",
         "android_client_info": {
-          "package_name": "com.example.Crowd_v"
+          "package_name": "com.getcrowdv.crowdv_mobile_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "590815132019-2smkh9b983m98dcrbjcuvaajla0h9nkd.apps.googleusercontent.com",
+          "client_id": "1037498261537-v5136meq5qp0kme7cbjoj361g7n1bik9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.Crowd_v",
+            "package_name": "com.getcrowdv.crowdv_mobile_app",
             "certificate_hash": "f43040cdd5b1988422e318c9dc38d0ce37c7ff03"
           }
         },
         {
-          "client_id": "590815132019-cci1m6hdjva8nggb12sb68psn89o365m.apps.googleusercontent.com",
+          "client_id": "1037498261537-m9aul2v35b1hvaaf0s8i9c3oc8o3tm9o.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCoHdS7pAAEvlH1RJrSqA3AgfRjujnk2eQ"
+          "current_key": "AIzaSyCF5tHxnXGXokhC68UcVCsQEBDJ_4gf89c"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "590815132019-cci1m6hdjva8nggb12sb68psn89o365m.apps.googleusercontent.com",
+              "client_id": "1037498261537-m9aul2v35b1hvaaf0s8i9c3oc8o3tm9o.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

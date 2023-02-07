@@ -49,7 +49,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.Crowd_v"
+        applicationId "com.getcrowdv.crowdv_mobile_app"
         minSdkVersion 23
         multiDexEnabled true
         targetSdkVersion 31
@@ -79,7 +79,7 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation ('com.google.android.exoplayer:exoplayer:2.17.0')
-    implementation platform('com.google.firebase:firebase-bom:29.3.0')
+    implementation platform('com.google.firebase:firebase-bom:31.1.1')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.android.support:multidex'
 }

@@ -166,7 +166,11 @@ class _NavDrawerState extends State<NavDrawer> {
                             city: widget.city,
                             zip: widget.zip,
                           )),
-                );
+                ).then((value) =>
+                    setState(
+                            () {
+
+                            }));
                 setState(() {});
               });
             },

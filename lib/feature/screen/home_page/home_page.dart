@@ -141,44 +141,87 @@ class _HomeScreenState extends State<HomeScreen> {
       return NotificationModel.fromJson(data);
     }
   }
-  List images = [ NetworkImage('https://alkuwaiti.com/wp-content/uploads/2020/05/Hero-Banner-Placeholder-Dark-1024x480.png'),];
-  int _currentIndex = 0 ;
+
+  List images = [
+    NetworkImage(
+        'https://alkuwaiti.com/wp-content/uploads/2020/05/Hero-Banner-Placeholder-Dark-1024x480.png'),
+  ];
+  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: FutureBuilder<AccountModel>(
-          future: getAcApi(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return NavDrawer(
-                id: widget.id,
-                role: snapshot.data.data.role,
-                fname: snapshot.data.data.firstName,
-                lname: snapshot.data.data.lastName,
-                email: snapshot.data.data.email,
-                image: snapshot.data.data.image,
-                disability: snapshot.data.data.typeOfDisability,
-                prof: snapshot.data.data.profession,
-                gender: snapshot.data.data.gender,
-                country: snapshot.data.data.country.id,
-                state: snapshot.data.data.state.id,
-                city: snapshot.data.data.city.id,
-                zip: snapshot.data.data.zipCode,
-              );
-            } else {
-              return Container(
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                  ),
-                ),
-              );
-            }
-          }),
+      // drawer: FutureBuilder<AccountModel>(
+      //     future: getAcApi(),
+      //     builder: (context, snapshot) {
+      //       if (snapshot.hasData) {
+      //         return NavDrawer(
+      //           id: widget.id,
+      //           role: snapshot.data.data.role,
+      //           fname: snapshot.data.data.firstName,
+      //           lname: snapshot.data.data.lastName,
+      //           email: snapshot.data.data.email,
+      //           image: snapshot.data.data.image,
+      //           disability: snapshot.data.data.typeOfDisability,
+      //           prof: snapshot.data.data.profession,
+      //           gender: snapshot.data.data.gender,
+      //           country: snapshot.data.data.country.id,
+      //           state: snapshot.data.data.state.id,
+      //           city: snapshot.data.data.city.id,
+      //           zip: snapshot.data.data.zipCode,
+      //         );
+      //       } else {
+      //         return Container(
+      //           child: Center(
+      //             child: CircularProgressIndicator(
+      //               color: Colors.white,
+      //             ),
+      //           ),
+      //         );
+      //       }
+      //     }),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
+        leading: FutureBuilder<AccountModel>(
+            future: getAcApi(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return InkWell(
+                  child: Icon(Icons.menu),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NavDrawer(
+                                id: widget.id,
+                                role: snapshot.data.data.role,
+                                fname: snapshot.data.data.firstName,
+                                lname: snapshot.data.data.lastName,
+                                email: snapshot.data.data.email,
+                                image: snapshot.data.data.image,
+                                disability: snapshot.data.data.typeOfDisability,
+                                prof: snapshot.data.data.profession,
+                                gender: snapshot.data.data.gender,
+                                country: snapshot.data.data.country.id,
+                                state: snapshot.data.data.state.id,
+                                city: snapshot.data.data.city.id,
+                                zip: snapshot.data.data.zipCode,
+                              )),
+                    ).then((value) => setState(() {
+                          print("page reload");
+                        }));
+                  },
+                );
+              } else {
+                return InkWell(
+                  child: Icon(Icons.menu),
+                  onTap: () {
+                    Center(child: CircularProgressIndicator());
+                  },
+                );
+              }
+            }),
         actions: [
           Container(
             margin: EdgeInsets.only(
@@ -321,51 +364,60 @@ class _HomeScreenState extends State<HomeScreen> {
                                       _currentIndex = index;
                                       print(_currentIndex);
                                     },
-                                    images: snapshot.data.data.banner.length != 0?snapshot.data.data.banner
-                                        .map((item) => Container(
-                                      child: ClipRRect(
-                                          borderRadius:
-                                          BorderRadius.all(
-                                              Radius.circular(5.0)),
-                                          child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment
-                                                  .start,
-                                              children: <Widget>[
-                                                SizedBox(
-                                                  height:140,
-                                                  width: double.infinity,
-                                                  child: Image.network(
-                                                    item,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                                Padding(
-                                                    padding: EdgeInsets
-                                                        .symmetric(
-                                                        vertical:
-                                                        5.0,
-                                                        horizontal:
-                                                        20.0),
-                                                    child: Text(
-                                                      snapshot
-                                                          .data
-                                                          .data
-                                                          .title[
-                                                      _currentIndex]
-                                                          .toString(),
-                                                      style: TextStyle(
-                                                        color: Colors
-                                                            .black,
-                                                        fontSize: 16.0,
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .bold,
-                                                      ),
-                                                    ))
-                                              ])),
-                                    ))
-                                        .toList():images,
+                                    images: snapshot.data.data.banner.length !=
+                                            0
+                                        ? snapshot.data.data.banner
+                                            .map((item) => Container(
+                                                  child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  5.0)),
+                                                      child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: <Widget>[
+                                                            SizedBox(
+                                                              height: 140,
+                                                              width: double
+                                                                  .infinity,
+                                                              child:
+                                                                  Image.network(
+                                                                item,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                                padding: EdgeInsets
+                                                                    .symmetric(
+                                                                        vertical:
+                                                                            5.0,
+                                                                        horizontal:
+                                                                            20.0),
+                                                                child: Text(
+                                                                  snapshot
+                                                                      .data
+                                                                      .data
+                                                                      .title[
+                                                                          _currentIndex]
+                                                                      .toString(),
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        16.0,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                ))
+                                                          ])),
+                                                ))
+                                            .toList()
+                                        : images,
                                     autoplayDuration:
                                         const Duration(seconds: 15),
                                   ),
@@ -376,7 +428,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Center(
                               child: CircularProgressIndicator(
                                 color: Colors.white,
-
                               ),
                             ),
                           );
@@ -499,7 +550,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     title: "Create Opportunity",
                                     svgSrc: "assets/edit.svg",
                                     press: () {
-                                      profileComplete == 100 && profileComplete != null
+                                      profileComplete == 100 &&
+                                              profileComplete != null
                                           ? Get.to(CreateOpportunity())
                                           : showToast(
                                               "Please complete your profile");

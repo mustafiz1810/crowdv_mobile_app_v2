@@ -1,5 +1,4 @@
 import 'package:crowdv_mobile_app/feature/screen/splash/view/splash_view.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';

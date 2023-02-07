@@ -109,7 +109,7 @@ class _VolunteerSignUpState extends State<VolunteerSignUp> {
               title: Text("Exception:"),
               content: Text(e.toString()),
               actions: [
-                FlatButton(
+                TextButton(
                   child: Text("Try Again"),
                   onPressed: () {
                     Navigator.of(context).pop();

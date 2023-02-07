@@ -222,7 +222,7 @@ class _OtpVolunteerPageState extends State<OtpVolunteer> {
                       SizedBox(height: 30.0),
                       CustomTimer(
                           controller: _controller,
-                          from: Duration(minutes: 2),
+                          from: Duration(minutes: 5),
                           to: Duration(minutes: 0),
                           onBuildAction: CustomTimerAction.auto_start,
                           builder: (remaining) {
