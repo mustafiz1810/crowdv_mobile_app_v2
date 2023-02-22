@@ -16,7 +16,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:path/path.dart' as Path;
 import 'package:async/async.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -150,7 +150,11 @@ class _ProfilePageState extends State<ProfilePage> {
       } else {
         var data = jsonDecode(response.body.toString());
         print(data);
-        showToast(context, data['error'].length!=0?data['error'].toString():data['message'].toString());
+        showToast(
+            context,
+            data['error'].length != 0
+                ? data['error'].toString()
+                : data['message'].toString());
       }
     } catch (e) {
       showDialog(
@@ -300,7 +304,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         Stack(children: [
                           SizedBox(
-                            height:120,
+                            height: 120,
                             child: CircleAvatar(
                               radius: 50.0,
                               backgroundColor: Colors.white,
@@ -323,14 +327,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ),
                                         )
                                       : CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    radius: 12.0,
-                                    child: Icon(
-                                      Icons.check_circle,
-                                      size: 20.0,
-                                      color: Colors.green,
-                                    ),
-                                  ),
+                                          backgroundColor: Colors.white,
+                                          radius: 12.0,
+                                          child: Icon(
+                                            Icons.check_circle,
+                                            size: 20.0,
+                                            color: Colors.green,
+                                          ),
+                                        ),
                                 ),
                                 radius: 50.0,
                                 backgroundImage: _image == null
@@ -454,7 +458,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         slivers: <Widget>[
                           SliverToBoxAdapter(
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                              padding:
+                                  const EdgeInsets.only(left: 8.0, right: 8.0),
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: Colors.grey.shade300,
@@ -466,7 +471,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         icon: Icon(Icons.info_rounded),
                                         child: const Text('My Info')),
                                     Tab(
-                                        icon: Icon(Icons.wheelchair_pickup_rounded),
+                                        icon: Icon(
+                                            Icons.wheelchair_pickup_rounded),
                                         child: const Text('Disabilities')),
                                     Tab(
                                         icon: Icon(Icons.location_on_rounded),
@@ -508,55 +514,60 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 Container(
                                                   child: Row(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
+                                                        MainAxisAlignment.spaceBetween,
                                                     children: [
+                                                      Container(
+                                                        height: 32,
+                                                        decoration: BoxDecoration(
+                                                          color: primaryColor,
+                                                          borderRadius: BorderRadius.circular(5)
+                                                        ),
+                                                        child: TextButton(
+                                                            onPressed: () {
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            ProfileUpdate(
+                                                                              token:
+                                                                                  token,
+                                                                              fname:
+                                                                                  snapshot.data.data.firstName,
+                                                                              lname:
+                                                                                  snapshot.data.data.lastName,
+                                                                              about:
+                                                                                  snapshot.data.data.aboutMe,
+                                                                              email:
+                                                                                  snapshot.data.data.email,
+                                                                              phone:
+                                                                                  snapshot.data.data.phone,
+                                                                              dob:
+                                                                                  snapshot.data.data.dob,
+                                                                              prof:
+                                                                                  snapshot.data.data.profession,
+                                                                              institute:
+                                                                                  snapshot.data.data.institution,
+                                                                              gender:
+                                                                                  snapshot.data.data.gender,
+                                                                            )),
+                                                              ).then((value) =>
+                                                                  setState(
+                                                                      () {}));
+                                                            },
+                                                            child: Text("Edit Profile",style: TextStyle(color: Colors.white),)),
+                                                      ),
                                                       Text(
                                                         "User Information",
                                                         style: TextStyle(
                                                           color: Colors.black87,
                                                           fontWeight:
-                                                              FontWeight.w500,
+                                                          FontWeight.w500,
                                                           fontSize: 16,
                                                         ),
                                                         textAlign:
-                                                            TextAlign.left,
+                                                        TextAlign.left,
                                                       ),
-                                                      TextButton(
-                                                          onPressed: () {
-                                                            Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          ProfileUpdate(
-                                                                            token:
-                                                                                token,
-                                                                            fname:
-                                                                                snapshot.data.data.firstName,
-                                                                            lname:
-                                                                                snapshot.data.data.lastName,
-                                                                            about:snapshot.data.data.aboutMe,
-                                                                            email:
-                                                                                snapshot.data.data.email,
-                                                                            phone:
-                                                                                snapshot.data.data.phone,
-                                                                            dob:
-                                                                                snapshot.data.data.dob,
-                                                                            prof:
-                                                                                snapshot.data.data.profession,
-                                                                            institute:snapshot.data.data.institution,
-                                                                            gender:
-                                                                                snapshot.data.data.gender,
-                                                                          )),
-                                                            ).then((value) =>
-                                                                setState(
-                                                                    () {}));
-                                                          },
-                                                          child: Icon(
-                                                            Icons.edit,
-                                                            color: Colors.black,
-                                                          ))
                                                     ],
                                                   ),
                                                 ),
@@ -615,20 +626,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                 .profession
                                                             : "")),
                                                     ListTile(
-                                                        leading: Icon(Icons.home_filled),
-                                                        title:
-                                                        Text("Institution:"),
-                                                        subtitle: Text(
-                                                            snapshot
-                                                                .data
-                                                                .data
-                                                                .institution != null
-                                                                ? snapshot
-                                                                .data
-                                                                .data
+                                                        leading: Icon(
+                                                            Icons.home_filled),
+                                                        title: Text(
+                                                            "Institution:"),
+                                                        subtitle: Text(snapshot
+                                                                    .data
+                                                                    .data
+                                                                    .institution !=
+                                                                null
+                                                            ? snapshot.data.data
                                                                 .institution
-                                                                : "Not Provided"
-                                                            )),
+                                                            : "Not Provided")),
                                                     ListTile(
                                                         leading:
                                                             Icon(Icons.male),
@@ -642,19 +651,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                 .gender
                                                             : "")),
                                                     ListTile(
-                                                        leading: Icon(Icons.person_pin_outlined),
+                                                        leading: Icon(Icons
+                                                            .person_pin_outlined),
                                                         title:
-                                                        Text("About me:"),
-                                                        subtitle: Text(
-                                                            snapshot
-                                                                .data
-                                                                .data
-                                                                .aboutMe != null
-                                                                ? snapshot
-                                                                .data
-                                                                .data
+                                                            Text("About me:"),
+                                                        subtitle: Text(snapshot
+                                                                    .data
+                                                                    .data
+                                                                    .aboutMe !=
+                                                                null
+                                                            ? snapshot.data.data
                                                                 .aboutMe
-                                                                : "Not Provided")),
+                                                            : "Not Provided")),
                                                   ],
                                                 ),
                                               ],
@@ -771,32 +779,32 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 items: countries,
                                                 label: 'Select Country',
                                                 decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(10),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
                                                     border: Border.all(
-                                                        color: Colors.black
-                                                    )
-                                                ),
-                                                dropDownMenuItems:  countries?.map((item) {
-                                                  return item['name'];
-                                                })?.toList() ??
-                                                    [],
+                                                        color: Colors.black)),
+                                                dropDownMenuItems:
+                                                    countries?.map((item) {
+                                                          return item['name'];
+                                                        })?.toList() ??
+                                                        [],
                                                 onChanged: (newVal) {
-                                                  if(newVal!=null)
-                                                  {
+                                                  if (newVal != null) {
                                                     setState(() {
                                                       states.clear();
                                                       statevalue = null;
                                                       city.clear();
                                                       cityvalue = null;
                                                       zipController.clear();
-                                                      countryvalue = newVal['id'];
+                                                      countryvalue =
+                                                          newVal['id'];
                                                       getState(countryvalue);
                                                       print(countryvalue);
                                                     });
-
-                                                  }
-                                                  else{
-                                                    countryvalue=widget.country;
+                                                  } else {
+                                                    countryvalue =
+                                                        widget.country;
                                                   }
                                                 },
                                               ),
@@ -811,20 +819,22 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   }
                                                 ],
                                                 items: states,
-                                                label: 'Division/Province/State',
+                                                label:
+                                                    'Division/Province/State',
                                                 decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(10),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
                                                     border: Border.all(
-                                                        color: Colors.black
-                                                    )
-                                                ),
-                                                dropDownMenuItems: states.map((item) {
-                                                  return item['name'].toString();
-                                                }).toList() ??
-                                                    [],
-                                                onChanged: (newVal)  {
-                                                  if(newVal!=null)
-                                                  {
+                                                        color: Colors.black)),
+                                                dropDownMenuItems:
+                                                    states.map((item) {
+                                                          return item['name']
+                                                              .toString();
+                                                        }).toList() ??
+                                                        [],
+                                                onChanged: (newVal) {
+                                                  if (newVal != null) {
                                                     setState(() {
                                                       city.clear();
                                                       cityvalue = null;
@@ -833,9 +843,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       print(statevalue);
                                                       getCity(statevalue);
                                                     });
-                                                  }
-                                                  else{
-                                                    statevalue=widget.state;
+                                                  } else {
+                                                    statevalue = widget.state;
                                                   }
                                                 },
                                               ),
@@ -852,24 +861,24 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 items: city,
                                                 label: 'City',
                                                 decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(10),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
                                                     border: Border.all(
-                                                        color: Colors.black
-                                                    )
-                                                ),
-                                                dropDownMenuItems: city.map((item) {
-                                                  return item['name'].toString();
-                                                }).toList() ??
-                                                    [],
+                                                        color: Colors.black)),
+                                                dropDownMenuItems:
+                                                    city.map((item) {
+                                                          return item['name']
+                                                              .toString();
+                                                        }).toList() ??
+                                                        [],
                                                 onChanged: (newVal) {
-                                                  if(newVal!=null)
-                                                  {
+                                                  if (newVal != null) {
                                                     cityvalue = newVal['id'];
                                                     zipController.clear();
                                                     print(cityvalue);
-                                                  }
-                                                  else{
-                                                    cityvalue=widget.city;
+                                                  } else {
+                                                    cityvalue = widget.city;
                                                   }
                                                 },
                                               ),
@@ -878,7 +887,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                               ),
                                               Container(
                                                 child: TextFormField(
-                                                  style: TextStyle(fontSize: 14),
+                                                  style:
+                                                      TextStyle(fontSize: 14),
                                                   keyboardType:
                                                       TextInputType.number,
                                                   controller: zipController,

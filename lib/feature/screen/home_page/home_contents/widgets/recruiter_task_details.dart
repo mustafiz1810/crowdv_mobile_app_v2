@@ -436,9 +436,12 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                                         .data
                                                                         .data
                                                                         .applyInvite[
-                                                                            index].status==
+                                                                            index]
+                                                                        .status ==
                                                                     "applied"
                                                                 ? ListTile(
+                                                                    minVerticalPadding:
+                                                                        20,
                                                                     leading:
                                                                         InkWell(
                                                                       onTap:
@@ -480,102 +483,94 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                                                 TextOverflow.ellipsis),
                                                                       ),
                                                                     ),
-                                                                    subtitle: Text(
-                                                                        snapshot
-                                                                            .data
-                                                                            .data
-                                                                            .applyInvite[
-                                                                                index]
-                                                                            .location,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                14)),
-                                                                    trailing:
-                                                                        SizedBox(
-                                                                      width: 80,
-                                                                      child:
-                                                                          Row(
-                                                                        children: [
-                                                                          IconBox(
-                                                                            onTap:
-                                                                                () {
-                                                                              SweetAlert.show(context, subtitle: "Are you sure?", style: SweetAlertStyle.confirm, showCancelButton: true, onPress: (bool isConfirm) {
-                                                                                if (isConfirm) {
-                                                                                  SweetAlert.show(context, subtitle: "Loading...", style: SweetAlertStyle.loading);
-                                                                                  //Return false to keep dialog
-                                                                                  if (isConfirm) {
-                                                                                    new Future.delayed(new Duration(seconds: 1), () {
-                                                                                      getRequestWithoutParam('/api/v1/opportunity/reject/${snapshot.data.data.applyInvite[index].id}', {
-                                                                                        'Content-Type': "application/json",
-                                                                                        "Authorization": "Bearer $token"
-                                                                                      }).then((value) async {
-                                                                                        showToast(context, 'Volunteer Declined');
-                                                                                        Navigator.pop(context);
-                                                                                        setState(() {});
+                                                                    subtitle:
+                                                                        Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        Text(
+                                                                            snapshot.data.data.applyInvite[index].location,
+                                                                            style: TextStyle(fontSize: 14)),
+                                                                        Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.only(top: 8.0),
+                                                                          child:
+                                                                              Row(
+                                                                            children: [
+                                                                              Container(
+                                                                                height: 32,
+                                                                                decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(5)),
+                                                                                child: TextButton(
+                                                                                    onPressed: () {
+                                                                                      SweetAlert.show(context, subtitle: "Are you sure?", style: SweetAlertStyle.confirm, showCancelButton: true, onPress: (bool isConfirm) {
+                                                                                        if (isConfirm) {
+                                                                                          //Return false to keep dialog
+                                                                                          if (isConfirm) {
+                                                                                            SweetAlert.show(context, subtitle: "Loading", style: SweetAlertStyle.loading);
+                                                                                            new Future.delayed(new Duration(seconds: 1), () {
+                                                                                              getRequestWithoutParam('/api/v1/opportunity/hired/${snapshot.data.data.applyInvite[index].id}', {
+                                                                                                'Content-Type': "application/json",
+                                                                                                "Authorization": "Bearer $token"
+                                                                                              }).then((value) async {
+                                                                                                showToast(context, 'Volunteer Accepted');
+                                                                                                Navigator.pop(context);
+                                                                                                setState(() {});
+                                                                                              });
+                                                                                            });
+                                                                                          } else {
+                                                                                            SweetAlert.show(context, subtitle: "Canceled!", style: SweetAlertStyle.error);
+                                                                                          }
+                                                                                          return false;
+                                                                                        }
+                                                                                        return null;
                                                                                       });
-                                                                                    });
-                                                                                  } else {
-                                                                                    SweetAlert.show(context, subtitle: "Canceled!", style: SweetAlertStyle.error);
-                                                                                  }
-                                                                                  return false;
-                                                                                }
-                                                                                return null;
-                                                                              });
-                                                                            },
-                                                                            bgColor:
-                                                                                Colors.red,
-                                                                            borderColor:
-                                                                                Colors.white,
-                                                                            child:
-                                                                                Icon(
-                                                                              Icons.clear,
-                                                                              color: Colors.white,
-                                                                              size: 18,
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                10,
-                                                                          ),
-                                                                          IconBox(
-                                                                            onTap:
-                                                                                () {
-                                                                              SweetAlert.show(context, subtitle: "Are you sure?", style: SweetAlertStyle.confirm, showCancelButton: true, onPress: (bool isConfirm) {
-                                                                                if (isConfirm) {
-                                                                                  //Return false to keep dialog
-                                                                                  if (isConfirm) {
-                                                                                    SweetAlert.show(context, subtitle: "Loading", style: SweetAlertStyle.loading);
-                                                                                    new Future.delayed(new Duration(seconds: 1), () {
-                                                                                      getRequestWithoutParam('/api/v1/opportunity/hired/${snapshot.data.data.applyInvite[index].id}', {
-                                                                                        'Content-Type': "application/json",
-                                                                                        "Authorization": "Bearer $token"
-                                                                                      }).then((value) async {
-                                                                                        showToast(context, 'Volunteer Accepted');
-                                                                                        Navigator.pop(context);
-                                                                                        setState(() {});
+                                                                                    },
+                                                                                    child: Text(
+                                                                                      "Confirm",
+                                                                                      style: TextStyle(color: Colors.white),
+                                                                                    )),
+                                                                              ),
+                                                                              SizedBox(
+                                                                                width: 10,
+                                                                              ),
+                                                                              Container(
+                                                                                height: 32,
+                                                                                decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(5)),
+                                                                                child: TextButton(
+                                                                                    onPressed: () {
+                                                                                      SweetAlert.show(context, subtitle: "Are you sure?", style: SweetAlertStyle.confirm, showCancelButton: true, onPress: (bool isConfirm) {
+                                                                                        if (isConfirm) {
+                                                                                          SweetAlert.show(context, subtitle: "Loading...", style: SweetAlertStyle.loading);
+                                                                                          //Return false to keep dialog
+                                                                                          if (isConfirm) {
+                                                                                            new Future.delayed(new Duration(seconds: 1), () {
+                                                                                              getRequestWithoutParam('/api/v1/opportunity/reject/${snapshot.data.data.applyInvite[index].id}', {
+                                                                                                'Content-Type': "application/json",
+                                                                                                "Authorization": "Bearer $token"
+                                                                                              }).then((value) async {
+                                                                                                showToast(context, 'Volunteer Declined');
+                                                                                                Navigator.pop(context);
+                                                                                                setState(() {});
+                                                                                              });
+                                                                                            });
+                                                                                          } else {
+                                                                                            SweetAlert.show(context, subtitle: "Canceled!", style: SweetAlertStyle.error);
+                                                                                          }
+                                                                                          return false;
+                                                                                        }
+                                                                                        return null;
                                                                                       });
-                                                                                    });
-                                                                                  } else {
-                                                                                    SweetAlert.show(context, subtitle: "Canceled!", style: SweetAlertStyle.error);
-                                                                                  }
-                                                                                  return false;
-                                                                                }
-                                                                                return null;
-                                                                              });
-                                                                            },
-                                                                            bgColor:
-                                                                                Colors.green,
-                                                                            borderColor:
-                                                                                Colors.white,
-                                                                            child:
-                                                                                Icon(
-                                                                              Icons.check,
-                                                                              color: Colors.white,
-                                                                              size: 18,
-                                                                            ),
+                                                                                    },
+                                                                                    child: Text(
+                                                                                      "Decline",
+                                                                                      style: TextStyle(color: Colors.white),
+                                                                                    )),
+                                                                              ),
+                                                                            ],
                                                                           ),
-                                                                        ],
-                                                                      ),
+                                                                        ),
+                                                                      ],
                                                                     ),
                                                                   )
                                                                 : ListTile(
@@ -1123,48 +1118,56 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                             SizedBox(
                                               height: 10,
                                             ),
-                                            snapshot.data.data
-                                                .type !=
-                                                "free"
-                                                ?  Padding(
-                                                  padding: const EdgeInsets.only(bottom: 10.0),
-                                                  child: Container(
-                                              width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                              decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                    BorderRadius.all(
-                                                        Radius.circular(12))),
-                                              child: Padding(
-                                                  padding:
-                                                  const EdgeInsets.all(15.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        "Charge",
-                                                        textAlign: TextAlign.left,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 20,
-                                                      ),
-                                                      Flexible(
-                                                        child: Text(
-                                                          snapshot
-                                                              .data.data.charge.toString(),
-                                                          textAlign:
-                                                          TextAlign.right,
+                                            snapshot.data.data.type != "free"
+                                                ? Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 10.0),
+                                                    child: Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          12))),
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(15.0),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              "Charge",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                            ),
+                                                            SizedBox(
+                                                              width: 20,
+                                                            ),
+                                                            Flexible(
+                                                              child: Text(
+                                                                snapshot.data
+                                                                    .data.charge
+                                                                    .toString(),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .right,
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ),
-                                                    ],
-                                                  ),
-                                              ),
-                                            ),
-                                                )
+                                                    ),
+                                                  )
                                                 : Container(),
                                             Container(
                                               width: MediaQuery.of(context)
@@ -1445,8 +1448,10 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                       .data.data.state.id,
                                                   zip: snapshot
                                                       .data.data.zipCode,
-                                                  charge: snapshot.data.data.charge,
-                                                  chargeType: snapshot.data.data.type,
+                                                  charge:
+                                                      snapshot.data.data.charge,
+                                                  chargeType:
+                                                      snapshot.data.data.type,
                                                 )),
                                       ).then((value) => setState(() {}));
                                     },

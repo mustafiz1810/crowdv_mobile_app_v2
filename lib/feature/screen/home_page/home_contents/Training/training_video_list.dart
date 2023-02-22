@@ -25,6 +25,7 @@ class _TrainingVideoState extends State<TrainingVideo> {
   // RandomColor _randomColor = RandomColor();
   @override
   void initState() {
+    print(token);
     getCred();
     super.initState();
   }

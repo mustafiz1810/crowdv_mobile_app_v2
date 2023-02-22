@@ -125,8 +125,6 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
-                                height:
-                                    MediaQuery.of(context).size.height / 3.7,
                                 margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
@@ -166,13 +164,13 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                                           ),
                                           SizedBox(
                                             width: 200,
-                                            height: 50,
+                                            height: 80,
                                             child: Text(
                                               snapshot.data.data[index].details,
                                             ),
                                           ),
                                           SizedBox(
-                                            height: 25,
+                                            height: 15,
                                           ),
                                           Row(
                                             mainAxisAlignment:

@@ -138,13 +138,13 @@ class _NotificationPageState extends State<NotificationPage> {
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               color: widget.data[index].readAt != null
-                                  ? Color(0xFFe5e5e5)
-                                  : Colors.white,
+                                  ? Colors.white
+                                  : Color(0xffcaf0f8),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.4),
                                   blurRadius: 1,
-                                  spreadRadius: 0.2,
+                                  spreadRadius: 0.1,
                                   offset: Offset(0, .5),
                                 ),
                               ],
@@ -181,16 +181,6 @@ class _NotificationPageState extends State<NotificationPage> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black)),
-                              trailing: Container(
-                                height: 10,
-                                width: 10,
-                                decoration: BoxDecoration(
-                                    color: widget.data[index].readAt == null
-                                        ? Color(0xFF1d4e89)
-                                        : Colors.white,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(100))),
-                              ),
                               subtitle: Text(widget.data[index].data.title),
                             ),
                           ),
