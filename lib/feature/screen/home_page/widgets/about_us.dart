@@ -78,200 +78,200 @@ class AboutUs extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            child: Stack(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(23.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                            child:  Padding(
+                              padding: const EdgeInsets.all(23.0),
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    snapshot.data.data.companyName,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 16),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  SizedBox(
+                                    width: 200,
+                                    height: 40,
+                                    child: Text(snapshot.data.data.tagLine
+                                        .toString()),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                     children: [
-                                      Text(
-                                        snapshot.data.data.companyName,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                            fontSize: 16),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      SizedBox(
-                                        width: 200,
-                                        height: 40,
-                                        child: Text(snapshot.data.data.tagLine
-                                            .toString()),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
                                         children: [
-                                          Row(
-                                            children: [
-                                              GFIconButton(
-                                                size: GFSize.MEDIUM,
-                                                color: Colors.white,
-                                                onPressed: () async {
-                                                  String _url = snapshot
-                                                      .data.data.webAddress;
-                                                  print('launching');
-                                                  try {
-                                                    await canLaunch(_url)
-                                                        ? await launch(_url)
-                                                        : throw 'Could not launch $_url';
-                                                  } catch (_, __) {
-                                                    showToast("Failed");
-                                                  }
-                                                },
-                                                icon: Image.asset(
-                                                    "assets/icons8-website-48.png"),
-                                                shape: GFIconButtonShape.circle,
-                                              ),
-                                              TextButton(
-                                                  onPressed: () async {
-                                                    String _url = snapshot
-                                                        .data.data.webAddress;
-                                                    print('launching');
-                                                    try {
-                                                      await canLaunch(_url)
-                                                          ? await launch(_url)
-                                                          : throw 'Could not launch $_url';
-                                                    } catch (_, __) {
-                                                      showToast("Failed");
-                                                    }
-                                                  },
-                                                  child: SizedBox(
-                                                      width: 170,
-                                                      height: 20,
-                                                      child: Text(snapshot.data
-                                                          .data.webAddress))),
-                                            ],
+                                          GFIconButton(
+                                            size: GFSize.MEDIUM,
+                                            color: Colors.white,
+                                            onPressed: () async {
+                                              String _url = snapshot
+                                                  .data.data.webAddress;
+                                              print('launching');
+                                              try {
+                                                await canLaunch(_url)
+                                                    ? await launch(_url)
+                                                    : throw 'Could not launch $_url';
+                                              } catch (_, __) {
+                                                showToast("Failed");
+                                              }
+                                            },
+                                            icon: Image.asset(
+                                                "assets/icons8-website-48.png"),
+                                            shape: GFIconButtonShape.circle,
                                           ),
-                                          InkWell(
-                                              onTap: () {
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title: Text("Address"),
-                                                        content: Row(
-                                                          children: [
-                                                            Flexible(
-                                                                child: Text(
-                                                                    snapshot
-                                                                        .data
-                                                                        .data
-                                                                        .address)),
-                                                          ],
-                                                        ),
-                                                        actions: [
-                                                          FlatButton(
-                                                            child: Text(
-                                                              "ok",
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white),
-                                                            ),
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            color: primaryColor,
-                                                          )
-                                                        ],
-                                                      );
-                                                    });
+                                          TextButton(
+                                              onPressed: () async {
+                                                String _url = snapshot
+                                                    .data.data.webAddress;
+                                                print('launching');
+                                                try {
+                                                  await canLaunch(_url)
+                                                      ? await launch(_url)
+                                                      : throw 'Could not launch $_url';
+                                                } catch (_, __) {
+                                                  showToast("Failed");
+                                                }
                                               },
-                                              child: Text(
-                                                "Address",
-                                                style: TextStyle(
-                                                    decoration: TextDecoration
-                                                        .underline),
-                                              ))
+                                              child: SizedBox(
+                                                  width: 170,
+                                                  height: 20,
+                                                  child: Text(snapshot.data
+                                                      .data.webAddress))),
                                         ],
                                       ),
-                                      Divider(
-                                        height: 1,
-                                        color: Colors.grey.withOpacity(.5),
-                                        thickness: 1,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(
-                                                Icons
-                                                    .home_repair_service_outlined,
-                                                size: 20,
-                                              ),
-                                              SizedBox(
-                                                width: 5,
-                                              ),
-                                              Text(
-                                                snapshot.data.data.companyName,
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 16),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              Icon(
-                                                Icons.phone,
-                                                size: 20,
-                                              ),
-                                              SizedBox(
-                                                width: 5,
-                                              ),
-                                              Text(
-                                                snapshot.data.data.phoneNumber,
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 14),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
+                                      InkWell(
+                                          onTap: () {
+                                            showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Text("Address"),
+                                                    content: Row(
+                                                      children: [
+                                                        Flexible(
+                                                            child: Text(
+                                                                snapshot
+                                                                    .data
+                                                                    .data
+                                                                    .address)),
+                                                      ],
+                                                    ),
+                                                    actions: [
+                                                      FlatButton(
+                                                        child: Text(
+                                                          "ok",
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .white),
+                                                        ),
+                                                        onPressed: () {
+                                                          Navigator.of(
+                                                              context)
+                                                              .pop();
+                                                        },
+                                                        color: primaryColor,
+                                                      )
+                                                    ],
+                                                  );
+                                                });
+                                          },
+                                          child: Text(
+                                            "Address",
+                                            style: TextStyle(
+                                                decoration: TextDecoration
+                                                    .underline),
+                                          ))
+                                    ],
+                                  ),
+                                  Divider(
+                                    height: 1,
+                                    color: Colors.grey.withOpacity(.5),
+                                    thickness: 1,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
                                       Row(
                                         children: [
                                           Icon(
-                                            Icons.email_outlined,
+                                            Icons
+                                                .home_repair_service_outlined,
                                             size: 20,
                                           ),
                                           SizedBox(
                                             width: 5,
                                           ),
                                           Text(
-                                            snapshot.data.data.email,
+                                            snapshot.data.data.companyName,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.phone,
+                                            size: 20,
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            snapshot.data.data.phoneNumber,
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 14),
                                           ),
                                         ],
                                       ),
-                                      SizedBox(
-                                        height: 5,
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.email_outlined,
+                                        size: 20,
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        snapshot.data.data.email,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 5.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
                                           children: [
                                             GFIconButton(
                                               onPressed: () async {
@@ -288,8 +288,32 @@ class AboutUs extends StatelessWidget {
                                               },
                                               icon: Icon(Icons.facebook),
                                               shape: GFIconButtonShape.circle,
+                                              size: GFSize.SMALL,
                                             ),
+                                            TextButton(
+                                                onPressed: () async {
+                                                  String _url = snapshot
+                                                      .data.data.facebook;
+                                                  print('launching');
+                                                  try {
+                                                    await canLaunch(_url)
+                                                        ? await launch(_url)
+                                                        : throw 'Could not launch $_url';
+                                                  } catch (_, __) {
+                                                    showToast("Failed");
+                                                  }
+                                                },
+                                                child: SizedBox(
+                                                    width: 240,
+                                                    height: 20,
+                                                    child: Text(snapshot.data
+                                                        .data.facebook))),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
                                             GFIconButton(
+                                              size: GFSize.SMALL,
                                               onPressed: () async {
                                                 String _url =
                                                     "https://www.linkedin.com/m/company/crowdvsquad/";
@@ -306,7 +330,28 @@ class AboutUs extends StatelessWidget {
                                                   "assets/icons8-linkedin-48.png"),
                                               shape: GFIconButtonShape.circle,
                                             ),
+                                            TextButton(
+                                                onPressed: () async {
+                                                  String _url = "https://www.linkedin.com/m/company/crowdvsquad/";
+                                                  print('launching');
+                                                  try {
+                                                    await canLaunch(_url)
+                                                        ? await launch(_url)
+                                                        : throw 'Could not launch $_url';
+                                                  } catch (_, __) {
+                                                    showToast("Failed");
+                                                  }
+                                                },
+                                                child: SizedBox(
+                                                    width: 240,
+                                                    height: 20,
+                                                    child: Text("https://www.linkedin.com/m/company/crowdvsquad/"))),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
                                             GFIconButton(
+                                              size: GFSize.SMALL,
                                               color: Colors.lightBlueAccent,
                                               onPressed: () async {
                                                 String _url =
@@ -324,14 +369,37 @@ class AboutUs extends StatelessWidget {
                                                   "assets/twitter.png"),
                                               shape: GFIconButtonShape.circle,
                                             ),
+                                            TextButton(
+                                                onPressed: () async {
+                                                  String _url = snapshot
+                                                      .data.data.twitter;
+                                                  print('launching');
+                                                  try {
+                                                    await canLaunch(_url)
+                                                        ? await launch(_url)
+                                                        : throw 'Could not launch $_url';
+                                                  } catch (_, __) {
+                                                    showToast("Failed");
+                                                  }
+                                                },
+                                                child: SizedBox(
+                                                    width: 240,
+                                                    height: 20,
+                                                    child: Text(snapshot.data
+                                                        .data.twitter))),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
                                             GFIconButton(
+                                              size: GFSize.SMALL,
                                               color: Colors.white,
                                               boxShadow: BoxShadow(
                                                 color: Colors.black26,
                                                 blurRadius:
-                                                    3.0, // soften the shadow
+                                                3.0, // soften the shadow
                                                 spreadRadius:
-                                                    1.0, //extend the shadow
+                                                1.0, //extend the shadow
                                                 offset: Offset(
                                                   0.0, // Move to right 10  horizontally
                                                   0.1, // Move to bottom 10 Vertically
@@ -353,14 +421,37 @@ class AboutUs extends StatelessWidget {
                                                   "assets/Insta.png"),
                                               shape: GFIconButtonShape.circle,
                                             ),
+                                            TextButton(
+                                                onPressed: () async {
+                                                  String _url = snapshot
+                                                      .data.data.instagram;
+                                                  print('launching');
+                                                  try {
+                                                    await canLaunch(_url)
+                                                        ? await launch(_url)
+                                                        : throw 'Could not launch $_url';
+                                                  } catch (_, __) {
+                                                    showToast("Failed");
+                                                  }
+                                                },
+                                                child: SizedBox(
+                                                    width: 240,
+                                                    height: 20,
+                                                    child: Text(snapshot.data
+                                                        .data.instagram))),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
                                             GFIconButton(
+                                              size: GFSize.SMALL,
                                               color: Colors.white,
                                               boxShadow: BoxShadow(
                                                 color: Colors.black26,
                                                 blurRadius:
-                                                    3.0, // soften the shadow
+                                                3.0, // soften the shadow
                                                 spreadRadius:
-                                                    1.0, //extend the shadow
+                                                1.0, //extend the shadow
                                                 offset: Offset(
                                                   0.0, // Move to right 10  horizontally
                                                   0.1, // Move to bottom 10 Vertically
@@ -385,13 +476,31 @@ class AboutUs extends StatelessWidget {
                                               ),
                                               shape: GFIconButtonShape.circle,
                                             ),
+                                            TextButton(
+                                                onPressed: () async {
+                                                  String _url = snapshot
+                                                      .data.data.youtube;
+                                                  print('launching');
+                                                  try {
+                                                    await canLaunch(_url)
+                                                        ? await launch(_url)
+                                                        : throw 'Could not launch $_url';
+                                                  } catch (_, __) {
+                                                    showToast("Failed");
+                                                  }
+                                                },
+                                                child: SizedBox(
+                                                    width: 240,
+                                                    height: 20,
+                                                    child: Text(snapshot.data
+                                                        .data.youtube))),
                                           ],
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),

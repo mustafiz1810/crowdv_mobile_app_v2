@@ -232,8 +232,7 @@ class _TrainingVideoState extends State<TrainingVideo> {
                                                     borderRadius:
                                                         BorderRadius.only(
                                                             topLeft:
-                                                                Radius.circular(
-                                                                    10))),
+                                                                Radius.circular(10))),
                                                 child: Center(
                                                     child: Text(
                                                   snapshot
