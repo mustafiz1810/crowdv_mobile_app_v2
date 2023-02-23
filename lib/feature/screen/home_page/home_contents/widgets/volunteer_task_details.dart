@@ -442,48 +442,56 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                             SizedBox(
                                               height: 10,
                                             ),
-                                            snapshot.data.data
-                                                .type !=
-                                                "free"
-                                                ?  Padding(
-                                              padding: const EdgeInsets.only(bottom: 10.0),
-                                              child: Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                    BorderRadius.all(
-                                                        Radius.circular(12))),
-                                                child: Padding(
-                                                  padding:
-                                                  const EdgeInsets.all(15.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        "Charge",
-                                                        textAlign: TextAlign.left,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 20,
-                                                      ),
-                                                      Flexible(
-                                                        child: Text(
-                                                          snapshot
-                                                              .data.data.charge.toString(),
-                                                          textAlign:
-                                                          TextAlign.right,
+                                            snapshot.data.data.type != "free"
+                                                ? Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 10.0),
+                                                    child: Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          12))),
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(15.0),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              "Charge",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                            ),
+                                                            SizedBox(
+                                                              width: 20,
+                                                            ),
+                                                            Flexible(
+                                                              child: Text(
+                                                                snapshot.data
+                                                                    .data.charge
+                                                                    .toString(),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .right,
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            )
+                                                    ),
+                                                  )
                                                 : Container(),
                                             ListCard(
                                               title: "Category",
@@ -935,6 +943,10 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                       ),
                                                       onPressed: () {
                                                         SweetAlert.show(context,
+                                                            cancelButtonColor:
+                                                                Colors.red,
+                                                            confirmButtonColor:
+                                                                Colors.green,
                                                             title:
                                                                 "Are you sure?",
                                                             subtitle:
@@ -1014,6 +1026,10 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                       ),
                                                       onPressed: () {
                                                         SweetAlert.show(context,
+                                                            cancelButtonColor:
+                                                                Colors.red,
+                                                            confirmButtonColor:
+                                                                Colors.green,
                                                             subtitle:
                                                                 "Are you sure?",
                                                             style:
@@ -1043,6 +1059,10 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                                     (value) async {
                                                                   SweetAlert.show(
                                                                       context,
+                                                                      cancelButtonColor:
+                                                                      Colors.red,
+                                                                      confirmButtonColor:
+                                                                      Colors.green,
                                                                       title:
                                                                           "Your task is done",
                                                                       subtitle:

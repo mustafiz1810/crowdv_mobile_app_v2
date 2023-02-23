@@ -503,7 +503,7 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                                                 decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(5)),
                                                                                 child: TextButton(
                                                                                     onPressed: () {
-                                                                                      SweetAlert.show(context, subtitle: "Are you sure?", style: SweetAlertStyle.confirm, showCancelButton: true, onPress: (bool isConfirm) {
+                                                                                      SweetAlert.show(context, cancelButtonColor: Colors.red, confirmButtonColor: Colors.green, subtitle: "Are you sure?", style: SweetAlertStyle.confirm, showCancelButton: true, onPress: (bool isConfirm) {
                                                                                         if (isConfirm) {
                                                                                           //Return false to keep dialog
                                                                                           if (isConfirm) {
@@ -539,7 +539,7 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                                                 decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(5)),
                                                                                 child: TextButton(
                                                                                     onPressed: () {
-                                                                                      SweetAlert.show(context, subtitle: "Are you sure?", style: SweetAlertStyle.confirm, showCancelButton: true, onPress: (bool isConfirm) {
+                                                                                      SweetAlert.show(context, cancelButtonColor: Colors.red, confirmButtonColor: Colors.green, subtitle: "Are you sure?", style: SweetAlertStyle.confirm, showCancelButton: true, onPress: (bool isConfirm) {
                                                                                         if (isConfirm) {
                                                                                           SweetAlert.show(context, subtitle: "Loading...", style: SweetAlertStyle.loading);
                                                                                           //Return false to keep dialog
@@ -1482,6 +1482,9 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                             ),
                                             onPressed: () {
                                               SweetAlert.show(context,
+                                                  cancelButtonColor: Colors.red,
+                                                  confirmButtonColor:
+                                                      Colors.green,
                                                   title: "Are you sure?",
                                                   style:
                                                       SweetAlertStyle.confirm,
@@ -1542,6 +1545,9 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                             ),
                                             onPressed: () {
                                               SweetAlert.show(context,
+                                                  cancelButtonColor: Colors.red,
+                                                  confirmButtonColor:
+                                                      Colors.green,
                                                   subtitle: "Are you sure?",
                                                   style:
                                                       SweetAlertStyle.confirm,
@@ -1563,6 +1569,10 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                           }).then(
                                                           (value) async {
                                                         SweetAlert.show(context,
+                                                            cancelButtonColor:
+                                                                Colors.red,
+                                                            confirmButtonColor:
+                                                                Colors.green,
                                                             title:
                                                                 "Your Task is completed",
                                                             subtitle:

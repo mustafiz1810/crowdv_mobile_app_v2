@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../data/models/text_model.dart';
 import '../../../../utils/view_utils/common_util.dart';
+import 'package:getwidget/getwidget.dart';
 
 class AboutUs extends StatelessWidget {
   const AboutUs({Key key}) : super(key: key);
@@ -63,7 +64,6 @@ class AboutUs extends StatelessWidget {
                           padding: const EdgeInsets.all(5),
                           child: Container(
                             width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height / 2.3,
                             margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -111,10 +111,24 @@ class AboutUs extends StatelessWidget {
                                         children: [
                                           Row(
                                             children: [
-                                              Icon(
-                                                Icons.add_link_rounded,
-                                                color: Colors.blueAccent,
-                                                size: 20,
+                                              GFIconButton(
+                                                size: GFSize.MEDIUM,
+                                                color: Colors.white,
+                                                onPressed: () async {
+                                                  String _url = snapshot
+                                                      .data.data.webAddress;
+                                                  print('launching');
+                                                  try {
+                                                    await canLaunch(_url)
+                                                        ? await launch(_url)
+                                                        : throw 'Could not launch $_url';
+                                                  } catch (_, __) {
+                                                    showToast("Failed");
+                                                  }
+                                                },
+                                                icon: Image.asset(
+                                                    "assets/icons8-website-48.png"),
+                                                shape: GFIconButtonShape.circle,
                                               ),
                                               TextButton(
                                                   onPressed: () async {
@@ -253,18 +267,16 @@ class AboutUs extends StatelessWidget {
                                       SizedBox(
                                         height: 5,
                                       ),
-                                      Column(children: [
-                                        Row(
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Icon(
-                                              Icons.facebook_rounded,
-                                              color: Colors.blueAccent,
-                                              size: 20,
-                                            ),
-                                            InkWell(
-                                              onTap: ()async{
-                                                String _url = snapshot
-                                                    .data.data.facebook;
+                                            GFIconButton(
+                                              onPressed: () async {
+                                                String _url =
+                                                    snapshot.data.data.facebook;
                                                 print('launching');
                                                 try {
                                                   await canLaunch(_url)
@@ -274,28 +286,31 @@ class AboutUs extends StatelessWidget {
                                                   showToast("Failed");
                                                 }
                                               },
-                                              child: SizedBox(
-                                                  width: 200,
-                                                  height: 20,
-                                                  child: Text(snapshot.data
-                                                      .data.facebook)),
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.add_link_rounded,
+                                              icon: Icon(Icons.facebook),
+                                              shape: GFIconButtonShape.circle,
+                                            ),
+                                            GFIconButton(
+                                              onPressed: () async {
+                                                String _url =
+                                                    "https://www.linkedin.com/m/company/crowdvsquad/";
+                                                print('launching');
+                                                try {
+                                                  await canLaunch(_url)
+                                                      ? await launch(_url)
+                                                      : throw 'Could not launch $_url';
+                                                } catch (_, __) {
+                                                  showToast("Failed");
+                                                }
+                                              },
+                                              icon: Image.asset(
+                                                  "assets/icons8-linkedin-48.png"),
+                                              shape: GFIconButtonShape.circle,
+                                            ),
+                                            GFIconButton(
                                               color: Colors.lightBlueAccent,
-                                              size: 20,
-                                            ),
-                                            InkWell(
-                                              onTap: ()async{
-                                                String _url = snapshot
-                                                    .data.data.twitter;
+                                              onPressed: () async {
+                                                String _url =
+                                                    snapshot.data.data.twitter;
                                                 print('launching');
                                                 try {
                                                   await canLaunch(_url)
@@ -305,26 +320,24 @@ class AboutUs extends StatelessWidget {
                                                   showToast("Failed");
                                                 }
                                               },
-                                              child: SizedBox(
-                                                  width: 200,
-                                                  height: 20,
-                                                  child: Text(snapshot.data
-                                                      .data.twitter)),
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.add_link_rounded,
-                                              color: Colors.deepPurpleAccent,
-                                              size: 20,
+                                              icon: Image.asset(
+                                                  "assets/twitter.png"),
+                                              shape: GFIconButtonShape.circle,
                                             ),
-                                            InkWell(
-                                              onTap: ()async{
+                                            GFIconButton(
+                                              color: Colors.white,
+                                              boxShadow: BoxShadow(
+                                                color: Colors.black26,
+                                                blurRadius:
+                                                    3.0, // soften the shadow
+                                                spreadRadius:
+                                                    1.0, //extend the shadow
+                                                offset: Offset(
+                                                  0.0, // Move to right 10  horizontally
+                                                  0.1, // Move to bottom 10 Vertically
+                                                ),
+                                              ),
+                                              onPressed: () async {
                                                 String _url = snapshot
                                                     .data.data.instagram;
                                                 print('launching');
@@ -336,28 +349,26 @@ class AboutUs extends StatelessWidget {
                                                   showToast("Failed");
                                                 }
                                               },
-                                              child: SizedBox(
-                                                  width: 200,
-                                                  height: 20,
-                                                  child: Text(snapshot.data
-                                                      .data.instagram)),
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.add_link_rounded,
-                                              color: Colors.red,
-                                              size: 20,
+                                              icon: Image.asset(
+                                                  "assets/Insta.png"),
+                                              shape: GFIconButtonShape.circle,
                                             ),
-                                            InkWell(
-                                              onTap: ()async{
-                                                String _url = snapshot
-                                                    .data.data.youtube;
+                                            GFIconButton(
+                                              color: Colors.white,
+                                              boxShadow: BoxShadow(
+                                                color: Colors.black26,
+                                                blurRadius:
+                                                    3.0, // soften the shadow
+                                                spreadRadius:
+                                                    1.0, //extend the shadow
+                                                offset: Offset(
+                                                  0.0, // Move to right 10  horizontally
+                                                  0.1, // Move to bottom 10 Vertically
+                                                ),
+                                              ),
+                                              onPressed: () async {
+                                                String _url =
+                                                    snapshot.data.data.youtube;
                                                 print('launching');
                                                 try {
                                                   await canLaunch(_url)
@@ -367,15 +378,16 @@ class AboutUs extends StatelessWidget {
                                                   showToast("Failed");
                                                 }
                                               },
-                                              child: SizedBox(
-                                                  width: 200,
-                                                  height: 20,
-                                                  child: Text(snapshot.data
-                                                      .data.youtube)),
-                                            )
+                                              icon: Image.asset(
+                                                "assets/youtube.png",
+                                                height: 30,
+                                                width: 30,
+                                              ),
+                                              shape: GFIconButtonShape.circle,
+                                            ),
                                           ],
                                         ),
-                                      ],),
+                                      ),
                                     ],
                                   ),
                                 ),

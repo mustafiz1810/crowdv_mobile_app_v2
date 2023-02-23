@@ -52,7 +52,8 @@ class _TrainingVideoState extends State<TrainingVideo> {
     }
   }
 
-  void train(bool isWatched,int length,int index,int id, String name, mediaUrl, details, videos,trainingId) async {
+  void train(bool isWatched, int length, int index, int id, String name,
+      mediaUrl, details, videos, trainingId) async {
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'track-video-info/$id'),
@@ -70,15 +71,15 @@ class _TrainingVideoState extends State<TrainingVideo> {
           context,
           MaterialPageRoute(
               builder: (context) => VideoScreen(
-                isWatched:isWatched,
-                length: length,
-                index:index,
+                    isWatched: isWatched,
+                    length: length,
+                    index: index,
                     id: id,
                     token: token,
                     name: name,
                     mediaUrl: mediaUrl,
                     details: details,
-                trainingId:trainingId,
+                    trainingId: trainingId,
                   )),
         );
       } else {
@@ -156,30 +157,30 @@ class _TrainingVideoState extends State<TrainingVideo> {
                           onTap: () {
                             train(
                               snapshot.data.data.videos[index].isWatched,
-                                snapshot.data.data.videos.length,
-                              snapshot.data.data.videos.indexOf(snapshot.data.data.videos[index]),
-                                snapshot.data.data.videos[index].id,
-                                snapshot.data.data.videos[index].title,
-                                snapshot.data.data.videos[index].video,
-                                snapshot.data.data.videos[index].details,
-                                snapshot.data.data.videos, widget.id,
+                              snapshot.data.data.videos.length,
+                              snapshot.data.data.videos
+                                  .indexOf(snapshot.data.data.videos[index]),
+                              snapshot.data.data.videos[index].id,
+                              snapshot.data.data.videos[index].title,
+                              snapshot.data.data.videos[index].video,
+                              snapshot.data.data.videos[index].details,
+                              snapshot.data.data.videos,
+                              widget.id,
                             );
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                      offset: Offset(0,1),
-                                      spreadRadius: .5,
-                                      blurRadius: 3,
-                                      color: Colors.grey
-                                  )
-                                ]
-                              ),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        offset: Offset(0, 1),
+                                        spreadRadius: .5,
+                                        blurRadius: 3,
+                                        color: Colors.grey)
+                                  ]),
                               // color: _randomColor.randomColor(colorHue: ColorHue.random,colorSaturation: ColorSaturation.monochrome,colorBrightness: ColorBrightness.veryLight),
                               height: MediaQuery.of(context).size.height / 4,
                               width: MediaQuery.of(context).size.width,
@@ -189,60 +190,93 @@ class _TrainingVideoState extends State<TrainingVideo> {
                                   Container(
                                       height: 140,
                                       width: MediaQuery.of(context).size.width,
-                                      child: Stack(
-                                        children:[
-                                          Center(
-                                            child: CachedNetworkImage(
-                                              imageUrl: snapshot.data.data.videos[index].thumbnail,
-                                              imageBuilder:
-                                                  (context, imageProvider) =>
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
-                                                      image: DecorationImage(
-                                                        image: imageProvider,
-                                                        fit: BoxFit.fill,),
-                                                    ),
-                                                  ),
-                                              placeholder: (context, url) =>
-                                                  Icon(Icons.downloading_rounded,size: 100,),
-                                              errorWidget: (context, url, error)
-                                              => Icon(Icons.image_outlined,size: 100,),
+                                      child: Stack(children: [
+                                        Center(
+                                          child: CachedNetworkImage(
+                                            imageUrl: snapshot.data.data
+                                                .videos[index].thumbnail,
+                                            imageBuilder:
+                                                (context, imageProvider) =>
+                                                    Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    topRight:
+                                                        Radius.circular(10)),
+                                                image: DecorationImage(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              ),
+                                            ),
+                                            placeholder: (context, url) => Icon(
+                                              Icons.downloading_rounded,
+                                              size: 100,
+                                            ),
+                                            errorWidget:
+                                                (context, url, error) => Icon(
+                                              Icons.image_outlined,
+                                              size: 100,
                                             ),
                                           ),
-                                          snapshot.data.data.videos[index].watchedStatus.isEmpty == false?
-                                          Container(
-                                            height: 30,
-                                            width: 80,
-                                            decoration: BoxDecoration(
-                                                color: Colors.black38,
-                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10))
-                                            ),
-                                            child: Center(child: Text(snapshot.data.data.videos[index].watchedStatus,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)),
-                                          )
-                                              :Container(),
-                                          Center(child: Container(
-                                            height: 80,
-                                            width: 80,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(100),
-                                              color: Colors.black38,
-                                            ),
-                                          )),
-                                          Center(child: Icon(Icons.play_arrow,size: 70,color: Colors.white,))
-                                        ]
-
-                                      )),
+                                        ),
+                                        snapshot.data.data.videos[index]
+                                                    .watchedStatus !=
+                                                null
+                                            ? Container(
+                                                height: 30,
+                                                width: 80,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.black38,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10))),
+                                                child: Center(
+                                                    child: Text(
+                                                  snapshot
+                                                      .data
+                                                      .data
+                                                      .videos[index]
+                                                      .watchedStatus,
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                )),
+                                              )
+                                            : Container(),
+                                        Center(
+                                            child: Container(
+                                          height: 80,
+                                          width: 80,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            color: Colors.black38,
+                                          ),
+                                        )),
+                                        Center(
+                                            child: Icon(
+                                          Icons.play_arrow,
+                                          size: 70,
+                                          color: Colors.white,
+                                        ))
+                                      ])),
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 8.0,right: 8,top: 2),
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, right: 8, top: 2),
                                     child: SizedBox(
                                       height: 38,
-                                        child: Text(
-                                          snapshot.data.data.videos[index].title,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                        ),),
+                                      child: Text(
+                                        snapshot.data.data.videos[index].title,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      ),
+                                    ),
                                   )
                                 ],
                               ),
@@ -257,7 +291,6 @@ class _TrainingVideoState extends State<TrainingVideo> {
                 } else {
                   return Center(child: CircularProgressIndicator()); // loading
                 }
-
               },
             )),
           ],
