@@ -60,7 +60,7 @@ class _FaqState extends State<Faq> {
         future: getFaqListApi(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data.data.recruiter.length == 0) {
+            if (snapshot.data.success == false) {
               return Container(
                 alignment: Alignment.center,
                 child: EmptyWidget(
@@ -85,18 +85,25 @@ class _FaqState extends State<Faq> {
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child:DefaultTabController(
-                    length: 2,
+                    length:4,
                     child: CustomScrollView(
                       slivers: <Widget>[
                         SliverToBoxAdapter(
                           child: TabBar(
+                            isScrollable: true,
                             tabs: [
                               Tab(
-                                  icon: Icon(Icons.wheelchair_pickup),
-                                  child: const Text('Recruiter')),
+                                  icon: Icon(Icons.login),
+                                  child:  Text(snapshot.data.data.signupAndLogin[0].label)),
                               Tab(
-                                  icon: Icon(Icons.volunteer_activism_rounded),
-                                  child: const Text('Volunteer')),
+                                  icon: Icon(Icons.question_answer),
+                                  child:  Text(snapshot.data.data.generalQuestions[0].label)),
+                              Tab(
+                                  icon: Icon(Icons.library_books),
+                                  child: Text(snapshot.data.data.testAndTraining[0].label)),
+                              Tab(
+                                  icon: Icon(Icons.card_membership_rounded),
+                                  child:Text(snapshot.data.data.membershipBenefitsAndCertificates[0].label)),
                             ],
                             unselectedLabelColor: Colors.black38,
                             indicatorSize: TabBarIndicatorSize.tab,
@@ -115,7 +122,7 @@ class _FaqState extends State<Faq> {
                               ListView.builder(
                                 scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
-                                itemCount: snapshot.data.data.recruiter.length,
+                                itemCount: snapshot.data.data.signupAndLogin.length,
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -128,7 +135,7 @@ class _FaqState extends State<Faq> {
                                         child:custom.ExpansionTile(
                                           headerBackgroundColor: Color(0xFF01A1B7),
                                           iconColor: Colors.white,
-                                          title: Text(snapshot.data.data.recruiter[index].question,
+                                          title: Text(snapshot.data.data.signupAndLogin[index].question,
                                             style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 14),
                                           ),
                                           children: <Widget>[
@@ -136,7 +143,7 @@ class _FaqState extends State<Faq> {
                                               title:  Padding(
                                                 padding: const EdgeInsets.all(10.0),
                                                 child: Text(
-                                                  snapshot.data.data.recruiter[index].answer,
+                                                  snapshot.data.data.signupAndLogin[index].answer,
                                                   style: TextStyle(color:Color(0xFF003049),fontWeight: FontWeight.bold,fontSize: 14),
                                                 ),
                                               ),
@@ -151,7 +158,7 @@ class _FaqState extends State<Faq> {
                               ListView.builder(
                                 scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
-                                itemCount:snapshot.data.data.volunteer.length,
+                                itemCount:snapshot.data.data.generalQuestions.length,
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -164,7 +171,7 @@ class _FaqState extends State<Faq> {
                                         child:custom.ExpansionTile(
                                           headerBackgroundColor: Color(0xFF01A1B7),
                                           iconColor: Colors.white,
-                                          title: Text(snapshot.data.data.volunteer[index].question,
+                                          title: Text(snapshot.data.data.generalQuestions[index].question,
                                             style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 14),
                                           ),
                                           children: <Widget>[
@@ -172,7 +179,77 @@ class _FaqState extends State<Faq> {
                                               title:  Padding(
                                                 padding: const EdgeInsets.all(10.0),
                                                 child: Text(
-                                                  snapshot.data.data.volunteer[index].answer,
+                                                  snapshot.data.data.generalQuestions[index].answer,
+                                                  style: TextStyle(color:Color(0xFF003049),fontWeight: FontWeight.bold,fontSize: 14),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                    ),
+                                  );
+                                },
+                              ),
+                              ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemCount:snapshot.data.data.testAndTraining.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                            color:Colors.white,
+                                            borderRadius: BorderRadius.all(Radius.circular(8))
+                                        ),
+                                        width: 100,
+                                        child:custom.ExpansionTile(
+                                          headerBackgroundColor: Color(0xFF01A1B7),
+                                          iconColor: Colors.white,
+                                          title: Text(snapshot.data.data.testAndTraining[index].question,
+                                            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 14),
+                                          ),
+                                          children: <Widget>[
+                                            ListTile(
+                                              title:  Padding(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: Text(
+                                                  snapshot.data.data.testAndTraining[index].answer,
+                                                  style: TextStyle(color:Color(0xFF003049),fontWeight: FontWeight.bold,fontSize: 14),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                    ),
+                                  );
+                                },
+                              ),
+                              ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemCount:snapshot.data.data.membershipBenefitsAndCertificates.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                            color:Colors.white,
+                                            borderRadius: BorderRadius.all(Radius.circular(8))
+                                        ),
+                                        width: 100,
+                                        child:custom.ExpansionTile(
+                                          headerBackgroundColor: Color(0xFF01A1B7),
+                                          iconColor: Colors.white,
+                                          title: Text(snapshot.data.data.membershipBenefitsAndCertificates[index].question,
+                                            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 14),
+                                          ),
+                                          children: <Widget>[
+                                            ListTile(
+                                              title:  Padding(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: Text(
+                                                  snapshot.data.data.membershipBenefitsAndCertificates[index].answer,
                                                   style: TextStyle(color:Color(0xFF003049),fontWeight: FontWeight.bold,fontSize: 14),
                                                 ),
                                               ),

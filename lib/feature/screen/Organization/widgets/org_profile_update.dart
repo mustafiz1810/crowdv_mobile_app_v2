@@ -272,7 +272,7 @@ class _OrgProfileUpdateState extends State<OrgProfileUpdate> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
-        child: InkWellSplash(
+        child: InkWell(
           onTap: () {
             if (_image != null) {
               setState(() {

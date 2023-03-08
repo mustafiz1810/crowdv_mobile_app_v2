@@ -104,7 +104,7 @@ class _OrgOpportunityState extends State<OrgOpportunity> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: InkWellSplash(
+        child: InkWell(
           onTap: () {
             if (_formKey.currentState.validate()) {
               upload(

@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/feature/screen/authentication/otp_config/volunteer/otp_v.dart';
 import 'package:crowdv_mobile_app/feature/screen/authentication/otp_config/volunteer/phone_v.dart';
-import 'package:crowdv_mobile_app/feature/screen/authentication/sign_in/sign_in.dart';
+import 'package:crowdv_mobile_app/feature/screen/authentication/sign_in/signin.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/widgets/header_widget.dart';
 import 'package:crowdv_mobile_app/widgets/progres_hud.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
 import '../../../../../widgets/show_toast.dart';
 import '../../sign_up/Volunteer/role_check.dart';
@@ -81,8 +83,9 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
         }
       } else {
         var data = jsonDecode(response.body.toString());
-        data['error'].length != 0?
-        showToast(context, data['error']['errors'].toString()):showToast(context, data['message']);
+        data['error'].length != 0
+            ? showToast(context, data['error']['errors'].toString())
+            : showToast(context, data['message']);
         setState(() {
           isApiCallProcess = false;
         });
@@ -241,6 +244,24 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
                                   ;
                                 },
                               ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                              //child: Text('Don\'t have an account? Create'),
+                              child: Text.rich(TextSpan(children: [
+                                TextSpan(text: "Already have an account? "),
+                                TextSpan(
+                                  text: 'SignIn!',
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      // Navigator.pop(context);
+                                      Get.to(LoginPage());
+                                    },
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).accentColor),
+                                ),
+                              ])),
                             ),
                           ],
                         ),

@@ -80,7 +80,7 @@ class _EligibilityUpdateState extends State<EligibilityUpdate> {
         ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.only(bottom: 20.0, left: 40, right: 40),
-          child: InkWellSplash(
+          child: InkWell(
             onTap: () {
               // getItems();
               Get.to(() => LocationUpdate(

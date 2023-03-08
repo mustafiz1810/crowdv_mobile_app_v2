@@ -15,6 +15,11 @@ import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/common_util.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:getwidget/components/badge/gf_badge.dart';
+import 'package:getwidget/components/button/gf_button.dart';
+import 'package:getwidget/getwidget.dart';
+import 'package:getwidget/shape/gf_button_shape.dart';
 import 'package:http/http.dart' as http;
 import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
 import 'package:crowdv_mobile_app/widgets/category_grid.dart';
@@ -143,154 +148,109 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List images = [
-    NetworkImage(
-        'https://alkuwaiti.com/wp-content/uploads/2020/05/Hero-Banner-Placeholder-Dark-1024x480.png'),
+    AssetImage(
+        'assets/BannerCV.jpg'),
   ];
   int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      // drawer: FutureBuilder<AccountModel>(
-      //     future: getAcApi(),
-      //     builder: (context, snapshot) {
-      //       if (snapshot.hasData) {
-      //         return NavDrawer(
-      //           id: widget.id,
-      //           role: snapshot.data.data.role,
-      //           fname: snapshot.data.data.firstName,
-      //           lname: snapshot.data.data.lastName,
-      //           email: snapshot.data.data.email,
-      //           image: snapshot.data.data.image,
-      //           disability: snapshot.data.data.typeOfDisability,
-      //           prof: snapshot.data.data.profession,
-      //           gender: snapshot.data.data.gender,
-      //           country: snapshot.data.data.country.id,
-      //           state: snapshot.data.data.state.id,
-      //           city: snapshot.data.data.city.id,
-      //           zip: snapshot.data.data.zipCode,
-      //         );
-      //       } else {
-      //         return Container(
-      //           child: Center(
-      //             child: CircularProgressIndicator(
-      //               color: Colors.white,
-      //             ),
-      //           ),
-      //         );
-      //       }
-      //     }),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
-        leading: FutureBuilder<AccountModel>(
+        title: FutureBuilder<AccountModel>(
             future: getAcApi(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return InkWell(
-                  child: Icon(Icons.menu),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NavDrawer(
-                                id: widget.id,
-                                role: snapshot.data.data.role,
-                                fname: snapshot.data.data.firstName,
-                                lname: snapshot.data.data.lastName,
-                                email: snapshot.data.data.email,
-                                image: snapshot.data.data.image,
-                                disability: snapshot.data.data.typeOfDisability,
-                                prof: snapshot.data.data.profession,
-                                gender: snapshot.data.data.gender,
-                                country: snapshot.data.data.country.id,
-                                state: snapshot.data.data.state.id,
-                                city: snapshot.data.data.city.id,
-                                zip: snapshot.data.data.zipCode,
-                              )),
-                    ).then((value) => setState(() {
-                          print("page reload");
-                        }));
-                  },
+                return GFButton(
+                  color: Colors.white,
+                  onPressed: (){Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NavDrawer(
+                          id: widget.id,
+                          role: snapshot.data.data.role,
+                          fname: snapshot.data.data.firstName,
+                          lname: snapshot.data.data.lastName,
+                          email: snapshot.data.data.email,
+                          image: snapshot.data.data.image,
+                          disability: snapshot.data.data.typeOfDisability,
+                          prof: snapshot.data.data.profession,
+                          gender: snapshot.data.data.gender,
+                          country: snapshot.data.data.country.id,
+                          state: snapshot.data.data.state.id,
+                          city: snapshot.data.data.city.id,
+                          zip: snapshot.data.data.zipCode,
+                        )),
+                  ).then((value) => setState(() {
+                    print("page reload");
+                  }));},
+                  text: "Menu",
+                  textColor: Colors.blue,
+                  icon: Icon(Icons.menu,color: Colors.blue,),
+                  shape: GFButtonShape.pills,
+                  elevation: 2.0,
+                  boxShadow:  BoxShadow(color: Colors.black26, offset: Offset(0, 1), blurRadius: 2.0),
                 );
               } else {
-                return InkWell(
-                  child: Icon(Icons.menu),
-                  onTap: () {
-                    Center(child: CircularProgressIndicator());
-                  },
+                return GFButton(
+                  color: Colors.white,
+                  onPressed: (){},
+                  text: "Menu",
+                  textColor: Colors.blue,
+                  icon: Icon(Icons.menu,color: Colors.blue,),
+                  shape: GFButtonShape.pills,
+                  elevation: 2.0,
+                  boxShadow:  BoxShadow(color: Colors.black26, offset: Offset(0, 1), blurRadius: 2.0),
                 );
               }
             }),
         actions: [
           Container(
             margin: EdgeInsets.only(
-              top: 16,
-              right: 16,
+              top: 10,
+              right: 15,
+              bottom:10,
             ),
             child: FutureBuilder<NotificationModel>(
                 future: getNotifyApi(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Stack(
-                      children: <Widget>[
-                        InkWell(
-                            child: Container(
-                              width: 60,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Icon(
-                                    Icons.notifications,
-                                    color: Colors.black,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            onTap: () {
-                              print(token);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => NotificationPage(
-                                            id: widget.id,
-                                            data: snapshot.data.data.list,
-                                            token: token,
-                                            role: widget.role,
-                                          ))).then((value) {
-                                setState(() {});
-                              });
-                            }),
-                        snapshot.data.data.count != 0
-                            ? Positioned(
-                                right: 0,
-                                child: Container(
-                                  padding: EdgeInsets.all(1),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  constraints: BoxConstraints(
-                                    minWidth: 12,
-                                    minHeight: 12,
-                                  ),
-                                  child: Text(
-                                    snapshot.data.data.count.toString(),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 8,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              )
-                            : Container(),
-                      ],
+                    return  GFButtonBadge(
+                      color: Colors.white,
+                      onPressed: (){
+                        print(token);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NotificationPage(
+                                  id: widget.id,
+                                  data: snapshot.data.data.list,
+                                  token: token,
+                                  role: widget.role,
+                                ))).then((value) {
+                          setState(() {});
+                        });
+                      },
+                      text: "Notifications",
+                      textColor: Colors.blue,
+                      shape: GFButtonShape.pills,
+                      icon:  snapshot.data.data.count != 0?GFBadge(
+                        child: Text(snapshot.data.data.count.toString()),
+                      ):null,
+                      elevation: 2.0,
+                      boxShadow:  BoxShadow(color: Colors.black26, offset: Offset(0, 1), blurRadius: 2.0),
                     );
                   } else {
-                    return Icon(
-                      Icons.notifications,
-                      color: Colors.black,
+                    return GFButtonBadge(
+                      color: Colors.white,
+                      onPressed: (){},
+                      text: "Notification",
+                      textColor: Colors.blue,
+                      shape: GFButtonShape.pills,
+                      elevation: 2.0,
+                      boxShadow:  BoxShadow(color: Colors.black26, offset: Offset(0, 1), blurRadius: 2.0),
                     );
                   }
                 }),
@@ -354,6 +314,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height: 180.0,
                                   width: double.infinity,
                                   child: Carousel(
+                                    boxFit: BoxFit.contain,
                                     dotSpacing: 15.0,
                                     dotSize: 4.0,
                                     dotIncreasedColor: Colors.grey,

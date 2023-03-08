@@ -5,7 +5,7 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/settings.dart
 import 'package:crowdv_mobile_app/feature/screen/password/change_pass.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:flutter/material.dart';
-import 'package:crowdv_mobile_app/feature/screen/authentication/sign_in/sign_in.dart';
+import 'package:crowdv_mobile_app/feature/screen/authentication/sign_in/signin.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';

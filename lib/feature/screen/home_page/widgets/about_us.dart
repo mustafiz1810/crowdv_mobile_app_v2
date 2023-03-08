@@ -78,18 +78,17 @@ class AboutUs extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            child:  Padding(
+                            child: Padding(
                               padding: const EdgeInsets.all(23.0),
                               child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     snapshot.data.data.companyName,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
-                                        fontSize: 16),
+                                        fontSize: 18),
                                   ),
                                   SizedBox(
                                     height: 5,
@@ -97,24 +96,26 @@ class AboutUs extends StatelessWidget {
                                   SizedBox(
                                     width: 200,
                                     height: 40,
-                                    child: Text(snapshot.data.data.tagLine
-                                        .toString()),
+                                    child: Text(
+                                        snapshot.data.data.tagLine.toString()),
                                   ),
                                   SizedBox(
                                     height: 10,
                                   ),
                                   Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           GFIconButton(
-                                            size: GFSize.MEDIUM,
-                                            color: Colors.white,
+                                            size: GFSize.SMALL,
+                                            color: Colors.blue.withOpacity(0.2),
                                             onPressed: () async {
-                                              String _url = snapshot
-                                                  .data.data.webAddress;
+                                              String _url =
+                                                  snapshot.data.data.webAddress;
                                               print('launching');
                                               try {
                                                 await canLaunch(_url)
@@ -141,11 +142,14 @@ class AboutUs extends StatelessWidget {
                                                   showToast("Failed");
                                                 }
                                               },
-                                              child: SizedBox(
-                                                  width: 170,
-                                                  height: 20,
-                                                  child: Text(snapshot.data
-                                                      .data.webAddress))),
+                                              child: Text(
+                                                "Website",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                    decoration: TextDecoration
+                                                        .underline),
+                                              )),
                                         ],
                                       ),
                                       InkWell(
@@ -159,11 +163,10 @@ class AboutUs extends StatelessWidget {
                                                     content: Row(
                                                       children: [
                                                         Flexible(
-                                                            child: Text(
-                                                                snapshot
-                                                                    .data
-                                                                    .data
-                                                                    .address)),
+                                                            child: Text(snapshot
+                                                                .data
+                                                                .data
+                                                                .address)),
                                                       ],
                                                     ),
                                                     actions: [
@@ -171,12 +174,11 @@ class AboutUs extends StatelessWidget {
                                                         child: Text(
                                                           "ok",
                                                           style: TextStyle(
-                                                              color: Colors
-                                                                  .white),
+                                                              color:
+                                                                  Colors.white),
                                                         ),
                                                         onPressed: () {
-                                                          Navigator.of(
-                                                              context)
+                                                          Navigator.of(context)
                                                               .pop();
                                                         },
                                                         color: primaryColor,
@@ -188,8 +190,8 @@ class AboutUs extends StatelessWidget {
                                           child: Text(
                                             "Address",
                                             style: TextStyle(
-                                                decoration: TextDecoration
-                                                    .underline),
+                                                decoration:
+                                                    TextDecoration.underline),
                                           ))
                                     ],
                                   ),
@@ -202,60 +204,37 @@ class AboutUs extends StatelessWidget {
                                     height: 10,
                                   ),
                                   Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons
-                                                .home_repair_service_outlined,
-                                            size: 20,
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            snapshot.data.data.companyName,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 16),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.phone,
-                                            size: 20,
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            snapshot.data.data.phoneNumber,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 14),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.email_outlined,
-                                        size: 20,
+                                      Text(
+                                        "Name :",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16),
                                       ),
                                       SizedBox(
                                         width: 5,
                                       ),
                                       Text(
-                                        snapshot.data.data.email,
+                                        snapshot.data.data.companyName,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Phone :",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16),
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        snapshot.data.data.phoneNumber,
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 14),
@@ -265,11 +244,37 @@ class AboutUs extends StatelessWidget {
                                   SizedBox(
                                     height: 5,
                                   ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Email :",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16),
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        snapshot.data.data.email,
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 14),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Divider(
+                                    height: 4,
+                                    color: Colors.grey.withOpacity(.5),
+                                    thickness: 1,
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 5.0),
                                     child: Column(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Row(
                                           children: [
@@ -303,11 +308,15 @@ class AboutUs extends StatelessWidget {
                                                     showToast("Failed");
                                                   }
                                                 },
-                                                child: SizedBox(
-                                                    width: 240,
-                                                    height: 20,
-                                                    child: Text(snapshot.data
-                                                        .data.facebook))),
+                                                child: Text(
+                                                  "Facebook",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18,
+                                                      decoration: TextDecoration
+                                                          .underline),
+                                                )),
                                           ],
                                         ),
                                         Row(
@@ -332,7 +341,8 @@ class AboutUs extends StatelessWidget {
                                             ),
                                             TextButton(
                                                 onPressed: () async {
-                                                  String _url = "https://www.linkedin.com/m/company/crowdvsquad/";
+                                                  String _url =
+                                                      "https://www.linkedin.com/m/company/crowdvsquad/";
                                                   print('launching');
                                                   try {
                                                     await canLaunch(_url)
@@ -342,10 +352,15 @@ class AboutUs extends StatelessWidget {
                                                     showToast("Failed");
                                                   }
                                                 },
-                                                child: SizedBox(
-                                                    width: 240,
-                                                    height: 20,
-                                                    child: Text("https://www.linkedin.com/m/company/crowdvsquad/"))),
+                                                child: Text(
+                                                  "Linkedin",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18,
+                                                      decoration: TextDecoration
+                                                          .underline),
+                                                )),
                                           ],
                                         ),
                                         Row(
@@ -382,11 +397,15 @@ class AboutUs extends StatelessWidget {
                                                     showToast("Failed");
                                                   }
                                                 },
-                                                child: SizedBox(
-                                                    width: 240,
-                                                    height: 20,
-                                                    child: Text(snapshot.data
-                                                        .data.twitter))),
+                                                child: Text(
+                                                  "Twitter",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18,
+                                                      decoration: TextDecoration
+                                                          .underline),
+                                                )),
                                           ],
                                         ),
                                         Row(
@@ -397,9 +416,9 @@ class AboutUs extends StatelessWidget {
                                               boxShadow: BoxShadow(
                                                 color: Colors.black26,
                                                 blurRadius:
-                                                3.0, // soften the shadow
+                                                    3.0, // soften the shadow
                                                 spreadRadius:
-                                                1.0, //extend the shadow
+                                                    1.0, //extend the shadow
                                                 offset: Offset(
                                                   0.0, // Move to right 10  horizontally
                                                   0.1, // Move to bottom 10 Vertically
@@ -434,11 +453,15 @@ class AboutUs extends StatelessWidget {
                                                     showToast("Failed");
                                                   }
                                                 },
-                                                child: SizedBox(
-                                                    width: 240,
-                                                    height: 20,
-                                                    child: Text(snapshot.data
-                                                        .data.instagram))),
+                                                child: Text(
+                                                  "Instagram",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18,
+                                                      decoration: TextDecoration
+                                                          .underline),
+                                                )),
                                           ],
                                         ),
                                         Row(
@@ -449,9 +472,9 @@ class AboutUs extends StatelessWidget {
                                               boxShadow: BoxShadow(
                                                 color: Colors.black26,
                                                 blurRadius:
-                                                3.0, // soften the shadow
+                                                    3.0, // soften the shadow
                                                 spreadRadius:
-                                                1.0, //extend the shadow
+                                                    1.0, //extend the shadow
                                                 offset: Offset(
                                                   0.0, // Move to right 10  horizontally
                                                   0.1, // Move to bottom 10 Vertically
@@ -489,11 +512,15 @@ class AboutUs extends StatelessWidget {
                                                     showToast("Failed");
                                                   }
                                                 },
-                                                child: SizedBox(
-                                                    width: 240,
-                                                    height: 20,
-                                                    child: Text(snapshot.data
-                                                        .data.youtube))),
+                                                child: Text(
+                                                  "YouTube",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18,
+                                                      decoration: TextDecoration
+                                                          .underline),
+                                                )),
                                           ],
                                         ),
                                       ],

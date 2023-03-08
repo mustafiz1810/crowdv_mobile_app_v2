@@ -155,7 +155,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                 height: 10,
               ),
               //--------------------------------here is category
-              InkWellSplash(
+              InkWell(
                 onTap: () {
                   setState(() {
                     if (isVisible == false) {
@@ -507,7 +507,7 @@ class _OpportunityUpdateState extends State<OpportunityUpdate> {
                 ],
               ),
               SizedBox(height: 20.0),
-              InkWellSplash(
+              InkWell(
                 onTap: () {
                   if (time.hour < _time.hour && time.hour != _time.hour) {
                     Get.to(() => EligibilityUpdate(

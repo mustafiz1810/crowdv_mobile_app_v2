@@ -63,7 +63,7 @@ class _NotificationPageState extends State<NotificationPage> {
                     shrinkWrap: true,
                     itemCount: widget.data.length,
                     itemBuilder: (context, index) {
-                      return InkWellSplash(
+                      return InkWell(
                         splashColor: Colors.white,
                         onTap: () {
                           // print(widget.data[index].data.opportunityId.toString());

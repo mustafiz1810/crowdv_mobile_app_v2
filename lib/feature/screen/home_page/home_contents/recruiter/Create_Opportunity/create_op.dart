@@ -9,9 +9,9 @@ import 'package:crowdv_mobile_app/utils/view_utils/common_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
-import 'package:inkwell_splash/inkwell_splash.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:time_interval_picker/time_interval_picker.dart';
 
 class CreateOpportunity extends StatefulWidget {
   const CreateOpportunity({Key key}) : super(key: key);
@@ -23,8 +23,8 @@ class CreateOpportunity extends StatefulWidget {
 class _CreateOpportunityState extends State<CreateOpportunity> {
   final _formKey = GlobalKey<FormState>();
   DateTime dateTime = DateTime.now();
-  TimeOfDay time = TimeOfDay.now();
-  TimeOfDay _time = TimeOfDay.now();
+  // TimeOfDay time = TimeOfDay.now();
+  // TimeOfDay _time = TimeOfDay.now();
   String _typevalue;
   List<String> _type = ["Online", "Offline", "Both"];
   String token = "";
@@ -61,16 +61,18 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
   bool isVisible = false;
   var dropdownvalue;
   int _selectedIndex;
+  DateTime startT;
+  DateTime endT;
   String tileName, slug;
   TextEditingController titleController = TextEditingController();
   TextEditingController chargeController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final hours = time.hour.toString().padLeft(2, '0');
-    final minutes = time.minute.toString().padLeft(2, '0');
-    final _hours = _time.hour.toString().padLeft(2, '0');
-    final _minutes = _time.minute.toString().padLeft(2, '0');
+    // final hours = time.hour.toString().padLeft(2, '0');
+    // final minutes = time.minute.toString().padLeft(2, '0');
+    // final _hours = _time.hour.toString().padLeft(2, '0');
+    // final _minutes = _time.minute.toString().padLeft(2, '0');
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
@@ -118,8 +120,8 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                     builder: (state) {
                       return Column(
                         children: <Widget>[
-                          InkWellSplash(
-                            onTap: () {
+                          TextButton(
+                            onPressed: () {
                               setState(() {
                                 if (isVisible == false) {
                                   isVisible = true;
@@ -350,7 +352,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                         "Charge: ",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: 15,
                           letterSpacing: 0.27,
                           color: primaryColor,
                         ),
@@ -441,10 +443,10 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                       Row(
                         children: [
                           Text(
-                            "DATE: ",
+                            "Date: ",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              fontSize: 15,
                               letterSpacing: 0.27,
                               color: primaryColor,
                             ),
@@ -474,124 +476,153 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                   Column(
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "TIME: ",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              letterSpacing: 0.27,
-                              color: primaryColor,
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              "Start Time",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                letterSpacing: 0.27,
+                                color: primaryColor,
+                              ),
                             ),
                           ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          InkWell(
-                              onTap: () async {
-                                TimeOfDay newTime = await showTimePicker(
-                                  context: context,
-                                  initialTime: time,
-                                );
-                                if (newTime == null) return;
-                                setState(() {
-                                  time = newTime;
-                                  print(
-                                      '${time.hour}:${time.minute.toString().padLeft(2, '0')}');
-                                });
-                              },
-                              child: getTimeBoxUI('$hours:$minutes', 80)),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            '-',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          InkWell(
-                              onTap: () async {
-                                TimeOfDay endTime = await showTimePicker(
-                                  context: context,
-                                  initialTime: _time,
-                                );
-                                if (endTime == null) return;
-                                setState(() {
-                                  _time = endTime;
-                                  print(_time.toString());
-                                });
-                              },
-                              child: getTimeBoxUI('$_hours:$_minutes', 80)),
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              "End Time",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                letterSpacing: 0.27,
+                                color: primaryColor,
+                              ),
+                            ),
+                          )
                         ],
                       ),
-                      SizedBox(
-                        height: 15,
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: TimeIntervalPicker(
+                          endLimit: null,
+                          startLimit: null,
+                          onChanged: (DateTime startTime, DateTime endTime,
+                              bool isAllDay) {
+                            setState(() {
+                              startT = startTime;
+                              endT = endTime;
+                            });
+                          },
+                        ),
                       ),
+                      // Row(
+                      //   children: [
+                      //     Text(
+                      //       "TIME: ",
+                      //       style: TextStyle(
+                      //         fontWeight: FontWeight.bold,
+                      //         fontSize: 16,
+                      //         letterSpacing: 0.27,
+                      //         color: primaryColor,
+                      //       ),
+                      //     ),
+                      //     SizedBox(
+                      //       width: 30,
+                      //     ),
+                      //     InkWell(
+                      //         onTap: () async {
+                      //           TimeOfDay newTime = await showTimePicker(
+                      //             initialEntryMode: TimePickerEntryMode.input,
+                      //             context: context,
+                      //             initialTime: time,
+                      //           );
+                      //           if (newTime == null) return;
+                      //           setState(() {
+                      //             time = newTime;
+                      //             print(
+                      //                 '${time.hour}:${time.minute.toString().padLeft(2, '0')}');
+                      //           });
+                      //         },
+                      //         child: getTimeBoxUI('$hours:$minutes', 80)),
+                      //     SizedBox(
+                      //       width: 5,
+                      //     ),
+                      //     Text(
+                      //       '-',
+                      //       style: TextStyle(fontWeight: FontWeight.bold),
+                      //     ),
+                      //     SizedBox(
+                      //       width: 5,
+                      //     ),
+                      //     InkWell(
+                      //         onTap: () async {
+                      //           TimeOfDay endTime = await showTimePicker(
+                      //             context: context,
+                      //             initialTime: _time,
+                      //           );
+                      //           if (endTime == null) return;
+                      //           setState(() {
+                      //             _time = endTime;
+                      //             print(_time.toString());
+                      //           });
+                      //         },
+                      //         child: getTimeBoxUI('$_hours:$_minutes', 80)),
+                      //   ],
+                      // ),
+                      // SizedBox(
+                      //   height: 15,
+                      // ),
                     ],
                   ),
-                  InkWellSplash(
-                    onTap: () {
-                      // setState(() {
-                      //   print(titleController.text +
-                      //       " " +
-                      //       _selectedIndex.toString() +
-                      //       " " +
-                      //       _typevalue.toString() +
-                      //       " " +
-                      //       descriptionController.text +
-                      //       " " +
-                      //       dateTime.toString() +
-                      //       " " +
-                      //       '${time.hour}:${time.minute.toString().padLeft(2, '0')}' +
-                      //       " " +
-                      //       '${_time.hour}:${_time.minute.toString().padLeft(2, '0') + "  " + slug.toString()}');
-                      // });
-                      if (time.hour < _time.hour &&
-                          time.hour != _time.hour &&
-                          _formKey.currentState.validate()) {
-                        Get.to(() => CheckBox(
-                              token: token,
-                              slug: slug.toString(),
-                              title: titleController.text,
-                              category: _selectedIndex.toString(),
-                              type: _typevalue.toString(),
-                              description: descriptionController.text,
-                              date: dateTime.toString(),
-                              time:
-                                  '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
-                              etime:
-                                  '${_time.hour}:${_time.minute.toString().padLeft(2, '0')}',
-                              charge: chargeController.text,
-                            ));
-                      } else
-                        (showToast("End time must be greater than start time"));
-                    },
-                    child: Container(
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(16.0),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15.0),
+                    child: TextButton(
+                      onPressed: () {
+                        if (_formKey.currentState.validate()) {
+                          Get.to(() => CheckBox(
+                                token: token,
+                                slug: slug.toString(),
+                                title: titleController.text,
+                                category: _selectedIndex.toString(),
+                                type: _typevalue.toString(),
+                                description: descriptionController.text,
+                                date: dateTime.toString(),
+                                time:
+                                    '${startT.hour}:${startT.minute.toString().padLeft(2, '0')}',
+                                etime:
+                                    '${endT.hour}:${endT.minute.toString().padLeft(2, '0')}',
+                                charge: chargeController.text,
+                              ));
+                        };
+                      },
+                      child: Container(
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: primaryColor,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(16.0),
+                          ),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: DesignCourseAppTheme.nearlyBlue
+                                    .withOpacity(0.5),
+                                offset: const Offset(-1.1, -1.1),
+                                blurRadius: 1.0),
+                          ],
                         ),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: DesignCourseAppTheme.nearlyBlue
-                                  .withOpacity(0.5),
-                              offset: const Offset(-1.1, -1.1),
-                              blurRadius: 1.0),
-                        ],
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Next',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                            letterSpacing: 0.0,
-                            color: DesignCourseAppTheme.nearlyWhite,
+                        child: Center(
+                          child: Text(
+                            'Next',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              letterSpacing: 0.0,
+                              color: DesignCourseAppTheme.nearlyWhite,
+                            ),
                           ),
                         ),
                       ),
@@ -617,8 +648,8 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
           boxShadow: <BoxShadow>[
             BoxShadow(
                 color: DesignCourseAppTheme.grey.withOpacity(0.2),
-                offset: const Offset(1.1, 1.1),
-                blurRadius: 8.0),
+                offset: const Offset(0, 1),
+                blurRadius: 2.0),
           ],
         ),
         child: Padding(

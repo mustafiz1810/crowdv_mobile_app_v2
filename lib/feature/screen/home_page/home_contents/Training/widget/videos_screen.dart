@@ -140,13 +140,24 @@ class _VideoScreenState extends State<VideoScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                  child: Text(
-                widget.name,
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-              )),
+              padding: const EdgeInsets.only(left: 15.0,right: 15.0,top: 5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Please watch full video to take the test !",
+                    style:
+                    TextStyle(fontSize: 12, color: Colors.white),
+                  ),
+                  SizedBox(height: 10,),
+                  SizedBox(
+                      child: Text(
+                    widget.name,
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                  )),
+                ],
+              ),
             ),
             SizedBox(
               height: 10,

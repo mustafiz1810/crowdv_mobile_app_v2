@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               height: _headerHeight,
               child: HeaderLogo(
-                  _headerHeight), //let's create a common header widget
+                  _headerHeight),
             ),
             SafeArea(
               child: Container(

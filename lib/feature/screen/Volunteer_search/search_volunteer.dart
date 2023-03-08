@@ -426,7 +426,7 @@ class _VolunteerSearchPageState extends State<VolunteerSearchPage> {
                                     ],
                                   ),
                                 ),
-                                Positioned(
+                                Positioned (
                                     top: 20,
                                     right: 20,
                                     child: Container(

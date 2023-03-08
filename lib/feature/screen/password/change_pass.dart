@@ -146,7 +146,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox.fromSize(
-                    size: Size(180, 60), // button width and height
+                    size: Size(180, 50), // button width and height
                     child: Material(
                       borderRadius: BorderRadius.circular(10),
                       color: primaryColor, // button color
@@ -177,7 +177,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 16),
+                                  fontSize: 14),
                             ), // text
                           ],
                         ),

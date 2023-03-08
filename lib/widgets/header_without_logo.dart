@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../utils/view_utils/colors.dart';
 import 'show_toast.dart';
 
 class HeaderWidget extends StatefulWidget {
@@ -163,9 +164,9 @@ class _HeaderWidgetState extends State<HeaderWidget>
                   const Text(
                     "Crowd",
                     style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                         fontSize: 35,
-                        color: Colors.black),
+                        color: Color(0xFF015D8D)),
                   ),
                   Image.asset('assets/crowdv_png.png', width: 40, height: 50),
                 ]),
