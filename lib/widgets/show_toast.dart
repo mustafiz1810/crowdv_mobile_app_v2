@@ -1,7 +1,11 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:toast/toast.dart';
 
 void showToast(BuildContext context, msg) {
+  print(msg);
+  SemanticsService.announce(msg, TextDirection.ltr);
   ToastContext().init(context);
   Toast.show(
       msg,

@@ -10,7 +10,6 @@ class CustomBottomNavigation extends StatefulWidget {
   @override
   State<CustomBottomNavigation> createState() => _CustomBottomNavigationState();
 }
-
 class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
   String token, role;
   int id;
@@ -32,13 +31,13 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      backgroundColor: Colors.white,
+      backgroundColor: primaryColor,
       type: BottomNavigationBarType.fixed,
       selectedFontSize: 14,
       unselectedFontSize: 14,
-      selectedItemColor: primaryColor,
+      selectedItemColor: Colors.white,
       elevation: 10,
-      unselectedItemColor: Colors.grey,
+      unselectedItemColor: Colors.white,
       onTap: (index) {
         switch (index) {
           case 0:
@@ -58,18 +57,21 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
         }
       },
       selectedLabelStyle: TextStyle(
-        color: primaryColor,
+        color: Colors.white,
+          fontWeight: FontWeight.bold
       ),
       unselectedLabelStyle: TextStyle(
-        color: primaryColor,
-        fontWeight: FontWeight.w500,
+        color: Colors.white,
+          fontWeight: FontWeight.bold
       ),
       items: [
         BottomNavigationBarItem(
           icon: Icon(
             Icons.home_outlined,
+            color: Colors.white,
           ),
           label: 'Home',
+          backgroundColor: grayColor,
         ),
         BottomNavigationBarItem(
           icon: Icon(
@@ -100,6 +102,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
         //   label: 'Order',
         // ),
       ],
+
     );
   }
 }

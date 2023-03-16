@@ -3,6 +3,7 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -121,10 +122,10 @@ class _HeaderWidgetState extends State<HeaderWidget>
                       widget.role == 'volunteer'
                           ? LiteRollingSwitch(
                               value: volunteer,
-                              iconOn: Icons.accessibility,
+                              iconOn:  Icons.person,
                               iconOff: Icons.accessible,
-                              colorOff: Color(0xFF508991),
-                              colorOn: Colors.blueAccent,
+                              colorOff: secondaryColor,
+                              colorOn: secondaryColor,
                               onChanged: (val) {
                                 volunteer = val;
                               },
@@ -141,8 +142,8 @@ class _HeaderWidgetState extends State<HeaderWidget>
                               value: recruiter,
                               iconOn: Icons.accessibility,
                               iconOff: Icons.accessible,
-                              colorOff: Color(0xFF508991),
-                              colorOn: Colors.blueAccent,
+                              colorOff: primaryColor,
+                              colorOn: primaryColor,
                               onChanged: (val) {
                                 recruiter = val;
                               },

@@ -15,52 +15,44 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        // padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              offset: Offset(0, 0),
-              blurRadius: 2,
-              spreadRadius: -1,
-              color: kShadowColor,
-            ),
-          ],
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: press,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                children: <Widget>[
-                  Spacer(),
-                  Container(
-                    height: 32,
-                    width: 40,
-                    child: SvgPicture.asset(
-                      svgSrc,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+          onTap: press,
+          child:Column(
+            children: [
+              Container(
+                width: 60,
+                height: 55,
+                decoration: BoxDecoration(
+                  color: secondaryColor,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      child: SvgPicture.asset(
+                        svgSrc,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                  Spacer(),
-                  Text(
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
                     title,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall
-                        .copyWith(fontSize: 11),
-                  )
-                ],
-              ),
-            ),
+                    style: TextStyle(fontWeight: FontWeight.bold,color: primaryColor)
+                ),
+              )
+
+            ],
           ),
-        ),
       ),
     );
   }

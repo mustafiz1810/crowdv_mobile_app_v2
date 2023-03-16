@@ -88,6 +88,7 @@ dependencies:
   flutter_offline: ^2.1.0
   time_interval_picker: ^0.0.2
   data_connection_checker: ^0.3.4
+  convex_bottom_bar: ^3.2.0
 
 dev_dependencies:
   flutter_test:
@@ -111,7 +112,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/    - assets/BannerCV.jpg
+    - assets/
+    - assets/BannerCV.jpg
 
 
   # To add assets to your application, add an assets section, like this:

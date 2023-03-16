@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
+        backgroundColor: primaryColor,
         title: FutureBuilder<AccountModel>(
             future: getAcApi(),
             builder: (context, snapshot) {
@@ -187,8 +187,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     print("page reload");
                   }));},
                   text: "Menu",
-                  textColor: Colors.blue,
-                  icon: Icon(Icons.menu,color: Colors.blue,),
+                  textStyle: TextStyle(fontWeight: FontWeight.bold,color: secondaryColor),
+                  icon: Icon(Icons.menu,color: primaryColor,),
                   shape: GFButtonShape.pills,
                   elevation: 2.0,
                   boxShadow:  BoxShadow(color: Colors.black26, offset: Offset(0, 1), blurRadius: 2.0),
@@ -198,8 +198,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.white,
                   onPressed: (){},
                   text: "Menu",
-                  textColor: Colors.blue,
-                  icon: Icon(Icons.menu,color: Colors.blue,),
+                  textStyle: TextStyle(fontWeight: FontWeight.bold,color: secondaryColor),
+                  icon: Icon(Icons.menu,color: primaryColor,),
                   shape: GFButtonShape.pills,
                   elevation: 2.0,
                   boxShadow:  BoxShadow(color: Colors.black26, offset: Offset(0, 1), blurRadius: 2.0),
@@ -234,10 +234,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         });
                       },
                       text: "Notifications",
-                      textColor: Colors.blue,
+                      textStyle: TextStyle(fontWeight: FontWeight.bold,color: secondaryColor),
                       shape: GFButtonShape.pills,
                       icon:  snapshot.data.data.count != 0?GFBadge(
-                        child: Text(snapshot.data.data.count.toString()),
+                        color: primaryColor,
+                        shape: GFBadgeShape.standard,
+                        text: snapshot.data.data.count.toString(),
+                        textStyle: TextStyle(fontWeight: FontWeight.bold),
                       ):null,
                       elevation: 2.0,
                       boxShadow:  BoxShadow(color: Colors.black26, offset: Offset(0, 1), blurRadius: 2.0),
@@ -247,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.white,
                       onPressed: (){},
                       text: "Notification",
-                      textColor: Colors.blue,
+                      textStyle: TextStyle(fontWeight: FontWeight.bold,color: secondaryColor),
                       shape: GFButtonShape.pills,
                       elevation: 2.0,
                       boxShadow:  BoxShadow(color: Colors.black26, offset: Offset(0, 1), blurRadius: 2.0),
@@ -260,26 +263,64 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: CustomBottomNavigation(),
       resizeToAvoidBottomInset: false,
       floatingActionButton: widget.role == "volunteer"
-          ? FloatingActionButton(
-              backgroundColor: Colors.white,
-              child: Icon(
-                Icons.search,
-                color: Colors.black,
-              ),
-              onPressed: () {
-                Get.to(() => VolunteerSearchPage());
-              },
-            )
-          : FloatingActionButton(
-              backgroundColor: Colors.white,
-              child: Icon(
-                Icons.search,
-                color: Colors.black,
-              ),
-              onPressed: () {
-                Get.to(() => SearchPage());
-              },
+          ? Container(
+        height: 70.0,
+        width: 70.0,
+        child: FittedBox(
+          child: FloatingActionButton(
+            backgroundColor: primaryColor,
+            elevation: 0,
+           shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(60.0),
             ),
+            child:  Padding(
+              padding: const EdgeInsets.only(top: 5.0),
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.search,
+                    color: Colors.white,
+                    size: 13,
+                  ),
+                  Text("Search",style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold),)
+                ],
+              ),
+            ),
+            onPressed: () {
+              Get.to(() => VolunteerSearchPage());
+            },
+          ),
+        ),
+      )
+          :  Container(
+        height: 70.0,
+        width: 70.0,
+        child: FittedBox(
+          child: FloatingActionButton(
+            backgroundColor: primaryColor,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(60.0),
+            ),
+            child:  Padding(
+              padding: const EdgeInsets.only(top: 5.0),
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.search,
+                    color: Colors.white,
+                    size: 13,
+                  ),
+                  Text("Search",style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold),)
+                ],
+              ),
+            ),
+            onPressed: () {
+              Get.to(() => SearchPage());
+            },
+          ),
+        ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       // extendBody: true,
       body: RefreshIndicator(
@@ -297,7 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Divider(
-                height: 20,
+                height: 5,
                 color: Colors.black,
               ),
               widget.role == "volunteer"
@@ -306,8 +347,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
                               child: Align(
                                 alignment: Alignment.topCenter,
                                 child: SizedBox(
@@ -533,10 +572,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-              ),
-              Divider(
-                height: 2,
-                color: Colors.black,
               ),
             ],
           ),

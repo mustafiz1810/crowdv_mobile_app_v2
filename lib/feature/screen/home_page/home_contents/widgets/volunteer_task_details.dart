@@ -187,6 +187,11 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
     }
   }
 
+  void submit(){
+    Navigator.popUntil(context, (route) => count++ == 3);
+    showToast(context, "Opportunity completed waiting for recruiter acknowledgment");
+  }
+
   @override
   void initState() {
     getCred();
@@ -1181,7 +1186,7 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                                                                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                                                                                                       ),
                                                                                                       onPressed: () {
-                                                                                                        reviewController.text != '' ? review(reviewController.text.toString(), widget.id) : Navigator.popUntil(context, (route) => count++ == 3);
+                                                                                                        reviewController.text != '' ? review(reviewController.text.toString(), widget.id) : submit();
                                                                                                         setState(() {});
                                                                                                       },
                                                                                                     )
@@ -1235,10 +1240,10 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                                                                   SizedBox(
                                                                                                     height: 10,
                                                                                                   ),
-                                                                                                  FlatButton(
+                                                                                                  TextButton(
                                                                                                     child: new Text('Submit', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                                                                                     onPressed: () {
-                                                                                                      reportController.text != '' ? report(reportController.text.toString(), detailsController.text.toString(), widget.id) : Navigator.popUntil(context, (route) => count++ == 3);
+                                                                                                      reportController.text != '' ? report(reportController.text.toString(), detailsController.text.toString(), widget.id) : submit();
                                                                                                     },
                                                                                                   )
                                                                                                 ],

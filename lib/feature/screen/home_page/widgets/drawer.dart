@@ -4,6 +4,7 @@ import 'package:crowdv_mobile_app/feature/screen/Subscription/premium_page.dart'
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/about_us.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/faq.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/settings.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/support.dart';
 import 'package:crowdv_mobile_app/feature/screen/password/change_pass.dart';
 import 'package:crowdv_mobile_app/feature/screen/profile/profile.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
@@ -104,6 +105,9 @@ class _NavDrawerState extends State<NavDrawer> {
                 color: Colors.grey,
               ),
             ),
+            otherAccountsPictures: [
+              IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_forward_ios))
+            ],
             // Stack(children: [
             //   CachedNetworkImage(
             //     imageUrl: widget.image,
@@ -248,6 +252,15 @@ class _NavDrawerState extends State<NavDrawer> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => AboutUs()),
+                );
+              }),
+          ListTile(
+              leading: Icon(FontAwesomeIcons.headset, color: Colors.black),
+              title: Text("Help Line"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SupportPage()),
                 );
               }),
           token != null

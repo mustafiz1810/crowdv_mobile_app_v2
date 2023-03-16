@@ -325,7 +325,7 @@ class AboutUs extends StatelessWidget {
                                               size: GFSize.SMALL,
                                               onPressed: () async {
                                                 String _url =
-                                                    "https://www.linkedin.com/m/company/crowdvsquad/";
+                                                    "https://www.linkedin.com/company/crowdvsquad/";
                                                 print('launching');
                                                 try {
                                                   await canLaunch(_url)
@@ -342,7 +342,7 @@ class AboutUs extends StatelessWidget {
                                             TextButton(
                                                 onPressed: () async {
                                                   String _url =
-                                                      "https://www.linkedin.com/m/company/crowdvsquad/";
+                                                      "https://www.linkedin.com/company/crowdvsquad/";
                                                   print('launching');
                                                   try {
                                                     await canLaunch(_url)

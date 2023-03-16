@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 var primaryColor = Color(0xFF015D8D);
-var secondaryColor = Color(0xFFCB5300);
+var secondaryColor = Color(0xFFA3262E);
 var grayColor = Color(0xFFe8e8e8);
 const kBackgroundColor = Color(0xFFF8F8F8);
 const kActiveIconColor = Color(0xFFE68342);

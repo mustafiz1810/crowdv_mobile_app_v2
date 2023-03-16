@@ -188,6 +188,10 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
       return OpportunityDetail.fromJson(data);
     }
   }
+  void submit(){
+    Navigator.popUntil(context, (route) => count++ == 3);
+    showToast(context, "Opportunity completed");
+  }
 
   @override
   void initState() {
@@ -1701,7 +1705,7 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                                                               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                                                                                             ),
                                                                                             onPressed: () {
-                                                                                              reviewController.text != '' ? review(reviewController.text.toString(), widget.id) : Navigator.popUntil(context, (route) => count++ == 3);
+                                                                                              reviewController.text != '' ? review(reviewController.text.toString(), widget.id) : submit();
                                                                                               setState(() {});
                                                                                             },
                                                                                           )
@@ -1758,7 +1762,7 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                                                         FlatButton(
                                                                                           child: new Text('Submit', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                                                                           onPressed: () {
-                                                                                            reportController.text != '' ? report(reportController.text.toString(), detailsController.text.toString(), widget.id) : Navigator.popUntil(context, (route) => count++ == 3);
+                                                                                            reportController.text != '' ? report(reportController.text.toString(), detailsController.text.toString(), widget.id) : submit();
                                                                                           },
                                                                                         )
                                                                                       ],

@@ -23,15 +23,11 @@ class CreateOpportunity extends StatefulWidget {
 class _CreateOpportunityState extends State<CreateOpportunity> {
   final _formKey = GlobalKey<FormState>();
   DateTime dateTime = DateTime.now();
-  // TimeOfDay time = TimeOfDay.now();
-  // TimeOfDay _time = TimeOfDay.now();
   String _typevalue;
   List<String> _type = ["Online", "Offline", "Both"];
   String token = "";
-  // Default Radio Button Selected Item When App Starts.
   String radioButtonItem = 'free';
   bool chargeVisible = false;
-  // Group Value for Radio Button.
   int id = 1;
   @override
   void initState() {
@@ -113,7 +109,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                     decoration: ThemeHelper().inputBoxDecorationShaddow(),
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 5,
                   ),
                   //--------------------------------here is category
                   FormField<bool>(
@@ -172,21 +168,18 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                                       blurRadius: 2.0)
                                 ],
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(30),
+                                borderRadius: BorderRadius.circular(16),
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
                           Container(
-                            alignment: Alignment.bottomCenter,
                             child: Text(
                               state.errorText ?? '',
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                 color: Theme.of(context).errorColor,
                                 fontSize: 12,
+                                fontWeight: FontWeight.bold
                               ),
                             ),
                           )
@@ -317,7 +310,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                                     blurRadius: 2.0)
                               ],
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(16),
                             ),
                           ),
                           SizedBox(
@@ -331,6 +324,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                               style: TextStyle(
                                 color: Theme.of(context).errorColor,
                                 fontSize: 12,
+                                  fontWeight: FontWeight.bold
                               ),
                             ),
                           )
@@ -346,54 +340,59 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                     },
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        "Charge: ",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          letterSpacing: 0.27,
-                          color: primaryColor,
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          "Charge: ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            letterSpacing: 0.27,
+                            color: primaryColor,
+                          ),
                         ),
                       ),
-                      Radio(
-                        value: 1,
-                        groupValue: id,
-                        onChanged: (val) {
-                          setState(() {
-                            chargeController.clear();
-                            radioButtonItem = 'free';
-                            chargeVisible = false;
-                            id = 1;
-                          });
-                        },
+                      Expanded(
+                          flex: 2,
+                          child:RadioListTile(
+                            title: Text(
+                              'Free',
+                              style: new TextStyle(fontSize: 16.0),
+                            ),
+                            value: 1,
+                            groupValue: id,
+                            onChanged: (val) {
+                              setState(() {
+                                chargeController.clear();
+                                radioButtonItem = 'free';
+                                chargeVisible = false;
+                                id = 1;
+                              });
+                            },
+                          ),
                       ),
-                      Text(
-                        'Free',
-                        style: new TextStyle(fontSize: 16.0),
-                      ),
-                      Radio(
-                        value: 2,
-                        groupValue: id,
-                        onChanged: (val) {
-                          setState(() {
-                            radioButtonItem = 'paid';
-                            chargeVisible = true;
-                            id = 2;
-                          });
-                        },
-                      ),
-                      Text(
-                        'Paid',
-                        style: new TextStyle(
-                          fontSize: 16.0,
-                        ),
+                      Expanded(
+                          flex: 2,
+                          child: RadioListTile(
+                            title: Text(
+                              'Paid',
+                              style: new TextStyle(
+                                fontSize: 16.0,
+                              ),
+                            ),
+                            value: 2,
+                            groupValue: id,
+                            onChanged: (val) {
+                              setState(() {
+                                radioButtonItem = 'paid';
+                                chargeVisible = true;
+                                id = 2;
+                              });
+                            },
+                          ),
                       ),
                     ],
-                  ),
-                  SizedBox(
-                    height: 5,
                   ),
                   Visibility(
                     visible: chargeVisible,
@@ -418,6 +417,9 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                       maxLines: 5,
                       maxLength: 200,
                       decoration: InputDecoration(
+                        errorStyle: TextStyle(
+                            fontWeight: FontWeight.bold
+                        ),
                           hintText: "Details",
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.white),
@@ -438,40 +440,38 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                     ),
                   ),
                   //--------------------------------here is date
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            "Date: ",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              letterSpacing: 0.27,
-                              color: primaryColor,
-                            ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0,bottom: 8.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Date: ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            letterSpacing: 0.27,
+                            color: primaryColor,
                           ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          InkWell(
-                              onTap: () async {
-                                final date = await pickDate();
-                                if (date == null) return;
-                                final startDate =
-                                    DateTime(date.year, date.month, date.day);
-                                setState(() {
-                                  dateTime = startDate;
-                                });
-                              },
-                              child: getTimeBoxUI(
-                                  '${dateTime.year}/${dateTime.month}/${dateTime.day}',
-                                  160)),
-                        ],
-                      ),
-                    ],
+                        ),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        InkWell(
+                            onTap: () async {
+                              final date = await pickDate();
+                              if (date == null) return;
+                              final startDate =
+                              DateTime(date.year, date.month, date.day);
+                              setState(() {
+                                dateTime = startDate;
+                              });
+                            },
+                            child: getTimeBoxUI(
+                                '${dateTime.year}/${dateTime.month}/${dateTime.day}',
+                                160)),
+                      ],
+                    ),
                   ),
-                  SizedBox(height: 10.0),
                   //--------------------------------here is time
                   Column(
                     children: [
@@ -482,9 +482,9 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                             padding: const EdgeInsets.all(4.0),
                             child: Text(
                               "Start Time",
-                              style: TextStyle(
+                              style:  TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                                fontSize: 15,
                                 letterSpacing: 0.27,
                                 color: primaryColor,
                               ),
@@ -496,7 +496,7 @@ class _CreateOpportunityState extends State<CreateOpportunity> {
                               "End Time",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                                fontSize: 15,
                                 letterSpacing: 0.27,
                                 color: primaryColor,
                               ),

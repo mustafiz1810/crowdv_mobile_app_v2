@@ -1,11 +1,15 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class ThemeHelper{
 
   InputDecoration textInputDecoration([String lableText="", String hintText = ""]){
     return InputDecoration(
+      errorStyle: TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
       labelText: lableText,
       labelStyle: TextStyle(fontSize: 14),
       hintText: hintText,
