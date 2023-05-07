@@ -431,9 +431,7 @@ class _ResultState extends State<Result> {
                                 onPrimary: primaryColor,
                                 elevation: 6,
                                 primary: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(40)),
-                              ),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),),
                               onPressed: () {
                                 Get.to(() => Certificate());
                               },
