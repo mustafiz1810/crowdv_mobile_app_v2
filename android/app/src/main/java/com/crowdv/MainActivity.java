@@ -1,4 +1,4 @@
-package com.icchepuran;
+package com.getcrowdv;
 
 import io.flutter.embedding.android.FlutterActivity;
 

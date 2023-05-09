@@ -149,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List images = [
     AssetImage(
-        'assets/BannerCV.jpg'),
+        'assets/BannerCV.png'),
   ];
   int _currentIndex = 0;
   @override

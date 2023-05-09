@@ -113,7 +113,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-    - assets/BannerCV.jpg
+    - assets/BannerCV.png
 
 
   # To add assets to your application, add an assets section, like this:
