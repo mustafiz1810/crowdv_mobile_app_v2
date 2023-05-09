@@ -559,7 +559,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   CategoryCard(
                                     title: "My Opportunities",
-                                    svgSrc: "assets/ballot.svg",
+                                    svgSrc: "assets/list-check.svg",
                                     press: () {
                                       Get.to(MyOpportunity(
                                         role: widget.role,
