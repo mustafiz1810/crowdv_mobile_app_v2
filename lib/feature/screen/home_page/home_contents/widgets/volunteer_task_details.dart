@@ -318,21 +318,24 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                             color: widget.isRead == false
                                                 ? Colors.lightBlue
                                                 : Colors.transparent),
-                                        child: IconBox(
-                                          child: Icon(
-                                            Icons.forum,
-                                            color: primaryColor,
-                                            size: 28,
+                                        child: Semantics(
+                                          label: "Chat Button",
+                                          child: IconBox(
+                                            child: Icon(
+                                              Icons.forum,
+                                              color: primaryColor,
+                                              size: 28,
+                                            ),
+                                            onTap: () {
+                                              Get.to(() => ChatUi(
+                                                  uid: uid,
+                                                  friendId: widget.friendId,
+                                                  friendName: widget.friendName,
+                                                  friendImage: widget.friendImage,
+                                                  isOnline: widget.isOnline));
+                                            },
+                                            bgColor: Colors.white,
                                           ),
-                                          onTap: () {
-                                            Get.to(() => ChatUi(
-                                                uid: uid,
-                                                friendId: widget.friendId,
-                                                friendName: widget.friendName,
-                                                friendImage: widget.friendImage,
-                                                isOnline: widget.isOnline));
-                                          },
-                                          bgColor: Colors.white,
                                         ),
                                       ),
                                     ],
@@ -1158,9 +1161,12 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                                                                       direction: Axis.horizontal,
                                                                                                       itemCount: 5,
                                                                                                       itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                                                                                                      itemBuilder: (context, _) => Icon(
-                                                                                                        Icons.star,
-                                                                                                        color: Colors.amber,
+                                                                                                      itemBuilder: (context, index) => Semantics(
+                                                                                                        label: (index+1).toString(),
+                                                                                                        child: Icon(
+                                                                                                          Icons.star,
+                                                                                                          color: Colors.amber,
+                                                                                                        ),
                                                                                                       ),
                                                                                                       onRatingUpdate: (rating) {
                                                                                                         rate(rating.toInt(), widget.id);
@@ -1180,15 +1186,18 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                                                                           focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
                                                                                                           enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: Colors.black)),
                                                                                                         )),
-                                                                                                    FlatButton(
-                                                                                                      child: new Text(
-                                                                                                        'Submit',
-                                                                                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                                                                                    Padding(
+                                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                                      child: FlatButton(
+                                                                                                        child: new Text(
+                                                                                                          'Save Review',
+                                                                                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                                                                                        ),
+                                                                                                        onPressed: () {
+                                                                                                          reviewController.text != '' ? review(reviewController.text.toString(), widget.id) : submit();
+                                                                                                          setState(() {});
+                                                                                                        },
                                                                                                       ),
-                                                                                                      onPressed: () {
-                                                                                                        reviewController.text != '' ? review(reviewController.text.toString(), widget.id) : submit();
-                                                                                                        setState(() {});
-                                                                                                      },
                                                                                                     )
                                                                                                   ],
                                                                                                 ),
@@ -1241,7 +1250,7 @@ class _VolunteerTaskDetailsState extends State<VolunteerTaskDetails>
                                                                                                     height: 10,
                                                                                                   ),
                                                                                                   TextButton(
-                                                                                                    child: new Text('Submit', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                                                                                    child: new Text('Save report', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                                                                                     onPressed: () {
                                                                                                       reportController.text != '' ? report(reportController.text.toString(), detailsController.text.toString(), widget.id) : submit();
                                                                                                     },

@@ -16,6 +16,7 @@ import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/common_util.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:getwidget/components/badge/gf_badge.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/getwidget.dart';
@@ -54,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     FirebaseMessaging.instance.getInitialMessage();
 
     FirebaseMessaging.onMessage.listen((message) {
+      FlutterRingtonePlayer.play(fromAsset: "assets/notif.mp3");
       if (message.notification != null) {
         print(message.notification.title);
         print(message.notification.body);
@@ -62,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     //app open but not terminated
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      FlutterRingtonePlayer.play(fromAsset: "assets/notif.mp3");
       if (message.notification != null) {
         print(message.notification.title);
         print(message.notification.body);
@@ -79,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     //when app is terminated
     FirebaseMessaging.instance.getInitialMessage().then((message) {
+      FlutterRingtonePlayer.play(fromAsset: "assets/notif.mp3");
       if (message != null) {
         print(message.notification.title);
         print(message.notification.body);
@@ -165,7 +169,8 @@ class _HomeScreenState extends State<HomeScreen> {
               if (snapshot.hasData) {
                 return GFButton(
                   color: Colors.white,
-                  onPressed: (){Navigator.push(
+                  onPressed: (){
+                    Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => NavDrawer(
@@ -185,7 +190,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         )),
                   ).then((value) => setState(() {
                     print("page reload");
-                  }));},
+                  }));
+
+                    },
                   text: "Menu",
                   textStyle: TextStyle(fontWeight: FontWeight.bold,color: secondaryColor),
                   icon: Icon(Icons.menu,color: primaryColor,),
@@ -232,6 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ))).then((value) {
                           setState(() {});
                         });
+
                       },
                       text: "Notifications",
                       textStyle: TextStyle(fontWeight: FontWeight.bold,color: secondaryColor),

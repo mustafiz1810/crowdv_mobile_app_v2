@@ -341,155 +341,164 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                                   )
                                                 : Row(
                                                     children: [
-                                                      IconBox(
-                                                        onTap: () {
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        AppliedVolunteer(
-                                                                          token:
-                                                                              token,
-                                                                          id: snapshot
-                                                                              .data
-                                                                              .data[index]
-                                                                              .id,
-                                                                        )),
-                                                          ).then((value) =>
-                                                              setState(() {}));
-                                                        },
-                                                        child: Icon(
-                                                          Icons.person_pin,
-                                                          color: Colors.white,
-                                                          size: 18,
+                                                      Semantics(
+                                                        label:"Applied volunteer button",
+                                                        child: IconBox(
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          AppliedVolunteer(
+                                                                            token:
+                                                                                token,
+                                                                            id: snapshot
+                                                                                .data
+                                                                                .data[index]
+                                                                                .id,
+                                                                          )),
+                                                            ).then((value) =>
+                                                                setState(() {}));
+                                                          },
+                                                          child: Icon(
+                                                            Icons.person_pin,
+                                                            color: Colors.white,
+                                                            size: 18,
+                                                          ),
+                                                          bgColor: primaryColor,
                                                         ),
-                                                        bgColor: primaryColor,
                                                       ),
                                                       SizedBox(
                                                         width: 10,
                                                       ),
-                                                      IconBox(
-                                                        onTap: () {
-                                                          SweetAlert.show(
-                                                              context,
-                                                              subtitle:
-                                                                  "Are you sure?",
-                                                              style:
-                                                                  SweetAlertStyle
-                                                                      .confirm,
-                                                              showCancelButton:
-                                                                  true,
-                                                              onPress: (bool
-                                                                  isConfirm) {
-                                                            if (isConfirm) {
-                                                              //Return false to keep dialog
+                                                      Semantics(
+                                                        label:"Delete Opportunity",
+                                                        child: IconBox(
+                                                          onTap: () {
+                                                            SweetAlert.show(
+                                                                context,
+                                                                subtitle:
+                                                                    "Are you sure?",
+                                                                style:
+                                                                    SweetAlertStyle
+                                                                        .confirm,
+                                                                showCancelButton:
+                                                                    true,
+                                                                onPress: (bool
+                                                                    isConfirm) {
                                                               if (isConfirm) {
-                                                                // SweetAlert.show(context,
-                                                                //     subtitle:
-                                                                //         "Deleting...",
-                                                                //     style:
-                                                                //         SweetAlertStyle
-                                                                //             .loading);
-                                                                new Future
-                                                                        .delayed(
-                                                                    new Duration(
-                                                                        seconds:
-                                                                            1),
-                                                                    () {
-                                                                  getRequestWithoutParam(
-                                                                      '/api/v1/opportunity/delete/${snapshot.data.data[index].id}',
-                                                                      {
-                                                                        'Content-Type':
-                                                                            "application/json",
-                                                                        "Authorization":
-                                                                            "Bearer ${token}"
-                                                                      }).then(
-                                                                      (value) async {
-                                                                    SweetAlert.show(
-                                                                        context,
-                                                                        subtitle:
-                                                                            "Success!",
-                                                                        style: SweetAlertStyle
-                                                                            .success);
-                                                                    setState(
-                                                                        () {});
+                                                                //Return false to keep dialog
+                                                                if (isConfirm) {
+                                                                  // SweetAlert.show(context,
+                                                                  //     subtitle:
+                                                                  //         "Deleting...",
+                                                                  //     style:
+                                                                  //         SweetAlertStyle
+                                                                  //             .loading);
+                                                                  new Future
+                                                                          .delayed(
+                                                                      new Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                      () {
+                                                                    getRequestWithoutParam(
+                                                                        '/api/v1/opportunity/delete/${snapshot.data.data[index].id}',
+                                                                        {
+                                                                          'Content-Type':
+                                                                              "application/json",
+                                                                          "Authorization":
+                                                                              "Bearer ${token}"
+                                                                        }).then(
+                                                                        (value) async {
+                                                                      SweetAlert.show(
+                                                                          context,
+                                                                          subtitle:
+                                                                              "Success!",
+                                                                          style: SweetAlertStyle
+                                                                              .success);
+                                                                      setState(
+                                                                          () {});
+                                                                    });
                                                                   });
-                                                                });
-                                                              } else {
-                                                                SweetAlert.show(
-                                                                    context,
-                                                                    subtitle:
-                                                                        "Canceled!",
-                                                                    style: SweetAlertStyle
-                                                                        .error);
+                                                                } else {
+                                                                  SweetAlert.show(
+                                                                      context,
+                                                                      subtitle:
+                                                                          "Canceled!",
+                                                                      style: SweetAlertStyle
+                                                                          .error);
+                                                                }
+                                                                return false;
                                                               }
-                                                              return false;
-                                                            }
-                                                            return null;
-                                                          });
-                                                        },
-                                                        child: Icon(
-                                                          Icons.delete,
-                                                          color: Colors.white,
-                                                          size: 18,
+                                                              return null;
+                                                            });
+                                                          },
+                                                          child: Icon(
+                                                            Icons.delete,
+                                                            color: Colors.white,
+                                                            size: 18,
+                                                          ),
+                                                          bgColor: Colors.red,
                                                         ),
-                                                        bgColor: Colors.red,
                                                       ),
                                                     ],
                                                   ),
-                                            IconBox(
-                                              onTap: () {
-                                                SweetAlert.show(context,
-                                                    subtitle: "Are you sure?",
-                                                    style:
-                                                        SweetAlertStyle.confirm,
-                                                    showCancelButton: true,
-                                                    onPress: (bool isConfirm) {
-                                                  if (isConfirm) {
-                                                    //Return false to keep dialog
+                                            Semantics(
+                                              label:"Copy Opportunity",
+                                              child: IconBox(
+                                                onTap: () {
+                                                  SweetAlert.show(context,
+                                                      subtitle: "Are you sure?",
+                                                      style:
+                                                          SweetAlertStyle.confirm,
+                                                      showCancelButton: true,
+                                                      onPress: (bool isConfirm) {
                                                     if (isConfirm) {
-                                                      SweetAlert.show(context,
-                                                          subtitle:
-                                                              "Copying...",
-                                                          style: SweetAlertStyle
-                                                              .loading);
-                                                      new Future.delayed(
-                                                          new Duration(
-                                                              seconds: 1), () {
-                                                        postRequest(
-                                                            '/api/v1/copy-opportunity/${snapshot.data.data[index].id}', {
-                                                          "Authorization":
-                                                              "Bearer ${token}"
-                                                        }, {}).then(
-                                                            (value) async {
-                                                          SweetAlert.show(
-                                                              context,
-                                                              subtitle:
-                                                                  "Success!",
-                                                              style:
-                                                                  SweetAlertStyle
-                                                                      .success);
-                                                          setState(() {});
+                                                      //Return false to keep dialog
+                                                      if (isConfirm) {
+                                                        SweetAlert.show(context,
+                                                            subtitle:
+                                                                "Copying...",
+                                                            style: SweetAlertStyle
+                                                                .loading);
+                                                        new Future.delayed(
+                                                            new Duration(
+                                                                seconds: 1), () {
+                                                          postRequest(
+                                                              '/api/v1/copy-opportunity/${snapshot.data.data[index].id}', {
+                                                            "Authorization":
+                                                                "Bearer ${token}"
+                                                          }, {}).then(
+                                                              (value) async {
+                                                            SweetAlert.show(
+                                                                context,
+                                                                subtitle:
+                                                                    "Success!",
+                                                                style:
+                                                                    SweetAlertStyle
+                                                                        .success);
+                                                            setState(() {});
+                                                          });
                                                         });
-                                                      });
-                                                    } else {
-                                                      SweetAlert.show(context,
-                                                          subtitle: "Canceled!",
-                                                          style: SweetAlertStyle
-                                                              .error);
+                                                      } else {
+                                                        SweetAlert.show(context,
+                                                            subtitle: "Canceled!",
+                                                            style: SweetAlertStyle
+                                                                .error);
+                                                      }
+                                                      return false;
                                                     }
-                                                    return false;
-                                                  }
-                                                  return null;
-                                                });
-                                              },
-                                              child: Icon(
-                                                Icons.copy,
-                                                color: Colors.white,
-                                                size: 18,
+                                                    return null;
+                                                  });
+                                                },
+                                                child: Icon(
+                                                  Icons.copy,
+                                                  color: Colors.white,
+                                                  size: 18,
+                                                ),
+                                                bgColor: Colors.blue,
                                               ),
-                                              bgColor: Colors.blue,
                                             ),
                                           ],
                                         ),
@@ -499,32 +508,36 @@ class _MyOpportunityState extends State<MyOpportunity> {
                                   Positioned(
                                     top: 20,
                                     right: 20,
-                                    child: Container(
-                                      height: 40,
-                                      width: 40,
-                                      child: CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        child: CachedNetworkImage(
-                                          imageUrl: snapshot
-                                              .data.data[index].category.icon,
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  Container(
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                image: imageProvider,
+                                    child: Semantics(
+                                      label:snapshot
+                                          .data.data[index].category.name,
+                                      child: Container(
+                                        height: 40,
+                                        width: 40,
+                                        child: CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          child: CachedNetworkImage(
+                                            imageUrl: snapshot
+                                                .data.data[index].category.icon,
+                                            imageBuilder:
+                                                (context, imageProvider) =>
+                                                    Container(
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: imageProvider,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          placeholder: (context, url) => Icon(
-                                              Icons.downloading_rounded,
+                                            placeholder: (context, url) => Icon(
+                                                Icons.downloading_rounded,
+                                                size: 40,
+                                                color: Colors.grey),
+                                            errorWidget: (context, url, error) =>
+                                                Icon(
+                                              Icons.image_outlined,
                                               size: 40,
-                                              color: Colors.grey),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(
-                                            Icons.image_outlined,
-                                            size: 40,
-                                            color: Colors.grey,
+                                              color: Colors.grey,
+                                            ),
                                           ),
                                         ),
                                       ),

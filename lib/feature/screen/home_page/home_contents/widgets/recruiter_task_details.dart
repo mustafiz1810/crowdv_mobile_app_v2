@@ -844,30 +844,33 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                                           : Colors
                                                                               .transparent),
                                                                   child:
-                                                                      IconBox(
+                                                                      Semantics(
+                                                                        label:"Chat Button",
+                                                                        child: IconBox(
                                                                     child: Icon(
-                                                                      Icons
-                                                                          .forum,
-                                                                      color:
-                                                                          primaryColor,
-                                                                      size: 25,
+                                                                        Icons
+                                                                            .forum,
+                                                                        color:
+                                                                            primaryColor,
+                                                                        size: 25,
                                                                     ),
                                                                     onTap: () {
-                                                                      Get.to(() => ChatUi(
-                                                                          uid:
-                                                                              uid,
-                                                                          friendId: widget
-                                                                              .friendId,
-                                                                          friendName: widget
-                                                                              .friendName,
-                                                                          friendImage: widget
-                                                                              .friendImage,
-                                                                          isOnline:
-                                                                              widget.isOnline));
+                                                                        Get.to(() => ChatUi(
+                                                                            uid:
+                                                                                uid,
+                                                                            friendId: widget
+                                                                                .friendId,
+                                                                            friendName: widget
+                                                                                .friendName,
+                                                                            friendImage: widget
+                                                                                .friendImage,
+                                                                            isOnline:
+                                                                                widget.isOnline));
                                                                     },
                                                                     bgColor: Colors
-                                                                        .white,
+                                                                          .white,
                                                                   ),
+                                                                      ),
                                                                 ),
                                                                 SizedBox(
                                                                   height: 5,
@@ -1677,10 +1680,13 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                                                             direction: Axis.horizontal,
                                                                                             itemCount: 5,
                                                                                             itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                                                                                            itemBuilder: (context, _) => Icon(
-                                                                                              Icons.star,
-                                                                                              color: Colors.amber,
-                                                                                            ),
+                                                                                              itemBuilder: (context, index) => Semantics(
+                                                                                                label: (index+1).toString(),
+                                                                                                child: Icon(
+                                                                                                  Icons.star,
+                                                                                                  color: Colors.amber,
+                                                                                                ),
+                                                                                              ),
                                                                                             onRatingUpdate: (rating) {
                                                                                               rate(rating.toInt(), widget.id);
                                                                                             },
@@ -1701,7 +1707,7 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                                                               )),
                                                                                           FlatButton(
                                                                                             child: new Text(
-                                                                                              'Submit',
+                                                                                              'Save review',
                                                                                               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                                                                                             ),
                                                                                             onPressed: () {
@@ -1760,7 +1766,7 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                                                           height: 10,
                                                                                         ),
                                                                                         FlatButton(
-                                                                                          child: new Text('Submit', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                                                                          child: new Text('Save report', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                                                                           onPressed: () {
                                                                                             reportController.text != '' ? report(reportController.text.toString(), detailsController.text.toString(), widget.id) : submit();
                                                                                           },

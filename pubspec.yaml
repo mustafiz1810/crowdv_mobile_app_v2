@@ -89,6 +89,7 @@ dependencies:
   time_interval_picker: ^0.0.2
   data_connection_checker: ^0.3.4
   convex_bottom_bar: ^3.2.0
+  flutter_ringtone_player: ^3.2.0
 
 dev_dependencies:
   flutter_test:

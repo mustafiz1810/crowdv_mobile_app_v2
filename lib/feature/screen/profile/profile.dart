@@ -312,29 +312,35 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: Align(
                                   alignment: Alignment.topRight,
                                   child: _image == null
-                                      ? InkWell(
-                                          onTap: () {
-                                            UploadImage();
-                                          },
-                                          child: CircleAvatar(
+                                      ? Semantics(
+                                        label: "Change profile Photo",
+                                        child: InkWell(
+                                            onTap: () {
+                                              UploadImage();
+                                            },
+                                            child: CircleAvatar(
+                                              backgroundColor: Colors.white,
+                                              radius: 12.0,
+                                              child: Icon(
+                                                Icons.camera_alt,
+                                                size: 15.0,
+                                                color: Color(0xFF404040),
+                                              ),
+                                            ),
+                                          ),
+                                      )
+                                      : Semantics(
+                                          label:"Profile photo updated",
+                                        child: CircleAvatar(
                                             backgroundColor: Colors.white,
                                             radius: 12.0,
                                             child: Icon(
-                                              Icons.camera_alt,
-                                              size: 15.0,
-                                              color: Color(0xFF404040),
+                                              Icons.check_circle,
+                                              size: 20.0,
+                                              color: Colors.green,
                                             ),
                                           ),
-                                        )
-                                      : CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          radius: 12.0,
-                                          child: Icon(
-                                            Icons.check_circle,
-                                            size: 20.0,
-                                            color: Colors.green,
-                                          ),
-                                        ),
+                                      ),
                                 ),
                                 radius: 50.0,
                                 backgroundImage: _image == null

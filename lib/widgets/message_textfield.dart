@@ -95,13 +95,16 @@ class _MessageTextFieldState extends State<MessageTextField> {
                 });
               });
             },
-            child: Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.blue,
+            child: Semantics(
+              label: "Send Message",
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.blue,
+                ),
+                child: Icon(Icons.send,color: Colors.white,),
               ),
-              child: Icon(Icons.send,color: Colors.white,),
             ),
           )
         ],
