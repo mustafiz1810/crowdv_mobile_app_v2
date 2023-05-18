@@ -21,7 +21,8 @@ class CheckBox extends StatefulWidget {
       this.date,
       this.time,
       this.etime,
-      this.slug,this.charge});
+      this.slug,
+        this.charge});
   @override
   _CheckBoxState createState() => _CheckBoxState();
 }
@@ -46,7 +47,6 @@ class _CheckBoxState extends State<CheckBox> {
       //   index += 1;
       // });
     }
-
   }
 
   Future<EligibilityModel> getEligibilityApi() async {
@@ -130,7 +130,8 @@ class _CheckBoxState extends State<CheckBox> {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              Expanded(child: FutureBuilder<EligibilityModel>(
+              Expanded(child:
+              FutureBuilder<EligibilityModel>(
                 future: myFuture,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {

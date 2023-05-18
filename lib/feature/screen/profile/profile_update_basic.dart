@@ -4,11 +4,12 @@ import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/design_details.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
+import 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
-
 class ProfileUpdate extends StatefulWidget {
-  final dynamic token, fname, lname,about, email, phone, dob, prof,institute, gender;
+  final dynamic token, fname, lname,about, email, phone, dob, prof,institute, gender,data,disability,country,state,city,zip;
   ProfileUpdate(
       {@required this.token,
         this.fname,
@@ -19,7 +20,13 @@ class ProfileUpdate extends StatefulWidget {
         this.dob,
         this.prof,
         this.institute,
-        this.gender});
+        this.gender,
+      this.data,
+      this.disability,
+      this.city,
+      this.country,
+      this.state,
+      this.zip});
   @override
   _ProfileUpdateState createState() => _ProfileUpdateState();
 }
@@ -30,8 +37,24 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
   String _gender;
   List<String> _items = ["Business", "Student", "Service", "Self-employer"];
   List<String> _item = ["Male", "Female", "Other"];
+  List<dynamic> array = [];
+  bool isVisible = false;
+  void _answerQuestion(String id) {
+    if (array.contains(id)) {
+      array.remove(id);
+    } else {
+      array.add(id);
+    }
+  }
   @override
   void initState() {
+    countryvalue = widget.country;
+    statevalue = widget.state;
+    cityvalue = widget.city;
+    zipController.text = widget.zip;
+    getCountry();
+    widget.state != null ? getState(widget.country) : "";
+    widget.city != null ? getCity(widget.state) : "";
     widget.prof == null ? _profession = "Business" : _profession = widget.prof;
     widget.gender == null ? _gender = "Male" : _gender = widget.gender;
     fnameController.text = widget.fname.toString();
@@ -39,6 +62,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
     widget.about != null?descriptionController.text = widget.about.toString():descriptionController.text;
     widget.institute != null?instituteController.text = widget.institute.toString():instituteController.text;
     dateTime = widget.dob;
+    array = widget.disability;
     super.initState();
   }
 
@@ -46,10 +70,72 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
   TextEditingController lnameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController instituteController = TextEditingController();
-  void update(String fname, lname,about_me,date,profession,institution,gender) async {
+  TextEditingController zipController = TextEditingController();
+  List countries = [];
+  Future getCountry() async {
+    var baseUrl = NetworkConstants.BASE_URL + 'countries';
+
+    Response response = await get(Uri.parse(baseUrl));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonData = json.decode(response.body);
+      setState(() {
+        countries = jsonData['data'];
+      });
+      print(jsonData);
+    }
+  }
+
+  List states = [];
+  Future getState(countryId) async {
+    var baseUrl = NetworkConstants.BASE_URL + 'get-state-by-country/$countryId';
+
+    Response response = await get(Uri.parse(baseUrl));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonData = json.decode(response.body);
+      setState(() {
+        states = jsonData['data'];
+      });
+    }
+  }
+
+  List city = [];
+  Future getCity(stateId) async {
+    var baseUrl = NetworkConstants.BASE_URL + 'get-city-by-state/$stateId';
+
+    Response response = await get(Uri.parse(baseUrl));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonData = json.decode(response.body);
+      setState(() {
+        city = jsonData['data'];
+      });
+    }
+  }
+
+  var countryvalue;
+  var statevalue;
+  var cityvalue;
+  void update(String fname, lname,about_me,date,profession,institution,gender,country, state, city, zip_code,List<dynamic> disable) async {
+    // String body = json.encode({
+    //   "first_name": fname,
+    //   "last_name": lname,
+    //   "about_me":about_me,
+    //   "dob": date,
+    //   "profession":profession,
+    //   "institution":institution,
+    //   "gender":gender,
+    //   'country_id': country,
+    //   'state_id': state,
+    //   'city_id': city,
+    //   'zip_code': zip_code,
+    //   'type_of_disability': disable,
+    // });
+    // print(body);
     try {
       Response response = await post(
-          Uri.parse(NetworkConstants.BASE_URL + 'profile/update?type=basic'),
+          Uri.parse(NetworkConstants.BASE_URL + 'profile/update'),
           headers: {
             "Authorization": "Bearer ${widget.token}"
           },
@@ -61,6 +147,11 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
             "profession":profession,
             "institution":institution,
             "gender":gender,
+            'country_id': country,
+            'state_id': state,
+            'city_id': city,
+            'zip_code': zip_code,
+            'type_of_disability': jsonEncode(disable),
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
@@ -69,6 +160,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
         Navigator.pop(context);
       } else {
         var data = jsonDecode(response.body.toString());
+        print(data);
         showToast(context, data['message'].toString());
       }
     } catch (e) {
@@ -121,6 +213,17 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 child: InkWell(
                   splashColor: secondaryColor, // splash color
                   onTap: () {
+                    print(fnameController.text.toString()+
+                      lnameController.text.toString()+
+                      descriptionController.text.toString()+
+                      dateTime.toString()+
+                      _profession+
+                      instituteController.text.toString()+
+                      _gender+
+                      countryvalue.toString()+
+                      statevalue.toString()+
+                      cityvalue.toString()+
+                      zipController.text.toString()+ array.toString(),);
                     update(
                         fnameController.text.toString(),
                         lnameController.text.toString(),
@@ -128,7 +231,13 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                         dateTime.toString(),
                         _profession,
                         instituteController.text.toString(),
-                        _gender);
+                        _gender,
+                        countryvalue.toString(),
+                        statevalue.toString(),
+                        cityvalue.toString(),
+                        zipController.text.toString(),
+                        array,
+                    );
 
                   }, // button pressed
                   child: Row(
@@ -194,7 +303,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 children: [
                   SizedBox(width: 10,),
                   Text(
-                    "About me: ",
+                    "About me (optional): ",
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -374,6 +483,322 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
               ),
               SizedBox(
                 height: 15,
+              ),
+            InputDecorator(
+              decoration: InputDecoration(
+                labelText: "Disability",
+                hintText: "Disability",
+                fillColor: Colors.white,
+                labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                filled: true,
+                contentPadding: EdgeInsets.fromLTRB(20, 5, 10, 5),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(color: Colors.black)),
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(color: Colors.black)),
+                errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide:
+                    BorderSide(color: Colors.red, width: 2.0)),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide:
+                    BorderSide(color: Colors.red, width: 2.0)),
+              ),
+              isEmpty: _gender == '',
+              child: TextButton(
+                onPressed: () {
+                  setState(() {
+                    if (isVisible == false) {
+                      isVisible = true;
+                    } else
+                      (isVisible = false);
+                  });
+                },
+                child: Row(
+                  mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      "Disability",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,),
+                    ),
+                    Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.black,
+                    )
+                  ],
+                ),
+              ),
+            ),
+              Visibility(
+                visible: isVisible,
+                child: ListView.builder(
+                  physics: ClampingScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: widget.data.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                      child:
+                      new CheckboxListTile(
+                          activeColor:
+                          primaryColor,
+                          dense: true,
+                          //font change
+                          title: new Text(
+                            widget.data[
+                            index]
+                            ["title"],
+                            style: TextStyle(
+                                fontSize:
+                                14,
+                                fontWeight:
+                                FontWeight
+                                    .w600,
+                                letterSpacing:
+                                0.5),
+                          ),
+                          value: array.contains(widget
+                              .data[
+                          index]
+                          ["id"]
+                              .toString())
+                              ? true
+                              : widget.data[
+                          index]
+                          [
+                          "is_check"],
+                          onChanged:
+                              (bool value) {
+                            setState(() {
+                              widget.data[
+                              index]
+                              [
+                              "is_check"] = value;
+                              _answerQuestion(widget
+                                  .data[
+                              index]
+                              ["id"]
+                                  .toString());
+                            });
+                          }));
+                },
+              ),),
+              //--------------------------------here is disability
+              // Column(
+              //   children: [
+              //     SizedBox(
+              //       height: 10,
+              //     ),
+              //     SizedBox(
+              //       height: 50,
+              //       width: 300,
+              //       child: ElevatedButton(
+              //         style: ElevatedButton.styleFrom(
+              //           primary: primaryColor,
+              //           shape: RoundedRectangleBorder(
+              //               borderRadius:
+              //               BorderRadius.circular(
+              //                   13)),
+              //         ),
+              //         onPressed: () {
+              //           set(array);
+              //         },
+              //         child: Center(
+              //           child: Text(
+              //             "Save",
+              //             style: GoogleFonts.kanit(
+              //                 color: Colors.white,
+              //                 fontSize: 16),
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //     SizedBox(
+              //       height: 15,
+              //     ),
+              //   ],
+              // ),
+
+              //--------------------------------here is location
+              Column(
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  CustomSearchableDropDown(
+                    initialValue: [
+                      {
+                        'parameter': 'id',
+                        'value': widget.country,
+                      }
+                    ],
+                    items: countries,
+                    label: 'Select Country',
+                    decoration: BoxDecoration(
+                        borderRadius:
+                        BorderRadius.circular(
+                            10),
+                        border: Border.all(
+                            color: Colors.black)),
+                    dropDownMenuItems:
+                    countries?.map((item) {
+                      return item['name'];
+                    })?.toList() ??
+                        [],
+                    onChanged: (newVal) {
+                      if (newVal != null) {
+                        setState(() {
+                          states.clear();
+                          statevalue = null;
+                          city.clear();
+                          cityvalue = null;
+                          zipController.clear();
+                          countryvalue =
+                          newVal['id'];
+                          getState(countryvalue);
+                          print(countryvalue);
+                        });
+                      } else {
+                        countryvalue =
+                            widget.country;
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  CustomSearchableDropDown(
+                    initialValue: [
+                      {
+                        'parameter': 'id',
+                        'value': widget.state,
+                      }
+                    ],
+                    items: states,
+                    label:
+                    'Division/Province/State',
+                    decoration: BoxDecoration(
+                        borderRadius:
+                        BorderRadius.circular(
+                            10),
+                        border: Border.all(
+                            color: Colors.black)),
+                    dropDownMenuItems:
+                    states.map((item) {
+                      return item['name']
+                          .toString();
+                    }).toList() ??
+                        [],
+                    onChanged: (newVal) {
+                      if (newVal != null) {
+                        setState(() {
+                          city.clear();
+                          cityvalue = null;
+                          zipController.clear();
+                          statevalue = newVal['id'];
+                          print(statevalue);
+                          getCity(statevalue);
+                        });
+                      } else {
+                        statevalue = widget.state;
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  CustomSearchableDropDown(
+                    initialValue: [
+                      {
+                        'parameter': 'id',
+                        'value': widget.city,
+                      }
+                    ],
+                    items: city,
+                    label: 'City',
+                    decoration: BoxDecoration(
+                        borderRadius:
+                        BorderRadius.circular(
+                            10),
+                        border: Border.all(
+                            color: Colors.black)),
+                    dropDownMenuItems:
+                    city.map((item) {
+                      return item['name']
+                          .toString();
+                    }).toList() ??
+                        [],
+                    onChanged: (newVal) {
+                      if (newVal != null) {
+                        cityvalue = newVal['id'];
+                        zipController.clear();
+                        print(cityvalue);
+                      } else {
+                        cityvalue = widget.city;
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    child: TextFormField(
+                      style:
+                      TextStyle(fontSize: 14),
+                      keyboardType:
+                      TextInputType.number,
+                      controller: zipController,
+                      decoration: ThemeHelper()
+                          .textInputDecoration(
+                          'Zip Code',
+                          'Enter your zip code'),
+                    ),
+                    decoration: ThemeHelper()
+                        .inputBoxDecorationShaddow(),
+                  ),
+                  SizedBox(height: 10),
+                  // SizedBox(
+                  //   height: 50,
+                  //   width: 300,
+                  //   child: ElevatedButton(
+                  //     style:
+                  //     ElevatedButton.styleFrom(
+                  //       primary: primaryColor,
+                  //       shape:
+                  //       RoundedRectangleBorder(
+                  //           borderRadius:
+                  //           BorderRadius
+                  //               .circular(
+                  //               13)),
+                  //     ),
+                  //     onPressed: () {
+                  //       location(
+                  //           countryvalue.toString(),
+                  //           statevalue.toString(),
+                  //           cityvalue.toString(),
+                  //           zipController.text
+                  //               .toString());
+                  //     },
+                  //     child: Center(
+                  //       child: Text(
+                  //         "Save",
+                  //         style: GoogleFonts.kanit(
+                  //             color: Colors.white,
+                  //             fontSize: 16),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                ],
               ),
               //--------------------------------here is date
               Row(

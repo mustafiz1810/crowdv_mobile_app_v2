@@ -46,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool navbarScrolled = false;
   String token;
-  var profileComplete;
   @override
   void initState() {
     getCred();
@@ -55,8 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
     FirebaseMessaging.instance.getInitialMessage();
 
     FirebaseMessaging.onMessage.listen((message) {
-      FlutterRingtonePlayer.play(fromAsset: "assets/notif.mp3");
       if (message.notification != null) {
+        FlutterRingtonePlayer.play(fromAsset: "assets/notif.mp3");
         print(message.notification.title);
         print(message.notification.body);
       }
@@ -64,8 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     //app open but not terminated
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      FlutterRingtonePlayer.play(fromAsset: "assets/notif.mp3");
       if (message.notification != null) {
+        FlutterRingtonePlayer.play(fromAsset: "assets/notif.mp3");
         print(message.notification.title);
         print(message.notification.body);
         print(message.data['opportunity_id']);
@@ -82,8 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     //when app is terminated
     FirebaseMessaging.instance.getInitialMessage().then((message) {
-      FlutterRingtonePlayer.play(fromAsset: "assets/notif.mp3");
       if (message != null) {
+        FlutterRingtonePlayer.play(fromAsset: "assets/notif.mp3");
         print(message.notification.title);
         print(message.notification.body);
         print(message.data['opportunity_id']);
@@ -118,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Uri.parse(NetworkConstants.BASE_URL + 'profile'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body);
-    profileComplete = data["data"]["is_complete"];
+    print(data);
     if (response.statusCode == 200) {
       return AccountModel.fromJson(data);
     } else {
@@ -188,11 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           city: snapshot.data.data.city.id,
                           zip: snapshot.data.data.zipCode,
                         )),
-                  ).then((value) => setState(() {
-                    print("page reload");
-                  }));
-
-                    },
+                  );},
                   text: "Menu",
                   textStyle: TextStyle(fontWeight: FontWeight.bold,color: secondaryColor),
                   icon: Icon(Icons.menu,color: primaryColor,),
@@ -204,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 return GFButton(
                   color: Colors.white,
                   onPressed: (){},
-                  text: "Menu",
+                  text: "Menus",
                   textStyle: TextStyle(fontWeight: FontWeight.bold,color: secondaryColor),
                   icon: Icon(Icons.menu,color: primaryColor,),
                   shape: GFButtonShape.pills,
@@ -558,11 +553,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     title: "Create Opportunity",
                                     svgSrc: "assets/edit.svg",
                                     press: () {
-                                      profileComplete == 100 &&
-                                              profileComplete != null
-                                          ? Get.to(CreateOpportunity())
-                                          : showToast(
-                                              "Please complete your profile");
+                                      Get.to(CreateOpportunity(token:token));
                                     },
                                   ),
                                   CategoryCard(

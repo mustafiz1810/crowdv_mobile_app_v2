@@ -133,13 +133,13 @@ class _NotificationPageState extends State<NotificationPage> {
                           });
                         },
                         child: Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(5),
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               color: widget.data[index].readAt != null
-                                  ? Colors.white
-                                  : Color(0xffcaf0f8),
+                                  ? secondaryColor.withOpacity(0.4)
+                                  : primaryColor,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.4),
@@ -149,7 +149,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                 ),
                               ],
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
+                                  BorderRadius.all(Radius.circular(10)),
                             ),
                             child: ListTile(
                               leading: CachedNetworkImage(
@@ -180,8 +180,9 @@ class _NotificationPageState extends State<NotificationPage> {
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black)),
-                              subtitle: Text(widget.data[index].data.title),
+                                      color: Colors.white)),
+                              subtitle: Text(widget.data[index].data.title, style: TextStyle(
+                                  color: Colors.white)),
                             ),
                           ),
                         ),

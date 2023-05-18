@@ -48,16 +48,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   String token = "";
 
-  List<dynamic> array = [];
-
-  void _answerQuestion(String id) {
-    if (array.contains(id)) {
-      array.remove(id);
-    } else {
-      array.add(id);
-    }
-  }
-
   void initState() {
     countryvalue = widget.country;
     statevalue = widget.state;
@@ -68,7 +58,6 @@ class _ProfilePageState extends State<ProfilePage> {
     getCountry();
     widget.state != null ? getState(widget.country) : "";
     widget.city != null ? getCity(widget.state) : "";
-    array = widget.disability;
   }
 
   void getCred() async {
@@ -556,6 +545,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                                   snapshot.data.data.institution,
                                                                               gender:
                                                                                   snapshot.data.data.gender,
+                                                                              data: widget.data,
+                                                                              disability: widget.disability,
+                                                                              country: widget.country,
+                                                                              state: widget.state,
+                                                                              city: widget.city,
+                                                                              zip: widget.zip,
                                                                             )),
                                                               ).then((value) =>
                                                                   setState(
@@ -707,62 +702,23 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                     letterSpacing:
                                                                         0.5),
                                                               ),
-                                                              value: array.contains(widget
-                                                                      .data[
-                                                                          index]
-                                                                          ["id"]
-                                                                      .toString())
-                                                                  ? true
-                                                                  : widget.data[
-                                                                          index]
-                                                                      [
-                                                                      "is_check"],
-                                                              onChanged:
-                                                                  (bool value) {
-                                                                setState(() {
-                                                                  widget.data[
-                                                                          index]
-                                                                      [
-                                                                      "is_check"] = value;
-                                                                  _answerQuestion(widget
-                                                                      .data[
-                                                                          index]
-                                                                          ["id"]
-                                                                      .toString());
-                                                                });
-                                                              }));
+                                                            value: widget.disability.contains(widget
+                                                                .data[
+                                                            index]
+                                                            ["id"]
+                                                                .toString())
+                                                                ? true
+                                                                : widget.data[
+                                                            index]
+                                                            [
+                                                            "is_check"],
+                                                            onChanged:(value){} ,
+                                                              ));
                                                 },
                                               ),
                                             ),
                                             SizedBox(
                                               height: 10,
-                                            ),
-                                            SizedBox(
-                                              height: 50,
-                                              width: 300,
-                                              child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                  primary: primaryColor,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              13)),
-                                                ),
-                                                onPressed: () {
-                                                  set(array);
-                                                },
-                                                child: Center(
-                                                  child: Text(
-                                                    "Save",
-                                                    style: GoogleFonts.kanit(
-                                                        color: Colors.white,
-                                                        fontSize: 16),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 15,
                                             ),
                                           ],
                                         ),
@@ -905,39 +861,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 ),
                                                 decoration: ThemeHelper()
                                                     .inputBoxDecorationShaddow(),
-                                              ),
-                                              SizedBox(height: 10),
-                                              SizedBox(
-                                                height: 50,
-                                                width: 300,
-                                                child: ElevatedButton(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    primary: primaryColor,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        13)),
-                                                  ),
-                                                  onPressed: () {
-                                                    location(
-                                                        countryvalue.toString(),
-                                                        statevalue.toString(),
-                                                        cityvalue.toString(),
-                                                        zipController.text
-                                                            .toString());
-                                                  },
-                                                  child: Center(
-                                                    child: Text(
-                                                      "Save",
-                                                      style: GoogleFonts.kanit(
-                                                          color: Colors.white,
-                                                          fontSize: 16),
-                                                    ),
-                                                  ),
-                                                ),
                                               ),
                                             ],
                                           ),

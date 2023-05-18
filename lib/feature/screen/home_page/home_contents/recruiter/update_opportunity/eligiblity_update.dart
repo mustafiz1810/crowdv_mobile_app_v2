@@ -147,7 +147,8 @@ class _EligibilityUpdateState extends State<EligibilityUpdate> {
                   ],
                 ),
               ),
-              Expanded(child: FutureBuilder<EligibilityModel>(
+              Expanded(child:
+              FutureBuilder<EligibilityModel>(
                 future: myFuture,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {

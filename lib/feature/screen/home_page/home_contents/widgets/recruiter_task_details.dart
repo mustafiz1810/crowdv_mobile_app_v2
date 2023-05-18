@@ -72,7 +72,6 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
         showToast(context, data['message']);
       } else {
         var data = jsonDecode(response.body.toString());
-        print(data);
         showToast(context, data['message']);
       }
     } catch (e) {
@@ -180,7 +179,6 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
         Uri.parse(NetworkConstants.BASE_URL + 'opportunity/view/${widget.id}'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
-    print(data);
     eligibility = data['data']['eligibility'];
     if (response.statusCode == 200) {
       return OpportunityDetail.fromJson(data);
