@@ -18,7 +18,7 @@ class AboutUs extends StatelessWidget {
         await http.get(Uri.parse(NetworkConstants.BASE_URL + 'settings'));
     var data = jsonDecode(response.body.toString());
     if (response.statusCode == 200) {
-      print(data);
+
       return TextModel.fromJson(data);
     } else {
       return TextModel.fromJson(data);

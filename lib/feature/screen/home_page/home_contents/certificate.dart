@@ -359,10 +359,10 @@ class _CertificateState extends State<Certificate> {
                                                   "application/json",
                                               "Authorization": "Bearer ${token}"
                                             }).then((value) async {
-                                              print(value['data']['file_path']);
+
                                               String _url =
                                                   value['data']['file_path'];
-                                              print('launching');
+
                                               try {
                                                 await canLaunch(_url)
                                                     ? await launch(_url)

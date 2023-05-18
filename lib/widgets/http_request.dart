@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 Future getRequest(path, qparam, headers) async {
   final response = await http.get(Uri.https('system.getcrowdv.com', path, qparam),
-      // final response = await http.get(Uri.http('192.168.68.126:8000', path, qparam),
+      // final response = await http.get(Uri.http('192.168.68.104:8000', path, qparam),
       headers: headers);
 
   // debugPrint(response.body);
@@ -28,7 +28,7 @@ Future getRequest(path, qparam, headers) async {
 
 Future getRequestWithoutParam(path, headers) async {
       final response = await http.get(Uri.https('system.getcrowdv.com', path), headers: headers);
-  // final response = await http.get(Uri.http('192.168.68.126:8000', path), headers: headers);
+  // final response = await http.get(Uri.http('192.168.68.104:8000', path), headers: headers);
 
   // debugPrint(response.body);
 
@@ -54,7 +54,7 @@ Future getRequestWithoutParam(path, headers) async {
 
 Future postRequest(path, headers, body) async {
   final response = await http.post(Uri.https('system.getcrowdv.com', path),
-      // final response = await http.post(Uri.http('192.168.68.126:8000', path),
+      // final response = await http.post(Uri.http('192.168.68.104:8000', path),
       headers: headers, body: body);
 
   if (response.statusCode == 200 || response.statusCode == 201) {

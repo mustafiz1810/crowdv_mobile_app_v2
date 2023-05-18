@@ -66,7 +66,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity>
         showToast(context, data['message']);
       } else {
         var data = jsonDecode(response.body.toString());
-        print(data);
+
         showToast(context, data['message']);
       }
     } catch (e) {
@@ -106,7 +106,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity>
         showToast(context, data['message']);
       } else {
         var data = jsonDecode(response.body.toString());
-        print(data);
+
         showToast(context, data['error']['errors']);
       }
     } catch (e) {
@@ -147,7 +147,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity>
         showToast(context, data['message']);
       } else {
         var data = jsonDecode(response.body.toString());
-        print(data);
+
         showToast(context, data['message']);
       }
     } catch (e) {
@@ -174,7 +174,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity>
         Uri.parse(NetworkConstants.BASE_URL + 'volunteer/own/tasks'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
-    print(data);
+
     if (response.statusCode == 200) {
       return VolunteerOpportunityModel.fromJson(data);
     } else {
@@ -266,7 +266,7 @@ class _VolunteerMyOpportunityState extends State<VolunteerMyOpportunity>
                                               itemBuilder: (context, index) {
                                                 isRead = snapshot.data
                                                     .docs[index]['is_read'];
-                                                print(isRead);
+
                                                 return Center();
                                               });
                                         }

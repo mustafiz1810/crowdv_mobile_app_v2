@@ -40,7 +40,7 @@ class _OrganizationOpportunitiesState extends State<OrganizationOpportunities> {
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
     if (response.statusCode == 200) {
-      print(data);
+
       return OrgModel.fromJson(data);
     } else {
       return OrgModel.fromJson(data);
@@ -174,7 +174,7 @@ class _OrganizationOpportunitiesState extends State<OrganizationOpportunities> {
                                                       .data
                                                       .data[index]
                                                       .links;
-                                                  print('launching');
+
                                                   try {
                                                     await canLaunch(_url)
                                                         ? await launch(_url)

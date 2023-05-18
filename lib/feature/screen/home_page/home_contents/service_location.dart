@@ -20,7 +20,7 @@ class _ServiceLocationState extends State<ServiceLocation> {
   String token = "";
   @override
   void initState() {
-    print(widget.state);
+
     super.initState();
     getCred();
     getCountry();
@@ -175,7 +175,7 @@ class _ServiceLocationState extends State<ServiceLocation> {
                       zipController.clear();
                       countryvalue = newVal['id'];
                       getState(countryvalue);
-                      print(countryvalue);
+
                     });
                   } else {
                     countryvalue = null;
@@ -208,7 +208,7 @@ class _ServiceLocationState extends State<ServiceLocation> {
                       cityvalue = null;
                       zipController.clear();
                       statevalue = newVal['id'];
-                      print(statevalue);
+
                       getCity(statevalue);
                     });
                   } else {
@@ -239,7 +239,7 @@ class _ServiceLocationState extends State<ServiceLocation> {
                   if (newVal != null) {
                     cityvalue = newVal['id'];
                     zipController.clear();
-                    print(cityvalue);
+
                   } else {
                     cityvalue = null;
                   }

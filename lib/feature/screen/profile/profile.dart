@@ -79,91 +79,6 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  void set(List<dynamic> disable) async {
-    String body = json.encode({
-      'type_of_disability': disable,
-    });
-    try {
-      Response response = await post(
-          Uri.parse(NetworkConstants.BASE_URL + 'profile/update?type=service'),
-          headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "application/json"
-          },
-          body: body);
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
-        setState(() {});
-        showToast(context, data['message']);
-      } else {
-        var data = jsonDecode(response.body.toString());
-        showToast(context, data['message'].toString());
-      }
-    } catch (e) {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Exception:"),
-              content: Text(e.toString()),
-              actions: [
-                FlatButton(
-                  child: Text("Try Again"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            );
-          });
-    }
-  }
-
-  void location(String country, state, city, zip_code) async {
-    try {
-      Response response = await post(
-          Uri.parse(NetworkConstants.BASE_URL + 'profile/update?type=contacts'),
-          headers: {
-            "Authorization": "Bearer $token"
-          },
-          body: {
-            'country_id': country,
-            'state_id': state,
-            'city_id': city,
-            'zip_code': zip_code,
-          });
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
-        setState(() {});
-        showToast(context, data['message']);
-      } else {
-        var data = jsonDecode(response.body.toString());
-        print(data);
-        showToast(
-            context,
-            data['error'].length != 0
-                ? data['error'].toString()
-                : data['message'].toString());
-      }
-    } catch (e) {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Exception:"),
-              content: Text(e.toString()),
-              actions: [
-                FlatButton(
-                  child: Text("Try Again"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            );
-          });
-    }
-  }
 
   TextEditingController zipController = TextEditingController();
   List countries = [];
@@ -177,7 +92,6 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         countries = jsonData['data'];
       });
-      print(jsonData);
     }
   }
 
@@ -239,7 +153,6 @@ class _ProfilePageState extends State<ProfilePage> {
     // send
     var response = await request.send();
     if (response.statusCode == 200) {
-      // print(data);
       showToast(context, 'Updated');
       setState(() {
         _image = null;
@@ -511,6 +424,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.spaceBetween,
                                                     children: [
+                                                      Text(
+                                                        "User Information",
+                                                        style: TextStyle(
+                                                          color: Colors.black87,
+                                                          fontWeight:
+                                                          FontWeight.w500,
+                                                          fontSize: 16,
+                                                        ),
+                                                        textAlign:
+                                                        TextAlign.left,
+                                                      ),
                                                       Container(
                                                         height: 32,
                                                         decoration: BoxDecoration(
@@ -547,27 +471,16 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                                   snapshot.data.data.gender,
                                                                               data: widget.data,
                                                                               disability: widget.disability,
-                                                                              country: widget.country,
-                                                                              state: widget.state,
-                                                                              city: widget.city,
-                                                                              zip: widget.zip,
+                                                                              country: snapshot.data.data.country.id,
+                                                                              state: snapshot.data.data.state.id,
+                                                                              city: snapshot.data.data.city.id,
+                                                                              zip: snapshot.data.data.zipCode,
                                                                             )),
                                                               ).then((value) =>
                                                                   setState(
                                                                       () {}));
                                                             },
                                                             child: Text("Edit Profile",style: TextStyle(color: Colors.white),)),
-                                                      ),
-                                                      Text(
-                                                        "User Information",
-                                                        style: TextStyle(
-                                                          color: Colors.black87,
-                                                          fontWeight:
-                                                          FontWeight.w500,
-                                                          fontSize: 16,
-                                                        ),
-                                                        textAlign:
-                                                        TextAlign.left,
                                                       ),
                                                     ],
                                                   ),
@@ -735,7 +648,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 initialValue: [
                                                   {
                                                     'parameter': 'id',
-                                                    'value': widget.country,
+                                                    'value': snapshot.data.data.country.id,
                                                   }
                                                 ],
                                                 items: countries,
@@ -777,7 +690,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 initialValue: [
                                                   {
                                                     'parameter': 'id',
-                                                    'value': widget.state,
+                                                    'value': snapshot.data.data.state.id,
                                                   }
                                                 ],
                                                 items: states,
@@ -817,7 +730,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 initialValue: [
                                                   {
                                                     'parameter': 'id',
-                                                    'value': widget.city,
+                                                    'value': snapshot.data.data.city.id,
                                                   }
                                                 ],
                                                 items: city,

@@ -57,12 +57,11 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data);
+
         Navigator.of(context).pop();
         showToast(context, data['message']);
       } else {
         var data = jsonDecode(response.body.toString());
-        print(data);
         showToast(context, data['error']['errors']);
       }
     } catch (e) {
@@ -140,7 +139,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
         showToast(context, data['message']);
       } else {
         var data = jsonDecode(response.body.toString());
-        print(data);
+
         showToast(context, data['error']['errors']);
       }
     } catch (e) {
@@ -167,7 +166,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
         Uri.parse(NetworkConstants.BASE_URL + 'opportunity/history'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
-    print(data);
+
     if (response.statusCode == 200) {
       return RecruiterHistoryModel.fromJson(data);
     } else {
@@ -572,7 +571,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                                 "Bearer ${token}"
                                                           }).then(
                                                               (value) async {
-                                                            print(value);
+
                                                             reviewController
                                                                     .text =
                                                                 value["data"]
@@ -668,7 +667,7 @@ class _RecruiterHistoryState extends State<RecruiterHistory> {
                                                                 "Bearer ${token}"
                                                           }).then(
                                                               (value) async {
-                                                            print(value);
+
                                                             reportController
                                                                 .text = value[
                                                                             "data"]

@@ -1,12 +1,7 @@
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
 import 'package:crowdv_mobile_app/feature/screen/authentication/sign_up/Recruiteer/recruiter_details.dart';
-import 'package:crowdv_mobile_app/feature/screen/authentication/sign_up/Volunteer/sign_up_details.dart';
-import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
 import 'package:crowdv_mobile_app/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/route_manager.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 class RecruiterSignUp extends StatefulWidget {
   @override

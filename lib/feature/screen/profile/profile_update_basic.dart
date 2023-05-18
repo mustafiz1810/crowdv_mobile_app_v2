@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:crowdv_mobile_app/common/theme_helper.dart';
+import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/design_details.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
@@ -52,6 +53,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
     statevalue = widget.state;
     cityvalue = widget.city;
     zipController.text = widget.zip;
+    getUniversities();
     getCountry();
     widget.state != null ? getState(widget.country) : "";
     widget.city != null ? getCity(widget.state) : "";
@@ -71,6 +73,21 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController instituteController = TextEditingController();
   TextEditingController zipController = TextEditingController();
+  List universities = [];
+  Future getUniversities() async {
+    var baseUrl = NetworkConstants.BASE_URL + 'universities';
+
+    Response response = await get(Uri.parse(baseUrl),headers: {"Authorization": "Bearer ${widget.token}"});
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonData = json.decode(response.body);
+      setState(() {
+        universities = jsonData['data'];
+      });
+      print(jsonData);
+    }
+  }
+
   List countries = [];
   Future getCountry() async {
     var baseUrl = NetworkConstants.BASE_URL + 'countries';
@@ -113,26 +130,11 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
       });
     }
   }
-
+  var uniValue;
   var countryvalue;
   var statevalue;
   var cityvalue;
   void update(String fname, lname,about_me,date,profession,institution,gender,country, state, city, zip_code,List<dynamic> disable) async {
-    // String body = json.encode({
-    //   "first_name": fname,
-    //   "last_name": lname,
-    //   "about_me":about_me,
-    //   "dob": date,
-    //   "profession":profession,
-    //   "institution":institution,
-    //   "gender":gender,
-    //   'country_id': country,
-    //   'state_id': state,
-    //   'city_id': city,
-    //   'zip_code': zip_code,
-    //   'type_of_disability': disable,
-    // });
-    // print(body);
     try {
       Response response = await post(
           Uri.parse(NetworkConstants.BASE_URL + 'profile/update'),
@@ -155,9 +157,10 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
           });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data);
         showToast(context, data['message']);
-        Navigator.pop(context);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+                (Route<dynamic> route) => false);
       } else {
         var data = jsonDecode(response.body.toString());
         print(data);
@@ -213,24 +216,18 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 child: InkWell(
                   splashColor: secondaryColor, // splash color
                   onTap: () {
-                    print(fnameController.text.toString()+
-                      lnameController.text.toString()+
-                      descriptionController.text.toString()+
-                      dateTime.toString()+
-                      _profession+
-                      instituteController.text.toString()+
-                      _gender+
-                      countryvalue.toString()+
-                      statevalue.toString()+
-                      cityvalue.toString()+
-                      zipController.text.toString()+ array.toString(),);
+                    print(
+                      countryvalue.toString()+"/n"+
+                      statevalue.toString()+"cfc"+
+                      cityvalue.toString()+"r4c4"+
+                      zipController.text.toString());
                     update(
                         fnameController.text.toString(),
                         lnameController.text.toString(),
                         descriptionController.text.toString(),
                         dateTime.toString(),
                         _profession,
-                        instituteController.text.toString(),
+                        uniValue.toString(),
                         _gender,
                         countryvalue.toString(),
                         statevalue.toString(),
@@ -399,14 +396,38 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
               SizedBox(
                 height: 20,
               ),
-              Container(
-                child: TextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: instituteController,
-                  decoration: ThemeHelper()
-                      .textInputDecoration('Institute', 'Your institute name'),
-                ),
-                decoration: ThemeHelper().inputBoxDecorationShaddow(),
+              CustomSearchableDropDown(
+                initialValue: [
+                  {
+                    'parameter': 'name',
+                    'value': widget.institute,
+                  }
+                ],
+                items: universities,
+                label: 'Select Institute',
+                decoration: BoxDecoration(
+                    borderRadius:
+                    BorderRadius.circular(
+                        10),
+                    border: Border.all(
+                        color: Colors.black)),
+                dropDownMenuItems:
+                universities?.map((item) {
+                  return item['name'];
+                })?.toList() ??
+                    [],
+                onChanged: (newVal) {
+                  if (newVal != null) {
+                    setState(() {
+                      uniValue =
+                      newVal['name'];
+                      print(uniValue);
+                    });
+                  } else {
+                    uniValue =
+                        widget.institute;
+                  }
+                },
               ),
               SizedBox(
                 height: 15,
@@ -592,43 +613,6 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                           }));
                 },
               ),),
-              //--------------------------------here is disability
-              // Column(
-              //   children: [
-              //     SizedBox(
-              //       height: 10,
-              //     ),
-              //     SizedBox(
-              //       height: 50,
-              //       width: 300,
-              //       child: ElevatedButton(
-              //         style: ElevatedButton.styleFrom(
-              //           primary: primaryColor,
-              //           shape: RoundedRectangleBorder(
-              //               borderRadius:
-              //               BorderRadius.circular(
-              //                   13)),
-              //         ),
-              //         onPressed: () {
-              //           set(array);
-              //         },
-              //         child: Center(
-              //           child: Text(
-              //             "Save",
-              //             style: GoogleFonts.kanit(
-              //                 color: Colors.white,
-              //                 fontSize: 16),
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //     SizedBox(
-              //       height: 15,
-              //     ),
-              //   ],
-              // ),
-
-              //--------------------------------here is location
               Column(
                 children: [
                   SizedBox(

@@ -28,7 +28,7 @@ class _AppliedVolunteerState extends State<AppliedVolunteer> {
             NetworkConstants.BASE_URL + 'apply-volunteer-list/${widget.id}'),
         headers: {"Authorization": "Bearer ${widget.token}"});
     var data = jsonDecode(response.body.toString());
-    print(data);
+
     if (response.statusCode == 200) {
       return ApplyVolunteer.fromJson(data);
     } else {

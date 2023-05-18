@@ -13,14 +13,9 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/notification.dart';
 import 'package:crowdv_mobile_app/feature/screen/home_page/widgets/drawer.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
-import 'package:crowdv_mobile_app/utils/view_utils/common_util.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
-import 'package:getwidget/components/badge/gf_badge.dart';
-import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:getwidget/shape/gf_button_shape.dart';
 import 'package:http/http.dart' as http;
 import 'package:crowdv_mobile_app/widgets/bottom_nav_bar.dart';
 import 'package:crowdv_mobile_app/widgets/category_grid.dart';
@@ -49,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     getCred();
-    print(token);
+
     //Foreground State
     FirebaseMessaging.instance.getInitialMessage();
 
@@ -117,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Uri.parse(NetworkConstants.BASE_URL + 'profile'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body);
-    print(data);
+
     if (response.statusCode == 200) {
       return AccountModel.fromJson(data);
     } else {
@@ -142,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Uri.parse(NetworkConstants.BASE_URL + 'notifications'),
         headers: {"Authorization": "Bearer $token"});
     var data = jsonDecode(response.body.toString());
-    print(data);
+
     if (response.statusCode == 200) {
       return NotificationModel.fromJson(data);
     } else {
@@ -199,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 return GFButton(
                   color: Colors.white,
                   onPressed: (){},
-                  text: "Menus",
+                  text: "Menu",
                   textStyle: TextStyle(fontWeight: FontWeight.bold,color: secondaryColor),
                   icon: Icon(Icons.menu,color: primaryColor,),
                   shape: GFButtonShape.pills,
@@ -222,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return  GFButtonBadge(
                       color: Colors.white,
                       onPressed: (){
-                        print(token);
+
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -486,41 +481,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                           '/api/v1/get-category', {
                                         "Authorization": "Bearer ${token}"
                                       }).then((value) async {
-                                        print(value);
+
                                         List<String> category = [];
 
                                         for (Map map in value["data"]
                                             ["category"]) {
                                           category.add(map["name"]);
                                         }
-                                        print(category);
+
                                         setState(() {});
                                         Get.to(() => SetCategory(category));
                                       });
                                     },
                                   ),
-                                  // CategoryCard(
-                                  //   title: "Service Location",
-                                  //   svgSrc: "assets/home-location-alt.svg",
-                                  //   press: () async {
-                                  //     getRequestWithoutParam(
-                                  //         '/api/v1/get-category', {
-                                  //       "Authorization": "Bearer ${token}"
-                                  //     }).then((value) async {
-                                  //       print(value);
-                                  //       Get.to(() => ServiceLocation(
-                                  //         country: value['data']
-                                  //         ['service_country']['id'],
-                                  //         state: value['data']
-                                  //         ['service_state']['id'],
-                                  //         city: value['data']
-                                  //         ['service_city']['id'],
-                                  //         zip: value['data']
-                                  //         ['service_zip_code'],
-                                  //       ));
-                                  //     });
-                                  //   },
-                                  // ),
                                   CategoryCard(
                                     title: "Training",
                                     svgSrc: "assets/e-learning.svg",

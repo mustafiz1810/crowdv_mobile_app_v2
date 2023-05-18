@@ -23,7 +23,7 @@ class _SetCategoryState extends State<SetCategory> {
   @override
   void initState() {
     tempArray = widget.category;
-    print(tempArray);
+
     getCred();
     super.initState();
   }
@@ -135,7 +135,7 @@ class _SetCategoryState extends State<SetCategory> {
                                           'Content-Type': "application/json",
                                           "Authorization": "Bearer $token"
                                         }).then((value) async {
-                                          print(value);
+
                                       showToast(context, 'Removed');
                                     });
                                     tempArray
@@ -147,14 +147,14 @@ class _SetCategoryState extends State<SetCategory> {
                                           'Content-Type': "application/json",
                                           "Authorization": "Bearer $token"
                                         }).then((value) async {
-                                          print(value);
+
                                       showToast(context, 'Added');
                                     });
                                     tempArray
                                         .add(snapshot.data.data[index].name);
                                   }
                                 });
-                                print(tempArray.toString());
+
                               },
                               child: Container(
                                 width: 80,

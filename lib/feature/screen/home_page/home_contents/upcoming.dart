@@ -110,9 +110,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
                             padding: const EdgeInsets.all(5),
                             child: InkWell(
                               onTap: () {
-                                print(
-                                  snapshot.data.data[index].status,
-                                );
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

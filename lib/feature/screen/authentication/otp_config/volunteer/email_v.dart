@@ -251,7 +251,7 @@ class _EmailVolunteerPageState extends State<EmailVolunteer> {
                               child: Text.rich(TextSpan(children: [
                                 TextSpan(text: "Already have an account? "),
                                 TextSpan(
-                                  text: 'SignIn!',
+                                  text: 'Sign In!',
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
                                       // Navigator.pop(context);
