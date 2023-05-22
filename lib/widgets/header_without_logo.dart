@@ -3,6 +3,7 @@ import 'package:crowdv_mobile_app/feature/screen/home_page/home_page.dart';
 import 'package:crowdv_mobile_app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
@@ -29,6 +30,7 @@ class _HeaderWidgetState extends State<HeaderWidget>
         var data = jsonDecode(response.body.toString());
         print(data);
         roleRoute(data['data']['role']);
+        EasyLoading.dismiss();
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) =>
@@ -65,6 +67,7 @@ class _HeaderWidgetState extends State<HeaderWidget>
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         roleRoute(data['data']['role']);
+        EasyLoading.dismiss();
         print(data);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
@@ -130,6 +133,7 @@ class _HeaderWidgetState extends State<HeaderWidget>
                                 volunteer = val;
                               },
                               onTap: () async{
+                                EasyLoading.show(status: 'Switching Role...');
                                 SharedPreferences pref = await SharedPreferences.getInstance();
                                 await pref.remove("role");
                                 vol();
@@ -148,6 +152,7 @@ class _HeaderWidgetState extends State<HeaderWidget>
                                 recruiter = val;
                               },
                               onTap: () async{
+                                EasyLoading.show(status: 'Switching Role...');
                                 SharedPreferences pref = await SharedPreferences.getInstance();
                                 await pref.remove("role");
                                 rec();

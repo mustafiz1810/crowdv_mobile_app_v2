@@ -18,18 +18,6 @@ class UpcomingOpportunity extends StatefulWidget {
 
 class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
   String token = "";
-  var colors = [
-    Color(0xFFbde0fe),
-    Color(0xFFfefae0),
-    Color(0xFFdee2ff),
-    Color(0xFFade8f4),
-    Color(0xFFfae0e4),
-    Color(0xFFffd9da),
-    Color(0xFFfbf8cc),
-    Color(0xFFdaf7dc),
-    Color(0xFFd7fff1),
-    Color(0xFFb3dee2),
-  ];
   @override
   void initState() {
     super.initState();
@@ -48,6 +36,7 @@ class _UpcomingOpportunityState extends State<UpcomingOpportunity> {
         Uri.parse(NetworkConstants.BASE_URL + 'volunteer/tasks/list'),
         headers: {"Authorization": "Bearer ${token}"});
     var data = jsonDecode(response.body.toString());
+    print(data);
     if (response.statusCode == 200) {
       return VolunteerOpportunity.fromJson(data);
     } else {

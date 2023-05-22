@@ -12,7 +12,6 @@ import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/http_request.dart';
 import 'package:crowdv_mobile_app/widgets/icon_box.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/route_manager.dart';
@@ -912,12 +911,7 @@ class _RecruiterTaskDetailsState extends State<RecruiterTaskDetails>
                                                           Row(
                                                             children: [
                                                               Text(
-                                                                snapshot
-                                                                    .data
-                                                                    .data
-                                                                    .volunteer
-                                                                    .profileRating
-                                                                    .toString(),
+                                                                snapshot.data.data.volunteer.profileRating.toString(),
                                                                 style: TextStyle(
                                                                     fontSize:
                                                                         15,

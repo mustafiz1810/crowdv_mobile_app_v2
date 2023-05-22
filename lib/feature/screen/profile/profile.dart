@@ -7,6 +7,7 @@ import 'package:crowdv_mobile_app/utils/view_utils/colors.dart';
 import 'package:crowdv_mobile_app/widgets/show_toast.dart';
 import 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
@@ -541,7 +542,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             : "")),
                                                     ListTile(
                                                         leading: Icon(
-                                                            Icons.home_filled),
+                                                            FontAwesomeIcons.graduationCap),
                                                         title: Text(
                                                             "Institution:"),
                                                         subtitle: Text(snapshot
